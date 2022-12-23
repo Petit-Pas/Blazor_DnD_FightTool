@@ -1,0 +1,110 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Security.Cryptography.X509Certificates
+@using NeoBlazorphic.StyleParameters
+
+<h1>
+    Character Sheet
+</h1>
+
+<EditForm Model="_model">
+    <FluentValidationValidator />
+    @*<DataAnnotationsValidator />*@
+
+    <div class="character-sheet">
+        <div class="character-sheet-header">
+        
+            <h1> HEADER </h1>
+
+        </div>
+        <div class="character-sheet-body">
+            
+                <Characteristics _model="_model.CharacteristicDummy"></Characteristics>
+
+            <h1> BODY </h1>
+            
+            <p>
+                <!-- Works as expected when using InputNumber which is the default from Blazor -->
+                @*<label>inner thing </label>
+                <IntInput @bind-Value="@_model._dummy.Value" ValidateOnKeyPress="true" ValidationFor="@(() => _model._dummy.Value)" />*@
+                @*<ValidationMessage For="@(() => _model._dummy.Value)"/>*@
+            </p>
+
+            
+            <p style="color:black">
+                <label> walue </label>
+                <InputNumber @bind-Value="@_model.Walue"  />
+                <ValidationMessage For="@(() => _model.Walue)" />
+            </p>
+
+            @*<IntInput ValidateOnKeyPress="true" LabelSizePx="50" LabelPosition="ElementRelativePosition.Left" Label="@_model._dummy.Name" @bind-Value="_model._dummy.Value" ValidationFor="@(() => @_model._dummy.Value)"></IntInput>*@
+
+            <p /><p />
+
+            @*<IntInput ValidateOnKeyPress="true" LabelSizePx="50" LabelPosition="ElementRelativePosition.Left" Label="VALUE" @bind-Value="_model.Walue" ValidationFor="@(() => @_model.Walue)"></IntInput>*@
+                
+                
+            <div>
+                @_model._dummy.Value
+            </div>
+            
+            <button type="submit">Save</button>
+
+        </div>
+    </div>
+
+</EditForm>
+
+@code
+{
+    public CharacterDummy _model = new CharacterDummy();
+
+    public class CharacterDummyValidator : AbstractValidator<CharacterDummy>
+    {
+        public CharacterDummyValidator()
+        {
+            RuleFor(x => x._dummy).SetValidator(new CharacteristicDummyValidator());
+            
+
+            RuleFor(x => x.Walue).InclusiveBetween(1, 30);
+            RuleForEach(x => x.CharacteristicDummy).SetValidator(new CharacteristicDummyValidator());
+        }
+
+    }
+
+    public class CharacteristicDummyValidator : AbstractValidator<CharacteristicDummy>
+    {
+        public CharacteristicDummyValidator()
+        {
+            RuleFor(x => x.Value).InclusiveBetween(5, 20);
+        }
+    }
+
+    public class CharacteristicDummy
+    {
+        public CharacteristicDummy(int value, string name)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        public int Value { get; set; } = 10;
+        public string Name = "STR";
+    }
+
+    public class CharacterDummy
+    {
+        public CharacteristicDummy _dummy { get; set; } = new CharacteristicDummy(4, "TEST");
+
+        public int Walue { get; set; } = 13;
+
+    public CharacteristicDummy[] CharacteristicDummy { get; set; } = new CharacteristicDummy[]
+    {
+        new CharacteristicDummy(10, "STR"),
+        new CharacteristicDummy(11, "DEX"),
+        new CharacteristicDummy(12, "CON"),
+        new CharacteristicDummy(13, "INT"),
+        new CharacteristicDummy(14, "WIS"),
+        new CharacteristicDummy(15, "CHA"),
+    };
+    }
+}

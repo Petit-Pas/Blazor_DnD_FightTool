@@ -1,0 +1,19 @@
+﻿
+.character-sheet {
+    display: grid;
+    grid-template-columns: 1fr ;
+    grid-template-rows: auto 1fr;
+}
+
+.character-sheet-header {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.character-sheet-body {
+    grid-column: 1;
+    grid-row: 2;
+
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
