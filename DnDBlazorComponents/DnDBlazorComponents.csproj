@@ -23,7 +23,12 @@
     <PackageReference Include="Blazored.FluentValidation" Version="2.1.0-preview.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
-    <PackageReference Include="NeoBlazorphic" Version="0.0.1-alpha1.3.3" />
+    <PackageReference Include="NeoBlazorphic" Version="0.0.1-alpha1.4.0" />
+    <PackageReference Include="PeterLeslieMorris.Blazor.Validation" Version="1.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Characters\Characters.csproj" />
   </ItemGroup>
 
 </Project>

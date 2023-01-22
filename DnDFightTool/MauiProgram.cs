@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Characters.Characteristics;
+using Characters.Characteristics.Validation;
+using Microsoft.Extensions.Logging;
 using DnDFightTool.Data;
 using FluentValidation;
+using PeterLeslieMorris.Blazor.Validation;
 using static DnDBlazorComponents.CharacterSheet;
 
 namespace DnDFightTool;
@@ -24,8 +27,13 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-        builder.Services.AddSingleton<IValidator<CharacterDummy>, CharacterDummyValidator>();
-        builder.Services.AddSingleton<IValidator<CharacteristicDummy>, CharacteristicDummyValidator>();
+        builder.Services.AddFormValidation(config =>
+            {
+                //config.AddFluentValidation(typeof(CharacterDummy).Assembly);
+                config.AddFluentValidation(typeof(AbilityScore).Assembly);
+            }
+        );
+
 
         builder.Services.AddSingleton<WeatherForecastService>();
 

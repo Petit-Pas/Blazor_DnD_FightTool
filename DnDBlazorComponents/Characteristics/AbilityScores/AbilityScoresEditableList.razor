@@ -1,0 +1,54 @@
+﻿@using NeoBlazorphic.StyleParameters
+@using Microsoft.AspNetCore.Components
+@using Characters.Characteristics
+
+
+<Card ShadowPosition="ShadowPosition.In" Padding="Spacing._0" TextSelectable="false">
+    <div class="characteristic-container">
+
+        @{
+            var i = 1;
+        }
+        @foreach (var abilityScore in Model)
+        {
+            <div class="characteristic-row" style="grid-row: @i;">
+                <IntInput ValidateOnKeyPress="true" @bind-Value="abilityScore.Value" ValidationFor="@(() => abilityScore.Value)">
+                    <InputFieldPrefix>
+                        <div class="characteristic-label">
+                            @abilityScore.ShortName
+                        </div>
+                    </InputFieldPrefix>
+                    <InputFieldSuffix>
+                        <div class="characteristic-modifier">
+                            @Model.GetModifierStringWithMastery(abilityScore.Name)
+                        </div>
+                    </InputFieldSuffix>
+                </IntInput>
+            </div>
+            <div class="characterisitc-mastery" style="grid-row: @i;">
+                <CheckBox @bind-IsChecked="@abilityScore.HasMastery" AccentClass="neo-primary"></CheckBox>
+            </div>
+
+            i += 1;
+        }
+        <div class="mastery-bonus">
+            <IntInput ValidateOnKeyPress="true" @bind-Value="@Model.MasteryBonus" ValidationFor="@(() => @Model.MasteryBonus)">
+                <InputFieldPrefix>
+                    <div>
+                        Mastery bonus
+                    </div>
+                </InputFieldPrefix>
+            </IntInput>
+        </div>
+    </div>
+</Card>
+
+@code
+{
+    public int MasteryBonus { get; set; } = 2;
+
+    [Parameter]
+    public AbilityScores Model { get; set; }
+
+    public int Score { get; set; } = 0;
+}

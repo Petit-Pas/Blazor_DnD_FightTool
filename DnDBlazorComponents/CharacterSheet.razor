@@ -1,13 +1,17 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using System.Security.Cryptography.X509Certificates
+@using Characters.Characteristics
+@using Characters.Characteristics.Validation
 @using NeoBlazorphic.StyleParameters
+@using PeterLeslieMorris.Blazor.Validation
+@using DnDBlazorComponents.Characteristics.AbilityScores
 
 <h1>
     Character Sheet
 </h1>
 
 <EditForm Model="_model">
-    <FluentValidationValidator />
+    <Validate />
     @*<DataAnnotationsValidator />*@
 
     <div class="character-sheet">
@@ -18,7 +22,7 @@
         </div>
         <div class="character-sheet-body">
             
-                <Characteristics _model="_model.CharacteristicDummy"></Characteristics>
+                <AbilityScoresEditableList Model="_model.AbilityScores"></AbilityScoresEditableList>
 
             <h1> BODY </h1>
             
@@ -32,7 +36,7 @@
             
             <p style="color:black">
                 <label> walue </label>
-                <InputNumber @bind-Value="@_model.Walue"  />
+                <InputNumber @bind-Value="@_model.Walue">  </InputNumber>
                 <ValidationMessage For="@(() => _model.Walue)" />
             </p>
 
@@ -41,12 +45,9 @@
             <p /><p />
 
             @*<IntInput ValidateOnKeyPress="true" LabelSizePx="50" LabelPosition="ElementRelativePosition.Left" Label="VALUE" @bind-Value="_model.Walue" ValidationFor="@(() => @_model.Walue)"></IntInput>*@
-                
-                
-            <div>
-                @_model._dummy.Value
-            </div>
             
+            
+
             <button type="submit">Save</button>
 
         </div>
@@ -62,49 +63,18 @@
     {
         public CharacterDummyValidator()
         {
-            RuleFor(x => x._dummy).SetValidator(new CharacteristicDummyValidator());
-            
-
+            RuleFor(x => x.AbilityScores).SetValidator(new AbilityScoresValidator());
             RuleFor(x => x.Walue).InclusiveBetween(1, 30);
-            RuleForEach(x => x.CharacteristicDummy).SetValidator(new CharacteristicDummyValidator());
+
         }
 
     }
-
-    public class CharacteristicDummyValidator : AbstractValidator<CharacteristicDummy>
-    {
-        public CharacteristicDummyValidator()
-        {
-            RuleFor(x => x.Value).InclusiveBetween(5, 20);
-        }
-    }
-
-    public class CharacteristicDummy
-    {
-        public CharacteristicDummy(int value, string name)
-        {
-            Name = name;
-            Value = value;
-        }
-
-        public int Value { get; set; } = 10;
-        public string Name = "STR";
-    }
-
+   
     public class CharacterDummy
     {
-        public CharacteristicDummy _dummy { get; set; } = new CharacteristicDummy(4, "TEST");
+        public AbilityScores AbilityScores { get; set; } = new AbilityScores();
 
         public int Walue { get; set; } = 13;
 
-    public CharacteristicDummy[] CharacteristicDummy { get; set; } = new CharacteristicDummy[]
-    {
-        new CharacteristicDummy(10, "STR"),
-        new CharacteristicDummy(11, "DEX"),
-        new CharacteristicDummy(12, "CON"),
-        new CharacteristicDummy(13, "INT"),
-        new CharacteristicDummy(14, "WIS"),
-        new CharacteristicDummy(15, "CHA"),
-    };
     }
 }

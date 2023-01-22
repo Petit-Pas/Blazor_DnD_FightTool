@@ -51,7 +51,8 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-        <PackageReference Include="NeoBlazorphic" Version="0.0.1-alpha1.3.3" />
+        <PackageReference Include="NeoBlazorphic" Version="0.0.1-alpha1.4.0" />
+        <PackageReference Include="PeterLeslieMorris.Blazor.FluentValidation" Version="1.8.0" />
     </ItemGroup>
 
     <ItemGroup>
