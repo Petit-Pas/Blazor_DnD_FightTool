@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Characters\Characters.csproj" />
+    <ProjectReference Include="..\src\Domain\Characters\Characters.csproj" />
   </ItemGroup>
 
 </Project>

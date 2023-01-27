@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Characters.AbilityScores;
 using Microsoft.AspNetCore.Components;
 
 namespace DnDBlazorComponents.Characteristics.AbilityScores
 {
     public partial class AbilityScoresEditableList : ComponentBase
     {
+        [Parameter]
+        public AbilityScoresCollection Model { get; set; }
     }
 }

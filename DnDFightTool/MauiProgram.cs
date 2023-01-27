@@ -1,8 +1,6 @@
-﻿using Characters.Characteristics;
-using Characters.Characteristics.Validation;
+﻿using Characters.AbilityScores;
 using Microsoft.Extensions.Logging;
 using DnDFightTool.Data;
-using FluentValidation;
 using PeterLeslieMorris.Blazor.Validation;
 using static DnDBlazorComponents.CharacterSheet;
 
@@ -29,7 +27,6 @@ public static class MauiProgram
 
         builder.Services.AddFormValidation(config =>
             {
-                //config.AddFluentValidation(typeof(CharacterDummy).Assembly);
                 config.AddFluentValidation(typeof(AbilityScore).Assembly);
             }
         );

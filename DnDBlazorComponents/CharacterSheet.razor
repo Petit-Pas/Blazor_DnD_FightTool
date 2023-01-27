@@ -1,7 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using System.Security.Cryptography.X509Certificates
-@using Characters.Characteristics
-@using Characters.Characteristics.Validation
+@using Characters.AbilityScores
+@using Characters.AbilityScores.Validation
 @using NeoBlazorphic.StyleParameters
 @using PeterLeslieMorris.Blazor.Validation
 @using DnDBlazorComponents.Characteristics.AbilityScores
@@ -22,31 +22,9 @@
         </div>
         <div class="character-sheet-body">
             
-                <AbilityScoresEditableList Model="_model.AbilityScores"></AbilityScoresEditableList>
+                <AbilityScoresEditableList Model="_model.AbilityScoresCollection"></AbilityScoresEditableList>
 
             <h1> BODY </h1>
-            
-            <p>
-                <!-- Works as expected when using InputNumber which is the default from Blazor -->
-                @*<label>inner thing </label>
-                <IntInput @bind-Value="@_model._dummy.Value" ValidateOnKeyPress="true" ValidationFor="@(() => _model._dummy.Value)" />*@
-                @*<ValidationMessage For="@(() => _model._dummy.Value)"/>*@
-            </p>
-
-            
-            <p style="color:black">
-                <label> walue </label>
-                <InputNumber @bind-Value="@_model.Walue">  </InputNumber>
-                <ValidationMessage For="@(() => _model.Walue)" />
-            </p>
-
-            @*<IntInput ValidateOnKeyPress="true" LabelSizePx="50" LabelPosition="ElementRelativePosition.Left" Label="@_model._dummy.Name" @bind-Value="_model._dummy.Value" ValidationFor="@(() => @_model._dummy.Value)"></IntInput>*@
-
-            <p /><p />
-
-            @*<IntInput ValidateOnKeyPress="true" LabelSizePx="50" LabelPosition="ElementRelativePosition.Left" Label="VALUE" @bind-Value="_model.Walue" ValidationFor="@(() => @_model.Walue)"></IntInput>*@
-            
-            
 
             <button type="submit">Save</button>
 
@@ -63,7 +41,7 @@
     {
         public CharacterDummyValidator()
         {
-            RuleFor(x => x.AbilityScores).SetValidator(new AbilityScoresValidator());
+            RuleFor(x => x.AbilityScoresCollection).SetValidator(new AbilityScoresValidator());
             RuleFor(x => x.Walue).InclusiveBetween(1, 30);
 
         }
@@ -72,7 +50,7 @@
    
     public class CharacterDummy
     {
-        public AbilityScores AbilityScores { get; set; } = new AbilityScores();
+        public AbilityScoresCollection AbilityScoresCollection { get; set; } = new AbilityScoresCollection();
 
         public int Walue { get; set; } = 13;
 
