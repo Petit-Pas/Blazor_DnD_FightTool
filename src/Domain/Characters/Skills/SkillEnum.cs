@@ -26,7 +26,7 @@ public enum SkillEnum
 
 public static class SkillEnumExtensions
 {
-    public static string ToString(this SkillEnum skill)
+    public static string ToReadableString(this SkillEnum skill)
     {
         return skill.ToString().Replace("_", " ");
     }

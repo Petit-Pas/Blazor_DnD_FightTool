@@ -1,0 +1,33 @@
+﻿<Card Padding="Spacing._0">
+    <table width="100%">
+        <tr>
+            <th> Skill </th>
+            <th> Mastery </th>
+            <th> Expertise </th>
+            <th> Bonus </th>
+        </tr>
+        @foreach (var skill in SkillMasteries)
+        {
+            <tr class="skill-row">
+                <td> @skill.Skill.Name.ToReadableString() </td>
+
+                <td>
+                    <CheckBox @bind-IsChecked="@skill.Mastered"> </CheckBox>
+                </td>
+                <td>
+                    <CheckBox @bind-IsChecked="@skill.Expert"> </CheckBox>
+                </td>
+                <td>
+                    @if (Abilities != null)
+                    {
+                        @skill.Skill.GetModifier(Abilities).ModifierString
+                    }
+                    else
+                    {
+                        <p> +0 </p>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+</Card>

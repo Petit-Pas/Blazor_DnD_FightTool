@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Domain\Fight\Fight.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Extensions\Extensions.csproj" />
+	  <ProjectReference Include="..\..\Infrastructure\Extensions\Extensions.csproj" />
+	  <ProjectReference Include="..\Fight\Fight.csproj" />
   </ItemGroup>
 
 </Project>
