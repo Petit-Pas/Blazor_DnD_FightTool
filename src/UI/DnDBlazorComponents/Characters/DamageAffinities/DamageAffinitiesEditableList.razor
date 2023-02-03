@@ -1,0 +1,30 @@
+﻿<Card Padding="Spacing._0">
+    <table width="100%">
+        <tr>
+            <th> Damage Type </th>
+            <th> Weak </th>
+            <th> Normal </th>
+            <th> Resistant </th>
+            <th> Immune </th>
+        </tr>
+        @foreach (var affinity in AffinitiesDtos)
+        {
+            <tr class="skill-row">
+                <td> @affinity.Affinity.Type.ToReadableString() </td>
+
+                <td>
+                    <CheckBox @bind-IsChecked="@affinity.Weak"> </CheckBox>
+                </td>
+                <td>
+                    <CheckBox @bind-IsChecked="@affinity.Normal"> </CheckBox>
+                </td>
+                <td>
+                    <CheckBox @bind-IsChecked="@affinity.Resistant"> </CheckBox>
+                </td>
+                <td>
+                    <CheckBox @bind-IsChecked="@affinity.Immune"> </CheckBox>
+                </td>
+            </tr>
+        }
+    </table>
+</Card>

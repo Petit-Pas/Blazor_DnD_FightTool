@@ -2,6 +2,7 @@
 @using System.Security.Cryptography.X509Certificates
 @using global::Characters.AbilityScores
 @using global::Characters.AbilityScores.Validation
+@using global::Characters.DamageAffinities
 @using NeoBlazorphic.StyleParameters
 @using PeterLeslieMorris.Blazor.Validation
 
@@ -9,7 +10,7 @@
     Character Sheet
 </h1>
 
-<EditForm Model="_model">
+<EditForm EditContext="_editContext">
     <Validate />
     @*<DataAnnotationsValidator />*@
 
@@ -32,13 +33,27 @@
             <button type="submit">Save</button>
 
         </div>
+        <div>
+            <DamageAffinitiesEditableList Affinities="_model.DamageAffinitiesCollection" ></DamageAffinitiesEditableList>
+        </div>
     </div>
 
 </EditForm>
 
 @code
 {
-    public CharacterDummy _model = new CharacterDummy();
+
+    protected override void OnInitialized()
+    {
+        _model = new CharacterDummy();
+        _editContext = new EditContext(_model);
+
+        _editContext.OnFieldChanged += (sender, args) => StateHasChanged();
+    }
+
+    public CharacterDummy _model;
+    public EditContext _editContext;
+
 
     public class CharacterDummyValidator : AbstractValidator<CharacterDummy>
     {
@@ -55,6 +70,7 @@
     {
         public SkillCollection SkillCollection { get; set; } = new SkillCollection();
         public AbilityScoresCollection AbilityScoresCollection { get; set; } = new AbilityScoresCollection();
+        public DamageAffinitiesCollection DamageAffinitiesCollection { get; set; } = new DamageAffinitiesCollection();
 
         public int Walue { get; set; } = 13;
 

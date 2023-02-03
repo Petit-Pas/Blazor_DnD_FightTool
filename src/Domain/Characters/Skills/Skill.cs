@@ -23,7 +23,7 @@ public class Skill
             return ScoreModifier.Empty;
         }
 
-        var attribute = Name.GetAttributes<AbilityAttribute>().SingleOrDefault();
+        var attribute = Name.GetAttribute<AbilityAttribute>();
 
         if (attribute == null)
         {

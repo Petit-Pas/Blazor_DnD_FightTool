@@ -1,0 +1,56 @@
+﻿.skill-row {
+    padding: 10px;
+}
+/*.skill-row:nth-of-type(2n+1) {
+    background: var(--dark-color);
+}
+.skill-row:nth-of-type(2n) {
+    background: var(--light-color);
+}*/
+.skill-row:hover {
+    background: var(--primary-main-color);
+}
+
+th:first-child {
+    text-align: left;
+}
+th:not(:first-child) {
+    width: 100px;
+}
+
+td, th {
+    padding: 7px;
+}
+
+td:not(:first-child) {
+    text-align: -webkit-center;
+}
+
+
+
+/*td:not(:first-child),*/ /*th:not(:first-child) {
+        border-left: 2px solid var(--dark-color);
+    }*/
+/*td:not(:last-child),*/ /*th:not(:last-child) {
+        border-right: 2px solid var(--dark-color);
+    }*/
+
+tr:first-child {
+    background: var(--light-color)
+}
+
+tr:not(:first-child) {
+    border-top: 2px solid var(--dark-color);
+}
+
+tr:not(:last-child) {
+    border-bottom: 2px solid var(--dark-color);
+}
+
+
+.vertical-line {
+    display: inline-block;
+    border-left: 1px solid white;
+    margin: 0 10px;
+    height: 125px;
+}

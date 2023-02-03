@@ -2,12 +2,12 @@
 
 public class AbilityAttribute : Attribute
 {
-    private AbilityEnum Ability;
+    private readonly AbilityEnum _ability;
     
-    public AbilityEnum GetAbility() => Ability;
+    public AbilityEnum GetAbility() => _ability;
 
     public AbilityAttribute(AbilityEnum ability)
     {
-        Ability = ability;
+        _ability = ability;
     }
 }
