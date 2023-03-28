@@ -1,11 +1,16 @@
-﻿@using System.ComponentModel.DataAnnotations
+﻿@using global::Characters.AbilityScores.Validation
+@using global::Characters.DamageAffinities
+@using global::Fight.AttackRolls.ArmorClasses
+@using global::Characters.AbilityScores
+@using System.ComponentModel.DataAnnotations
 @using System.Security.Cryptography.X509Certificates
 @using global::Characters.AbilityScores
 @using global::Characters.AbilityScores.Validation
 @using global::Characters.DamageAffinities
+@using global::Fight.AttackRolls
 @using NeoBlazorphic.StyleParameters
-@using PeterLeslieMorris.Blazor.Validation
-
+@using Morris.Blazor.Validation;
+@using DnDBlazorComponents.Fight.AttackRolls;
 <h1>
     Character Sheet
 </h1>
@@ -13,6 +18,11 @@
 <EditForm EditContext="_editContext">
     <Validate />
     @*<DataAnnotationsValidator />*@
+    
+    <div>
+        <ArmorClassEditable ArmorClass="_model.ArmorClass"></ArmorClassEditable>
+    </div>
+
 
     <div class="character-sheet">
         <div class="character-sheet-header">
@@ -61,7 +71,7 @@
         {
             RuleFor(x => x.AbilityScoresCollection).SetValidator(new AbilityScoresValidator());
             RuleFor(x => x.Walue).InclusiveBetween(1, 30);
-
+            RuleFor(x => x.ArmorClass).SetValidator(new ArmorClassValidator());
         }
 
     }
@@ -71,6 +81,8 @@
         public SkillCollection SkillCollection { get; set; } = new SkillCollection();
         public AbilityScoresCollection AbilityScoresCollection { get; set; } = new AbilityScoresCollection();
         public DamageAffinitiesCollection DamageAffinitiesCollection { get; set; } = new DamageAffinitiesCollection();
+
+        public ArmorClass ArmorClass { get; set; } = new();
 
         public int Walue { get; set; } = 13;
 

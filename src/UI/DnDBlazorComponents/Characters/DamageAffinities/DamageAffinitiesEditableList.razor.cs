@@ -1,6 +1,7 @@
 ﻿using Characters.DamageAffinities;
 using Fight.Damage;
 using Microsoft.AspNetCore.Components;
+using NeoBlazorphic.StyleParameters;
 
 namespace DnDBlazorComponents.Characters.DamageAffinities;
 
@@ -17,6 +18,8 @@ public partial class DamageAffinitiesEditableList : ComponentBase
             }
         }
     }
+
+    [Parameter] public BorderRadius? BorderRadius { get; set; } = new (1, "em");
 
     private IEnumerable<AffinityDto> AffinitiesDtos { get; set; } = new List<AffinityDto>();
 

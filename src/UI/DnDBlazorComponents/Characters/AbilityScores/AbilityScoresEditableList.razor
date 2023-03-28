@@ -1,4 +1,4 @@
-﻿<Card ShadowPosition="ShadowPosition.In" Padding="Spacing._0" TextSelectable="false">
+﻿<Card ShadowPosition="ShadowPosition.In" Padding="Spacing._0" SelectableText="false" BorderRadius="@BorderRadius">
     @if (Abilities != null)
     {
         <div class="characteristic-container">
@@ -10,31 +10,31 @@
             {
                 <div class="characteristic-row" style="grid-row: @i;">
                     <IntInput ValidateOnKeyPress="true" @bind-Value="abilityScore.Score" ValidationFor="@(() => abilityScore.Score)">
-                        <InputFieldPrefix>
+                        <PrefixRenderFragment>
                             <div class="characteristic-label">
                                 @abilityScore.ShortName
                             </div>
-                        </InputFieldPrefix>
-                        <InputFieldSuffix>
+                        </PrefixRenderFragment>
+                        <SuffixRenderFragment>
                             <div class="characteristic-modifier">
                                 @Abilities.GetModifierWithMastery(abilityScore.Name).ModifierString
                             </div>
-                        </InputFieldSuffix>
+                        </SuffixRenderFragment>
                     </IntInput>
                 </div>
                 <div class="characterisitc-mastery" style="grid-row: @i;">
-                    <CheckBox @bind-IsChecked="@abilityScore.HasMastery" AccentClass="neo-primary"></CheckBox>
+                    <CheckBox @bind-IsChecked="@abilityScore.HasMastery" Color="ThemeColor.Primary" IsEnabled="true"></CheckBox>
                 </div>
 
                 i += 1;
             }
             <div class="mastery-bonus">
                 <IntInput ValidateOnKeyPress="true" @bind-Value="@Abilities.MasteryBonus" ValidationFor="@(() => @Abilities.MasteryBonus)">
-                    <InputFieldPrefix>
+                    <PrefixRenderFragment>
                         <div>
                             Mastery bonus
                         </div>
-                    </InputFieldPrefix>
+                    </PrefixRenderFragment>
                 </IntInput>
             </div>
         </div>

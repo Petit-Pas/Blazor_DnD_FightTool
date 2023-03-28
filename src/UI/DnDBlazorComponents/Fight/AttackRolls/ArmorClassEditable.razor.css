@@ -1,0 +1,37 @@
+﻿.armor-class-container {
+    display: grid;
+    grid-column-gap: 20px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.armor-class {
+    grid-column: 1;
+}
+
+.shield {
+    grid-column: 2;
+    display: grid;
+    grid-template-rows: auto auto;
+}
+
+.has-a-shield-container {
+    grid-row: 1;
+    display: flex;
+}
+
+.has-a-shield {
+    margin: 0.5rem 0.3rem;
+}
+
+.has-a-shield-checkbox {
+    margin: auto 10px;
+}
+
+.shield-value-field {
+    grid-row: 2;
+    opacity: 1;
+    animation: reverse-fadeout 0.15s forwards;
+}
+.shield-value-field.hidden {
+    animation: fadeout 0.15s forwards;
+}

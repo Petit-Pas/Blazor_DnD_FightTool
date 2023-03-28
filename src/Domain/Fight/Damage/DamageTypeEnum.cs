@@ -1,4 +1,5 @@
-﻿namespace Fight.Damage;
+﻿// ReSharper disable InconsistentNaming
+namespace Fight.Damage;
 
 public enum DamageTypeEnum
 {

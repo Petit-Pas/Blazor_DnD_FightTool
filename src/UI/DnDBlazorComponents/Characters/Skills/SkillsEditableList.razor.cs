@@ -1,6 +1,7 @@
 ﻿using Characters.AbilityScores;
 using Characters.Skills;
 using Microsoft.AspNetCore.Components;
+using NeoBlazorphic.StyleParameters;
 
 namespace DnDBlazorComponents.Characters.Skills;
 
@@ -17,10 +18,13 @@ public partial class SkillsEditableList : ComponentBase
         }
     }
 
+    [Parameter] public BorderRadius? BorderRadius { get; set; } = new (1, "em");
+
+
     private IEnumerable<MasteryDto> SkillMasteries { get; set; } = new List<MasteryDto>();
 
     [Parameter, EditorRequired]
-    public AbilityScoresCollection Abilities { get; set; }
+    public AbilityScoresCollection? Abilities { get; set; }
 
     private class MasteryDto
     {

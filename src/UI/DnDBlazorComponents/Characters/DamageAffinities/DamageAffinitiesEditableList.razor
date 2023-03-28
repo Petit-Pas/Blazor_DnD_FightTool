@@ -1,6 +1,7 @@
-﻿<Card Padding="Spacing._0">
+﻿@using global::Fight.Damage
+<Card Padding="Spacing._0" BorderRadius="BorderRadius">
     <table width="100%">
-        <tr>
+        <tr class="ability-header">
             <th> Damage Type </th>
             <th> Weak </th>
             <th> Normal </th>
@@ -9,7 +10,7 @@
         </tr>
         @foreach (var affinity in AffinitiesDtos)
         {
-            <tr class="skill-row">
+            <tr class="ability-row">
                 <td> @affinity.Affinity.Type.ToReadableString() </td>
 
                 <td>
