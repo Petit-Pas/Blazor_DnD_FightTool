@@ -1,0 +1,78 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using System.Security.Cryptography.X509Certificates
+@using NeoBlazorphic.StyleParameters
+@using Morris.Blazor.Validation;
+@using DnDEntities.AbilityScores
+@using DnDEntities.DamageAffinities
+@using DnDEntities.Skills
+@using DnDEntitiesBlazorComponents.DnDEntities.AttackRolls
+@using DnDEntitiesBlazorComponents.DnDEntities.AbilityScores
+@using DnDEntitiesBlazorComponents.DnDEntities.Skills
+@using DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities
+@using global::DnDEntities.Characters
+
+<h1>
+    Character Sheet
+</h1>
+
+<EditForm EditContext="_editContext">
+    <Validate />
+    @*<DataAnnotationsValidator />*@
+
+    <div>
+        <StringInput @bind-Value="Character.Name" ValidationFor="() => Character.Name" Label="Name"></StringInput>
+    </div>
+    <div>
+        <ArmorClassEditable ArmorClass="Character.ArmorClass"></ArmorClassEditable>
+    </div>
+
+
+    <div class="character-sheet">
+        <div class="character-sheet-header">
+        
+            <h1> HEADER </h1>
+
+        </div>
+        <div class="character-sheet-body">
+            
+            <div class="m-2">
+                <AbilityScoresEditableList Abilities="Character.AbilityScores"></AbilityScoresEditableList>
+            </div>
+            <div class="m-2" style="width: 400px">
+                <SkillsEditableList Skills="Character.Skills" Abilities="Character.AbilityScores"></SkillsEditableList>
+            </div>
+            <h1> BODY </h1>
+
+            <button type="submit">Save</button>
+
+        </div>
+        <div>
+            <DamageAffinitiesEditableList Affinities="Character.DamageAffinities" ></DamageAffinitiesEditableList>
+        </div>
+    </div>
+
+</EditForm>
+
+@code
+{
+
+    [Parameter] public Character Character { get; set; }
+
+    protected override void OnInitialized()
+    {
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (Character != null)
+        {
+            _editContext = new EditContext(Character);
+
+            _editContext.OnFieldChanged += (sender, args) => StateHasChanged();
+
+        }
+    }
+
+    public EditContext _editContext;
+}

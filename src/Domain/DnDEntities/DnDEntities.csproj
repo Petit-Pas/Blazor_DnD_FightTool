@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FastDeepCloner" Version="1.3.6" />
     <PackageReference Include="FluentValidation" Version="11.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DnDEntities\DnDEntities.csproj" />
+	  <ProjectReference Include="..\..\Infrastructure\Extensions\Extensions.csproj" />
   </ItemGroup>
 
 </Project>

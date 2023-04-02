@@ -1,0 +1,67 @@
+﻿@page "/Characters"
+@using global::DnDEntities.Characters
+
+<div class="all-characters">
+    <MenuBlade Position="ElementRelativePosition.Top">
+        <Card BorderRadius="@HeaderBorderRadius">
+            <div class="tab-container">
+                @if (_typeDisplayed == CharacterType.Player)
+                {
+                    <Card Padding="Spacing._3" Color="ThemeColor.Primary" ShadowPosition="ShadowPosition.In">
+                        <div class="tab">
+                            Players
+                        </div>
+                    </Card>
+                }
+                else
+                {
+                    <ButtonCard OnMouseClickCallBack="SwitchType">
+                        <div class="tab">
+                            Players
+                        </div>
+                    </ButtonCard>
+                }
+                <div style="margin: 10px;"></div>
+                @if (_typeDisplayed == CharacterType.Monster)
+                {
+                    <Card Padding="Spacing._3" Color="ThemeColor.Primary" ShadowPosition="ShadowPosition.In">
+                        <div class="tab">
+                            Monsters
+                        </div>
+                    </Card>
+                }
+                else
+                {
+                    <ButtonCard OnMouseClickCallBack="SwitchType">
+                        <div class="tab">
+                            Monsters
+                        </div>
+                    </ButtonCard>
+                }
+            </div>
+        </Card>
+    </MenuBlade>
+
+    <CardsList T="Character" Items="@SelectedCharacters">
+        <ItemRenderFragment Context="character">
+            <div class="character-card">
+                <div>
+                    @character.Name
+                </div>
+                <div class="delete-button" @onclick="() => Delete(character)"> delete </div>
+            </div>
+        </ItemRenderFragment>
+    </CardsList>
+
+    <MenuBlade Position="ElementRelativePosition.Bottom">
+        <Card BorderRadius="@FooterBorderRadius">
+            <div>
+                <ButtonCard OnMouseClickCallBack="CreateNew">
+                    <div class="tab">
+                        Create New
+                    </div>
+                </ButtonCard>
+            </div>
+        </Card>
+    </MenuBlade>
+</div>

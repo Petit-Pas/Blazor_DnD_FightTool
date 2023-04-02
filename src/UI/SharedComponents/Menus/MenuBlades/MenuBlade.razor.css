@@ -1,0 +1,14 @@
+﻿.menu-blade {
+    position: sticky;
+    z-index: 2;
+}
+.menu-blade.bottom {
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+}
+.menu-blade.top {
+    top: 0;
+    display: flex;
+    justify-content: center;
+}

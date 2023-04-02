@@ -1,0 +1,44 @@
+﻿@page "/Characters/Edit/{CharacterId}"
+
+@using NeoBlazorphic.Components.Inputs.Buttons
+@using SharedComponents.Menus.MenuBlades
+
+
+@if (_character != null)
+{
+    <div class="edit-character">
+        <MenuBlade Position="ElementRelativePosition.Top">
+            <Card BorderRadius="@(new BorderRadius(0, 0, 1, 1, "em"))">
+                <div style="font-size: 26px;">
+                    Editing @_character.Name
+                </div>
+            </Card>
+        </MenuBlade>
+
+
+        <div class="edit-character-body">
+            <CharacterSheet Character="@_character"></CharacterSheet>
+        </div>
+
+        <MenuBlade Position="ElementRelativePosition.Bottom">
+            <Card BorderRadius="@(new BorderRadius(1, 1, 0, 0, "em"))">
+                <div class="edit-character-actions">
+                    <ButtonCard OnMouseClickCallBack="CancelClicked" Color="ThemeColor.Danger">
+                        <div class="edit-character-action"> Cancel </div>
+                    </ButtonCard>
+                    <div style="margin: 10px;"></div>
+                    <ButtonCard OnMouseClickCallBack="SaveClicked" Color="ThemeColor.Primary">
+                        <div class="edit-character-action"> Save </div>
+                    </ButtonCard>
+                </div>
+            </Card>
+        </MenuBlade>
+    </div>
+}
+else
+{
+    <div> Error when trying to load character with id @CharacterId</div>
+}
+
+
+

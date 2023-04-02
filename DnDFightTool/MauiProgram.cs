@@ -1,9 +1,10 @@
-﻿using Characters.AbilityScores;
+﻿using DnDEntities.AbilityScores;
+using DnDEntities.AttackRolls.ArmorClasses;
+using DnDEntities.Characters;
 using Microsoft.Extensions.Logging;
 using DnDFightTool.Data;
-using Fight.AttackRolls.ArmorClasses;
 using Morris.Blazor.Validation;
-using static DnDBlazorComponents.CharacterSheet;
+using static DnDEntitiesBlazorComponents.CharacterSheet;
 
 namespace DnDFightTool;
 
@@ -21,8 +22,11 @@ public static class MauiProgram
 
 		builder.Services.AddMauiBlazorWebView();
 
+        builder.Services.AddSingleton<ICharacterRepository, InMemoryCharacterRepository>();
+        builder.Services.AddSingleton<IFileManager, FileManager>();
+
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
+        builder.Services.AddBlazorWebViewDeveloperTools();
 		builder.Logging.AddDebug();
 #endif
 
