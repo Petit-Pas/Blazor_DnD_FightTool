@@ -1,13 +1,18 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@using Blazored.Toast
 
-    <main class="neo-gray" style="background: var(--base-main-color)">
-        <div class="p-3" style="padding-top: 0; padding-bottom: 0; height: 100%">
-            @Body
+<div style="background: var(--base-main-color)">
+    <BlazoredToasts ShowProgressBar="true"/>
+    <div class="page">
+        <div class="sidebar">
+            <NavMenu />
         </div>
-    </main>
+
+        <main >
+            <div class="p-3" style="padding-top: 0; padding-bottom: 0; height: 100%">
+                @Body
+            </div>
+        </main>
+    </div>
 </div>

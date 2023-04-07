@@ -1,4 +1,5 @@
-﻿using DnDEntities.Characters;
+﻿using Blazored.Toast.Services;
+using DnDEntities.Characters;
 using Microsoft.AspNetCore.Components;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
@@ -10,6 +11,8 @@ public partial class EditCharacterPage
 
     [Inject]
     public NavigationManager Navigation { get; set; }
+    [Inject]
+    public IToastService ToastService { get; set; }
 
 
     [Inject]
@@ -45,6 +48,7 @@ public partial class EditCharacterPage
     private void SaveClicked()
     {
         CharacterRepository.Save(_character!);
+        ToastService.ShowSuccess($"Character {_character?.Name} has been successfully saved!");
         Navigation.NavigateTo("/Characters");
     }
 

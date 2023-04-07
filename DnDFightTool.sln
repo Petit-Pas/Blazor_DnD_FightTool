@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DnDEntitiesBlazorComponents
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fight", "src\Domain\Fight\Fight.csproj", "{8BCD4882-6227-4A12-AB15-FC64E2DDAB3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedComponents", "src\UI\SharedComponents\SharedComponents.csproj", "{AEE3DB6C-0C51-4298-A6B4-D74E8A64E525}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedComponents", "src\UI\SharedComponents\SharedComponents.csproj", "{AEE3DB6C-0C51-4298-A6B4-D74E8A64E525}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,7 +69,7 @@ Global
 		{AEE3DB6C-0C51-4298-A6B4-D74E8A64E525} = {BD09E90F-6B05-45E9-A5D5-EA0E525A31EC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4F0A421B-176D-4E26-BD1F-6466C90520DF}
 		        SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
+		SolutionGuid = {4F0A421B-176D-4E26-BD1F-6466C90520DF}
 	EndGlobalSection
 EndGlobal

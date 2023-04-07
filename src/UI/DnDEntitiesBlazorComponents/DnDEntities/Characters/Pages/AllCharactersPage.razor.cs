@@ -1,8 +1,11 @@
 ﻿
+using Blazored.Modal;
+using Blazored.Modal.Services;
 using DnDEntities.Characters;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using NeoBlazorphic.StyleParameters;
+using SharedComponents.Modals.ConfirmationModals;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
 
@@ -13,6 +16,9 @@ public partial class AllCharactersPage
 
     [Inject]
     public NavigationManager Navigation { get; set; }
+
+    [Inject]
+    public IModalService Modal { get; set; }
 
     private Character[] _players;
 
@@ -42,16 +48,24 @@ public partial class AllCharactersPage
         Navigation.NavigateTo($"characters/edit/{(_typeDisplayed is CharacterType.Player ? "newPlayer" : "newMonster")}");
     }
 
-    private void Delete(Character character)
+    private async Task Delete(Character character)
     {
-        CharacterRepository.Delete(character);
-        if (character.Type is CharacterType.Player)
+        var parameters = new ModalParameters().Add(nameof(ConfirmationModal.Message), "Hello world message");
+        var options = new ModalOptions { UseCustomLayout = true };
+        var modal = Modal.Show<ConfirmationModal>("Default Title?", parameters, options);
+        var result = await modal.Result;
+        
+        if (result.Confirmed)
         {
-            _players = _players.Where(x => x.Id != character.Id).ToArray();
-        }
-        else
-        {
-            _monsters = _monsters.Where(x => x.Id != character.Id).ToArray();
+            CharacterRepository.Delete(character);
+            if (character.Type is CharacterType.Player)
+            {
+                _players = _players.Where(x => x.Id != character.Id).ToArray();
+            }
+            else
+            {
+                _monsters = _monsters.Where(x => x.Id != character.Id).ToArray();
+            }
         }
     }
 
