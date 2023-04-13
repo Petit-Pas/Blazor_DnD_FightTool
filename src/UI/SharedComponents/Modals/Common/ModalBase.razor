@@ -1,0 +1,30 @@
+﻿<div class="modal">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <div class="modal-title">
+                @if (ModalHeader != default)
+                {
+                    @ModalHeader
+                }
+            </div>
+            <div class="modal-actions">
+                @if (ModalActions != default)
+                {
+                    @ModalActions
+                }
+            </div>
+        </div>
+        <div class="modal-body">                 
+            @if (ModalBody != default)
+            {
+                @ModalBody
+            }
+        </div>
+        <div class="modal-footer">
+            @if (ModalFooter != default)
+            {
+                @ModalFooter
+            }
+        </div>
+    </div>
+</div>

@@ -69,6 +69,11 @@ public partial class AllCharactersPage
         }
     }
 
+    private void Edit(Character character)
+    {
+        Navigation.NavigateTo($"characters/edit/{character.Id}");
+    }
+
     // UI Methods
     private Character[] SelectedCharacters => _typeDisplayed switch
     {

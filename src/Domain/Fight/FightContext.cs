@@ -4,8 +4,10 @@ namespace Fight;
 
 public class FightContext : IFightContext
 {
+    private List<Character> Fighters = new ();
+
     public void AddToFight(Character character)
     {
-        throw new NotImplementedException();
+        Fighters.Add(character);
     }
 }

@@ -1,0 +1,11 @@
+﻿.modal-close-button {
+    background: var(--danger-main-color);
+    width: 40px;
+}
+
+.modal-close-icon {
+    transition: all 0.3s ease-in-out;
+}
+.modal-close-button:hover > .modal-close-icon {
+    transform: rotate(180deg);
+}

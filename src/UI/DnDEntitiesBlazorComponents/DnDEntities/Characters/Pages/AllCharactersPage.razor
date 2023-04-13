@@ -48,7 +48,10 @@
                 <div>
                     @character.Name
                 </div>
-                <div class="delete-button" @onclick="() => Delete(character)"> delete </div>
+                <div class="character-buttons">
+                    <div class="edit-button" @onclick="() => Edit(character)"> Edit </div>
+                    <div class="delete-button" @onclick="() => Delete(character)"> Delete </div>
+                </div>
             </div>
         </ItemRenderFragment>
     </CardsList>

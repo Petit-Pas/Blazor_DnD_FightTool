@@ -103,3 +103,16 @@ a, .btn-link {
         opacity: 1;
     }
 } 
+
+/* overriding shadows from neo blazorphic to make them smoother */
+.neo-shadow-in, .neo-shadow-in-on-active:active {
+    box-shadow: inset 2px 2px 5px var(--dark-shadow-color), inset -2px -2px 5px var(--light-shadow-color);
+}
+
+.neo-shadow-out, .neo-shadow-out-on-active:active {
+    box-shadow: 2px 2px 5px var(--base-dark-shadow), -2px -2px 5px var(--base-light-color);
+}
+
+.toast-success-override {
+    background: red;
+}

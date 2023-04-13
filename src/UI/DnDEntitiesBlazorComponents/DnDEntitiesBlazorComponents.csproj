@@ -30,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="DnDEntities\Characters\Components\" />
-    <Folder Include="Fight\" />
   </ItemGroup>
 
   <ItemGroup>
