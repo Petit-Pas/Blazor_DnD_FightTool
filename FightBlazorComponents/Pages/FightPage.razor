@@ -1,3 +1,6 @@
 ﻿@page "/Fight"
 
-<div> Fight page </div>
+@foreach (var character in FightContext)
+{
+    <FightingCharacterTile CharacterId="@character.Id" />
+}

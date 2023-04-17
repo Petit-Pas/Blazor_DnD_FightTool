@@ -49,6 +49,7 @@
                     @character.Name
                 </div>
                 <div class="character-buttons">
+                    <div class="edit-button" @onclick="() => AddToFight(character)"> Add To Fight </div>
                     <div class="edit-button" @onclick="() => Edit(character)"> Edit </div>
                     <div class="delete-button" @onclick="() => Delete(character)"> Delete </div>
                 </div>

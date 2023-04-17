@@ -58,6 +58,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\FightBlazorComponents\FightBlazorComponents.csproj" />
       <ProjectReference Include="..\src\Domain\DnDEntities\DnDEntities.csproj" />
       <ProjectReference Include="..\src\Domain\Fight\Fight.csproj" />
       <ProjectReference Include="..\src\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />

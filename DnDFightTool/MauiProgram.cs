@@ -5,8 +5,8 @@ using DnDEntities.Characters;
 using Microsoft.Extensions.Logging;
 using DnDFightTool.Data;
 using Morris.Blazor.Validation;
-using static DnDEntitiesBlazorComponents.CharacterSheet;
 using Blazored.Modal;
+using Fight;
 
 namespace DnDFightTool;
 
@@ -28,6 +28,7 @@ public static class MauiProgram
         builder.Services.AddBlazoredModal();
 
         builder.Services.AddSingleton<ICharacterRepository, InMemoryCharacterRepository>();
+        builder.Services.AddSingleton<IFightContext, FightContext>();
         builder.Services.AddSingleton<IFileManager, FileManager>();
 
 #if DEBUG
@@ -38,8 +39,7 @@ public static class MauiProgram
         builder.Services.AddFormValidation(config =>
             {
                 config.AddFluentValidation(
-                    typeof(AbilityScore).Assembly, 
-                    typeof(ArmorClass).Assembly);
+                    typeof(Character).Assembly);
             }
         );
 

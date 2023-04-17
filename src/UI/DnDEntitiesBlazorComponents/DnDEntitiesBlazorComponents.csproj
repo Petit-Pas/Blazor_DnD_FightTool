@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\DnDEntities\DnDEntities.csproj" />
+    <ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
     <ProjectReference Include="..\SharedComponents\SharedComponents.csproj" />
   </ItemGroup>
 

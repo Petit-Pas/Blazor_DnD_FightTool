@@ -2,6 +2,7 @@
 using Blazored.Modal;
 using Blazored.Modal.Services;
 using DnDEntities.Characters;
+using Fight;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using NeoBlazorphic.StyleParameters;
@@ -19,6 +20,9 @@ public partial class AllCharactersPage
 
     [Inject]
     public IModalService Modal { get; set; }
+
+    [Inject]
+    public IFightContext FightContext { get; set; }
 
     private Character[] _players;
 
@@ -67,6 +71,11 @@ public partial class AllCharactersPage
                 _monsters = _monsters.Where(x => x.Id != character.Id).ToArray();
             }
         }
+    }
+
+    private void AddToFight(Character character)
+    {
+        FightContext.AddToFight(character);
     }
 
     private void Edit(Character character)

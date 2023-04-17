@@ -2,7 +2,9 @@
 
 namespace Fight;
 
-public interface IFightContext
+public interface IFightContext: IEnumerable<Character>
 {
     public void AddToFight(Character character);
+
+    public Character? this[Guid characterId] { get; }
 }

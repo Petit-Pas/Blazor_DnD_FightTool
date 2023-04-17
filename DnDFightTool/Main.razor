@@ -1,9 +1,10 @@
 ﻿@using DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages
+@using FightBlazorComponents.Pages;
 @inject NavigationManager Navigation;
 
 <CascadingBlazoredModal>
     <Router AppAssembly="@typeof(Main).Assembly"
-            AdditionalAssemblies="new [] { typeof(EditCharacterPage).Assembly}">
+            AdditionalAssemblies="new [] { typeof(EditCharacterPage).Assembly, typeof(FightPage).Assembly}">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
