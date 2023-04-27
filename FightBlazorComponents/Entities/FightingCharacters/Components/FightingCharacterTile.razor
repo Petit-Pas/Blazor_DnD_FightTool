@@ -1,0 +1,20 @@
+﻿
+<div @onclick="TileClicked">
+    <Card Color="@CardTheme" BorderRadius="@BorderRadius">
+        <div class="character-tile">
+            @if (Character == null)
+            {
+                <p> Character not found </p>
+            }
+            else
+            {
+                <div class="character-tile-header">
+                    @Character.Name
+                </div>
+                <div class="character-tile-hps">
+                    @Character.HitPoints.HpRatioString
+                </div>
+            }
+        </div>
+    </Card>
+</div>

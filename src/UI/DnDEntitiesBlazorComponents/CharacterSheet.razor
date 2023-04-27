@@ -9,6 +9,7 @@
 @using DnDEntitiesBlazorComponents.DnDEntities.AbilityScores
 @using DnDEntitiesBlazorComponents.DnDEntities.Skills
 @using DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities
+@using DnDEntitiesBlazorComponents.DnDEntities.HitPoint
 @using global::DnDEntities.Characters
 
 <h1>
@@ -21,6 +22,9 @@
 
     <div>
         <StringInput @bind-Value="Character.Name" ValidationFor="() => Character.Name" Label="Name"></StringInput>
+    </div>
+    <div>
+        <HitPointsEditable HitPoints="Character.HitPoints"></HitPointsEditable>
     </div>
     <div>
         <ArmorClassEditable ArmorClass="Character.ArmorClass"></ArmorClassEditable>
@@ -69,8 +73,11 @@
         {
             _editContext = new EditContext(Character);
 
-            _editContext.OnFieldChanged += (sender, args) => StateHasChanged();
-
+            _editContext.OnFieldChanged += (sender, args) =>
+            {
+                var test = _editContext.Validate();
+                StateHasChanged();
+            };
         }
     }
 

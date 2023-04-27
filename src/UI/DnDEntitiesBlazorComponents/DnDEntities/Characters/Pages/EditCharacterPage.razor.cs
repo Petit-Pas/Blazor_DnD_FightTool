@@ -2,6 +2,7 @@
 using Blazored.Toast.Services;
 using DnDEntities.Characters;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
 

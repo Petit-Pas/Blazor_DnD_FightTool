@@ -1,4 +1,5 @@
-﻿using DnDEntities.Damage;
+﻿using System.Xml;
+using DnDEntities.Damage;
 using Extensions;
 
 namespace DnDEntities.DamageAffinities;

@@ -1,0 +1,13 @@
+﻿.hp-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+}
+
+.max-hps {
+    grid-column: 1;
+}
+
+.current-hps {
+    grid-column: 2;
+}

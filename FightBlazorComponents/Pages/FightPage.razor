@@ -1,6 +1,10 @@
 ﻿@page "/Fight"
 
-@foreach (var character in FightContext)
-{
-    <FightingCharacterTile CharacterId="@character.Id" />
-}
+<div class="fight-ui">
+    <div class="character-tile-list">
+        @foreach (var fighter in FightContext)
+        {
+            <FightingCharacterTile Fighter="@fighter" />
+        }
+    </div>
+</div>

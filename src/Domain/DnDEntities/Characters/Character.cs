@@ -2,6 +2,7 @@
 using DnDEntities.AttackRolls.ArmorClasses;
 using DnDEntities.DamageAffinities;
 using DnDEntities.Skills;
+using DnDEntities.HitPoint;
 
 namespace DnDEntities.Characters;
 
@@ -19,7 +20,7 @@ public class Character
         AbilityScores = new AbilityScoresCollection(withDefaults);
         Skills = new SkillCollection(withDefaults);
         DamageAffinities = new DamageAffinitiesCollection(withDefaults);
-
+        HitPoints = new HitPoints(withDefaults);
     }
 
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -36,4 +37,5 @@ public class Character
 
     public DamageAffinitiesCollection DamageAffinities { get; set; }
 
+    public HitPoints HitPoints { get; set; }
 }

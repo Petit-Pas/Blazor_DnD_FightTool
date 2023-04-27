@@ -1,0 +1,19 @@
+﻿.fight-ui {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.character-tile-list {
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.character-tile-list > * {
+    flex: 1 1 1px;
+    height: 100%;
+}

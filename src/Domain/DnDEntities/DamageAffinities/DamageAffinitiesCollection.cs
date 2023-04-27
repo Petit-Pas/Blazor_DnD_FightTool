@@ -43,6 +43,7 @@ public class DamageAffinitiesCollection : List<DamageAffinity>
         if (damageAffinity == null)
         {
             // TODO warn
+            return null;
         }
         return damageAffinity;
     }

@@ -1,0 +1,13 @@
+﻿@using global::DnDEntities.Characters
+
+@if (HitPoints != null)
+{
+    <div class="hp-container">
+        <div class="max-hps">
+            <IntInput @bind-Value="HitPoints.MaxHps" ValidationFor="() => HitPoints.MaxHps" Label="Max Hps"></IntInput>
+        </div>
+        <div class="current-hps">
+            <IntInput @bind-Value="HitPoints.CurrentHps" ValidationFor="() => HitPoints.CurrentHps" Label="Hps"></IntInput>
+        </div>
+    </div>
+}

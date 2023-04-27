@@ -1,0 +1,15 @@
+﻿.character-tile {
+    display: grid;
+    grid-template-rows: auto 1fr;
+
+    min-height: 100px;
+    min-width: 200px;
+}
+
+.character-tile-header {
+    grid-row: 1;
+}
+
+.character-tile-hps {
+    grid-row: 2;
+}
