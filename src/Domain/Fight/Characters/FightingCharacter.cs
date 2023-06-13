@@ -2,16 +2,9 @@
 
 namespace Fight.Characters;
 
-public class FightingCharacter
+public record FightingCharacter(CharacterType CharacterType, Guid CharacterId)
 {
-    public CharacterType CharacterType { get; init; }
-
-    public Guid CharacterId { get; init; }
-
-
-    public FightingCharacter(Character character)
-    {
-        CharacterType = character.Type;
-        CharacterId = character.Id;
-    }
+	public FightingCharacter(Character character) : this(character.Type, character.Id)
+	{
+	}
 }

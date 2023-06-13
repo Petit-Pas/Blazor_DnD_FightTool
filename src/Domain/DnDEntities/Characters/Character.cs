@@ -3,6 +3,7 @@ using DnDEntities.AttackRolls.ArmorClasses;
 using DnDEntities.DamageAffinities;
 using DnDEntities.Skills;
 using DnDEntities.HitPoint;
+using FastDeepCloner;
 
 namespace DnDEntities.Characters;
 
@@ -38,4 +39,15 @@ public class Character
     public DamageAffinitiesCollection DamageAffinities { get; set; }
 
     public HitPoints HitPoints { get; set; }
+
+    /// <summary>
+    ///     Will do a deep copy of this character, then give it a new ID
+    /// </summary>
+    /// <returns></returns>
+    public Character Duplicate()
+    {
+        var copy = this.Clone();
+        copy.Id = new Guid();
+        return copy;
+    }
 }

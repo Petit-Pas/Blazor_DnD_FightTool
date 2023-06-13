@@ -1,9 +1,14 @@
-﻿.character-tile {
+﻿.character-tile-wrap {
+    min-height: 100px;
+    min-width: 200px;
+    max-height: 200px;
+    max-width: 250px;
+}
+
+.character-tile {
     display: grid;
     grid-template-rows: auto 1fr;
 
-    min-height: 100px;
-    min-width: 200px;
 }
 
 .character-tile-header {

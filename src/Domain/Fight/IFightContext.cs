@@ -21,7 +21,11 @@ public interface IFightContext: IEnumerable<FightingCharacter>
     ///     the moving fighter is not the one whose turn it is.
     ///     Is is the player whose possible actions will be displayed (aka the one the user clicked on, or the one whose turn it is when you switch turn)
     /// </summary>
-    FightingCharacter? MovingCharacter { get; }
+    FightingCharacter? MovingFightingCharacter { get; }
 
     event EventHandler<FightingCharacter?> MovingCharacterChanged;
+
+    public Character? GetMovingCharacter();
+    public Character? GetCharacterById(Guid id);
+
 }

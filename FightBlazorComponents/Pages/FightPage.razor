@@ -7,4 +7,11 @@
             <FightingCharacterTile Fighter="@fighter" />
         }
     </div>
+    @if (MovingCharacter != null)
+    {
+        <div class="character-actions">
+            <div> actions of @MovingCharacter.Name </div>
+        </div>
+
+    }
 </div>

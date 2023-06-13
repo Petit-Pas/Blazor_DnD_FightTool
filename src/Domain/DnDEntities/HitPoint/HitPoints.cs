@@ -19,5 +19,7 @@ public class HitPoints
 
     public int CurrentHps { get; set; }
 
-    public string HpRatioString => $"{CurrentHps} / {MaxHps}";
+    public int CurrentTempHps { get; set; }
+
+    public string HpRatioString => $"{CurrentHps}{(CurrentTempHps != 0 ? $"(+ {CurrentHps})" : "")} / {MaxHps}";
 }

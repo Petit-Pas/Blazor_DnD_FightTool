@@ -60,7 +60,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     }
 
     // UI Methods
-    private ThemeColor CardTheme => FightContext.MovingCharacter == Fighter
+    private ThemeColor CardTheme => FightContext.MovingFightingCharacter == Fighter
         ? ThemeColor.Primary 
         : ThemeColor.Base;
 }
