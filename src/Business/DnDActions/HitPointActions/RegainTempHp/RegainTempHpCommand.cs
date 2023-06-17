@@ -1,9 +1,8 @@
-﻿using Fight.Characters;
-
+﻿
 namespace DnDActions.HitPointActions.RegainTempHp;
 
 public class RegainTempHpCommand : HitPointCommandBase
-{
+{ 
     /// <summary>
     ///     The amount of Temporay hit points to provide
     /// </summary>
@@ -14,7 +13,7 @@ public class RegainTempHpCommand : HitPointCommandBase
     /// </summary>
     public int? CorrectedAmount { get; set; }
 
-    public RegainTempHpCommand(FightingCharacter fightingCharacter, int amount) : base(fightingCharacter.CharacterId)
+    public RegainTempHpCommand(Guid targetId, int amount) : base(targetId)
     {
         Amount = amount;
     }

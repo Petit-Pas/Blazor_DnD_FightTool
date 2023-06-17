@@ -48,17 +48,17 @@ public class DamageAffinitiesCollection : List<DamageAffinity>
         return damageAffinity;
     }
 
-    public DamageFactorModifierEnum GetDamageFactorModifierFor(DamageTypeEnum damageType)
+    public DamageAffinityEnum GetAffinityFor(DamageTypeEnum damageType)
     {
         var damageAffinity = GetDamageAffinityFor(damageType);
 
-        return damageAffinity?.Modifier ?? DamageFactorModifierEnum.Normal;
+        return damageAffinity?.Affinity ?? DamageAffinityEnum.Normal;
     }
 
     public DamageFactor GetDamageFactorFor(DamageTypeEnum damageType)
     {
         var damageAffinity = GetDamageAffinityFor(damageType);
 
-        return damageAffinity?.GetDamageFactor() ?? DamageFactor.Empty;
+        return damageAffinity?.GetDamageFactor() ?? DamageFactor.None;
     }
 }

@@ -19,7 +19,6 @@ internal class RegainHpCommandHandlerTests
     private IFightContext _fightContext = null!;
 
     private Character _character = null!;
-    private FightingCharacter _fightingCharacter = null!;
 
     private RegainHpCommand _command = null!;
     private RegainHpCommandHandler _commandHandler = null!;
@@ -32,9 +31,8 @@ internal class RegainHpCommandHandlerTests
 
         _character = new Character();
         _character.HitPoints = new HitPoints() { CurrentHps = 12, MaxHps = 25 };
-        _fightingCharacter = new FightingCharacter(_character);
 
-        _command = new RegainHpCommand(_fightingCharacter, 10) { CorrectedAmount = 10 };
+        _command = new RegainHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
         _commandHandler = new RegainHpCommandHandler(_mediator, _fightContext);
 
         A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
@@ -182,32 +180,16 @@ internal class RegainHpCommandHandlerTests
         }
 
         [Test]
-        public void Should_Throw_InvalidOperationException_When_CorrectedAmount_Is_Null()
-        {
-            // Arrange
-            _command.CorrectedAmount = null;
-
-            // Act
-            var redoing = () => _commandHandler.Redo(_command);
-
-            // Assert
-            redoing.Should().Throw<InvalidOperationException>();
-        }
-
-        [Test]
-        [TestCase(3)]
-        [TestCase(10)]
-        public void Should_Update_Hps_With_CorrectedAmount(int correctedAmount)
+        public void Should_Update_Hps()
         {
             // Arrange
             var startingHps = _hps;
-            _command.CorrectedAmount = correctedAmount;
 
             // Act
-            _commandHandler.Redo(_command);
+            _commandHandler.Execute(_command);
 
             // Assert
-            _hps.Should().Be(startingHps + correctedAmount);
+            _hps.Should().Be(startingHps + _command.Amount);
         }
     }
 }

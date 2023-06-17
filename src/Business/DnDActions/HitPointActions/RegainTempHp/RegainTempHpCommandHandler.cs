@@ -44,13 +44,6 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
     {
         base.Redo(command);
 
-        var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
-
-        if (command.CorrectedAmount == null)
-        {
-            throw new InvalidOperationException($"Cannot redo a {command.GetType()} when it has not been executed/undone yet.");
-        }
-
-        hitPoints.CurrentTempHps += command.CorrectedAmount.Value;
+        Execute(command);
     }
 }

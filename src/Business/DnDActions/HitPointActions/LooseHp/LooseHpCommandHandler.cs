@@ -47,13 +47,6 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
     {
         base.Redo(command);
 
-        var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
-
-        if (command.CorrectedAmount == null)
-        {
-            throw new InvalidOperationException($"Cannot redo a {command.GetType()} when it has not executed/undone yet.");
-        }
-
-        hitPoints.CurrentHps -= command.CorrectedAmount.Value;
+        Execute(command);
     }
 }

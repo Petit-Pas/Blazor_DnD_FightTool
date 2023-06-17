@@ -1,4 +1,4 @@
-﻿using Fight.Characters;
+﻿using UndoableMediator.Commands;
 
 namespace DnDActions.HitPointActions.LooseHp;
 
@@ -14,8 +14,11 @@ public class LooseHpCommand : HitPointCommandBase
     /// </summary>
     public int? CorrectedAmount { get; set; }
 
-    public LooseHpCommand(FightingCharacter fightingCharacter, int amount) : base(fightingCharacter.CharacterId)
-    {
+    /// <summary>
+    ///     The guid of the actual target
+    /// </summary>
+    public LooseHpCommand(Guid targetId, int amount) : base(targetId)
+    { 
         Amount = amount;
     }
 }

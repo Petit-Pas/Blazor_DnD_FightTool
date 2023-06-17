@@ -1,12 +1,12 @@
 ﻿namespace DnDEntities.Damage;
 
-public class DamageFactorModifierAttribute : Attribute
+public class DamageFactorAttribute : Attribute
 {
     private readonly double _modifier;
 
     public double GetModifier() => _modifier;
 
-    public DamageFactorModifierAttribute(double modifier)
+    public DamageFactorAttribute(double modifier)
     {
         _modifier = modifier;
     }

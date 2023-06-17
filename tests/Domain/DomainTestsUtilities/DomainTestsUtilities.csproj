@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Domain\DnDEntities\DnDEntities.csproj" />
+    <ProjectReference Include="..\..\..\src\Domain\Fight\Fight.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,4 @@
-﻿using DnDEntities.Damage;
-using DnDEntities.DamageAffinities;
+﻿using DnDEntities.DamageAffinities;
 using Microsoft.AspNetCore.Components;
 using NeoBlazorphic.StyleParameters;
 
@@ -35,26 +34,26 @@ public partial class DamageAffinitiesEditableList : ComponentBase
 
         public bool Weak
         {
-            get => Affinity.Modifier == DamageFactorModifierEnum.Weak;
-            set => Affinity.Modifier = value ? DamageFactorModifierEnum.Weak : Affinity.Modifier;
+            get => Affinity.Affinity == DamageAffinityEnum.Weak;
+            set => Affinity.Affinity = value ? DamageAffinityEnum.Weak : Affinity.Affinity;
         }
 
         public bool Normal
         {
-            get => Affinity.Modifier == DamageFactorModifierEnum.Normal;
-            set => Affinity.Modifier = value ? DamageFactorModifierEnum.Normal : Affinity.Modifier;
+            get => Affinity.Affinity == DamageAffinityEnum.Normal;
+            set => Affinity.Affinity = value ? DamageAffinityEnum.Normal : Affinity.Affinity;
         }
 
         public bool Resistant
         {
-            get => Affinity.Modifier == DamageFactorModifierEnum.Resistant;
-            set => Affinity.Modifier = value ? DamageFactorModifierEnum.Resistant : Affinity.Modifier;
+            get => Affinity.Affinity == DamageAffinityEnum.Resistant;
+            set => Affinity.Affinity = value ? DamageAffinityEnum.Resistant : Affinity.Affinity;
         }
 
         public bool Immune
         {
-            get => Affinity.Modifier == DamageFactorModifierEnum.Immune;
-            set => Affinity.Modifier = value ? DamageFactorModifierEnum.Immune : Affinity.Modifier;
+            get => Affinity.Affinity == DamageAffinityEnum.Immune;
+            set => Affinity.Affinity = value ? DamageAffinityEnum.Immune : Affinity.Affinity;
         }
     }
 }

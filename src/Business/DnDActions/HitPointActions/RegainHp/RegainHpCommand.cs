@@ -1,4 +1,4 @@
-﻿using Fight.Characters;
+﻿using UndoableMediator.Commands;
 
 namespace DnDActions.HitPointActions.RegainHp;
 
@@ -14,7 +14,7 @@ public class RegainHpCommand : HitPointCommandBase
     /// </summary>
     public int? CorrectedAmount { get; set; }
 
-    public RegainHpCommand(FightingCharacter fightingCharacter, int amount) : base(fightingCharacter.CharacterId)
+    public RegainHpCommand(Guid targetId, int amount) : base(targetId)
     {
         Amount = amount;
     }

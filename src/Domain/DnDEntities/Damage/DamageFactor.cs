@@ -1,6 +1,18 @@
 ﻿namespace DnDEntities.Damage;
 
-public record DamageFactor (double Factor)
+public class DamageFactor
 {
-    public static readonly DamageFactor Empty = new (1);
+    public DamageFactor(double factor)
+    {
+        Factor = factor;
+    }
+
+    private double Factor { get; init; }
+
+    public static readonly DamageFactor None = new (1);
+
+    public double ApplyOn(int baseDamage)
+    {
+        return baseDamage * Factor;
+    }
 }

@@ -19,7 +19,6 @@ internal class LooseHpCommandHandlerTests
     private IFightContext _fightContext = null!;
 
     private Character _character = null!;
-    private FightingCharacter _fightingCharacter = null!;
 
     private LooseHpCommand _command = null!;
     private LooseHpCommandHandler _commandHandler = null!;
@@ -32,9 +31,8 @@ internal class LooseHpCommandHandlerTests
 
         _character = new Character();
         _character.HitPoints = new HitPoints() { MaxHps = 25, CurrentHps = 12 };
-        _fightingCharacter = new FightingCharacter(_character);
 
-        _command = new LooseHpCommand(_fightingCharacter, 10) { CorrectedAmount = 10 };
+        _command = new LooseHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
         _commandHandler = new LooseHpCommandHandler(_mediator, _fightContext);
 
         A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
@@ -181,32 +179,35 @@ internal class LooseHpCommandHandlerTests
         }
 
         [Test]
-        public void Should_Throw_InvalidOperationException_When_CorrectedAmount_Is_Null()
-        {
-            // Arrange
-            _command.CorrectedAmount = null;
-
-            // Act
-            var redoing = () => _commandHandler.Redo(_command);
-
-            // Assert
-            redoing.Should().Throw<InvalidOperationException>();
-        }
-
-        [Test]
-        [TestCase(3)]
-        [TestCase(10)]
-        public void Should_Update_Hps_With_CorrectedAmount(int correctedAmount)
+        public void Should_Update_Hps()
         {
             // Arrange
             var startingHps = _hps;
-            _command.CorrectedAmount = correctedAmount;
+
+            // Act
+            _commandHandler.Execute(_command);
+
+            // Assert
+            _hps.Should().Be(startingHps - _command.Amount);
+        }
+    }
+
+    [TestFixture]
+    public class FullCycleTest : LooseHpCommandHandlerTests
+    {
+        [Test]
+        public void Redo_Should_Do_The_Same_As_Execute()
+        {
+            // Arrange
+            _commandHandler.Execute(_command);
+            var remainingHps = _hps;
+            _commandHandler.Undo(_command);
 
             // Act
             _commandHandler.Redo(_command);
 
             // Assert
-            _hps.Should().Be(startingHps - correctedAmount);
+            _hps.Should().Be(remainingHps);
         }
     }
 }

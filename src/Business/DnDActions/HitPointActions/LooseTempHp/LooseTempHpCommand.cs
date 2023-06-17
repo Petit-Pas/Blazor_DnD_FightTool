@@ -1,6 +1,4 @@
-﻿using Fight.Characters;
-
-namespace DnDActions.HitPointActions.LooseTempHp;
+﻿namespace DnDActions.HitPointActions.LooseTempHp;
 
 public class LooseTempHpCommand : HitPointCommandBase
 {
@@ -14,8 +12,11 @@ public class LooseTempHpCommand : HitPointCommandBase
     /// </summary>
     public int? CorrectedAmount { get; set; }
 
-    public LooseTempHpCommand(FightingCharacter fightingCharacter, int amount) : base(fightingCharacter.CharacterId)
-	{
-		Amount = amount;
-	}
+    /// <summary>
+    ///     The guid of the actual target
+    /// </summary>
+    public LooseTempHpCommand(Guid targetId, int amount) : base(targetId)
+    {
+        Amount = amount; 
+    }
 }
