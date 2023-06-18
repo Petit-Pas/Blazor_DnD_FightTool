@@ -3,6 +3,8 @@ using DnDEntities.DiceThrows.Modifiers;
 
 namespace DnDEntities.AbilityScores;
 
+// TODO unit tests
+
 public class AbilityScoresCollection : List<AbilityScore>
 {
     public AbilityScoresCollection() : this(false)
@@ -27,7 +29,7 @@ public class AbilityScoresCollection : List<AbilityScore>
 
     public ScoreModifier GetModifierWithoutMastery(AbilityEnum name)
     {
-        var ability = this.FirstOrDefault(x => x.Name == name);
+        var ability = this.FirstOrDefault(x => x.Ability == name);
 
         if (ability == null)
         {
@@ -40,7 +42,7 @@ public class AbilityScoresCollection : List<AbilityScore>
 
     public ScoreModifier GetModifierWithMastery(AbilityEnum name)
     {
-        var ability = this.FirstOrDefault(x => x.Name == name);
+        var ability = this.FirstOrDefault(x => x.Ability == name);
 
         if (ability == null)
         {

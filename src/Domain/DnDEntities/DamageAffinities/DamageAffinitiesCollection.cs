@@ -2,6 +2,8 @@
 
 namespace DnDEntities.DamageAffinities;
 
+// TODO unit tests
+
 public class DamageAffinitiesCollection : List<DamageAffinity>
 {
     public DamageAffinitiesCollection() : this(false)

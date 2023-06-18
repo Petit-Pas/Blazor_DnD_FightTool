@@ -1,24 +1,20 @@
-﻿using System.Text.Json.Serialization;
-using DnDEntities.DiceThrows.Modifiers;
+﻿using DnDEntities.DiceThrows.Modifiers;
 
 namespace DnDEntities.AbilityScores;
 
 public class AbilityScore
 {
-    public AbilityScore(AbilityEnum name, int score)
+    public AbilityScore(AbilityEnum ability, int score)
     {
-        Name = name;
+        Ability = ability;
         Score = score;
     }
 
-    public AbilityEnum Name { get; set; }
-
-    [JsonIgnore]
-    public string ShortName => Name.ToString().Substring(0, 3).ToUpper();
+    public AbilityEnum Ability { get; set; }
 
     public int Score { get; set; }
 
     public bool HasMastery { get; set; } = false;
 
-    public ScoreModifier GetModifier(int masteryBonus = 0) => new ((Score - 10) / 2 + (HasMastery ? masteryBonus : 0));
+    public ScoreModifier GetModifier(int masteryBonus = 0) => new ScoreModifier(Score / 2 - 5 + (HasMastery ? masteryBonus : 0));
 }

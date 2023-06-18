@@ -47,7 +47,7 @@ public class Character
     public Character Duplicate()
     {
         var copy = this.Clone();
-        copy.Id = new Guid();
+        copy.Id = Guid.NewGuid();
         return copy;
     }
 }

@@ -17,21 +17,15 @@ public class Skill
 
     public ScoreModifier GetModifier(AbilityScoresCollection abilityScores)
     {
-        if (!Enum.IsDefined(typeof(SkillMasteryEnum), Mastery))
-        {
-            Console.WriteLine($"WARNING: the skill {Name} has an unknown mastery.");
-            return ScoreModifier.Empty;
-        }
+        var skillAttribute = Name.GetAttribute<AbilityAttribute>();
 
-        var attribute = Name.GetAttribute<AbilityAttribute>();
-
-        if (attribute == null)
+        if (skillAttribute == null)
         {
             Console.WriteLine($"WARNING: the skill {Name} does not have a linked attribute.");
             return ScoreModifier.Empty;
         }
 
-        var baseScore = abilityScores.GetModifierWithoutMastery(attribute.GetAbility()).Modifier;
+        var baseScore = abilityScores.GetModifierWithoutMastery(skillAttribute.GetAbility()).Modifier;
 
         return new ScoreModifier(Mastery switch
         {

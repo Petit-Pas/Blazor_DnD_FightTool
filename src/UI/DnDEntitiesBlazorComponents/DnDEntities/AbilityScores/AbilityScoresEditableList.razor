@@ -1,4 +1,7 @@
-﻿<Card ShadowPosition="ShadowPosition.In" Padding="Spacing._0" SelectableText="false" BorderRadius="@BorderRadius">
+﻿@using DnDEntities.AbilityScores;
+
+
+<Card ShadowPosition="ShadowPosition.In" Padding="Spacing._0" SelectableText="false" BorderRadius="@BorderRadius">
     @if (Abilities != null)
     {
         <div class="characteristic-container">
@@ -12,12 +15,12 @@
                     <IntInput ValidateOnKeyPress="true" @bind-Value="abilityScore.Score" ValidationFor="@(() => abilityScore.Score)">
                         <PrefixRenderFragment>
                             <div class="characteristic-label">
-                                @abilityScore.ShortName
+                                @abilityScore.Ability.ShortName()
                             </div>
                         </PrefixRenderFragment>
                         <SuffixRenderFragment>
                             <div class="characteristic-modifier">
-                                @Abilities.GetModifierWithMastery(abilityScore.Name).ModifierString
+                                @Abilities.GetModifierWithMastery(abilityScore.Ability).ModifierString
                             </div>
                         </SuffixRenderFragment>
                     </IntInput>

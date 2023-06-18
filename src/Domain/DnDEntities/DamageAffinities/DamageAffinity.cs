@@ -1,11 +1,14 @@
-﻿using System.Xml;
-using DnDEntities.Damage;
+﻿using DnDEntities.Damage;
 using Extensions;
 
 namespace DnDEntities.DamageAffinities;
 
 public class DamageAffinity
 {
+    public DamageAffinity()
+    {
+    }
+
     public DamageAffinity(DamageTypeEnum type, DamageAffinityEnum modifier = DamageAffinityEnum.Normal)
     {
         Type = type;

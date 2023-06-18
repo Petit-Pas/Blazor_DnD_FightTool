@@ -9,3 +9,11 @@ public enum AbilityEnum
     Wisdom,
     Charisma,
 }
+
+public static class AbilityEnumExtensions
+{
+    public static string ShortName(this AbilityEnum ability)
+    {
+        return ability.ToString().Substring(0, 3).ToUpper();
+    }
+}

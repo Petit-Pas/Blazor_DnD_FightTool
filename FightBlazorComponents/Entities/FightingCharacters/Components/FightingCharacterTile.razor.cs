@@ -45,7 +45,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     {
         if (Character == null || Character.Id != Fighter.CharacterId)
         {
-            Character = CharacterRepository.GetCharacterById(Fighter.CharacterId);
+            Character = FightContext.GetCharacterById(Fighter.CharacterId);
         }
     }
 
