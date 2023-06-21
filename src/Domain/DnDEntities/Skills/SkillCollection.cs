@@ -1,5 +1,5 @@
 ﻿using DnDEntities.AbilityScores;
-using DnDEntities.DiceThrows.Modifiers;
+using DnDEntities.Dices.Modifiers;
 
 namespace DnDEntities.Skills;
 

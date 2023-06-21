@@ -15,4 +15,9 @@ public class DamageFactor
     {
         return baseDamage * Factor;
     }
+
+    public double ApplyOn(double baseDamage)
+    {
+        return baseDamage * Factor;
+    }
 }

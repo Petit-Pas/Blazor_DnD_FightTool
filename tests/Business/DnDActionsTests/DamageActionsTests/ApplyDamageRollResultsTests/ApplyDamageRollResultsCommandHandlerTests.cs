@@ -13,6 +13,7 @@ using FluentAssertions;
 using System.Linq;
 using DnDActions.DamageActions.TakeDamage;
 using DnDActions.HitPointActions.LooseHp;
+using DomainTestsUtilities.Fakes.Savings;
 
 namespace DnDActionsTests.DamageActionsTests.ApplyDamageRollResultsTests;
 
@@ -22,7 +23,8 @@ public class ApplyDamageRollResultsCommandHandlerTests
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
 
-    private Character _character = null!;
+    private Character _caster = null!;
+    private Character _target = null!;
     private DamageRollResult[] _damageRollResults = null!;
 
     private ApplyDamageRollResultsCommand _command = null!;
@@ -34,41 +36,30 @@ public class ApplyDamageRollResultsCommandHandlerTests
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
 
-        _character = new Character();
+        _caster = new Character();
+        _target = new Character();
 
         _damageRollResults = new DamageRollResult[]
         {
             DamageRollResultFactory.Build(DamageTypeEnum.Fire, 10),
         };
 
-        _character.DamageAffinities = new DamageAffinitiesCollection(true);
+        _target.DamageAffinities = new DamageAffinitiesCollection(true);
 
-        _command = new ApplyDamageRollResultsCommand(Guid.NewGuid(), _damageRollResults);
+        _command = new ApplyDamageRollResultsCommand(_target.Id, _caster.Id, _damageRollResults);
         _commandHandler = new ApplyDamageRollResultsCommandHandler(_mediator, _fightContext);
 
-        A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
-            .Returns(_character);
+        A.CallTo(() => _fightContext.GetCharacterById(_caster.Id))
+            .Returns(_caster);
+        A.CallTo(() => _fightContext.GetCharacterById(_target.Id))
+            .Returns(_target);
     }
 
-    DamageAffinitiesCollection _affinities { get => _character.DamageAffinities; }
+    DamageAffinitiesCollection _affinities { get => _target.DamageAffinities; }
 
     [TestFixture]
     public class ExecuteTests : ApplyDamageRollResultsCommandHandlerTests
     {
-        [Test]
-        public void Should_Throw_ArgumentException_When_FightContext_Returns_No_Character()
-        {
-            // Arrange
-            A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
-                .Returns(null);
-
-            // Act
-            var executing = () => _commandHandler.Execute(_command);
-
-            // Assert
-            executing.Should().Throw<ArgumentException>();
-        }
-
         [Test]
         public void Should_Execute_Take_Damage_Command_With_Rolled_Damage()
         {
@@ -86,7 +77,7 @@ public class ApplyDamageRollResultsCommandHandlerTests
         {
             // Arrange
             _damageRollResults = new DamageRollResult[] { _damageRollResults.First(), _damageRollResults.First() };
-            _command = new ApplyDamageRollResultsCommand(Guid.NewGuid(), _damageRollResults);
+            _command = new ApplyDamageRollResultsCommand(Guid.NewGuid(), Guid.NewGuid(), _damageRollResults);
 
             // Act
             _commandHandler.Execute(_command);
@@ -109,6 +100,22 @@ public class ApplyDamageRollResultsCommandHandlerTests
 
             // Assert
             takeDamageCommand!.Damage.Should().Be(20);
+        }
+
+        [Test]
+        [TestCase(SituationalDamageModifierEnum.Normal, 10)]
+        [TestCase(SituationalDamageModifierEnum.Halved, 5)]
+        public void Should_Apply_Damage_Modifier_Factor_When_Save_Is_Succesfull(SituationalDamageModifierEnum modifier, int expectedDamage)
+        {
+            // Arrange
+            _command = new ApplyDamageRollResultsCommand(_target.Id, _caster.Id, _damageRollResults, new FakeSaveRollResult(true));
+            _command.DamageRolls.First().SuccessfullSaveModifier = modifier;
+
+            // Act
+            _commandHandler.Execute(_command);
+
+            // Assert
+            _command.SubCommands.OfType<TakeDamageCommand>().First().Damage.Should().Be(expectedDamage);
         }
 
     }

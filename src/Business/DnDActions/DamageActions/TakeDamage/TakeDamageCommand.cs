@@ -2,7 +2,7 @@
 
 namespace DnDActions.DamageActions.TakeDamage;
 
-public class TakeDamageCommand : TargetedCommandBase
+public class TakeDamageCommand : TargetCommandBase
 {
 	public TakeDamageCommand(Guid targetId, int damage) : base(targetId)
 	{

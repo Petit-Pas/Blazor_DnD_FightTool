@@ -34,7 +34,7 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
     {
         base.Undo(command);
 
-        var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
+        var hitPoints = command.GetHitPoints(_fightContext);
 
         if (command.CorrectedAmount == null)
         {

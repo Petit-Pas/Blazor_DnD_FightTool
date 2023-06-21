@@ -4,9 +4,9 @@ using UndoableMediator.Commands;
 
 namespace DnDActions;
 
-public class TargetedCommandBase : CommandBase
+public class TargetCommandBase : CommandBase
 {
-    public TargetedCommandBase(Guid targetId)
+    public TargetCommandBase(Guid targetId)
     {
         TargetId = targetId;
     }
@@ -21,5 +21,5 @@ public class TargetedCommandBase : CommandBase
     /// </summary>
     /// <param name="fightContext"> A required dependency for the method. Since the handlers is injected through DI, its easier for it to provide the service. </param>
     /// <returns> the affected HitPoints </returns>
-    public Character? GetTarget(IFightContext fightContext) => fightContext.GetCharacterById(TargetId);
+    public Character GetTarget(IFightContext fightContext) => fightContext.GetCharacterById(TargetId) ?? throw new InvalidOperationException($"Could not get target for {GetType()}.");
 }

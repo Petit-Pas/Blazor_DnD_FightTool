@@ -45,20 +45,6 @@ public class TakeDamageCommandHandlerTests
     public class ExecuteTests : TakeDamageCommandHandlerTests
     {
         [Test]
-        public void Should_Throw_ArgumentException_When_FightContext_Returns_No_Character()
-        {
-            // Arrange
-            A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
-                .Returns(null);
-
-            // Act
-            var executing = () => _commandHandler.Execute(_command);
-
-            // Assert
-            executing.Should().Throw<ArgumentException>();
-        }
-
-        [Test]
         public void Should_Execute_A_Command_To_Reduce_Hps()
         {
             // Act

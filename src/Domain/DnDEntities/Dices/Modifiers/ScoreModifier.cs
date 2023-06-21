@@ -1,4 +1,6 @@
-﻿namespace DnDEntities.DiceThrows.Modifiers;
+﻿namespace DnDEntities.Dices.Modifiers;
+
+// TODO not certain this class is in the right place
 
 public record ScoreModifier(int Modifier)
 {

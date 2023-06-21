@@ -33,7 +33,7 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
     {
         base.Undo(command);
 
-        var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
+        var hitPoints = command.GetHitPoints(_fightContext);
 
         if (command.CorrectedAmount == null)
         {

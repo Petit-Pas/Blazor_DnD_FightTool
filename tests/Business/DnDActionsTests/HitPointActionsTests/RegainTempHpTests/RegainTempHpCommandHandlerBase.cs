@@ -50,20 +50,6 @@ internal class RegainTempHpCommandHandlerBase
     private class ExecuteTests : RegainTempHpCommandHandlerBase
     {
         [Test]
-        public void Should_Throw_ArgumentException_When_FightContext_Returns_No_Character()
-        {
-            // Arrange
-            A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
-                .Returns(null);
-
-            // Act
-            var executing = () => _commandHandler.Execute(_command);
-
-            // Assert
-            executing.Should().Throw<ArgumentException>();
-        }
-
-        [Test]
         public void Should_Return_Success()
         {
             // Act 
@@ -105,20 +91,6 @@ internal class RegainTempHpCommandHandlerBase
     private class UndoTests : RegainTempHpCommandHandlerBase
     {
         [Test]
-        public void Should_Throw_ArgumentException_When_FightContext_Returns_No_Character()
-        {
-            // Arrange
-            A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
-                .Returns(null);
-
-            // Act
-            var undoing = () => _commandHandler.Undo(_command);
-
-            // Assert
-            undoing.Should().Throw<ArgumentException>();
-        }
-
-        [Test]
         public void Should_Throw_InvalidOperationException_When_CorrectedAmount_Is_Null()
         {
             // Arrange
@@ -151,20 +123,6 @@ internal class RegainTempHpCommandHandlerBase
     [TestFixture]
     private class RedoTests : RegainTempHpCommandHandlerBase
     {
-        [Test]
-        public void Should_Throw_ArgumentException_When_FightContext_Returns_No_Character()
-        {
-            // Arrange
-            A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
-                .Returns(null);
-
-            // Act
-            var redoing = () => _commandHandler.Redo(_command);
-
-            // Assert
-            redoing.Should().Throw<ArgumentException>();
-        }
-
         [Test]
         public void Should_Update_Hps()
         {

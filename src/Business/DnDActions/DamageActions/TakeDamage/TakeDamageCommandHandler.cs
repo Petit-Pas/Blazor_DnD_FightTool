@@ -17,7 +17,7 @@ public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
 
     public override ICommandResponse<NoResponse> Execute(TakeDamageCommand command)
     {
-        var target = command.GetTarget(_fightContext) ?? throw new ArgumentNullException($"Could not get target for this {command.GetType()}");
+        var target = command.GetTarget(_fightContext);
         
         var remainingDamage = command.Damage;
 

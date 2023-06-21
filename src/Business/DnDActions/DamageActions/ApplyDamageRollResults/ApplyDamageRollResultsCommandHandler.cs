@@ -2,6 +2,7 @@
 using DnDEntities.Characters;
 using DnDEntities.Damage;
 using Fight;
+using Fight.Savings;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
@@ -18,13 +19,15 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
 
     public override ICommandResponse<NoResponse> Execute(ApplyDamageRollResultsCommand command)
     {
-        var target = command.GetTarget(_fightContext) ?? throw new ArgumentException($"Could not get target for this {command.GetType()}");
+        var target = command.GetTarget(_fightContext);
+        var caster = command.GetCaster(_fightContext);
 
         var totalDamage = 0;
 
         foreach (var damageRoll in command.DamageRolls)
         {
             var actualDamage = ApplyAffinity(damageRoll.Damage, damageRoll.DamageType, target);
+            actualDamage = ApplySaveModifier(actualDamage, damageRoll.SuccessfullSaveModifier, command.Save, target, caster);
 
             totalDamage += (int)Math.Floor(actualDamage);
         }
@@ -41,6 +44,16 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         var damageFactor = target.DamageAffinities.GetDamageFactorFor(damageType);
 
         return damageFactor.ApplyOn(damage);
+    }
+
+    private double ApplySaveModifier(double actualDamage, SituationalDamageModifierEnum modifier, SaveRollResult? save, Character target, Character caster)
+    {
+        if (save != null && save.IsSuccesfull(target, caster))
+        {
+            var factor = modifier.GetFactor();
+            return factor.ApplyOn(actualDamage);
+        }
+        return actualDamage;
     }
 
     public override void Redo(ApplyDamageRollResultsCommand command)

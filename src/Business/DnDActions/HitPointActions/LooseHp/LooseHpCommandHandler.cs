@@ -15,7 +15,7 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
 
     public override ICommandResponse<NoResponse> Execute(LooseHpCommand command)
     {
-        var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
+        var hitPoints = command.GetHitPoints(_fightContext);
 
         command.CorrectedAmount = command.Amount;
         

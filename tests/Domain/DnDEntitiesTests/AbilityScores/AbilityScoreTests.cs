@@ -41,4 +41,6 @@ public class AbilityScoreTests
         // Assert
         modifier.Modifier.Should().Be(expectedModifier);
     }
+
+    // TODO lacks unit tests with mastery bonus in GetModifier(here)
 }

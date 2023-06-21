@@ -15,4 +15,8 @@
 	  <ProjectReference Include="..\..\Infrastructure\Extensions\Extensions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dices\DiceThrows\Validators\" />
+  </ItemGroup>
+
 </Project>
