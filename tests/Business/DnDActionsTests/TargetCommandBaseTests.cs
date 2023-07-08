@@ -1,5 +1,4 @@
 ﻿using DnDActions;
-using DnDActions.HitPointActions;
 using FakeItEasy;
 using Fight;
 using FluentAssertions;

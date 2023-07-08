@@ -12,6 +12,7 @@ public class SaveRollResult
 
     /// <summary>
     ///     Can be 0 if inherited from the caster
+    ///     // TODO could this be recalculated ? migth be handy
     /// </summary>
     public int Target { get; set; }
 

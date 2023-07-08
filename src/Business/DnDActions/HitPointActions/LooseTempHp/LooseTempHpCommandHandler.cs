@@ -14,7 +14,7 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
         _fightContext = fightContext;
     }
 
-    public override ICommandResponse<NoResponse> Execute(LooseTempHpCommand command)
+    public override Task<ICommandResponse<NoResponse>> Execute(LooseTempHpCommand command)
     {
         var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
 
@@ -27,13 +27,11 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
             hitPoints.CurrentTempHps = 0;
         }
 
-        return CommandResponse.Success();
+        return Task.FromResult(CommandResponse.Success());
     }
 
     public override void Undo(LooseTempHpCommand command)
     {
-        base.Undo(command);
-
         var hitPoints = command.GetHitPoints(_fightContext);
 
         if (command.CorrectedAmount == null)
@@ -44,10 +42,8 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
         hitPoints.CurrentTempHps += command.CorrectedAmount.Value;
     }
 
-    public override void Redo(LooseTempHpCommand command)
+    public override async Task Redo(LooseTempHpCommand command)
     {
-        base.Redo(command);
-
-        Execute(command);
+        await Execute(command);
     }
 }

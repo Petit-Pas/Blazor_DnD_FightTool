@@ -7,8 +7,30 @@ using DnDFightTool.Data;
 using Morris.Blazor.Validation;
 using Blazored.Modal;
 using Fight;
+using UndoableMediator.DependencyInjection;
+using DnDActions;
+using FightBlazorComponents.Queries.MartialAttackQueries;
+using UndoableMediator.Mediators;
 
 namespace DnDFightTool;
+
+public class Logg : ILogger<IUndoableMediator>
+{
+    public IDisposable BeginScope<TState>(TState state) where TState : notnull
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool IsEnabled(LogLevel logLevel)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+    {
+        throw new NotImplementedException();
+    }
+}
 
 public static class MauiProgram
 {
@@ -30,6 +52,16 @@ public static class MauiProgram
         builder.Services.AddSingleton<ICharacterRepository, InMemoryCharacterRepository>();
         builder.Services.AddSingleton<IFightContext, FightContext>();
         builder.Services.AddSingleton<IFileManager, FileManager>();
+
+        builder.Services.ConfigureMediator(options =>
+        {
+            options.ShouldScanAutomatically = false;
+            options.AssembliesToScan = new System.Reflection.Assembly[]
+            {
+                typeof(CasterCommandBase).Assembly,
+                typeof(MartialAttackRollResultQueryHandler).Assembly
+            };
+        });
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

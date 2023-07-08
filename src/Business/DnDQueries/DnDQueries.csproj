@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="UndoableMediator" Version="1.0.0-rc6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\DnDEntities\DnDEntities.csproj" />
+    <ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
+  </ItemGroup>
+
+</Project>

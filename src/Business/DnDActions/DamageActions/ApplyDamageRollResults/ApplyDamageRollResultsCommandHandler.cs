@@ -17,7 +17,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         _fightContext = fightContext;
     }
 
-    public override ICommandResponse<NoResponse> Execute(ApplyDamageRollResultsCommand command)
+    public override async Task<ICommandResponse<NoResponse>> Execute(ApplyDamageRollResultsCommand command)
     {
         var target = command.GetTarget(_fightContext);
         var caster = command.GetCaster(_fightContext);
@@ -34,7 +34,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
 
         var takeDamageCommand = new TakeDamageCommand(target.Id, totalDamage);
         command.AddToSubCommands(takeDamageCommand);
-        _mediator.Execute(takeDamageCommand);
+        await _mediator.Execute(takeDamageCommand);
 
         return CommandResponse.Success();
     }
@@ -56,11 +56,11 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         return actualDamage;
     }
 
-    public override void Redo(ApplyDamageRollResultsCommand command)
+    public override async Task Redo(ApplyDamageRollResultsCommand command)
     {
         // The subcommands of this one are applying damages that were computed with resistance.
         // Since resistance might have changed, we clear the subcommands and re execute the command fully
         command.SubCommands.Clear();
-        Execute(command);
+        await Execute(command);
     }
 }

@@ -11,6 +11,8 @@ public partial class ConfirmationModal
     [Parameter]
     public string Message { get; set; }
 
+    [Parameter]
+    public string Title { get; set; }
 
     public async Task Close()
     {

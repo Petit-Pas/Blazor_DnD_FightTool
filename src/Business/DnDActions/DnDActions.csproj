@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="UndoableMediator" Version="1.0.0-rc2" />
+    <PackageReference Include="UndoableMediator" Version="1.0.0-rc6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
+    <ProjectReference Include="..\DnDQueries\DnDQueries.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,14 @@ public class SkillCollection : List<Skill>
     {
     }
 
+    public SkillCollection(IEnumerable<Skill> skills)
+    {
+        foreach (var skill in skills)
+        {
+            Add(skill);
+        }
+    }
+
     public SkillCollection(bool withDefaults = false)
     {
         if (withDefaults)

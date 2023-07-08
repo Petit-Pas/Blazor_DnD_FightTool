@@ -16,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\src\Business\DnDActions\DnDActions.csproj" />
+    <ProjectReference Include="..\src\Business\DnDQueries\DnDQueries.csproj" />
     <ProjectReference Include="..\src\Domain\DnDEntities\DnDEntities.csproj" />
     <ProjectReference Include="..\src\Domain\Fight\Fight.csproj" />
     <ProjectReference Include="..\src\UI\SharedComponents\SharedComponents.csproj" />

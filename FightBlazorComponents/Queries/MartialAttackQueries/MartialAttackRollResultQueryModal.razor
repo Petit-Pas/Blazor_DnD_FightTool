@@ -1,0 +1,20 @@
+﻿@using SharedComponents.Modals.Common;
+@using DnDEntities.Damage;
+
+
+<ModalBase>
+    <ModalBody>
+        @if (_editContext != null)
+        {
+            <EditForm EditContext=@_editContext>
+
+                @foreach (var damage in MartialAttackRollResult.DamageRolls)
+                {
+                    <IntInput @bind-Value="damage.Damage" ValidationFor="() => damage.Damage" Label="@damage.DamageType.ToReadableString()"></IntInput>
+                }
+
+            </EditForm>
+        }
+    </ModalBody>
+</ModalBase>
+

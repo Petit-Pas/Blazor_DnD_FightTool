@@ -16,6 +16,7 @@ public partial class SkillsEditableList : ComponentBase
                 SkillMasteries = value.Select(x => new MasteryDto(x));
             }
         }
+        get => new SkillCollection(SkillMasteries.Select(x => x.Skill));
     }
 
     [Parameter] public BorderRadius? BorderRadius { get; set; } = new (1, "em");

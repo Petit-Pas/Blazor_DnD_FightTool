@@ -14,6 +14,7 @@ using System.Linq;
 using DnDActions.DamageActions.TakeDamage;
 using DnDActions.HitPointActions.LooseHp;
 using DomainTestsUtilities.Fakes.Savings;
+using System.Threading.Tasks;
 
 namespace DnDActionsTests.DamageActionsTests.ApplyDamageRollResultsTests;
 
@@ -61,10 +62,10 @@ public class ApplyDamageRollResultsCommandHandlerTests
     public class ExecuteTests : ApplyDamageRollResultsCommandHandlerTests
     {
         [Test]
-        public void Should_Execute_Take_Damage_Command_With_Rolled_Damage()
+        public async Task Should_Execute_Take_Damage_Command_With_Rolled_Damage()
         {
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.Execute(_command);
             var takeDamageCommand = _command.SubCommands.OfType<TakeDamageCommand>().SingleOrDefault();
 
             // Assert
@@ -73,14 +74,14 @@ public class ApplyDamageRollResultsCommandHandlerTests
         }
 
         [Test]
-        public void Should_Sum_All_DamageRolls()
+        public async Task Should_Sum_All_DamageRolls()
         {
             // Arrange
             _damageRollResults = new DamageRollResult[] { _damageRollResults.First(), _damageRollResults.First() };
             _command = new ApplyDamageRollResultsCommand(Guid.NewGuid(), Guid.NewGuid(), _damageRollResults);
 
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.Execute(_command);
             var takeDamageCommand = _command.SubCommands.OfType<TakeDamageCommand>().SingleOrDefault();
 
             // Assert
@@ -89,13 +90,13 @@ public class ApplyDamageRollResultsCommandHandlerTests
 
 
         [Test]
-        public void Should_Apply_Damage_Resistance()
+        public async Task Should_Apply_Damage_Resistance()
         {
             // Arrange
             _affinities.First(x => x.Type == DamageTypeEnum.Fire).Affinity = DamageAffinityEnum.Weak;
 
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.Execute(_command);
             var takeDamageCommand = _command.SubCommands.OfType<TakeDamageCommand>().SingleOrDefault();
 
             // Assert
@@ -105,14 +106,14 @@ public class ApplyDamageRollResultsCommandHandlerTests
         [Test]
         [TestCase(SituationalDamageModifierEnum.Normal, 10)]
         [TestCase(SituationalDamageModifierEnum.Halved, 5)]
-        public void Should_Apply_Damage_Modifier_Factor_When_Save_Is_Succesfull(SituationalDamageModifierEnum modifier, int expectedDamage)
+        public async Task Should_Apply_Damage_Modifier_Factor_When_Save_Is_Succesfull(SituationalDamageModifierEnum modifier, int expectedDamage)
         {
             // Arrange
             _command = new ApplyDamageRollResultsCommand(_target.Id, _caster.Id, _damageRollResults, new FakeSaveRollResult(true));
             _command.DamageRolls.First().SuccessfullSaveModifier = modifier;
 
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.Execute(_command);
 
             // Assert
             _command.SubCommands.OfType<TakeDamageCommand>().First().Damage.Should().Be(expectedDamage);
@@ -125,10 +126,10 @@ public class ApplyDamageRollResultsCommandHandlerTests
     {
         // Smoke test to double check that it executes the command well, most basic Execute test.
         [Test]
-        public void Should_Execute_Take_Damage_Command_With_Rolled_Damage()
+        public async Task Should_Execute_Take_Damage_Command_With_Rolled_Damage()
         {
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.Execute(_command);
             var takeDamageCommand = _command.SubCommands.OfType<TakeDamageCommand>().SingleOrDefault();
 
             // Assert
@@ -137,13 +138,13 @@ public class ApplyDamageRollResultsCommandHandlerTests
         }
 
         [Test]
-        public void Should_Clear_SubCommands_To_Avoid_Multiplying_Them()
+        public async Task Should_Clear_SubCommands_To_Avoid_Multiplying_Them()
         {
             // Arrange
             _command.AddToSubCommands(_command);
 
             // Act
-            _commandHandler.Redo(_command);
+            await _commandHandler.Redo(_command);
 
             // Assert
             _command.SubCommands.Should().NotContain(_command);

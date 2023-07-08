@@ -1,4 +1,6 @@
-﻿namespace DnDEntities.Dices.Modifiers;
+﻿using System.Numerics;
+
+namespace DnDEntities.Dices.Modifiers;
 
 // TODO not certain this class is in the right place
 

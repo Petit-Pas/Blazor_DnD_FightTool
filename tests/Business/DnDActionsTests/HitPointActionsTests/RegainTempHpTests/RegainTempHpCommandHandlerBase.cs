@@ -10,6 +10,7 @@ using System;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
 using DnDActions.HitPointActions.RegainTempHp;
+using System.Threading.Tasks;
 
 namespace DnDActionsTests.HitPointActionsTests.RegainTempHpTests;
 
@@ -50,10 +51,10 @@ internal class RegainTempHpCommandHandlerBase
     private class ExecuteTests : RegainTempHpCommandHandlerBase
     {
         [Test]
-        public void Should_Return_Success()
+        public async Task Should_Return_Success()
         {
             // Act 
-            var response = _commandHandler.Execute(_command);
+            var response = await _commandHandler.Execute(_command);
 
             // Assert
             response.Status.Should().Be(RequestStatus.Success);

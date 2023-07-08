@@ -15,7 +15,7 @@ public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
         _fightContext = fightContext;
     }
 
-    public override ICommandResponse<NoResponse> Execute(TakeDamageCommand command)
+    public override Task<ICommandResponse<NoResponse>> Execute(TakeDamageCommand command)
     {
         var target = command.GetTarget(_fightContext);
         
@@ -39,14 +39,14 @@ public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
             _mediator.Execute(looseHpCommand);
         }
 
-        return CommandResponse.Success();
+        return Task.FromResult(CommandResponse.Success());
     }
 
-    public override void Redo(TakeDamageCommand command)
+    public override async Task Redo(TakeDamageCommand command)
     {
         // The subcommands of this one are applying damages based on the current hp/temp hps of the target
         // Since hitPoints might have changed, we clear the subcommands and re execute the command fully
         command.SubCommands.Clear();
-        Execute(command);
+        await Execute(command);
     }
 }

@@ -13,7 +13,7 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
         _fightContext = fightContext;
     }
 
-    public override ICommandResponse<NoResponse> Execute(RegainHpCommand command)
+    public override Task<ICommandResponse<NoResponse>> Execute(RegainHpCommand command)
     {
         var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
 
@@ -26,13 +26,11 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
             hitPoints.CurrentHps = hitPoints.MaxHps;
         }
 
-        return CommandResponse.Success();
+        return Task.FromResult(CommandResponse.Success());
     }
 
     public override void Undo(RegainHpCommand command)
     {
-        base.Undo(command);
-
         var hitPoints = command.GetHitPoints(_fightContext);
 
         if (command.CorrectedAmount == null)
@@ -43,10 +41,8 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
         hitPoints.CurrentHps -= command.CorrectedAmount.Value;
     }
 
-    public override void Redo(RegainHpCommand command)
+    public override async Task Redo(RegainHpCommand command)
     {
-        base.Redo(command);
-
-        Execute(command);
+        await Execute(command);
     }
 }

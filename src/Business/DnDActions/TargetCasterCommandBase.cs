@@ -15,12 +15,12 @@ public class TargetCasterCommandBase : CommandBase
     /// <summary>
     ///     Guid of the character affected by the command
     /// </summary>
-    protected Guid TargetId { get; }
+    public Guid TargetId { get; }
 
     /// <summary>
     ///     Guid of the character actually executing the action
     /// </summary>
-    protected Guid CasterId { get; }
+    public Guid CasterId { get; }
 
     /// <summary>
     ///     Simple helper method for the command handlers, to get the character easily

@@ -4,6 +4,7 @@ using DnDEntities.DamageAffinities;
 using DnDEntities.Skills;
 using DnDEntities.HitPoint;
 using FastDeepCloner;
+using DnDEntities.MartialAttacks;
 
 namespace DnDEntities.Characters;
 
@@ -22,6 +23,7 @@ public class Character
         Skills = new SkillCollection(withDefaults);
         DamageAffinities = new DamageAffinitiesCollection(withDefaults);
         HitPoints = new HitPoints(withDefaults);
+        MartialAttacks = new MartialAttackTemplateCollection(withDefaults);
     }
 
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -37,6 +39,8 @@ public class Character
     public SkillCollection Skills { get; set; }
 
     public DamageAffinitiesCollection DamageAffinities { get; set; }
+
+    public MartialAttackTemplateCollection MartialAttacks { get; set; }
 
     public HitPoints HitPoints { get; set; }
 
