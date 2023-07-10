@@ -16,7 +16,7 @@ public class ModifierExpressionTests
         public void Should_Parse_Wildcards()
         {
             // Arrange
-            var modifier = new ModifierExpression();
+            var modifier = new ModifiersTemplate();
 
             // Act
             modifier.Expression = "STR+INT+DEX+3+MAS";
@@ -32,7 +32,7 @@ public class ModifierExpressionTests
         public void Should_Parse_Modifier()
         {
             // Arrange
-            var modifier = new ModifierExpression();
+            var modifier = new ModifiersTemplate();
 
             // Act
             modifier.Expression = "STR+2+INT+DEX+3+MAS-1";
@@ -49,7 +49,7 @@ public class ModifierExpressionTests
         public void Should_Merge_Modifiers()
         {
             // Arrange
-            var modifier = new ModifierExpression();
+            var modifier = new ModifiersTemplate();
 
             // Act
             modifier.Expression = "2+8";
@@ -62,7 +62,7 @@ public class ModifierExpressionTests
         public void Should_Order_Elements_Properly()
         {
             // Arrange
-            var modifier = new ModifierExpression();
+            var modifier = new ModifiersTemplate();
 
             // Act
             modifier.Expression = "8+MAS";
@@ -75,7 +75,7 @@ public class ModifierExpressionTests
         public void Should_Not_Keep_Modifier_When_Empty()
         {
             // Arrange
-            var modifier = new ModifierExpression();
+            var modifier = new ModifiersTemplate();
 
             // Act
             modifier.Expression = "MAS+1-1";
@@ -92,7 +92,7 @@ public class ModifierExpressionTests
         public void Should_Include_Static_Modifiers()
         {
             // Arrange
-            var modifier = new ModifierExpression();
+            var modifier = new ModifiersTemplate();
 
             // Act
             modifier.Expression = "2";
@@ -105,7 +105,7 @@ public class ModifierExpressionTests
         public void Should_Resolve_Wildcards()
         {
             // Arrange
-            var modifier = new ModifierExpression();
+            var modifier = new ModifiersTemplate();
             var character = new Character(true);
             character.AbilityScores.MasteryBonus = 7;
 

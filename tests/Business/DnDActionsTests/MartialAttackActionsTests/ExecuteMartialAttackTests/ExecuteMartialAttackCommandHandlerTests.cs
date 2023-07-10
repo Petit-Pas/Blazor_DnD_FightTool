@@ -16,6 +16,7 @@ using System.Linq;
 using DnDQueries.MartialAttackQueries;
 using UndoableMediator.Queries;
 using FluentAssertions;
+using DnDEntities.Dices.DiceThrows;
 
 namespace DnDActionsTests.MartialAttackActionsTests.ExecuteMartialAttackTests;
 
@@ -33,7 +34,7 @@ public class ExecuteMartialAttackCommandHandlerTests
     private ExecuteMartialAttackCommandHandler _commandHandler = null!;
 
     private DamageRollResult[] _damageRollResults = null!;
-    private int _rolledResult = 10;
+    private HitRollResult _hitRollResult = new HitRollResult() { Result = 10 };
     private RequestStatus _attackRollResultQueryStatus;
 
     [SetUp]
@@ -71,10 +72,8 @@ public class ExecuteMartialAttackCommandHandlerTests
 
     IQueryResponse<MartialAttackRollResult> BuildQueryResponse()
     {
-        var rollResult = new MartialAttackRollResult()
+        var rollResult = new MartialAttackRollResult(_hitRollResult, _damageRollResults)
         {
-            HitRoll = _rolledResult,
-            DamageRolls = _damageRollResults,
             TargetId = _target.Id,
         };
 
@@ -141,7 +140,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Not_Apply_Damage_When_The_Attack_Does_Not_Hit()
         {
             // Arrange
-            _rolledResult = 3;
+            _hitRollResult.Result = 3;
 
             // Act
             await _commandHandler.Execute(_command);
@@ -155,7 +154,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Apply_Rolled_Damage_When_The_Attack_Does_Hit()
         {
             // Arrange
-            _rolledResult = 17;
+            _hitRollResult.Result = 17;
 
             // Act
             await _commandHandler.Execute(_command);

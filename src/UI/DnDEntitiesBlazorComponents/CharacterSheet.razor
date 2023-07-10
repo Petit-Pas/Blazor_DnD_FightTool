@@ -1,5 +1,4 @@
 ﻿@using System.ComponentModel.DataAnnotations
-@using System.Security.Cryptography.X509Certificates
 @using NeoBlazorphic.StyleParameters
 @using Morris.Blazor.Validation;
 @using DnDEntities.AbilityScores
@@ -75,7 +74,7 @@
 
             _editContext.OnFieldChanged += (sender, args) =>
             {
-                var test = _editContext.Validate();
+                //var test = _editContext.Validate();
                 StateHasChanged();
             };
         }

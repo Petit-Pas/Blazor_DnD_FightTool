@@ -16,11 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Dices\DiceThrows\Validators\" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<InternalsVisibleTo Include="DnDEntitiesTests"/>
+		<InternalsVisibleTo Include="DnDEntitiesTests" />
 	</ItemGroup>
 
 </Project>

@@ -7,6 +7,7 @@ using UndoableMediator.Mediators;
 using Blazored.Modal.Services;
 using Blazored.Modal;
 using SharedComponents.Modals.ConfirmationModals;
+using UndoableMediator.Requests;
 
 namespace FightBlazorComponents.Pages;
 
@@ -52,7 +53,27 @@ public partial class FightPage
         if (character != null)
         {
             var attackCommand = new ExecuteMartialAttackCommand(character.Id, character.MartialAttacks.First().Id);
-            await Mediator.Execute(attackCommand);
+            await Mediator.Execute(attackCommand, (status) => status is RequestStatus.Success);
+        }
+    }
+
+    public bool CanUndo => Mediator?.HistoryLength != 0;
+
+    public bool CanRedo => Mediator?.RedoHistoryLength != 0;
+
+    public void Undo()
+    {
+        if (CanUndo)
+        {
+            Mediator.UndoLastCommand();
+        }
+    }
+
+    public async Task Redo()
+    {
+        if (CanRedo)
+        {
+            await Mediator.RedoLastUndoneCommand();
         }
     }
 

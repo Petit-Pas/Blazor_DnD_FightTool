@@ -40,7 +40,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
         var target = _fightContext.GetCharacterById(command.MartialAttackRollResult.TargetId) ?? throw new InvalidOperationException($"Could not get target.");
         var attackTemplate = command.GetAttackTemplate(caster) ?? throw new InvalidOperationException($"Could not get attack template.");
 
-        if (command.MartialAttackRollResult.Hits(attackTemplate, target, caster))
+        if (command.MartialAttackRollResult.HitRoll.Hits(target, caster))
         {
             var applyDamageRollResultCommand = new ApplyDamageRollResultsCommand(target.Id, caster.Id, command.MartialAttackRollResult.DamageRolls);
             command.AddToSubCommands(applyDamageRollResultCommand);

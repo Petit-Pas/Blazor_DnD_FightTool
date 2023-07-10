@@ -15,4 +15,28 @@
         </div>
 
     }
+
+    <MenuBlade Position="ElementRelativePosition.Bottom">
+        <Card>
+            <div>
+                <!-- TODO This should be changed with a disabled state on the buttons -->
+                @if (CanUndo)
+                {
+                    <ButtonCard OnMouseClickCallBack="Undo" >
+                        <div>
+                            Undo
+                        </div>
+                    </ButtonCard>
+                }
+                @if (CanRedo)
+                {
+                    <ButtonCard OnMouseClickCallBack="Redo">
+                        <div>
+                            Redo
+                        </div>
+                    </ButtonCard>
+                }
+            </div>
+        </Card>
+    </MenuBlade>
 </div>

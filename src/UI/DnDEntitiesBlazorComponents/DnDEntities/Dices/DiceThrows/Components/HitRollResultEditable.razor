@@ -1,0 +1,12 @@
+﻿
+@if (HitRollResult != null)
+{
+    <IntInput @bind-Value="HitRollResult.Result" ValidationFor="() => HitRollResult.Result">
+        <SuffixRenderFragment>
+            @if (Caster != null)
+            {
+                @HitRollResult.Modifiers.GetScoreModifier(Caster).ModifierString
+            }
+        </SuffixRenderFragment>
+    </IntInput>
+}

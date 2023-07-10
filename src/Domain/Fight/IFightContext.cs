@@ -25,6 +25,9 @@ public interface IFightContext: IEnumerable<FightingCharacter>
 
     event EventHandler<FightingCharacter?> MovingCharacterChanged;
 
+    IReadOnlyCollection<FightingCharacter> GetAllFightingCharacters();
+
+
     public Character? GetMovingCharacter();
     public Character? GetCharacterById(Guid id);
 

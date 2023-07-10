@@ -9,7 +9,7 @@ namespace DnDEntities.Dices.DiceThrows;
 ///     This describes a modifier to apply to a dice, since it does not contain the dice expression, its only for static modifiers and wildcards
 ///     such as 2+WIS
 /// </summary>
-public class ModifierExpression
+public class ModifiersTemplate
 {
     public static Regex Regex = new Regex(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS))))*$", RegexOptions.IgnoreCase);
 
@@ -17,6 +17,14 @@ public class ModifierExpression
 
     private void AnalyzeExpression(string expression)
     {
+        // TODO this error handling can probably be improved, same in DiceThrowTemplate
+        if (string.IsNullOrEmpty(expression)) 
+        {
+            Wildcards = Array.Empty<Wildcard>();
+            StaticModifier = 0;
+            return;
+        };
+
         var rgxMatch = Regex.Match(expression);
         if (!rgxMatch.Success)
         {
@@ -59,7 +67,7 @@ public class ModifierExpression
             expression += $"{(StaticModifier > 0 ? "+" : "")}{StaticModifier}";
         }
 
-        if (expression[0] == '+')
+        if (expression.Length > 0 && expression[0] == '+')
         {
             expression = expression[1..];
         }

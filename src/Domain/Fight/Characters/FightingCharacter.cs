@@ -2,9 +2,9 @@
 
 namespace Fight.Characters;
 
-public record FightingCharacter(CharacterType CharacterType, Guid CharacterId)
+public record FightingCharacter(string Name, CharacterType CharacterType, Guid CharacterId)
 {
-	public FightingCharacter(Character character) : this(character.Type, character.Id)
+	public FightingCharacter(Character character) : this(character.Name, character.Type, character.Id)
 	{
 	}
 }

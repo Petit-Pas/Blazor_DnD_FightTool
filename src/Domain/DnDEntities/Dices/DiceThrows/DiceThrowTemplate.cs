@@ -8,9 +8,13 @@ namespace DnDEntities.Dices.DiceThrows;
 ///     This describes a full roll expression, that can contain dices, static modifiers and wildcards.
 ///     So it can be represented as for instance: 1d8+2d4+3+STR
 /// </summary>
-public class DiceThrowExpression
+public class DiceThrowTemplate
 {
-    public DiceThrowExpression(string expression = "")
+    public DiceThrowTemplate()
+    {
+    }
+
+    public DiceThrowTemplate(string expression)
     {
         Expression = expression;
     }
@@ -21,6 +25,14 @@ public class DiceThrowExpression
 
     private void AnalyzeExpression(string expression)
     {
+        if (string.IsNullOrEmpty(expression))
+        {
+            DicesToRoll = Array.Empty<Dices>();
+            Wildcards = Array.Empty<Wildcard>();
+            StaticModifier = 0;
+            return;
+        }
+
         var rgxMatch = Regex.Match(expression);
         if (!rgxMatch.Success) 
         {
@@ -72,14 +84,28 @@ public class DiceThrowExpression
         }
     }
 
-    private string CreateExpression()
+    public string DicesToRollExpression()
     {
         var expression = string.Empty;
 
         if (DicesToRoll.Length != 0)
-        { 
+        {
             expression += string.Join("", DicesToRoll.Select(x => x.ToString(true)));
+
+            if (expression[0] == '+')
+            {
+                expression = expression[1..];
+            }
         }
+
+        return expression;
+    }
+
+    private string CreateExpression()
+    {
+        var expression = string.Empty;
+
+        expression += DicesToRollExpression();
 
         if (Wildcards.Length != 0)
         {
@@ -113,5 +139,15 @@ public class DiceThrowExpression
     public Dices[] GetDicesToRoll()
     {
         return DicesToRoll;
+    }
+
+    public int MinimumRoll()
+    {
+        return DicesToRoll.Sum(x => x.Amount);
+    }
+
+    public int MaximumRoll()
+    {
+        return DicesToRoll.Sum(x => x.MaximumRoll());
     }
 }

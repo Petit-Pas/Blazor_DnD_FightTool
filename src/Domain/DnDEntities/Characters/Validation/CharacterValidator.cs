@@ -2,7 +2,7 @@
 using DnDEntities.HitPoint.Validation;
 using FluentValidation;
 
-namespace DnDEntities.Characters.Validator;
+namespace DnDEntities.Characters.Validation;
 
 public class CharacterValidator : AbstractValidator<Character>
 {

@@ -13,12 +13,14 @@ public class FightContext : IFightContext
         _characterRepository = characterRepository;
     }
 
+
+    private readonly ILogger<FightContext> _log;
+
     /// <summary>
     ///     Hosts lightweight representations of all the characters in the fight
     /// </summary>
-    private readonly List<FightingCharacter> _fighters = new ();
-    private readonly ILogger<FightContext> _log;
-
+    private readonly List<FightingCharacter> _fighters = new();
+    
     /// <summary>
     ///     Since the players (or NPCs) are unique, we keep their reference in the character repository
     /// </summary>
@@ -110,5 +112,10 @@ public class FightContext : IFightContext
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+
+    public IReadOnlyCollection<FightingCharacter> GetAllFightingCharacters()
+    {
+        return _fighters.AsReadOnly();
     }
 }

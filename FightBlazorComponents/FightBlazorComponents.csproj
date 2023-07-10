@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Morris.Blazor.FluentValidation" Version="2.0.0" />
+    <PackageReference Include="Morris.Blazor.Validation" Version="2.0.0" />
     <PackageReference Include="NeoBlazorphic" Version="1.0.0-rc4" />
   </ItemGroup>
 
@@ -20,6 +22,7 @@
     <ProjectReference Include="..\src\Business\DnDQueries\DnDQueries.csproj" />
     <ProjectReference Include="..\src\Domain\DnDEntities\DnDEntities.csproj" />
     <ProjectReference Include="..\src\Domain\Fight\Fight.csproj" />
+    <ProjectReference Include="..\src\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
     <ProjectReference Include="..\src\UI\SharedComponents\SharedComponents.csproj" />
   </ItemGroup>
 

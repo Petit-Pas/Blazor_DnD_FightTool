@@ -1,6 +1,7 @@
 ﻿using Blazored.Toast.Configuration;
 using Blazored.Toast.Services;
 using DnDEntities.Characters;
+using FastDeepCloner;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
@@ -43,7 +44,7 @@ public partial class EditCharacterPage
         }
         else {
             var id = Guid.Parse(CharacterId);
-            _character = CharacterRepository.GetCharacterById(id);
+            _character = CharacterRepository.GetCharacterById(id).Clone();
         }
     }
 

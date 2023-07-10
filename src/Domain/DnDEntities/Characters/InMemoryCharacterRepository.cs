@@ -1,5 +1,4 @@
-﻿using FastDeepCloner;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace DnDEntities.Characters;
@@ -78,7 +77,7 @@ public class InMemoryCharacterRepository : ICharacterRepository
             return null;
         }
 
-        return _characters[characterById].Clone();
+        return _characters[characterById];
     }
 
     public Character? GetCharacterByIndex(int index)
@@ -88,7 +87,7 @@ public class InMemoryCharacterRepository : ICharacterRepository
             return null;
         }
 
-        return _characters.ElementAt(index).Value.Clone();
+        return _characters.ElementAt(index).Value;
     }
 
     public IEnumerable<Character> GetAllCharacters()

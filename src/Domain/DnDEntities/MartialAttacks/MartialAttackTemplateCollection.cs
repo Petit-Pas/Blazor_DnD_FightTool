@@ -20,12 +20,12 @@ namespace DnDEntities.MartialAttacks
                     {
                         new DamageRollTemplate()
                         {
-                            Dices = new DiceThrowExpression("2d12"),
+                            Dices = new DiceThrowTemplate("2d12"),
                             Type = DamageTypeEnum.Cold
                         },
                         new DamageRollTemplate()
                         {
-                            Dices = new DiceThrowExpression("1d4+3"),
+                            Dices = new DiceThrowTemplate("1d4+3"),
                             Type = DamageTypeEnum.Thunder
                         }
 

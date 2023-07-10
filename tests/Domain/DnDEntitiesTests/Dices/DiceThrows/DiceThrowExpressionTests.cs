@@ -16,7 +16,7 @@ public class DiceThrowExpressionTests
         public void Should_Parse_Dices_Properly()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
 
             // Act
             diceThrow.Expression = "3d12+1d8+3+MAS+2d4";
@@ -31,7 +31,7 @@ public class DiceThrowExpressionTests
         public void Should_Parse_Wildcards()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
 
             // Act
             diceThrow.Expression = "STR+INT+DEX+1d6+3+MAS";
@@ -47,7 +47,7 @@ public class DiceThrowExpressionTests
         public void Should_Parse_Modifier()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
 
             // Act
             diceThrow.Expression = "STR+2+INT+DEX+1d6+3+MAS-1";
@@ -64,7 +64,7 @@ public class DiceThrowExpressionTests
         public void Should_Merge_Dices_With_Same_Value()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
 
             // Act
             diceThrow.Expression = "1d12+2d12-1d12";
@@ -77,7 +77,7 @@ public class DiceThrowExpressionTests
         public void Should_Order_Dices_By_Growing_Value()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
 
             // Act
             diceThrow.Expression = "1d12+1d4-1d8";
@@ -90,7 +90,7 @@ public class DiceThrowExpressionTests
         public void Should_Merge_Modifiers()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
 
             // Act
             diceThrow.Expression = "2+8";
@@ -103,7 +103,7 @@ public class DiceThrowExpressionTests
         public void Should_Order_Elements_Properly()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
 
             // Act
             diceThrow.Expression = "8+MAS+1d8";
@@ -116,7 +116,7 @@ public class DiceThrowExpressionTests
         public void Should_Not_Keep_Modifier_When_Empty()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
 
             // Act
             diceThrow.Expression = "1d8+1-1";
@@ -133,7 +133,7 @@ public class DiceThrowExpressionTests
         public void Should_Include_Static_Modifiers()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
 
             // Act
             diceThrow.Expression = "1d8+2";
@@ -146,7 +146,7 @@ public class DiceThrowExpressionTests
         public void Should_Resolve_Wildcards()
         {
             // Arrange
-            var diceThrow = new DiceThrowExpression();
+            var diceThrow = new DiceThrowTemplate();
             var character = new Character(true);
             character.AbilityScores.MasteryBonus = 7;
 

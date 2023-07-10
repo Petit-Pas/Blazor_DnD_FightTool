@@ -44,11 +44,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FightTests", "tests\Domain\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DnDQueries", "src\Business\DnDQueries\DnDQueries.csproj", "{B13D95B8-2531-44EE-9109-933A9A0B5FF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Memory", "src\Infrastructure\Memory\Memory.csproj", "{0A6DAFC8-D2CE-459D-B549-AF438AA21D42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Memory", "src\Infrastructure\Memory\Memory.csproj", "{0A6DAFC8-D2CE-459D-B549-AF438AA21D42}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{9891AF96-E2DF-4B88-AF89-10D6F238017B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoryTests", "tests\Infrastructure\MemoryTests\MemoryTests.csproj", "{DAA15DCF-D256-47EA-931E-D7D9CA0E1923}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MemoryTests", "tests\Infrastructure\MemoryTests\MemoryTests.csproj", "{DAA15DCF-D256-47EA-931E-D7D9CA0E1923}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

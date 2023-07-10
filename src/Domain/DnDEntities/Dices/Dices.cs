@@ -27,4 +27,9 @@ public class Dices
     {
         return ToString(false);
     }
+
+    public int MaximumRoll()
+    {
+        return Amount * Value;
+    }
 }
