@@ -59,4 +59,24 @@ public partial class EditCharacterPage
     {
         Navigation.NavigateTo("/Characters");
     }
+
+    private EditCharacterPageState PageState { get; set; } = EditCharacterPageState.MainInformations;
+
+    private void UpdatePageState(EditCharacterPageState newState)
+    {
+        if (newState != PageState)
+        {
+            PageState = newState;
+            StateHasChanged();
+        }
+    }
+
+    internal enum EditCharacterPageState
+    {
+        MainInformations,
+        Attacks
+    }
+
+
 }
+

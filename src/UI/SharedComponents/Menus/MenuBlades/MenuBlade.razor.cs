@@ -16,6 +16,7 @@ public partial class MenuBlade
     {
         ElementRelativePosition.Top => "top",
         ElementRelativePosition.Bottom => "bottom",
+        ElementRelativePosition.Right => "right",
         _ => throw new NotImplementedException($"MenuBlade does not support {Position} at the moment."),
     };
 }

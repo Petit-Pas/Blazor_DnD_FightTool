@@ -1,12 +1,15 @@
 ﻿@page "/Characters/Edit/{CharacterId}"
 
+@using DnDEntitiesBlazorComponents.DnDEntities.MartialAttacks
 @using NeoBlazorphic.Components.Inputs.Buttons
 @using SharedComponents.Menus.MenuBlades
+
+@using DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
 
 
 @if (_character != null)
 {
-    <div class="edit-character">
+    <div class="edit-character" style="overflow: auto; padding: 4em 1em 6em 1em;">
         <MenuBlade Position="ElementRelativePosition.Top">
             <Card BorderRadius="@(new BorderRadius(0, 0, 1, 1, "em"))">
                 <div style="font-size: 26px;">
@@ -15,10 +18,52 @@
             </Card>
         </MenuBlade>
 
+        <MenuBlade Position="ElementRelativePosition.Right">
+            <Card BorderRadius="@(new BorderRadius(1, 0, 0, 1, "em"))">
+                <div style="width: 80px;">
+                    @if (PageState == EditCharacterPageState.MainInformations)
+                    {
+                        <Card Color="ThemeColor.Primary" ShadowPosition="ShadowPosition.In">
+                            <div> Main </div>
+                        </Card>
+                    }
+                    else
+                    {
+                        <ButtonCard OnMouseClickCallBack="() => UpdatePageState(EditCharacterPageState.MainInformations)">
+                            <div> Main </div>
+                        </ButtonCard>
+                    }
+                    <div style="margin: 10px;"></div>
+                    @if (PageState == EditCharacterPageState.Attacks)
+                    {
+                        <Card Color="ThemeColor.Primary" ShadowPosition="ShadowPosition.In">
+                            <div> Attacks </div>
+                        </Card>
+                    }
+                    else
+                    {
+                        <ButtonCard OnMouseClickCallBack="() => UpdatePageState(EditCharacterPageState.Attacks)">
+                            <div> Attacks </div>
+                        </ButtonCard>
+                    }
+                </div>
+            </Card>
+        </MenuBlade>
 
-        <div class="edit-character-body">
-            <CharacterSheet Character="@_character"></CharacterSheet>
-        </div>
+        @switch (PageState)
+        {
+            case EditCharacterPageState.MainInformations:
+                <div class="edit-character-body" >
+                    <CharacterSheet Character="@_character"></CharacterSheet>
+                </div>
+                break;
+            case EditCharacterPageState.Attacks:
+                <div>
+                    <MartialAttackTemplatesEditable Character="@_character"></MartialAttackTemplatesEditable>
+                </div>
+                break;
+        }
+
 
         <MenuBlade Position="ElementRelativePosition.Bottom">
             <Card BorderRadius="@(new BorderRadius(1, 1, 0, 0, "em"))">
