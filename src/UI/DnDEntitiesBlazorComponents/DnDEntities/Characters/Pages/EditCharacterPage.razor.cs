@@ -1,4 +1,5 @@
-﻿using Blazored.Toast.Configuration;
+﻿using System.Collections.Generic;
+using Blazored.Toast.Configuration;
 using Blazored.Toast.Services;
 using DnDEntities.Characters;
 using FastDeepCloner;
@@ -71,7 +72,13 @@ public partial class EditCharacterPage
         }
     }
 
-    internal enum EditCharacterPageState
+    private static Dictionary<string, EditCharacterPageState> PageStatesDictionary = new() 
+    { 
+        { "Main", EditCharacterPageState.MainInformations},
+        { "Attacks", EditCharacterPageState.Attacks}
+    };
+
+    private enum EditCharacterPageState
     {
         MainInformations,
         Attacks

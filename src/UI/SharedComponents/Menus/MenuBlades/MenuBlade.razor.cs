@@ -3,6 +3,8 @@ using NeoBlazorphic.StyleParameters;
 
 namespace SharedComponents.Menus.MenuBlades;
 
+// TODO probably not going to be used anymore with the OverlayableArea
+
 public partial class MenuBlade
 {
     [Parameter]

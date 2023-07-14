@@ -1,34 +1,13 @@
-﻿.edit-character {
-    height: 100%;
-    overflow-y: scroll;
-    padding: 0 1em;
-}
-
-.edit-character-header {
-/*    display: flex;
-    position: sticky;
-    justify-content: center;*/
-    margin-top: -0.75em;
-/*    top: 0;
-    z-index: 2;*/
-}
-
-.edit-character-body {
-    margin-bottom: 0.75em;
-    margin-top: 0.75em;
-}
-
-.edit-character-footer {
-/*    position: sticky;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-*/    margin-bottom: -0.75em;
-}
-
-.edit-character-actions {
+﻿.edit-character-actions {
     display: flex;
     margin: 10px;
+}
+
+.page-tabs {
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .edit-character-action {

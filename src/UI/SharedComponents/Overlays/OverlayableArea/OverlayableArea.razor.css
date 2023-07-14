@@ -1,0 +1,27 @@
+﻿.overlayable-area
+{
+    height: 100%;
+    overflow-y: auto;
+}
+
+.overlay {
+    position: fixed;
+    z-index: 2;
+}
+    .overlay.top {
+        top: 0;
+        right: 50%;
+        transform: translateX(50%);
+    }
+
+    .overlay.bottom {
+        bottom: 0;
+        right: 50%;
+        transform: translateX(50%);
+    }
+
+    .overlay.right {
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+    }
