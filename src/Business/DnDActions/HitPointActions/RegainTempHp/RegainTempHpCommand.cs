@@ -1,5 +1,5 @@
 ﻿
-namespace DnDActions.HitPointActions.RegainTempHp;
+namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
 
 public class RegainTempHpCommand : HitPointCommandBase
 { 

@@ -1,4 +1,4 @@
-﻿namespace DnDEntities.AbilityScores;
+﻿namespace DnDFightTool.Domain.DnDEntities.AbilityScores;
 
 public class AbilityAttribute : Attribute
 {

@@ -1,7 +1,7 @@
-﻿using DnDEntities.Characters;
-using Fight;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
-using Fight.Characters;
+using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components.Web;
 using NeoBlazorphic.StyleParameters;
 

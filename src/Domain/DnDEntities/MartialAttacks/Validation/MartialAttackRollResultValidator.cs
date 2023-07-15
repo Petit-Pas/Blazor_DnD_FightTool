@@ -1,6 +1,6 @@
-﻿using DnDEntities.Damage.Validation;
-using DnDEntities.Dices.DiceThrows.Validation;
-using Fight.MartialAttacks;
+﻿using DnDFightTool.Domain.DnDEntities.Damage.Validation;
+using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;
+using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using FluentValidation;
 
 namespace DnDEntities.MartialAttacks.Validation;

@@ -1,8 +1,8 @@
-﻿using DnDEntities.AttackRolls.ArmorClasses.Validation;
-using DnDEntities.HitPoint.Validation;
+﻿using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses.Validation;
+using DnDFightTool.Domain.DnDEntities.HitPoint.Validation;
 using FluentValidation;
 
-namespace DnDEntities.Characters.Validation;
+namespace DnDFightTool.Domain.DnDEntities.Characters.Validation;
 
 public class CharacterValidator : AbstractValidator<Character>
 {

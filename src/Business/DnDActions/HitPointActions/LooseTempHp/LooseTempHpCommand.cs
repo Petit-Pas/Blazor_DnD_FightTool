@@ -1,4 +1,4 @@
-﻿namespace DnDActions.HitPointActions.LooseTempHp;
+﻿namespace DnDFightTool.Business.DnDActions.HitPointActions.LooseTempHp;
 
 public class LooseTempHpCommand : HitPointCommandBase
 {

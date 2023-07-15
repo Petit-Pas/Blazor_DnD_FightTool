@@ -1,7 +1,7 @@
-﻿using DnDEntities.Characters;
-using Fight.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight.Characters;
 
-namespace Fight;
+namespace DnDFightTool.Domain.Fight;
 
 public interface IFightContext: IEnumerable<FightingCharacter>
 {

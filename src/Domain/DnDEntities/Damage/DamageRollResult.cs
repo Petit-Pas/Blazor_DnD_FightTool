@@ -1,8 +1,8 @@
 ﻿
-using DnDEntities.Damage;
-using DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
-namespace Fight.Damage;
+namespace DnDFightTool.Domain.DnDEntities.Damage;
 
 public class DamageRollResult
 {

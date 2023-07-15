@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
-using Fight;
-using Fight.Characters;
+using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
 
 namespace FightBlazorComponents.Entities.FightingCharacters.Components;

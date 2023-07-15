@@ -1,6 +1,6 @@
-﻿using DnDEntities.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
 
-namespace Fight.Characters;
+namespace DnDFightTool.Domain.Fight.Characters;
 
 public record FightingCharacter(string Name, CharacterType CharacterType, Guid CharacterId)
 {

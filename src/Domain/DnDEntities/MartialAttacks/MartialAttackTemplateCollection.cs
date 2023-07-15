@@ -1,8 +1,8 @@
-﻿using DnDEntities.Damage;
-using DnDEntities.Dices.DiceThrows;
-using Fight.MartialAttacks;
+﻿using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 
-namespace DnDEntities.MartialAttacks
+namespace DnDFightTool.Domain.DnDEntities.MartialAttacks
 {
     public class MartialAttackTemplateCollection : List<MartialAttackTemplate>
     {

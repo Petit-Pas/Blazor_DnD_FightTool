@@ -1,9 +1,8 @@
-﻿using DnDActions.HitPointActions.RegainHp;
-using DnDEntities.Characters;
-using DnDEntities.HitPoint;
+﻿using DnDFightTool.Business.DnDActions.HitPointActions.RegainHp;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.HitPoint;
 using FakeItEasy;
-using Fight;
-using Fight.Characters;
+using DnDFightTool.Domain.Fight;
 using FluentAssertions;
 using NUnit.Framework;
 using System;

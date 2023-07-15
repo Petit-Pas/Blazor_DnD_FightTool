@@ -1,8 +1,8 @@
-﻿using Fight.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.Damage;
 using FluentValidation;
 using FluentValidation.Validators;
 
-namespace DnDEntities.Damage.Validation;
+namespace DnDFightTool.Domain.DnDEntities.Damage.Validation;
 
 public class DamageRollResultValidator : AbstractValidator<DamageRollResult>
 {
@@ -12,14 +12,5 @@ public class DamageRollResultValidator : AbstractValidator<DamageRollResult>
             .GreaterThanOrEqualTo(x => x.Dices.MinimumRoll())
             .LessThanOrEqualTo(x => x.Dices.MaximumRoll() * 2);
     }
-
-   
 }
 
-public static class Test
-{
-    public static IRuleBuilderOptions<T, TProperty> InclusiveBetween<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder, TProperty from, TProperty to) where TProperty : IComparable<TProperty>, IComparable
-    {
-        return ruleBuilder.SetValidator(RangeValidatorFactory.CreateInclusiveBetween<T, TProperty>(from, to));
-    }
-}

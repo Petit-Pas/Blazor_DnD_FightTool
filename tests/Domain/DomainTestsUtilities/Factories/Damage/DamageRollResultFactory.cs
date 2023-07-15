@@ -1,5 +1,4 @@
-﻿using DnDEntities.Damage;
-using Fight.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.Damage;
 
 namespace FightTestsUtilities.Factories.Damage;
 

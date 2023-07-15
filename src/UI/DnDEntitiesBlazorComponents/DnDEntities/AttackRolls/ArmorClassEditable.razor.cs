@@ -1,4 +1,4 @@
-﻿using DnDEntities.AttackRolls.ArmorClasses;
+﻿using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses;
 using Microsoft.AspNetCore.Components;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.AttackRolls;

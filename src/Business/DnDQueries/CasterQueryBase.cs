@@ -1,8 +1,8 @@
-﻿using DnDEntities.Characters;
-using Fight;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.Queries;
 
-namespace DnDQueries;
+namespace DnDFightTool.Business.DnDQueries;
 
 public class CasterQueryBase<T> : QueryBase<T>
 {

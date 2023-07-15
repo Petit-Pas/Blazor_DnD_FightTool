@@ -1,7 +1,7 @@
-﻿using DnDEntities.AbilityScores;
-using DnDEntities.Dices.Modifiers;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 
-namespace DnDEntities.Skills;
+namespace DnDFightTool.Domain.DnDEntities.Skills;
 
 public class SkillCollection : List<Skill>
 {

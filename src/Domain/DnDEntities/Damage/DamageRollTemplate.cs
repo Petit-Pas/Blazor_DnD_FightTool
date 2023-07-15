@@ -1,7 +1,6 @@
-﻿using DnDEntities.Dices.DiceThrows;
-using Fight.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
-namespace DnDEntities.Damage;
+namespace DnDFightTool.Domain.DnDEntities.Damage;
 
 public class DamageRollTemplate
 {

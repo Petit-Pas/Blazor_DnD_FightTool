@@ -1,6 +1,6 @@
-﻿using DnDEntities.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.Damage;
 
-namespace DnDEntities.DamageAffinities;
+namespace DnDFightTool.Domain.DnDEntities.DamageAffinities;
 
 // TODO unit tests
 

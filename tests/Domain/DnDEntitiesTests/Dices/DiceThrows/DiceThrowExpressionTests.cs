@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using DnDEntities.Characters;
-using DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 using FluentAssertions;
 using NUnit.Framework;
 

@@ -1,6 +1,6 @@
 ﻿using Extensions;
 
-namespace DnDEntities.Damage;
+namespace DnDFightTool.Domain.DnDEntities.Damage;
 
 public enum SituationalDamageModifierEnum
 {

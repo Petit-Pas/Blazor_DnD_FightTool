@@ -1,12 +1,10 @@
-﻿using DnDEntities.Characters;
-using Fight;
-using Fight.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
-using DnDActions.MartialAttackActions.ExecuteMartialAttack;
+using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
 using UndoableMediator.Mediators;
 using Blazored.Modal.Services;
-using Blazored.Modal;
-using SharedComponents.Modals.ConfirmationModals;
 using UndoableMediator.Requests;
 
 namespace FightBlazorComponents.Pages;

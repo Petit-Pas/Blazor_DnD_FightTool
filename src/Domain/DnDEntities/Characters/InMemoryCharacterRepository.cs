@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace DnDEntities.Characters;
+namespace DnDFightTool.Domain.DnDEntities.Characters;
 
 public interface IFileManager
 {

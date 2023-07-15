@@ -1,10 +1,10 @@
-﻿using DnDActions.HitPointActions.LooseHp;
-using DnDActions.HitPointActions.LooseTempHp;
-using Fight;
+﻿using DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
+using DnDFightTool.Business.DnDActions.HitPointActions.LooseTempHp;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
-namespace DnDActions.DamageActions.TakeDamage;
+namespace DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
 
 public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
 {

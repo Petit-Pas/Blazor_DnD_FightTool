@@ -1,7 +1,7 @@
-﻿using Fight.Damage;
-using Fight.Savings;
+﻿using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Saves;
 
-namespace DnDActions.DamageActions.ApplyDamageRollResults;
+namespace DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 
 public class ApplyDamageRollResultsCommand : TargetCasterCommandBase
 {

@@ -1,5 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace DnDEntities.Damage;
+namespace DnDFightTool.Domain.DnDEntities.Damage;
 
 public enum DamageTypeEnum
 {

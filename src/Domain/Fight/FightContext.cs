@@ -1,9 +1,9 @@
-﻿using DnDEntities.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
 using System.Collections;
-using Fight.Characters;
+using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.Extensions.Logging;
 
-namespace Fight;
+namespace DnDFightTool.Domain.Fight;
 
 public class FightContext : IFightContext
 {

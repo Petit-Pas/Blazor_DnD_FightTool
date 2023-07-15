@@ -1,6 +1,6 @@
-﻿using DnDEntities.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
 
-namespace DnDEntities.Dices.DiceThrows;
+namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
 public class HitRollResult : D20BaseRollResult
 {

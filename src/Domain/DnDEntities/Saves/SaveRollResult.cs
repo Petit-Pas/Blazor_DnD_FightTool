@@ -1,7 +1,7 @@
-﻿using DnDEntities.AbilityScores;
-using DnDEntities.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.Characters;
 
-namespace Fight.Savings;
+namespace DnDFightTool.Domain.DnDEntities.Saves;
 
 public class SaveRollResult
 {

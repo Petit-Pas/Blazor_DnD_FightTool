@@ -1,7 +1,7 @@
-﻿using DnDEntities.Dices.DiceThrows;
-using Fight.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Damage;
 
-namespace Fight.MartialAttacks;
+namespace DnDFightTool.Domain.DnDEntities.MartialAttacks;
 
 public class MartialAttackRollResult
 {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace DnDEntities.AttackRolls.ArmorClasses.Validation;
+namespace DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses.Validation;
 
 public class ArmorClassValidator : AbstractValidator<ArmorClass>
 {

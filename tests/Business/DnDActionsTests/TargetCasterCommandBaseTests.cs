@@ -1,6 +1,6 @@
-﻿using DnDActions;
+﻿using DnDFightTool.Business.DnDActions;
 using FakeItEasy;
-using Fight;
+using DnDFightTool.Domain.Fight;
 using FluentAssertions;
 using NUnit.Framework;
 using System;

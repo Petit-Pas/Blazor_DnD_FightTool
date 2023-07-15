@@ -1,5 +1,5 @@
-﻿using DnDEntities.Characters;
-using Fight.Savings;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Saves;
 
 namespace DomainTestsUtilities.Fakes.Savings;
 

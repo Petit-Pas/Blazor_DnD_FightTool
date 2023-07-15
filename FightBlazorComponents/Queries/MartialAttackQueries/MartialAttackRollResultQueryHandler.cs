@@ -1,12 +1,10 @@
-﻿using System.Reflection;
-using Blazored.Modal;
+﻿using Blazored.Modal;
 using Blazored.Modal.Services;
-using DnDEntities.Dices.DiceThrows;
-using DnDQueries.MartialAttackQueries;
-using Fight;
-using Fight.MartialAttacks;
+using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
+using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using FightBlazorComponents.Pages;
-using SharedComponents.Modals.ConfirmationModals;
 using UndoableMediator.Queries;
 
 namespace FightBlazorComponents.Queries.MartialAttackQueries

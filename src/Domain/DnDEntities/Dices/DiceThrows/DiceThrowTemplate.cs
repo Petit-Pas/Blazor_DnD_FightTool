@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
-using DnDEntities.Characters;
-using DnDEntities.Dices.Modifiers;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 
-namespace DnDEntities.Dices.DiceThrows;
+namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
 /// <summary>
 ///     This describes a full roll expression, that can contain dices, static modifiers and wildcards.

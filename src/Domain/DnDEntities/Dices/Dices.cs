@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace DnDEntities.Dices;
+namespace DnDFightTool.Domain.DnDEntities.Dices;
 
 public class Dices
 {

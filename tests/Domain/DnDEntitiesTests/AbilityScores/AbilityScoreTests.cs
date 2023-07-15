@@ -1,4 +1,4 @@
-﻿using DnDEntities.AbilityScores;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
 using FluentAssertions;
 using NUnit.Framework;
 

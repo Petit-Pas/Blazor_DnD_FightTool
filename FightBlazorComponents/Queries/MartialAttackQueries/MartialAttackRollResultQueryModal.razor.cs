@@ -1,8 +1,7 @@
-﻿using Blazored.Modal.Services;
-using Blazored.Modal;
-using DnDEntities.Characters;
-using Fight;
-using Fight.MartialAttacks;
+﻿using Blazored.Modal;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 

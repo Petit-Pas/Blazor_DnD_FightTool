@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace DnDEntities.HitPoint.Validation
+namespace DnDFightTool.Domain.DnDEntities.HitPoint.Validation
 {
     public class HitPointsValidator : AbstractValidator<HitPoints>
     {

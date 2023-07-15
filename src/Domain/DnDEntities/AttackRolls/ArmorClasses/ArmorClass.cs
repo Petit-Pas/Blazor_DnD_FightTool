@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace DnDEntities.AttackRolls.ArmorClasses;
+namespace DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses;
 
 public class ArmorClass
 {

@@ -1,18 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>DnDFightTool.Business.DnDActions</RootNamespace>
 
-  <ItemGroup>
-    <PackageReference Include="UndoableMediator" Version="1.0.0-rc7" />
-  </ItemGroup>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
-    <ProjectReference Include="..\DnDQueries\DnDQueries.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="UndoableMediator" Version="1.0.0-rc7" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
+		<ProjectReference Include="..\DnDQueries\DnDQueries.csproj" />
+	</ItemGroup>
 
 </Project>

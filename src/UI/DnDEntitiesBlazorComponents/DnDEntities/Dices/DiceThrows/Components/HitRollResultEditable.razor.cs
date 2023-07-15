@@ -1,5 +1,5 @@
-﻿using DnDEntities.Characters;
-using DnDEntities.Dices.DiceThrows;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 using Microsoft.AspNetCore.Components;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;

@@ -1,8 +1,8 @@
-﻿using DnDEntities.AbilityScores;
-using DnDEntities.Dices.Modifiers;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 using Extensions;
 
-namespace DnDEntities.Skills;
+namespace DnDFightTool.Domain.DnDEntities.Skills;
 
 public class Skill
 {

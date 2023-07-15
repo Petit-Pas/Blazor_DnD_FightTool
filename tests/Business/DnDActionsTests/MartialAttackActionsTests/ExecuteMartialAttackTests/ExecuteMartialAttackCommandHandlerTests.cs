@@ -1,22 +1,21 @@
-﻿using DnDActions.DamageActions.ApplyDamageRollResults;
-using DnDEntities.Characters;
-using Fight.Damage;
-using Fight;
+﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.Fight;
 using NUnit.Framework;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
 using System.Threading.Tasks;
-using DnDActions.MartialAttackActions.ExecuteMartialAttack;
-using DnDEntities.Damage;
-using DnDEntities.DamageAffinities;
+using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
+using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using FakeItEasy;
 using FightTestsUtilities.Factories.Damage;
-using Fight.MartialAttacks;
+using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using System.Linq;
-using DnDQueries.MartialAttackQueries;
+using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 using UndoableMediator.Queries;
 using FluentAssertions;
-using DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
 namespace DnDActionsTests.MartialAttackActionsTests.ExecuteMartialAttackTests;
 

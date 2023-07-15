@@ -1,8 +1,8 @@
-﻿using Fight;
+﻿using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
-namespace DnDActions.HitPointActions.LooseHp;
+namespace DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
 
 public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
 {

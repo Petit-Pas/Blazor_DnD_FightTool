@@ -1,5 +1,5 @@
-﻿using DnDEntities.AbilityScores;
-using DnDEntities.Skills;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.Skills;
 using Microsoft.AspNetCore.Components;
 using NeoBlazorphic.StyleParameters;
 

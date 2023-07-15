@@ -1,4 +1,4 @@
-﻿namespace DnDEntities.Skills;
+﻿namespace DnDFightTool.Domain.DnDEntities.Skills;
 
 public enum SkillMasteryEnum
 {

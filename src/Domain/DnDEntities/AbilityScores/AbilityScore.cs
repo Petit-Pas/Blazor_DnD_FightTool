@@ -1,6 +1,6 @@
-﻿using DnDEntities.Dices.Modifiers;
+﻿using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 
-namespace DnDEntities.AbilityScores;
+namespace DnDFightTool.Domain.DnDEntities.AbilityScores;
 
 public class AbilityScore
 {

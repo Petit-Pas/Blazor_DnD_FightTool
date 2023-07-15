@@ -1,4 +1,4 @@
-﻿using DnDEntities.AttackRolls.ArmorClasses;
+﻿using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses;
 using FluentAssertions;
 using NUnit.Framework;
 

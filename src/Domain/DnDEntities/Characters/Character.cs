@@ -1,12 +1,12 @@
-﻿using DnDEntities.AbilityScores;
-using DnDEntities.AttackRolls.ArmorClasses;
-using DnDEntities.DamageAffinities;
-using DnDEntities.Skills;
-using DnDEntities.HitPoint;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses;
+using DnDFightTool.Domain.DnDEntities.DamageAffinities;
+using DnDFightTool.Domain.DnDEntities.Skills;
+using DnDFightTool.Domain.DnDEntities.HitPoint;
 using FastDeepCloner;
-using DnDEntities.MartialAttacks;
+using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 
-namespace DnDEntities.Characters;
+namespace DnDFightTool.Domain.DnDEntities.Characters;
 
 public class Character
 {

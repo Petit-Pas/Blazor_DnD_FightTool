@@ -1,4 +1,4 @@
-﻿using DnDEntities.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
 using Microsoft.AspNetCore.Components;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.MartialAttacks;

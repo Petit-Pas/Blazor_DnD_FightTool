@@ -1,6 +1,6 @@
-﻿using DnDEntities.AbilityScores;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
 
-namespace DnDEntities.Skills;
+namespace DnDFightTool.Domain.DnDEntities.Skills;
 
 public enum SkillEnum
 {

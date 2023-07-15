@@ -1,20 +1,18 @@
-﻿using DnDActions.DamageActions.ApplyDamageRollResults;
-using DnDEntities.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
 using FakeItEasy;
-using Fight;
+using DnDFightTool.Domain.Fight;
 using NUnit.Framework;
 using System;
 using UndoableMediator.Mediators;
-using Fight.Damage;
+using DnDFightTool.Domain.DnDEntities.Damage;
 using FightTestsUtilities.Factories.Damage;
-using DnDEntities.Damage;
-using DnDEntities.DamageAffinities;
+using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using FluentAssertions;
 using System.Linq;
-using DnDActions.DamageActions.TakeDamage;
-using DnDActions.HitPointActions.LooseHp;
 using DomainTestsUtilities.Fakes.Savings;
 using System.Threading.Tasks;
+using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
+using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
 
 namespace DnDActionsTests.DamageActionsTests.ApplyDamageRollResultsTests;
 

@@ -1,6 +1,6 @@
 ﻿using System.Numerics;
 
-namespace DnDEntities.Dices.Modifiers;
+namespace DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 
 // TODO not certain this class is in the right place
 

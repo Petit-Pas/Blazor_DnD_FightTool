@@ -1,10 +1,10 @@
-﻿using DnDActions.DamageActions.ApplyDamageRollResults;
-using DnDQueries.MartialAttackQueries;
-using Fight;
+﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
+using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
-namespace DnDActions.MartialAttackActions.ExecuteMartialAttack;
+namespace DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
 
 public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMartialAttackCommand>
 {

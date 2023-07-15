@@ -1,9 +1,9 @@
-﻿using DnDActions;
+﻿using System;
+using DnDFightTool.Business.DnDActions;
+using DnDFightTool.Domain.Fight;
 using FakeItEasy;
-using Fight;
 using FluentAssertions;
 using NUnit.Framework;
-using System;
 
 namespace DnDActionsTests;
 

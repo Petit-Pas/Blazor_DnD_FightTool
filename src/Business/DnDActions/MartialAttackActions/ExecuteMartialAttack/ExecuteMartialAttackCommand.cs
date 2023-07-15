@@ -1,7 +1,7 @@
-﻿using DnDEntities.Characters;
-using Fight.MartialAttacks;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 
-namespace DnDActions.MartialAttackActions.ExecuteMartialAttack;
+namespace DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
 
 public class ExecuteMartialAttackCommand : CasterCommandBase
 {

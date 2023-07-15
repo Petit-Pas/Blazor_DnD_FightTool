@@ -1,4 +1,4 @@
-﻿namespace DnDEntities.Characters;
+﻿namespace DnDFightTool.Domain.DnDEntities.Characters;
 
 public interface ICharacterRepository 
 {

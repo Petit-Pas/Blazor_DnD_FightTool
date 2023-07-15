@@ -1,8 +1,8 @@
-﻿using DnDEntities.AbilityScores;
-using DnDEntities.Characters;
-using DnDEntities.Dices.Modifiers;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 
-namespace DnDEntities.Dices.DiceThrows;
+namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
 /// <summary>
 ///     Used to store a value that can be resolved depending on the character needing it.

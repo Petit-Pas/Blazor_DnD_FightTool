@@ -1,4 +1,4 @@
-﻿namespace DnDEntities.Dices.DiceThrows;
+﻿namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
 public abstract class D20BaseRollResult
 {

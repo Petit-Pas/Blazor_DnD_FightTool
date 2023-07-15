@@ -1,7 +1,6 @@
-﻿using Fight.MartialAttacks;
-using UndoableMediator.Queries;
+﻿using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 
-namespace DnDQueries.MartialAttackQueries;
+namespace DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 
 public class MartialAttackRollResultQuery : CasterQueryBase<MartialAttackRollResult>
 {

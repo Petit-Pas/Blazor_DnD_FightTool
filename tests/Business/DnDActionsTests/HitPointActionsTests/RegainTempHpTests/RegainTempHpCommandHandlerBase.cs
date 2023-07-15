@@ -1,15 +1,13 @@
-﻿using DnDActions.HitPointActions.LooseTempHp;
-using DnDEntities.Characters;
-using DnDEntities.HitPoint;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.HitPoint;
 using FakeItEasy;
-using Fight.Characters;
-using Fight;
+using DnDFightTool.Domain.Fight;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
-using DnDActions.HitPointActions.RegainTempHp;
+using DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
 using System.Threading.Tasks;
 
 namespace DnDActionsTests.HitPointActionsTests.RegainTempHpTests;

@@ -1,8 +1,8 @@
-﻿using DnDEntities.Characters;
-using Fight;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 
-namespace DnDActions;
+namespace DnDFightTool.Business.DnDActions;
 
 public class TargetCommandBase : CommandBase
 {

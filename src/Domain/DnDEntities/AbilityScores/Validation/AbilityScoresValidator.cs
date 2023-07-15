@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace DnDEntities.AbilityScores.Validation;
+namespace DnDFightTool.Domain.DnDEntities.AbilityScores.Validation;
 
 public class AbilityScoresValidator : AbstractValidator<AbilityScoresCollection>
 {

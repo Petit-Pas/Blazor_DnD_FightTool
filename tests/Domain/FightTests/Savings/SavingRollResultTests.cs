@@ -1,6 +1,6 @@
-﻿using DnDEntities.AbilityScores;
-using DnDEntities.Characters;
-using Fight.Savings;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Saves;
 using FluentAssertions;
 using NUnit.Framework;
 using System.Linq;

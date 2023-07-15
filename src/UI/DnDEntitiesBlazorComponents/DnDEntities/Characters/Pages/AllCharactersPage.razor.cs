@@ -1,8 +1,8 @@
 ﻿
 using Blazored.Modal;
 using Blazored.Modal.Services;
-using DnDEntities.Characters;
-using Fight;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using NeoBlazorphic.StyleParameters;

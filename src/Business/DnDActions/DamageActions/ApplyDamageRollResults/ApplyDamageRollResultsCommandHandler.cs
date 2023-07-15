@@ -1,12 +1,12 @@
-﻿using DnDActions.DamageActions.TakeDamage;
-using DnDEntities.Characters;
-using DnDEntities.Damage;
-using Fight;
-using Fight.Savings;
+﻿using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Saves;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
-namespace DnDActions.DamageActions.ApplyDamageRollResults;
+namespace DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 
 public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDamageRollResultsCommand>
 {

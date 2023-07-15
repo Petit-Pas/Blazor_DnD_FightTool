@@ -1,8 +1,8 @@
-﻿using Fight;
+﻿using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
-namespace DnDActions.HitPointActions.RegainTempHp;
+namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
 
 public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand>
 {

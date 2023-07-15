@@ -1,4 +1,4 @@
-﻿namespace DnDEntities.HitPoint;
+﻿namespace DnDFightTool.Domain.DnDEntities.HitPoint;
 
 public class HitPoints
 {

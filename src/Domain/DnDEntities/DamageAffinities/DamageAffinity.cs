@@ -1,7 +1,7 @@
-﻿using DnDEntities.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.Damage;
 using Extensions;
 
-namespace DnDEntities.DamageAffinities;
+namespace DnDFightTool.Domain.DnDEntities.DamageAffinities;
 
 public class DamageAffinity
 {

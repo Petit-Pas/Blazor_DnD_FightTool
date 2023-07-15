@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using Blazored.Toast.Configuration;
-using Blazored.Toast.Services;
-using DnDEntities.Characters;
+﻿using Blazored.Toast.Services;
+using DnDFightTool.Domain.DnDEntities.Characters;
 using FastDeepCloner;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
 

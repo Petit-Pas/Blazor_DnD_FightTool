@@ -1,36 +1,15 @@
 ﻿using Blazored.Toast;
-using DnDEntities.AbilityScores;
-using DnDEntities.AttackRolls.ArmorClasses;
-using DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Characters;
 using Microsoft.Extensions.Logging;
 using DnDFightTool.Data;
 using Morris.Blazor.Validation;
 using Blazored.Modal;
-using Fight;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.DependencyInjection;
-using DnDActions;
+using DnDFightTool.Business.DnDActions;
 using FightBlazorComponents.Queries.MartialAttackQueries;
-using UndoableMediator.Mediators;
 
 namespace DnDFightTool;
-
-public class Logg : ILogger<IUndoableMediator>
-{
-    public IDisposable BeginScope<TState>(TState state) where TState : notnull
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool IsEnabled(LogLevel logLevel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
-    {
-        throw new NotImplementedException();
-    }
-}
 
 public static class MauiProgram
 {

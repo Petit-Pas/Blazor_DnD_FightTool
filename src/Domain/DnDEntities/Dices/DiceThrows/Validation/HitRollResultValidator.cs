@@ -1,4 +1,4 @@
-﻿namespace DnDEntities.Dices.DiceThrows.Validation;
+﻿namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;
 
 public class HitRollResultValidator : D20RollResultValidator<HitRollResult>
 {

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace DnDEntities.Dices.DiceThrows.Validation;
+namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;
 
 public abstract class D20RollResultValidator<T> : AbstractValidator<T>
     where T : D20BaseRollResult
