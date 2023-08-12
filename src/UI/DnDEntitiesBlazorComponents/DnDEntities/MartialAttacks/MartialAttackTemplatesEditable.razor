@@ -1,7 +1,18 @@
-﻿
-<div style="">
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+@using Morris.Blazor.Validation
+
+
+<EditForm EditContext="_editContext">
+    <Validate />
+
     @foreach(var attackTemplate in Character.MartialAttacks)
     {
-        <div> @attackTemplate.Id </div>
+        <Card>
+            <div> @attackTemplate.Id </div>
+            @foreach (var damageTemplate in attackTemplate.Damages)
+            {
+                <DiceThrowTemplateEditable Template="damageTemplate.Dices"></DiceThrowTemplateEditable>
+            }
+        </Card>
     }
-</div>
+</EditForm>
