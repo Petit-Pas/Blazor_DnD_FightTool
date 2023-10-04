@@ -17,10 +17,12 @@ public class ExecuteMartialAttackCommand : CasterCommandBase
 
     /// <summary>
     ///     The Id of the martial attack. 
-    ///     Using the Id rather than 
     /// </summary>
     public Guid MartialAttackId { get; }
 
+    /// <summary>
+    ///     Calculated during the execution of the command
+    /// </summary>
     public MartialAttackRollResult? MartialAttackRollResult { get; set; }
 
     internal MartialAttackTemplate GetAttackTemplate(Character caster)

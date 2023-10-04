@@ -11,7 +11,7 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 /// </summary>
 public class ModifiersTemplate
 {
-    public static Regex Regex = new Regex(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS))))*$", RegexOptions.IgnoreCase);
+    public static Regex Regex = new Regex(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
 
     public string Expression { get => CreateExpression(); set => AnalyzeExpression(value); }
 

@@ -6,7 +6,7 @@ using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using NeoBlazorphic.StyleParameters;
-using SharedComponents.Modals.ConfirmationModals;
+using SharedComponents.Modals.Templates;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
 

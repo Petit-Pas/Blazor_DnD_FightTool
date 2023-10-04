@@ -2,7 +2,7 @@
 using Blazored.Modal.Services;
 using Microsoft.AspNetCore.Components;
 
-namespace SharedComponents.Modals.ConfirmationModals;
+namespace SharedComponents.Modals.Templates;
 
 public partial class ConfirmationModal
 {

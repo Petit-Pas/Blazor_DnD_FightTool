@@ -3,9 +3,9 @@ using DnDFightTool.Domain.DnDEntities.Saves;
 
 namespace DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 
-public class ApplyDamageRollResultsCommand : TargetCasterCommandBase
+public class ApplyDamageRollResultsCommand : CasterTargetCommandBase
 {
-	public ApplyDamageRollResultsCommand(Guid targetId, Guid casterId, DamageRollResult[] damageRolls, SaveRollResult? saving = null) : base(targetId, casterId)
+	public ApplyDamageRollResultsCommand(Guid casterId, Guid targetId, DamageRollResult[] damageRolls, SaveRollResult? saving = null) : base(casterId, targetId)
 	{
         DamageRolls = damageRolls;
         Save = saving;

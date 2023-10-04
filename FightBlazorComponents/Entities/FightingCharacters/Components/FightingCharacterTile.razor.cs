@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components.Web;
 using NeoBlazorphic.StyleParameters;
+using DnDFightTool.Domain.Fight.Events.AppliedStatusUpdated;
 
 namespace FightBlazorComponents.Entities.FightingCharacters.Components;
 
@@ -18,6 +19,9 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     [Parameter]
     public FightingCharacter Fighter { get; set; }
 
+    [Inject]
+    public IAppliedStatusCollection AppliedStatusCollection { get; set; }
+
     private Character? Character = null;
 
     private BorderRadius BorderRadius = new (2, "em");
@@ -28,6 +32,15 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
         InitCharacter();
 
         FightContext.MovingCharacterChanged += OnMovingCharacterChanged;
+        AppliedStatusCollection.AppliedStatusUpdated += AppliedStatusCollection_AppliedStatusUpdated;
+    }
+
+    private void AppliedStatusCollection_AppliedStatusUpdated(object _, AppliedStatusUpdatedEventArgs e)
+    {
+        if (e.AffectedCharacterId == Character?.Id)
+        {
+            StateHasChanged();
+        }
     }
 
     private void OnMovingCharacterChanged(object? sender, FightingCharacter? fightingCharacter)
@@ -52,6 +65,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     public void Dispose()
     {
         FightContext.MovingCharacterChanged -= OnMovingCharacterChanged;
+        AppliedStatusCollection.AppliedStatusUpdated -= AppliedStatusCollection_AppliedStatusUpdated;
     }
 
     private void TileClicked(MouseEventArgs _)

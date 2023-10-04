@@ -31,6 +31,11 @@ public record Wildcard(string Token)
         return Token == "MAS";
     }
 
+    private bool IsDc()
+    {
+        return Token == "DC";
+    }
+
     public ScoreModifier Resolve(Character caster)
     {
         if (IsAnAbility(out var ability))
@@ -40,6 +45,10 @@ public record Wildcard(string Token)
         if (IsMastery())
         {
             return new ScoreModifier(caster.AbilityScores.MasteryBonus);
+        }
+        if (IsDc())
+        {
+            return new ScoreModifier(caster.Dc.GetValue(caster));
         }
 
         return ScoreModifier.Empty;

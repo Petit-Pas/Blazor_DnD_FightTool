@@ -1,6 +1,5 @@
 ﻿using Blazored.Modal;
 using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -9,9 +8,6 @@ namespace FightBlazorComponents.Queries.MartialAttackQueries;
 
 public partial class MartialAttackRollResultQueryModal : ComponentBase
 {
-    [Inject]
-    public IFightContext FightContext { get; set; }
-
     [Parameter]
     public MartialAttackRollResult MartialAttackRollResult { get; set; }
 

@@ -4,9 +4,9 @@ using UndoableMediator.Commands;
 
 namespace DnDFightTool.Business.DnDActions;
 
-public class TargetCasterCommandBase : CommandBase
+public class CasterTargetCommandBase : CommandBase
 {
-    public TargetCasterCommandBase(Guid targetId, Guid casterId)
+    public CasterTargetCommandBase(Guid casterId, Guid targetId)
     {
         TargetId = targetId;
         CasterId = casterId;

@@ -31,6 +31,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<ICharacterRepository, InMemoryCharacterRepository>();
         builder.Services.AddSingleton<IFightContext, FightContext>();
         builder.Services.AddSingleton<IFileManager, FileManager>();
+        builder.Services.AddSingleton<IAppliedStatusCollection, AppliedStatusCollection>();
 
         builder.Services.ConfigureMediator(options =>
         {

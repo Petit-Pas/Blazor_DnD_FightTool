@@ -146,7 +146,7 @@ Global
 		{DAA15DCF-D256-47EA-931E-D7D9CA0E1923} = {9891AF96-E2DF-4B88-AF89-10D6F238017B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		        SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
 		SolutionGuid = {4F0A421B-176D-4E26-BD1F-6466C90520DF}
+		        SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
 	EndGlobalSection
 EndGlobal

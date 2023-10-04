@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace SharedComponents.Modals.Common
+namespace SharedComponents.Modals
 {
     public partial class ModalBase
     {

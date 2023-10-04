@@ -16,8 +16,4 @@
 		<ProjectReference Include="..\DnDEntities\DnDEntities.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Events\" />
-	</ItemGroup>
-
 </Project>

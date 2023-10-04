@@ -46,7 +46,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
             command.AddToSubCommands(applyDamageRollResultCommand);
             await _mediator.Execute(applyDamageRollResultCommand);
 
-            // Add a hash code in the attack template, if the hash has been modified, you execute everything, otherwise you may reexecute everything ? 
+            // Add a hash code in the attack template, if the hash has been modified, you redo everything, otherwise you may reexecute everything ? 
 
             // TODO apply status ? maybe some status are applied no matter if the attack actually hits ? 
         }

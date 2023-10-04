@@ -21,17 +21,15 @@ public class SavingRollResultTests
         [SetUp]
         public void SetUp()
         {
-            _caster = new Character();
+            _caster = new Character(true);
             _target = new Character(true);
 
             _target.AbilityScores.First(x => x.Ability == AbilityEnum.Strength).Score = 14;
 
 
-            _saveRoll = new SaveRollResult()
+            _saveRoll = new SaveRollResult(new DifficultyClass("10"), AbilityEnum.Intelligence)
             {
                 RolledResult = 10,
-                Target = 10,
-                Ability = AbilityEnum.Intelligence
             };
         }
 
@@ -52,16 +50,14 @@ public class SavingRollResultTests
         }
 
         [Test]
-        [TestCase(14, false)]
-        [TestCase(15, true)]
-        [TestCase(16, true)]
-        // TODO At the time of writing this test, the characters have no saving throw. So this test should be updated when the feature is implemented
-        // TODO at the moment, the mocked value is 15
-        public void Should_Use_Caster_Saving_Throw_When_Target_Is_Zero(int rolledResult, bool expectedResult)
+        [TestCase(9, false)]
+        [TestCase(10, true)]
+        [TestCase(11, true)]
+        public void Should_Use_Caster_Saving_Throw_When_Target_Is_DC(int rolledResult, bool expectedResult)
         {
             // Arrange
             _saveRoll.RolledResult = rolledResult;
-            _saveRoll.Target = 0;
+            _saveRoll.Target = new DifficultyClass("DC");
 
             // Act
             var result = _saveRoll.IsSuccesfull(_target, _caster);
