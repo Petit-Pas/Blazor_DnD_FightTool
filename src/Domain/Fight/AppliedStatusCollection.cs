@@ -6,9 +6,9 @@ namespace DnDFightTool.Domain.Fight;
 public class AppliedStatusCollection : IAppliedStatusCollection
 {
     public event AppliedStatusUpdatedEventHandler? AppliedStatusUpdated;
-    public void NotifyAppliedStatusUpdated(Guid affectedCharacterId)
+    public void NotifyAppliedStatusUpdated(AppliedStatus modifiedStatus)
     {
-        AppliedStatusUpdated?.Invoke(this, new AppliedStatusUpdatedEventArgs(affectedCharacterId));
+        AppliedStatusUpdated?.Invoke(this, new AppliedStatusUpdatedEventArgs(modifiedStatus.TargetId));
     }
     private List<AppliedStatus> _appliedStatuses;
 
@@ -21,7 +21,23 @@ public class AppliedStatusCollection : IAppliedStatusCollection
     {
         _appliedStatuses.Add(appliedStatus);
 
-        NotifyAppliedStatusUpdated(appliedStatus.TargetId);
+        NotifyAppliedStatusUpdated(appliedStatus);
+    }
+
+    private AppliedStatus? GetStatusByStatusId(Guid appliedStatusId)
+    {
+        return _appliedStatuses.FirstOrDefault(x => x.Id == appliedStatusId);
+    }
+
+    public void RemoveIfExists(Guid appliedStatusId)
+    {
+        var status = GetStatusByStatusId(appliedStatusId);
+
+        if (status != null)
+        {
+            _appliedStatuses.Remove(status);
+            NotifyAppliedStatusUpdated(status);
+        }
     }
 
 
@@ -29,4 +45,5 @@ public class AppliedStatusCollection : IAppliedStatusCollection
     {
         return _appliedStatuses.Where(x => x.TargetId == affectedCharacterId);
     }
+
 }

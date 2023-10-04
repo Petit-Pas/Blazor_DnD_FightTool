@@ -12,4 +12,9 @@ public class ApplyStatusCommand : CasterTargetCommandBase
 
     public Guid StatusId { get; }
     public SaveRollResult? SaveRollResult { get; }
+
+    /// <summary>
+    ///     Saved by the handler to find the status back when needed.
+    /// </summary>
+    public Guid AppliedStatusId { get; internal set; }
 }

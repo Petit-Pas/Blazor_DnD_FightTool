@@ -6,6 +6,8 @@ namespace DnDFightTool.Domain.Fight;
 public interface IAppliedStatusCollection
 {
     void Add(AppliedStatus appliedStatus);
+    void RemoveIfExists(Guid appliedStatusId);
+
 
     public event AppliedStatusUpdatedEventHandler AppliedStatusUpdated;
 

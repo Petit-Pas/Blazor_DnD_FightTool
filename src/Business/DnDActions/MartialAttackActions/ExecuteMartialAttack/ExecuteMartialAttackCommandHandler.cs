@@ -1,4 +1,5 @@
 ﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
+using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
@@ -42,13 +43,20 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 
         if (command.MartialAttackRollResult.HitRoll.Hits(target, caster))
         {
-            var applyDamageRollResultCommand = new ApplyDamageRollResultsCommand(target.Id, caster.Id, command.MartialAttackRollResult.DamageRolls);
+            var applyDamageRollResultCommand = new ApplyDamageRollResultsCommand(caster.Id, target.Id, command.MartialAttackRollResult.DamageRolls);
             command.AddToSubCommands(applyDamageRollResultCommand);
             await _mediator.Execute(applyDamageRollResultCommand);
 
+            // TODO maybe some status are applied no matter if the attack actually hits ? 
+            foreach (var onHitStatus in attackTemplate.Statuses)
+            {
+                var tryApplyStatusCommand = new TryApplyStatusCommand(caster.Id, target.Id, onHitStatus.Id);
+                await _mediator.Execute(tryApplyStatusCommand);
+                command.AddToSubCommands(tryApplyStatusCommand);
+            }
+
             // Add a hash code in the attack template, if the hash has been modified, you redo everything, otherwise you may reexecute everything ? 
 
-            // TODO apply status ? maybe some status are applied no matter if the attack actually hits ? 
         }
 
         return CommandResponse.Success();

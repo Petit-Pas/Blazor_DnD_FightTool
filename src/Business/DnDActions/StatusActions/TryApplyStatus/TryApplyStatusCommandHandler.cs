@@ -34,7 +34,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
             }
             command.SaveRollResult = saveRollResultResponse.Response;
 
-            if (!command.SaveRollResult!.IsSuccesfull(target, caster))
+            if (command.SaveRollResult!.IsSuccesfull(target, caster))
             {
                 return CommandResponse.Success();
             }
@@ -42,6 +42,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
 
         var applyStatusCommand = new ApplyStatusCommand(caster.Id, target.Id, status.Id, command.SaveRollResult);
         await _mediator.Execute(applyStatusCommand);
+        command.AddToSubCommands(applyStatusCommand);
 
         return CommandResponse.Success();
     }

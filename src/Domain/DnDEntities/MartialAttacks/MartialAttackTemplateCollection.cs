@@ -34,14 +34,6 @@ public class MartialAttackTemplateCollection : List<MartialAttackTemplate>
                 Statuses = new StatusTemplateCollection()
                 {
                     new StatusTemplate()
-                    {
-                        IsAppliedAutomatically = false,
-                        Save = new SaveRollTemplate()
-                        {
-                            Difficulty = new DifficultyClass(),
-                            TargetAbility = AbilityEnum.Wisdom
-                        }
-                    }
                 }
             });
         }

@@ -6,6 +6,8 @@ public class StatusTemplate
 {
     public StatusTemplate()
     {
+        Name = "Default status name";
+        Save = new SaveRollTemplate();
     }
 
     public Guid Id { get; set; } = Guid.NewGuid();

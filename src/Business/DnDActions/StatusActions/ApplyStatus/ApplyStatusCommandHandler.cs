@@ -24,8 +24,17 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
 
         var appliedStatus = new AppliedStatus(caster.Id, target.Id, status.Name);
 
+        command.AppliedStatusId = appliedStatus.Id;
+
         _appliedStatusCollection.Add(appliedStatus);
 
         return Task.FromResult(CommandResponse.Success());
+    }
+
+    public override void Undo(ApplyStatusCommand command)
+    {
+        base.Undo(command);
+
+        _appliedStatusCollection.RemoveIfExists(command.AppliedStatusId);
     }
 }
