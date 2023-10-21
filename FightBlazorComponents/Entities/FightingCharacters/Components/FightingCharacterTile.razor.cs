@@ -39,6 +39,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     {
         if (e.AffectedCharacterId == Character?.Id)
         {
+            // TODO the refresh works without that, but I think its because the whole state is recomputed when the HPs change, to try with an attack that has no damage 
             StateHasChanged();
         }
     }
