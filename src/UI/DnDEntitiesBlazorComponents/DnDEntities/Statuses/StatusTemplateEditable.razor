@@ -1,0 +1,14 @@
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Saves
+
+@if (StatusTemplate != null)
+{
+    <div>
+        <StringInput @bind-Value=StatusTemplate.Name ValidationFor="() => StatusTemplate.Name"></StringInput>
+        <p> @StatusTemplate.Id </p>
+        <CheckBox @bind-IsChecked=StatusTemplate.IsAppliedAutomatically></CheckBox>
+        @if (!StatusTemplate.IsAppliedAutomatically)
+        {
+            <SaveRollTemplateEditable SaveRollTemplate="@StatusTemplate.Save"></SaveRollTemplateEditable>
+        }
+    </div>
+}

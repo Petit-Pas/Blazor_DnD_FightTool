@@ -18,11 +18,6 @@ public class DifficultyClass
 
     public int GetValue(Character caster)
     {
-        if (caster.Dc != this)
-        {
-            // TODO Warn of this error? 
-            return 10;
-        }
         return Expression.GetScoreModifier(caster).Modifier;
     }
 }

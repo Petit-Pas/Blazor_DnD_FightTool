@@ -1,0 +1,7 @@
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+
+@if (DamageRollTemplate != null)
+{
+    <DamageTypePicker @bind-DamageType="DamageRollTemplate.Type"></DamageTypePicker>
+    <DiceThrowTemplateEditable @bind-Template="DamageRollTemplate.Dices"></DiceThrowTemplateEditable>
+}

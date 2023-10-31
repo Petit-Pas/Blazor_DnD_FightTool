@@ -1,7 +1,6 @@
 ﻿
 @if (Template != null)
 {
-    <DiceThrowTemplateInput ValidateOnKeyPress="false" @bind-Value="Template" ValidationFor=@(() => Template)>
+    <DiceThrowTemplateInput ValidateOnKeyPress="false" ValueExpression=@(() => Template) Value="Template" ValueChanged="(newTemplate) => OnTemplateChanged(newTemplate)" ValidationFor=@(() => Template)>
     </DiceThrowTemplateInput>
 }
-

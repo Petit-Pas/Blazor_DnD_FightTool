@@ -1,0 +1,6 @@
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;
+
+@if (DifficultyClass != null)
+{
+    <DiceThrowTemplateInput @bind-Value=DifficultyClass.Expression ValidationFor="() => DifficultyClass.Expression"></DiceThrowTemplateInput>
+}

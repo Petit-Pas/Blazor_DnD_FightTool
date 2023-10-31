@@ -46,4 +46,9 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
 
         return CommandResponse.Success();
     }
+
+    public override Task Redo(TryApplyStatusCommand command)
+    {
+        return base.Redo(command);
+    }
 }

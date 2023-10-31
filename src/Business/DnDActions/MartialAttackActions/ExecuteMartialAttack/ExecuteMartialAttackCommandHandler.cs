@@ -2,6 +2,7 @@
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 using DnDFightTool.Domain.Fight;
+using Memory.Hashes;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
@@ -55,7 +56,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
                 command.AddToSubCommands(tryApplyStatusCommand);
             }
 
-            // Add a hash code in the attack template, if the hash has been modified, you redo everything, otherwise you may reexecute everything ? 
+            // Add a hash code in the attack template, if the hash has been modified, you redo everything, otherwise you may re-execute everything ? 
 
         }
 

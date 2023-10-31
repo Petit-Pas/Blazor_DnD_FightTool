@@ -1,11 +1,9 @@
 ﻿using Blazored.Modal;
 using Blazored.Modal.Services;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.Saves;
 using DnDFightTool.Domain.Fight;
 using FightBlazorComponents.Pages;
-using FightBlazorComponents.Queries.MartialAttackQueries;
 using UndoableMediator.Queries;
 
 namespace FightBlazorComponents.Queries.SaveQueries;

@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 
 namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
@@ -9,6 +9,7 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 ///     This describes a full roll expression, that can contain dices, static modifiers and wildcards.
 ///     So it can be represented as for instance: 1d8+2d4+3+STR
 /// </summary>
+[DebuggerDisplay("{Expression}")]
 public class DiceThrowTemplate
 {
     public DiceThrowTemplate()
