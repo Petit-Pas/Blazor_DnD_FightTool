@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="UndoableMediator" Version="1.0.0-rc7" />
+		<PackageReference Include="UndoableMediator" Version="1.0.0-rc8" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -6,6 +6,11 @@ namespace Memory.Hashes;
 
 public static class HashableExtensions
 {
+    public static string HashExcept(this IHashable hashable, Func<IHashable, IEnumerable<object>> exceptionGetter)
+    {
+        return "";
+    }
+
 
     /// <summary>
     ///     This method is a generic method to use on any IHashable class. 

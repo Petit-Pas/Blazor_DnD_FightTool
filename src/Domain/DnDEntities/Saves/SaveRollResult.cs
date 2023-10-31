@@ -29,7 +29,7 @@ public class SaveRollResult
     /// </summary>
     public AbilityEnum Ability { get; set; }
 
-    public virtual bool IsSuccesfull(Character targetCharacter, Character casterCharacter)
+    public virtual bool IsSuccesfull(Character casterCharacter, Character targetCharacter)
     {
         var target = Target.GetValue(casterCharacter);
 

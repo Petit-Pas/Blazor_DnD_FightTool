@@ -11,7 +11,7 @@ public class MartialAttackTemplate : IHashable
 	{
 	}
 
-    public string Name { get; set; }
+    public string Name { get; set; } = "Attack template";
 
     public ModifiersTemplate Modifiers { get; set; } = new ModifiersTemplate();
 

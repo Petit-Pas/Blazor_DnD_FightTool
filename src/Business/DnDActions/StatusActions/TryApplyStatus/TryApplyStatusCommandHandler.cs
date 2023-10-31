@@ -1,5 +1,10 @@
-﻿using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
+﻿using System.Net.NetworkInformation;
+using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
+using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
+using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Statuses;
 using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
@@ -21,34 +26,49 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         var caster = command.GetCaster(_fightContext);
         var target = command.GetTarget(_fightContext);
         var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");
-        
-        if (!status.IsAppliedAutomatically)
+
+        var saveQueryResult = await QuerySaveRoll(command, status);
+        if (saveQueryResult != RequestStatus.Success)
         {
-            // TODO add a SaveContext that tells wether its magic or not, poison, charm etc so we can provide for defaul resistance to these
-            var saveQuery = new SaveRollResultQuery(caster.Id, target.Id, status.Save);
-
-            var saveRollResultResponse = await _mediator.Execute(saveQuery);
-            if (saveRollResultResponse.Status != RequestStatus.Success) 
-            {
-                return new CommandResponse(saveRollResultResponse);
-            }
-            command.SaveRollResult = saveRollResultResponse.Response;
-
-            if (command.SaveRollResult!.IsSuccesfull(target, caster))
-            {
-                return CommandResponse.Success();
-            }
+            return new CommandResponse(saveQueryResult);
         }
 
-        var applyStatusCommand = new ApplyStatusCommand(caster.Id, target.Id, status.Id, command.SaveRollResult);
-        await _mediator.Execute(applyStatusCommand);
-        command.AddToSubCommands(applyStatusCommand);
+        await TryApplyStatus(command, status, caster, target);
 
         return CommandResponse.Success();
     }
 
-    public override Task Redo(TryApplyStatusCommand command)
+    private async Task TryApplyStatus(TryApplyStatusCommand command, StatusTemplate status, Character caster, Character target)
     {
-        return base.Redo(command);
+        if (status.IsAppliedAutomatically || !command.SaveRollResult!.IsSuccesfull(caster, target))
+        {
+            var applyStatusCommand = new ApplyStatusCommand(caster.Id, target.Id, status.Id, command.SaveRollResult);
+            await _mediator.Execute(applyStatusCommand);
+            command.AddToSubCommands(applyStatusCommand);
+        }
+    }
+
+    private async Task<RequestStatus> QuerySaveRoll(TryApplyStatusCommand command, StatusTemplate status)
+    {
+        if (status.IsAppliedAutomatically)
+        {
+            return RequestStatus.Success;
+        }
+
+        var saveQuery = new SaveRollResultQuery(command.CasterId, command.TargetId, status.Save);
+        var saveQueryResponse = await _mediator.Execute(saveQuery);
+        command.SaveRollResult = saveQueryResponse.Response;
+        return saveQueryResponse.Status;
+    }
+
+    public override async Task Redo(TryApplyStatusCommand command)
+    {
+        var caster = command.GetCaster(_fightContext);
+        var target = command.GetTarget(_fightContext);
+        var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");
+
+        command.SubCommands.Clear();
+
+        await TryApplyStatus(command, status, caster, target);
     }
 }
