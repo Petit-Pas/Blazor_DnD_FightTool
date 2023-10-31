@@ -1,8 +1,9 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Saves;
+using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Statuses;
 
-public class StatusTemplate
+public class StatusTemplate : IHashable
 {
     public StatusTemplate()
     {

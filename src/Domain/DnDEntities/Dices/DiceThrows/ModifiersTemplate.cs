@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
+using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
@@ -9,7 +10,7 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 ///     This describes a modifier to apply to a dice, since it does not contain the dice expression, its only for static modifiers and wildcards
 ///     such as 2+WIS
 /// </summary>
-public class ModifiersTemplate
+public class ModifiersTemplate : IHashable
 {
     public static Regex Regex = new Regex(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
 

@@ -25,6 +25,11 @@ public class ExecuteMartialAttackCommand : CasterCommandBase
     /// </summary>
     public MartialAttackRollResult? MartialAttackRollResult { get; set; }
 
+    /// <summary>
+    ///     Calculated during the execution of the command
+    /// </summary>
+    public string Hash { get; internal set; }
+
     internal MartialAttackTemplate GetAttackTemplate(Character caster)
     {
         return caster.MartialAttacks.GetTemplateById(MartialAttackId) ?? throw new InvalidOperationException($"Could not get a martial attack of id {MartialAttackId} for character {caster.Id}");

@@ -1,6 +1,8 @@
-﻿namespace DnDFightTool.Domain.DnDEntities.Statuses;
+﻿using Memory.Hashes;
 
-public class StatusTemplateCollection : List<StatusTemplate>
+namespace DnDFightTool.Domain.DnDEntities.Statuses;
+
+public class StatusTemplateCollection : List<StatusTemplate>, IHashable
 {
     public StatusTemplateCollection() : this(false)
     {

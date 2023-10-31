@@ -303,4 +303,84 @@ public class HashableExtensionsTests
             newHash.Should().NotBe(initialHash);
         }
     }
+
+    [TestFixture]
+    private class HashSpecifiedProperties : HashableExtensionsTests
+    {
+        private ClassWithNormalProperties _class = null!;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _class = new ClassWithNormalProperties(10, "hello");
+        }
+
+        [Test]
+        public void Editing_An_Element_Not_Hashed_Should_Not_Have_An_Impact()
+        {
+            // Arrange 
+            var hash = _class.Hash(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))! });
+            _class.String = "world";
+
+            // Act
+            var newHash = _class.Hash(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))! });
+
+            // Assert
+            newHash.Should().Be(hash);
+        }
+
+        [Test]
+        public void Editing_a_Hashed_Element_Should_Have_An_Impact()
+        {
+            // Arrange 
+            var hash = _class.Hash(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))! });
+            _class.Integer = 156;
+
+            // Act
+            var newHash = _class.Hash(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))! });
+
+            // Assert
+            newHash.Should().NotBe(hash);
+        }
+    }
+
+    [TestFixture]
+    private class HashExceptSpecifiedProperties : HashableExtensionsTests
+    {
+        private ClassWithNormalProperties _class = null!;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _class = new ClassWithNormalProperties(10, "hello");
+        }
+
+        [Test]
+        public void Editing_An_Element_Not_Hashed_Should_Not_Have_An_Impact()
+        {
+            // Arrange 
+            var hash = _class.HashExcept(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))! });
+            _class.String = "world";
+
+            // Act
+            var newHash = _class.HashExcept(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))! });
+
+            // Assert
+            newHash.Should().Be(hash);
+        }
+
+        [Test]
+        public void Editing_a_Hashed_Element_Should_Have_An_Impact()
+        {
+            // Arrange 
+            var hash = _class.HashExcept(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))! });
+            _class.Integer = 156;
+
+            // Act
+            var newHash = _class.HashExcept(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))! });
+
+            // Assert
+            newHash.Should().NotBe(hash);
+        }
+    }
 }

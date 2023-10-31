@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
 using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Damage;
 
 [DebuggerDisplay("{Dices}-{Type}")]
-public class DamageRollTemplate
+public class DamageRollTemplate : IHashable
 {
     public DiceThrowTemplate Dices { get; set; } = new DiceThrowTemplate("1d6+STR");
     public DamageTypeEnum Type { get; set; }

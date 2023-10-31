@@ -45,7 +45,7 @@ public class ApplyDamageRollResultsCommandHandlerTests
 
         _target.DamageAffinities = new DamageAffinitiesCollection(true);
 
-        _command = new ApplyDamageRollResultsCommand(_target.Id, _caster.Id, _damageRollResults);
+        _command = new ApplyDamageRollResultsCommand(_caster.Id, _target.Id, _damageRollResults);
         _commandHandler = new ApplyDamageRollResultsCommandHandler(_mediator, _fightContext);
 
         A.CallTo(() => _fightContext.GetCharacterById(_caster.Id))

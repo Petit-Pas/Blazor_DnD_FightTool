@@ -43,7 +43,7 @@ public class SavingRollResultTests
             _saveRoll.RolledResult = rolledResult;
 
             // Act
-            var result = _saveRoll.IsSuccesfull(_target, _caster);
+            var result = _saveRoll.IsSuccesfull(_caster, _target);
 
             // Assert
             result.Should().Be(expectedResult);
@@ -60,7 +60,7 @@ public class SavingRollResultTests
             _saveRoll.Target = new DifficultyClass("DC");
 
             // Act
-            var result = _saveRoll.IsSuccesfull(_target, _caster);
+            var result = _saveRoll.IsSuccesfull(_caster, _target);
 
             // Assert
             result.Should().Be(expectedResult);
@@ -76,7 +76,7 @@ public class SavingRollResultTests
             _saveRoll.Ability = ability;
 
             // Act
-            var result = _saveRoll.IsSuccesfull(_target, _caster);
+            var result = _saveRoll.IsSuccesfull(_caster, _target);
 
             // Assert
             result.Should().Be(expectedResult);
@@ -98,7 +98,7 @@ public class SavingRollResultTests
             _saveRoll.RolledResult = rolledResult;
 
             // Act
-            var result = _saveRoll.IsSuccesfull(_target, _caster);
+            var result = _saveRoll.IsSuccesfull(_caster, _target);
 
             // Assert
             result.Should().Be(expectedResult);

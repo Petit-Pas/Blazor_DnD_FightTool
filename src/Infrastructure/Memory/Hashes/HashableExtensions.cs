@@ -1,16 +1,23 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Collections;
+using System.Reflection;
 
 namespace Memory.Hashes;
 
 public static class HashableExtensions
 {
-    public static string HashExcept(this IHashable hashable, Func<IHashable, IEnumerable<object>> exceptionGetter)
+    public static string HashExcept(this IHashable hashable, PropertyInfo[] propertiesToIgnore)
     {
-        return "";
-    }
+        var combinedProperties = new StringBuilder();
 
+        var properties = hashable.GetType().GetProperties()
+            .Where(p => p.DeclaringType != typeof(IEnumerable))
+            .Where(p => !propertiesToIgnore.Contains(p))
+            .OrderBy(x => x.Name);
+
+        return hashable.Hash(properties.ToArray());
+    }
 
     /// <summary>
     ///     This method is a generic method to use on any IHashable class. 
@@ -33,8 +40,29 @@ public static class HashableExtensions
             }
         }
 
-        var properties = hashable.GetType().GetProperties().Where(p => p.DeclaringType != typeof(IEnumerable)).OrderBy(x => x.Name);
-        foreach (var property in properties)
+        var properties = hashable.GetType().GetProperties()
+            .Where(p => p.DeclaringType != typeof(IEnumerable))
+            .OrderBy(x => x.Name);
+        
+        combinedProperties.Append(hashable.Hash(properties.ToArray()));
+        
+        var hashBytes = MD5.HashData(Encoding.UTF8.GetBytes(combinedProperties.ToString()));
+        return BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+    }
+
+    /// <summary>
+    ///     This method is a generic method to use on any IHashable class. 
+    ///     It will recursively hash any property that also implements IHashable.
+    ///     
+    ///     A property that does not implement IHashable will be added to the Hash with a ToString() call.
+    /// </summary>
+    /// <param name="hashable"></param>
+    /// <returns></returns>
+    public static string Hash(this IHashable hashable, PropertyInfo[] propertiesToHash)
+    {
+        var combinedProperties = new StringBuilder();
+       
+        foreach (var property in propertiesToHash.OrderBy(x => x.Name))
         {
             // Somehow, when a class inherits List, this condition is true, and it gets impossible to call GetValue without additional parameters.
             // Anyway the elements of the list have been handled above in the IEnumerable loop so we can simply skip them.

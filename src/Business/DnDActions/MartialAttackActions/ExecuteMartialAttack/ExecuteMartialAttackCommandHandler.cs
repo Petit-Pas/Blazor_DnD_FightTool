@@ -6,6 +6,9 @@ using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
+using DnDFightTool.Domain.DnDEntities.MartialAttacks;
+using Memory.Hashes;
+using Extensions.Mediator;
 using Extensions;
 
 namespace DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
@@ -21,18 +24,22 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 
     public override async Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
     {
+        var caster = command.GetCaster(_fightContext);
+        var attackTemplate = command.GetAttackTemplate(caster) ?? throw new InvalidOperationException($"Could not get attack template.");
+
+        command.Hash = attackTemplate.Hash();
+
         var queryStatus = await QueryAttackRollResult(command);
         if (queryStatus != RequestStatus.Success)
         {
             return new CommandResponse(queryStatus);
         }
 
-        var caster = command.GetCaster(_fightContext);
         var target = _fightContext.GetCharacterById(command.MartialAttackRollResult!.TargetId) ?? throw new InvalidOperationException($"Could not get target.");
         if (AttackHits(caster, target, command))
         {
             await ApplyDamage(caster, target, command);
-            await ApplyStatuses(caster, target, command);
+            await ApplyStatuses(caster, target, command, attackTemplate);
         }
 
         return CommandResponse.Success();
@@ -46,10 +53,8 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
         return attackRollResponse.Status;
     }
 
-    private async Task ApplyStatuses(Character caster, Character target, ExecuteMartialAttackCommand command)
+    private async Task ApplyStatuses(Character caster, Character target, ExecuteMartialAttackCommand command, MartialAttackTemplate attackTemplate)
     {
-        var attackTemplate = command.GetAttackTemplate(caster) ?? throw new InvalidOperationException($"Could not get attack template.");
-
         foreach (var onHitStatus in attackTemplate.Statuses)
         {
             var tryApplyStatusCommand = new TryApplyStatusCommand(caster.Id, target.Id, onHitStatus.Id);
@@ -83,24 +88,36 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     {
         var caster = command.GetCaster(_fightContext);
         var target = _fightContext.GetCharacterById(command.MartialAttackRollResult!.TargetId) ?? throw new InvalidOperationException($"Could not get target.");
+        var attackTemplate = command.GetAttackTemplate(caster) ?? throw new InvalidOperationException($"Could not get attack template.");
+        
+        if (attackTemplate.Hash() != command.Hash)
+        {
+            command.SubCommands.Clear();
+            var result = await QueryAttackRollResult(command);
+            if (result != RequestStatus.Success)
+            {
+                // Canceled
+                return;
+            }
+        }
 
         if (AttackHits(caster, target, command))
         {
-            // attack was already executed and had effect, so we just replicate the effect
+            // attack was already executed and had effect, so we can reuse the same commands
             if (command.SubCommands.Count != 0)
             {
                 await base.Redo(command);
             }
-            // attack has not hit before, we need to compute everything
+            // attack has has no effect before, we need to compute everything
             else
             {
                 await ApplyDamage(caster, target, command);
-                await ApplyStatuses(caster, target, command);
+                await ApplyStatuses(caster, target, command, attackTemplate);
             }
         }
         // attack does not hit, and since the Undo button could be clicked again, we need to make sure that no subCommands remains.
         // it also means that after that, we lose the potential dice throws in the subCommands,
-        //  as next time this is re-executed and the attack hits, we will call ApplyDamage & ApplyStatus again.
+        //      as next time this is re-executed and the attack hits, we will call ApplyDamage & ApplyStatus again.
         else
         {
             command.SubCommands.Clear();

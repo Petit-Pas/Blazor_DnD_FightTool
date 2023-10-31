@@ -1,5 +1,7 @@
-﻿namespace DnDFightTool.Domain.DnDEntities.Damage;
+﻿using Memory.Hashes;
 
-public class DamageRollTemplateCollection : List<DamageRollTemplate>
+namespace DnDFightTool.Domain.DnDEntities.Damage;
+
+public class DamageRollTemplateCollection : List<DamageRollTemplate>, IHashable
 {
 }

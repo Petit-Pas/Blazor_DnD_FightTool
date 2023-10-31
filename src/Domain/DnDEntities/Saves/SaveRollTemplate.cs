@@ -1,8 +1,9 @@
 ﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Saves;
 
-public class SaveRollTemplate
+public class SaveRollTemplate : IHashable
 {
     /// <summary>
     ///     The ability of the target to use for the check.
