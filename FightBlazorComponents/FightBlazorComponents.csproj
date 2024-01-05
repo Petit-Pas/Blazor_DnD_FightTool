@@ -25,7 +25,4 @@
     <ProjectReference Include="..\src\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
     <ProjectReference Include="..\src\UI\SharedComponents\SharedComponents.csproj" />
   </ItemGroup>
-
-
-
 </Project>
