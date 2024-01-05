@@ -1,6 +1,4 @@
-﻿
-using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+﻿using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
 namespace DnDFightTool.Domain.DnDEntities.Damage;
 
@@ -13,5 +11,5 @@ public class DamageRollResult
 
     public DamageTypeEnum DamageType { get; set; } = DamageTypeEnum.Fire;
 
-    public SituationalDamageModifierEnum SuccessfullSaveModifier { get; set; } = SituationalDamageModifierEnum.Normal;
+    public SituationalDamageModifierEnum SuccessfulSaveModifier { get; set; } = SituationalDamageModifierEnum.Normal;
 }

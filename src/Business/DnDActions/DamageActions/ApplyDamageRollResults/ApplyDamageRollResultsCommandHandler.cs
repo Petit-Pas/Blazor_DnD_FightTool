@@ -27,7 +27,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         foreach (var damageRoll in command.DamageRolls)
         {
             var actualDamage = ApplyAffinity(damageRoll.Damage, damageRoll.DamageType, target);
-            actualDamage = ApplySaveModifier(actualDamage, damageRoll.SuccessfullSaveModifier, command.Save, target, caster);
+            actualDamage = ApplySaveModifier(actualDamage, damageRoll.SuccessfulSaveModifier, command.Save, target, caster);
 
             totalDamage += (int)Math.Floor(actualDamage);
         }

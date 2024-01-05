@@ -23,7 +23,7 @@ public class HitRollResult : D20BaseRollResult
 
     public bool IsACriticalMiss()
     {
-        return Result == 0;
+        return Result == 1;
     }
 
     // TODO changing the returned boolean to a domain object might enable better logging in the consuming code (for crits for instance)

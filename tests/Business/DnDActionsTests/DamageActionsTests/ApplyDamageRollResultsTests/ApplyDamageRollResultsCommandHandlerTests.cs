@@ -108,7 +108,7 @@ public class ApplyDamageRollResultsCommandHandlerTests
         {
             // Arrange
             _command = new ApplyDamageRollResultsCommand(_target.Id, _caster.Id, _damageRollResults, new FakeSaveRollResult(true));
-            _command.DamageRolls.First().SuccessfullSaveModifier = modifier;
+            _command.DamageRolls.First().SuccessfulSaveModifier = modifier;
 
             // Act
             await _commandHandler.Execute(_command);
