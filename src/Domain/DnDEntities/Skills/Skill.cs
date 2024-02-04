@@ -1,20 +1,40 @@
-﻿using DnDEntities.AbilityScores;
-using DnDEntities.Dices.Modifiers;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 using Extensions;
 
-namespace DnDEntities.Skills;
+namespace DnDFightTool.Domain.DnDEntities.Skills;
 
+/// <summary>
+///     Represent a D&D skill, such as Acrobatics or Persuasion
+/// </summary>
 public class Skill
 {
+    /// <summary>
+    ///     Ctor with the name of the skill
+    /// </summary>
+    /// <param name="name"></param>
     public Skill(SkillEnum name)
     {
         Name = name;
     }
 
+    /// <summary>
+    ///     Name of the skill
+    /// </summary>
     public SkillEnum Name { get; set; }
 
+    /// <summary>
+    ///     How proficient the character is with this skill
+    ///     Can be Normal, Mastery or Expertise
+    /// </summary>
     public SkillMasteryEnum Mastery { get; set; }
 
+    /// <summary>
+    ///     Gets a score modifier to a skill check based on the ability scores of the character as well as its mastery of the skill
+    /// </summary>
+    /// <param name="abilityScores"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public ScoreModifier GetModifier(AbilityScoresCollection abilityScores)
     {
         var skillAttribute = Name.GetAttribute<AbilityAttribute>();

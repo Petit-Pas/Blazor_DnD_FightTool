@@ -1,7 +1,7 @@
-﻿using DnDEntities.HitPoint;
-using Fight;
+﻿using DnDFightTool.Domain.DnDEntities.HitPoint;
+using DnDFightTool.Domain.Fight;
 
-namespace DnDActions.HitPointActions;
+namespace DnDFightTool.Business.DnDActions.HitPointActions;
 
 public class HitPointCommandBase : TargetCommandBase
 {

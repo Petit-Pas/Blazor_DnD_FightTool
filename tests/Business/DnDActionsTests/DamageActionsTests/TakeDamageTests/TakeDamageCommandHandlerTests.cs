@@ -1,14 +1,14 @@
-﻿using DnDActions.DamageActions.TakeDamage;
-using DnDActions.HitPointActions.LooseHp;
-using DnDActions.HitPointActions.LooseTempHp;
-using DnDEntities.Characters;
-using DnDEntities.HitPoint;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.HitPoint;
 using FakeItEasy;
-using Fight;
+using DnDFightTool.Domain.Fight;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
 using UndoableMediator.Mediators;
+using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+using DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
+using DnDFightTool.Business.DnDActions.HitPointActions.LooseTempHp;
 
 namespace DnDActionsTests.DamageActionsTests.TakeDamageTests;
 

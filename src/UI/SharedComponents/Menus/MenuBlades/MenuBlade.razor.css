@@ -1,14 +1,29 @@
 ﻿.menu-blade {
-    position: sticky;
+    position: absolute;
     z-index: 2;
 }
+
 .menu-blade.bottom {
     bottom: 0;
+    right: 50%;
+    transform: translateX(80%);
     display: flex;
     justify-content: center;
 }
+
 .menu-blade.top {
     top: 0;
+    right: 50%;
+    transform: translateX(45%);
     display: flex;
     justify-content: center;
+}
+
+.menu-blade.right {
+    right: 0;
+    top: 50%;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(-50%);
 }

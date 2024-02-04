@@ -1,0 +1,20 @@
+﻿@using SharedComponents.Modals.Common
+
+<ModalBase>
+    <ModalActions>
+        <ModalCloseButton OnMouseClickCallBack="Cancel"></ModalCloseButton>
+    </ModalActions>
+
+    <ModalBody>
+        @ChildContent
+    </ModalBody>
+
+    <ModalFooter>
+        <ButtonCard Color="ThemeColor.Danger" OnMouseClickCallBack="Cancel">
+            Cancel
+        </ButtonCard>
+        <ButtonCard Color="ThemeColor.Primary" OnMouseClickCallBack="Validate">
+            Validate
+        </ButtonCard>
+    </ModalFooter>
+</ModalBase>

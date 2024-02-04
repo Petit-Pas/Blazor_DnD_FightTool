@@ -1,8 +1,7 @@
-﻿using Blazored.Toast.Configuration;
-using Blazored.Toast.Services;
-using DnDEntities.Characters;
+﻿using Blazored.Toast.Services;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using FastDeepCloner;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
 
@@ -43,7 +42,7 @@ public partial class EditCharacterPage
         }
         else {
             var id = Guid.Parse(CharacterId);
-            _character = CharacterRepository.GetCharacterById(id);
+            _character = CharacterRepository.GetCharacterById(id).Clone();
         }
     }
 
@@ -58,4 +57,30 @@ public partial class EditCharacterPage
     {
         Navigation.NavigateTo("/Characters");
     }
+
+    private EditCharacterPageState PageState { get; set; } = EditCharacterPageState.MainInformations;
+
+    private void UpdatePageState(EditCharacterPageState newState)
+    {
+        if (newState != PageState)
+        {
+            PageState = newState;
+            StateHasChanged();
+        }
+    }
+
+    private static Dictionary<string, EditCharacterPageState> PageStatesDictionary = new() 
+    { 
+        { "Main", EditCharacterPageState.MainInformations},
+        { "Attacks", EditCharacterPageState.Attacks}
+    };
+
+    private enum EditCharacterPageState
+    {
+        MainInformations,
+        Attacks
+    }
+
+
 }
+

@@ -1,4 +1,4 @@
-﻿using DnDEntities.AbilityScores;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
 using FluentAssertions;
 using NUnit.Framework;
 using System.Linq;
@@ -51,7 +51,7 @@ public class AbilityScoresCollectionTests
     [Test]
     [TestCase(AbilityEnum.Strength, 0)]
     [TestCase(AbilityEnum.Dexterity, 3)]
-    public void Should_Return_Modifier_Corresponding_To_The_Ability_Requestes(AbilityEnum ability, int expectedModifier)
+    public void Should_Return_Modifier_Corresponding_To_The_Ability_Requested(AbilityEnum ability, int expectedModifier)
     {
         // Act
         var scoreModifier = _abilityCollection.GetModifierWithoutMastery(ability);

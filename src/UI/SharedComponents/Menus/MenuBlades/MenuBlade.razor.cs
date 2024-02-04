@@ -3,6 +3,8 @@ using NeoBlazorphic.StyleParameters;
 
 namespace SharedComponents.Menus.MenuBlades;
 
+// TODO probably not going to be used anymore with the OverlayableArea
+
 public partial class MenuBlade
 {
     [Parameter]
@@ -16,6 +18,7 @@ public partial class MenuBlade
     {
         ElementRelativePosition.Top => "top",
         ElementRelativePosition.Bottom => "bottom",
+        ElementRelativePosition.Right => "right",
         _ => throw new NotImplementedException($"MenuBlade does not support {Position} at the moment."),
     };
 }

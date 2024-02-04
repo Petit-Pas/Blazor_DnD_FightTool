@@ -1,24 +1,29 @@
-﻿using DnDEntities.Characters;
-using System.Collections;
-using Fight.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.Extensions.Logging;
 
-namespace Fight;
+namespace DnDFightTool.Domain.Fight;
 
 public class FightContext : IFightContext
 {
+    /// <summary>
+    ///     Ctor
+    /// </summary>
+    /// <param name="log"></param>
+    /// <param name="characterRepository"></param>
     public FightContext(ILogger<FightContext> log, ICharacterRepository characterRepository)
     {
         _log = log;
         _characterRepository = characterRepository;
     }
 
+    private readonly ILogger<FightContext> _log;
+
     /// <summary>
     ///     Hosts lightweight representations of all the characters in the fight
     /// </summary>
-    private readonly List<FightingCharacter> _fighters = new ();
-    private readonly ILogger<FightContext> _log;
-
+    private readonly List<Fighter> _fighters = new();
+    
     /// <summary>
     ///     Since the players (or NPCs) are unique, we keep their reference in the character repository
     /// </summary>
@@ -29,17 +34,18 @@ public class FightContext : IFightContext
     /// </summary>
     private readonly List<Character> _monstersInFight = new ();
 
+    /// <inheritdoc/>
     public void AddToFight(Character character)
     {
         switch (character.Type)
         {
             case CharacterType.Player:
-                _fighters.Add(new FightingCharacter(character));
+                _fighters.Add(new Fighter(character));
                 break;
             case CharacterType.Monster:
                 var monsterCopy = character.Duplicate();
                 _monstersInFight.Add(monsterCopy);
-                _fighters.Add(new FightingCharacter(monsterCopy));
+                _fighters.Add(new Fighter(monsterCopy));
                 break;
             case CharacterType.Unknown:
             default:
@@ -48,7 +54,8 @@ public class FightContext : IFightContext
         }
     }
 
-    public void SetFightingCharacter(FightingCharacter fightingCharacter)
+    /// <inheritdoc/>
+    public void SetMovingFighter(Fighter fightingCharacter)
     {
         if (!_fighters.Contains(fightingCharacter))
         {
@@ -56,59 +63,68 @@ public class FightContext : IFightContext
             return;
         }
 
-        if (MovingFightingCharacter != fightingCharacter)
+        if (MovingFighter != fightingCharacter)
         {
-            MovingFightingCharacter = fightingCharacter;
+            MovingFighter = fightingCharacter;
             RaiseMovingCharacterChanged();
         }
     }
 
 
-    public FightingCharacter? MovingFightingCharacter { get; private set; }
+    /// <inheritdoc/>
+    public Fighter? MovingFighter { get; private set; }
 
-    private Character? GetCharacterFromFightingCharacter(FightingCharacter? fightingCharacter)
+    /// <summary>
+    ///     Gets character of a fighter, either from the character repository or from the monsters in fight
+    /// </summary>
+    /// <param name="fighter"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    private Character? GetActualCharacterFromFighters(Fighter? fighter)
     {
-        if (fightingCharacter == null)
+        if (fighter == null)
         {
             return null;
         }
 
-        switch (fightingCharacter.CharacterType)
+        switch (fighter.CharacterType)
         {
             case CharacterType.Player:
-                return _characterRepository.GetCharacterById(fightingCharacter.CharacterId);
+                return _characterRepository.GetCharacterById(fighter.CharacterId);
             case CharacterType.Monster:
-                return _monstersInFight.SingleOrDefault(x => x.Id == fightingCharacter.CharacterId);
+                return _monstersInFight.SingleOrDefault(x => x.Id == fighter.CharacterId);
             case CharacterType.Unknown:
             default:
-                throw new ArgumentOutOfRangeException($"There should not be a fighting character of type {fightingCharacter.CharacterId}");
+                throw new ArgumentOutOfRangeException($"There should not be a fighting character of type {fighter.CharacterId}");
         }
     }
 
-    public Character? GetMovingCharacter()
+    /// <inheritdoc/>
+    public Character? GetMovingFighterCharacter()
     {
-        return GetCharacterFromFightingCharacter(MovingFightingCharacter);
+        return GetActualCharacterFromFighters(MovingFighter);
     }
 
+    /// <inheritdoc/>
     public Character? GetCharacterById(Guid id)
     {
-        return GetCharacterFromFightingCharacter(_fighters.SingleOrDefault(x => x.CharacterId == id));
+        return GetActualCharacterFromFighters(_fighters.SingleOrDefault(x => x.CharacterId == id));
     }
 
-    public event EventHandler<FightingCharacter?>? MovingCharacterChanged;
+    /// <inheritdoc/>
+    public event EventHandler<Fighter?>? MovingFighterChanged;
 
+    /// <summary>
+    ///     Raise the event
+    /// </summary>
     private void RaiseMovingCharacterChanged()
     {
-        MovingCharacterChanged?.Invoke(this, MovingFightingCharacter);
+        MovingFighterChanged?.Invoke(this, MovingFighter);
     }
 
-    public IEnumerator<FightingCharacter> GetEnumerator()
+    /// <inheritdoc/>
+    public IEnumerable<Fighter> GetFighters()
     {
-        return _fighters.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
+        return _fighters;
     }
 }

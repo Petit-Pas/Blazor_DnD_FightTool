@@ -1,0 +1,4 @@
+﻿@if (Template != null)
+{
+    <ModifiersTemplateInput ValidateOnKeyPress="false" ValueExpression=@(() => Template) Value="Template" ValueChanged="(newTemplate) => OnTemplateChanged(newTemplate)" ValidationFor=@(() => Template) />
+}

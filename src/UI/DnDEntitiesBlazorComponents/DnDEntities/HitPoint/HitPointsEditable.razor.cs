@@ -1,5 +1,4 @@
-﻿using DnDEntities.Characters;
-using DnDEntities.HitPoint;
+﻿using DnDFightTool.Domain.DnDEntities.HitPoint;
 using Microsoft.AspNetCore.Components;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.HitPoint;

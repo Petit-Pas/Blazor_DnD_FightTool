@@ -1,12 +1,14 @@
 ﻿using Blazored.Toast;
-using DnDEntities.AbilityScores;
-using DnDEntities.AttackRolls.ArmorClasses;
-using DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Characters;
 using Microsoft.Extensions.Logging;
 using DnDFightTool.Data;
 using Morris.Blazor.Validation;
 using Blazored.Modal;
-using Fight;
+using DnDFightTool.Domain.Fight;
+using UndoableMediator.DependencyInjection;
+using DnDFightTool.Business.DnDActions;
+using FightBlazorComponents.Queries.MartialAttackQueries;
+using IO.Files;
 
 namespace DnDFightTool;
 
@@ -27,9 +29,20 @@ public static class MauiProgram
         builder.Services.AddBlazoredToast();
         builder.Services.AddBlazoredModal();
 
-        builder.Services.AddSingleton<ICharacterRepository, InMemoryCharacterRepository>();
+        builder.Services.AddSingleton<ICharacterRepository, LocalFileCharacterRepository>();
         builder.Services.AddSingleton<IFightContext, FightContext>();
-        builder.Services.AddSingleton<IFileManager, FileManager>();
+        builder.Services.AddSingleton<IFileManager, LocalFileManager>();
+        builder.Services.AddSingleton<IAppliedStatusRepository, AppliedStatusRepository>();
+
+        builder.Services.ConfigureMediator(options =>
+        {
+            options.ShouldScanAutomatically = false;
+            options.AssembliesToScan = new System.Reflection.Assembly[]
+            {
+                typeof(CasterCommandBase).Assembly,
+                typeof(MartialAttackRollResultQueryHandler).Assembly
+            };
+        });
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();

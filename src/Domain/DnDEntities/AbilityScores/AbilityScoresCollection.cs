@@ -1,16 +1,28 @@
-﻿
-using DnDEntities.Dices.Modifiers;
+﻿using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 
-namespace DnDEntities.AbilityScores;
+namespace DnDFightTool.Domain.DnDEntities.AbilityScores;
 
 // TODO unit tests
 
+/// <summary>
+///     Collection of ability scores
+///     Ex: Strength, Dexterity, ...
+///     
+///     Also holds the mastery bonus as it's often stored with such stats, might move it later.
+/// </summary>
 public class AbilityScoresCollection : List<AbilityScore>
 {
+    /// <summary>
+    ///     default ctor
+    /// </summary>
     public AbilityScoresCollection() : this(false)
     {
     }
 
+    /// <summary>
+    ///     ctor that can create default values
+    /// </summary>
+    /// <param name="withDefaults"> true if you want the default abilities to be populated </param>
     public AbilityScoresCollection(bool withDefaults = false)
     {
         if (withDefaults)
@@ -27,6 +39,11 @@ public class AbilityScoresCollection : List<AbilityScore>
         }
     }
 
+    /// <summary>
+    ///     Returns the raw modifier for the given ability score
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public ScoreModifier GetModifierWithoutMastery(AbilityEnum name)
     {
         var ability = this.FirstOrDefault(x => x.Ability == name);
@@ -40,6 +57,11 @@ public class AbilityScoresCollection : List<AbilityScore>
         return ability.GetModifier();
     }
 
+    /// <summary>
+    ///    Returns the modifier for the given ability score, with mastery bonus if applicable
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public ScoreModifier GetModifierWithMastery(AbilityEnum name)
     {
         var ability = this.FirstOrDefault(x => x.Ability == name);
@@ -53,5 +75,8 @@ public class AbilityScoresCollection : List<AbilityScore>
         return ability.GetModifier(MasteryBonus);
     }
 
+    /// <summary>
+    ///     The mastery bonus
+    /// </summary>
     public int MasteryBonus { get; set; } = 2;
 }

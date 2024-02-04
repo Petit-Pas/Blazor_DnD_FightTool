@@ -1,12 +1,12 @@
-﻿using DnDActions.DamageActions.TakeDamage;
-using DnDEntities.Characters;
-using DnDEntities.Damage;
-using Fight;
-using Fight.Savings;
+﻿using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Saves;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
-namespace DnDActions.DamageActions.ApplyDamageRollResults;
+namespace DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 
 public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDamageRollResultsCommand>
 {
@@ -17,7 +17,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         _fightContext = fightContext;
     }
 
-    public override ICommandResponse<NoResponse> Execute(ApplyDamageRollResultsCommand command)
+    public override async Task<ICommandResponse<NoResponse>> Execute(ApplyDamageRollResultsCommand command)
     {
         var target = command.GetTarget(_fightContext);
         var caster = command.GetCaster(_fightContext);
@@ -27,14 +27,14 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         foreach (var damageRoll in command.DamageRolls)
         {
             var actualDamage = ApplyAffinity(damageRoll.Damage, damageRoll.DamageType, target);
-            actualDamage = ApplySaveModifier(actualDamage, damageRoll.SuccessfullSaveModifier, command.Save, target, caster);
+            actualDamage = ApplySaveModifier(actualDamage, damageRoll.SuccessfulSaveModifier, command.Save, target, caster);
 
             totalDamage += (int)Math.Floor(actualDamage);
         }
 
         var takeDamageCommand = new TakeDamageCommand(target.Id, totalDamage);
         command.AddToSubCommands(takeDamageCommand);
-        _mediator.Execute(takeDamageCommand);
+        await _mediator.Execute(takeDamageCommand);
 
         return CommandResponse.Success();
     }
@@ -48,7 +48,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
 
     private double ApplySaveModifier(double actualDamage, SituationalDamageModifierEnum modifier, SaveRollResult? save, Character target, Character caster)
     {
-        if (save != null && save.IsSuccesfull(target, caster))
+        if (save != null && save.IsSuccessful(target, caster))
         {
             var factor = modifier.GetFactor();
             return factor.ApplyOn(actualDamage);
@@ -56,11 +56,11 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         return actualDamage;
     }
 
-    public override void Redo(ApplyDamageRollResultsCommand command)
+    public override async Task Redo(ApplyDamageRollResultsCommand command)
     {
         // The subcommands of this one are applying damages that were computed with resistance.
         // Since resistance might have changed, we clear the subcommands and re execute the command fully
         command.SubCommands.Clear();
-        Execute(command);
+        await Execute(command);
     }
 }

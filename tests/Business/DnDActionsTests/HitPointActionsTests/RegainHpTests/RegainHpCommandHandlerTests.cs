@@ -1,12 +1,12 @@
-﻿using DnDActions.HitPointActions.RegainHp;
-using DnDEntities.Characters;
-using DnDEntities.HitPoint;
+﻿using DnDFightTool.Business.DnDActions.HitPointActions.RegainHp;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.HitPoint;
 using FakeItEasy;
-using Fight;
-using Fight.Characters;
+using DnDFightTool.Domain.Fight;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
+using System.Threading.Tasks;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
 
@@ -50,10 +50,10 @@ internal class RegainHpCommandHandlerTests
     private class ExecuteTests : RegainHpCommandHandlerTests
     {
         [Test]
-        public void Should_Return_Success()
+        public async Task Should_Return_Success()
         {
             // Act 
-            var response = _commandHandler.Execute(_command);
+            var response = await _commandHandler.Execute(_command);
 
             // Assert
             response.Status.Should().Be(RequestStatus.Success);

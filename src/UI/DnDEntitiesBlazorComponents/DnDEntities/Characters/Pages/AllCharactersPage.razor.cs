@@ -1,12 +1,12 @@
 ﻿
 using Blazored.Modal;
 using Blazored.Modal.Services;
-using DnDEntities.Characters;
-using Fight;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using NeoBlazorphic.StyleParameters;
-using SharedComponents.Modals.ConfirmationModals;
+using SharedComponents.Modals.Templates;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
 
@@ -54,7 +54,8 @@ public partial class AllCharactersPage
 
     private async Task Delete(Character character)
     {
-        var parameters = new ModalParameters().Add(nameof(ConfirmationModal.Message), "Hello world message");
+        var parameters = new ModalParameters().Add(nameof(ConfirmationModal.Message), "Are you sure you want to delete this? ")
+                                              .Add(nameof(ConfirmationModal.Title), "Delete FR?");
         var options = new ModalOptions { UseCustomLayout = true };
         var modal = Modal.Show<ConfirmationModal>("Default Title?", parameters, options);
         var result = await modal.Result;

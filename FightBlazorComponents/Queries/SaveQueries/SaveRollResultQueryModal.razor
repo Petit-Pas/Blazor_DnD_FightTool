@@ -1,0 +1,25 @@
+﻿@using SharedComponents.Modals.Common;
+@using DnDFightTool.Domain.DnDEntities.Damage;
+@using Morris.Blazor.Validation;
+@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;
+@using SharedComponents.Modals.Templates;
+@using NeoBlazorphic.Components.Inputs.Fields;
+@using DnDFightTool.Domain.DnDEntities.AbilityScores;
+
+<ValidateCancelModal CanBeValidated="IsModelValid">
+    @if (_editContext != null)
+    {
+        <EditForm EditContext=@_editContext>
+            <Validate />
+
+            <IntInput @bind-Value="SaveRollResult!.RolledResult" ValidationFor="@(() => SaveRollResult!.RolledResult)" ValidateOnKeyPress="true">
+                <PrefixRenderFragment>
+                    DC @SaveRollResult.Target.GetValue(Caster!) @SaveRollResult.Ability.ShortName()
+                </PrefixRenderFragment>
+                <SuffixRenderFragment>
+                    @Target!.AbilityScores.GetModifierWithMastery(SaveRollResult.Ability).ModifierString
+                </SuffixRenderFragment>
+            </IntInput>
+        </EditForm>
+    }
+</ValidateCancelModal>

@@ -1,9 +1,10 @@
-﻿using DnDEntities.Characters;
-using Fight;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
-using Fight.Characters;
+using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components.Web;
 using NeoBlazorphic.StyleParameters;
+using DnDFightTool.Domain.Fight.Events.AppliedStatusUpdated;
 
 namespace FightBlazorComponents.Entities.FightingCharacters.Components;
 
@@ -16,7 +17,10 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     public IFightContext FightContext { get; set; }
 
     [Parameter]
-    public FightingCharacter Fighter { get; set; }
+    public Fighter Fighter { get; set; }
+
+    [Inject]
+    public IAppliedStatusRepository AppliedStatusCollection { get; set; }
 
     private Character? Character = null;
 
@@ -27,10 +31,20 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
         base.OnInitialized();
         InitCharacter();
 
-        FightContext.MovingCharacterChanged += OnMovingCharacterChanged;
+        FightContext.MovingFighterChanged += OnMovingCharacterChanged;
+        AppliedStatusCollection.AppliedStatusUpdated += AppliedStatusCollection_AppliedStatusUpdated;
     }
 
-    private void OnMovingCharacterChanged(object? sender, FightingCharacter? fightingCharacter)
+    private void AppliedStatusCollection_AppliedStatusUpdated(object _, AppliedStatusUpdatedEventArgs e)
+    {
+        if (e.AffectedCharacterId == Character?.Id)
+        {
+            // TODO the refresh works without that, but I think its because the whole state is recomputed when the HPs change, to try with an attack that has no damage 
+            StateHasChanged();
+        }
+    }
+
+    private void OnMovingCharacterChanged(object? sender, Fighter? fightingCharacter)
     {
         StateHasChanged();
     }
@@ -51,16 +65,17 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
 
     public void Dispose()
     {
-        FightContext.MovingCharacterChanged -= OnMovingCharacterChanged;
+        FightContext.MovingFighterChanged -= OnMovingCharacterChanged;
+        AppliedStatusCollection.AppliedStatusUpdated -= AppliedStatusCollection_AppliedStatusUpdated;
     }
 
     private void TileClicked(MouseEventArgs _)
     {
-        FightContext.SetFightingCharacter(Fighter);
+        FightContext.SetMovingFighter(Fighter);
     }
 
     // UI Methods
-    private ThemeColor CardTheme => FightContext.MovingFightingCharacter == Fighter
+    private ThemeColor CardTheme => FightContext.MovingFighter == Fighter
         ? ThemeColor.Primary 
         : ThemeColor.Base;
 }

@@ -1,0 +1,20 @@
+﻿@typeparam T
+
+@if (KeyValues != null)
+{
+    @foreach (var keyValue in KeyValues)
+    {
+        @if (Value?.Equals(keyValue.Value) ?? false)
+        {
+            <Card Color="ThemeColor.Primary" ShadowPosition="ShadowPosition.In">
+                <div> @keyValue.Key </div>
+            </Card>
+        }
+        else
+        {
+            <ButtonCard OnMouseClickCallBack="() => UpdateValue(keyValue.Value)">
+                <div> @keyValue.Key </div>
+            </ButtonCard>
+        }
+    }
+}

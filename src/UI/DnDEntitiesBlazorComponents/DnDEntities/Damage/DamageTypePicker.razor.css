@@ -1,0 +1,9 @@
+﻿
+select {
+    background: var(--base-main-color);
+    outline: none;
+}
+
+select:focus {
+    background: var(--primary-main-color);
+}

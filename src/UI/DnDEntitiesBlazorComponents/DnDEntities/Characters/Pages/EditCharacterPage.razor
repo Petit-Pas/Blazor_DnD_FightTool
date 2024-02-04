@@ -1,39 +1,56 @@
 ﻿@page "/Characters/Edit/{CharacterId}"
 
+@using DnDEntitiesBlazorComponents.DnDEntities.MartialAttacks
 @using NeoBlazorphic.Components.Inputs.Buttons
+@using SharedComponents.Inputs.Buttons
+@using SharedComponents.Menus
 @using SharedComponents.Menus.MenuBlades
+
+@using DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
+@using SharedComponents.Overlays.OverlayableArea
 
 
 @if (_character != null)
 {
-    <div class="edit-character">
-        <MenuBlade Position="ElementRelativePosition.Top">
-            <Card BorderRadius="@(new BorderRadius(0, 0, 1, 1, "em"))">
-                <div style="font-size: 26px;">
-                    Editing @_character.Name
-                </div>
-            </Card>
-        </MenuBlade>
+    <OverlayableArea>
+        <TopOverlay>
+            <div style="font-size: 26px;">
+                Editing @_character.Name
+            </div>
+        </TopOverlay>
+        <RightOverlay>
+            <div class="page-tabs">
+                <RadioButtons T="EditCharacterPageState" KeyValues="PageStatesDictionary" Value="PageState"  OnValueChanged="(newState) => PageState = newState"/>
+            </div>
+        </RightOverlay>
+        <BottomOverlay>
+            <div class="edit-character-actions">
+                <ButtonCard OnMouseClickCallBack="CancelClicked" Color="ThemeColor.Danger">
+                    <div class="edit-character-action"> Cancel </div>
+                </ButtonCard>
+                <div style="margin: 10px;"></div>
+                <ButtonCard OnMouseClickCallBack="SaveClicked" Color="ThemeColor.Primary">
+                    <div class="edit-character-action"> Save </div>
+                </ButtonCard>
+            </div>
+        </BottomOverlay>
+        <ChildContent>
+            <div style="padding: 4em 1em 6em 1em; height: 100%; overflow: auto">
 
+                @switch (PageState)
+                {
+                    case EditCharacterPageState.MainInformations:
+                        <CharacterSheet Character="@_character"></CharacterSheet>
+                        break;
+                    case EditCharacterPageState.Attacks:
+                        <MartialAttackTemplatesEditable Character="@_character"></MartialAttackTemplatesEditable>
+                        break;
+                }
+            </div>
 
-        <div class="edit-character-body">
-            <CharacterSheet Character="@_character"></CharacterSheet>
-        </div>
+        </ChildContent>
+    </OverlayableArea>
 
-        <MenuBlade Position="ElementRelativePosition.Bottom">
-            <Card BorderRadius="@(new BorderRadius(1, 1, 0, 0, "em"))">
-                <div class="edit-character-actions">
-                    <ButtonCard OnMouseClickCallBack="CancelClicked" Color="ThemeColor.Danger">
-                        <div class="edit-character-action"> Cancel </div>
-                    </ButtonCard>
-                    <div style="margin: 10px;"></div>
-                    <ButtonCard OnMouseClickCallBack="SaveClicked" Color="ThemeColor.Primary">
-                        <div class="edit-character-action"> Save </div>
-                    </ButtonCard>
-                </div>
-            </Card>
-        </MenuBlade>
-    </div>
 }
 else
 {

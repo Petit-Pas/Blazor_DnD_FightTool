@@ -1,0 +1,35 @@
+﻿
+<div class="overlayable-area">
+
+    @if (TopOverlay != null)
+    {
+        <div class="overlay top">
+            <Card BorderRadius="@_topBorderRadius">
+                @TopOverlay
+            </Card>
+        </div>
+    }
+
+    @if (RightOverlay != null)
+    {
+        <div class="overlay right">
+            <Card BorderRadius="@_rightBorderRadius">
+                @RightOverlay
+            </Card>
+        </div>
+    }
+
+    @if (BottomOverlay != null)
+    {
+        <div class="overlay bottom">
+            <Card BorderRadius="@_bottomBorderRadius">
+                @BottomOverlay
+            </Card>
+        </div>
+    }
+    
+    @if (ChildContent != null)
+    {
+        @ChildContent   
+    }
+</div>

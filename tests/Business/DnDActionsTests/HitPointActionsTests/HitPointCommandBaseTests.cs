@@ -1,6 +1,6 @@
-﻿using DnDActions.HitPointActions;
+﻿using DnDFightTool.Business.DnDActions.HitPointActions;
 using FakeItEasy;
-using Fight;
+using DnDFightTool.Domain.Fight;
 using FluentAssertions;
 using NUnit.Framework;
 using System;

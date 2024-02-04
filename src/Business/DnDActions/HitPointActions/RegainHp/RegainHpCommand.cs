@@ -1,6 +1,4 @@
-﻿using UndoableMediator.Commands;
-
-namespace DnDActions.HitPointActions.RegainHp;
+﻿namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainHp;
 
 public class RegainHpCommand : HitPointCommandBase
 {

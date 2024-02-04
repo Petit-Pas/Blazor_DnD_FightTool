@@ -1,8 +1,8 @@
-﻿using Fight;
+﻿using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
-namespace DnDActions.HitPointActions.LooseHp;
+namespace DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
 
 public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
 {
@@ -13,7 +13,7 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
         _fightContext = fightContext;
     }
 
-    public override ICommandResponse<NoResponse> Execute(LooseHpCommand command)
+    public override Task<ICommandResponse<NoResponse>> Execute(LooseHpCommand command)
     {
         var hitPoints = command.GetHitPoints(_fightContext);
 
@@ -26,13 +26,11 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
             hitPoints.CurrentHps = 0;
         }
 
-        return CommandResponse.Success();
+        return Task.FromResult(CommandResponse.Success());
     }
 
     public override void Undo(LooseHpCommand command)
     {
-        base.Undo(command);
-
         var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
 
         if (command.CorrectedAmount == null)
@@ -43,10 +41,8 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
         hitPoints.CurrentHps += command.CorrectedAmount.Value;
     }
 
-    public override void Redo(LooseHpCommand command)
+    public override async Task Redo(LooseHpCommand command)
     {
-        base.Redo(command);
-
-        Execute(command);
+        await Execute(command);
     }
 }

@@ -1,4 +1,4 @@
-﻿using DnDEntities.DamageAffinities;
+﻿using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using Microsoft.AspNetCore.Components;
 using NeoBlazorphic.StyleParameters;
 

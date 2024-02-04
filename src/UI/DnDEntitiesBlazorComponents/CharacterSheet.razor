@@ -1,5 +1,5 @@
 ﻿@using System.ComponentModel.DataAnnotations
-@using System.Security.Cryptography.X509Certificates
+@using DnDFightTool.Domain.DnDEntities.Characters;
 @using NeoBlazorphic.StyleParameters
 @using Morris.Blazor.Validation;
 @using DnDEntities.AbilityScores
@@ -10,7 +10,6 @@
 @using DnDEntitiesBlazorComponents.DnDEntities.Skills
 @using DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities
 @using DnDEntitiesBlazorComponents.DnDEntities.HitPoint
-@using global::DnDEntities.Characters
 
 <h1>
     Character Sheet
@@ -47,8 +46,6 @@
             </div>
             <h1> BODY </h1>
 
-            <button type="submit">Save</button>
-
         </div>
         <div>
             <DamageAffinitiesEditableList Affinities="Character.DamageAffinities" ></DamageAffinitiesEditableList>
@@ -75,7 +72,7 @@
 
             _editContext.OnFieldChanged += (sender, args) =>
             {
-                var test = _editContext.Validate();
+                //var test = _editContext.Validate();
                 StateHasChanged();
             };
         }

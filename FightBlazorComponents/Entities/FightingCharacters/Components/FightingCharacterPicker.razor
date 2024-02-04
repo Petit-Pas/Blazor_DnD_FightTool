@@ -1,0 +1,18 @@
+﻿
+<select @onchange="OnTargetChanged">
+
+    @if (SelectedCharacterId == Guid.Empty)
+    {
+        <option value="@Guid.Empty"> </option>
+    }
+
+    @if (_fightingCharacters != null)
+    {
+        @foreach (var character in _fightingCharacters)
+        {
+            <option value="@character.CharacterId"> @character.Name </option>
+        }
+    }
+</select>
+
+<ValidationMessage For="@ValidationFor" />

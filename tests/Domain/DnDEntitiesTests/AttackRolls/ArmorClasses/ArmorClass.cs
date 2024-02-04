@@ -1,4 +1,4 @@
-﻿using DnDEntities.AttackRolls.ArmorClasses;
+﻿using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -21,14 +21,14 @@ public class ArmorClassTests
     }
 
     [Test]
-    public void Shield_Armor_Class_Should_Not_Change_Effective_Ac_When_Not_Equiped()
+    public void Shield_Armor_Class_Should_Not_Change_Effective_Ac_When_Not_Equipped()
     {
         // Assert
         _armorClass.EffectiveAC.Should().Be(10);
     }
 
     [Test]
-    public void When_Shield_Is_Equiped_Effective_Ac_Should_Be_Increased()
+    public void When_Shield_Is_Equipped_Effective_Ac_Should_Be_Increased()
     {
         // Arrange
         _armorClass.HasShieldEquipped = true;

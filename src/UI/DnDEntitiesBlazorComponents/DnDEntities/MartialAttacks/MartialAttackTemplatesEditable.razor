@@ -1,0 +1,39 @@
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Damage
+@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+@using DnDEntitiesBlazorComponents.DnDEntities.Statuses
+@using Morris.Blazor.Validation
+
+
+<EditForm EditContext="_editContext">
+    <Validate />
+
+    @foreach(var attackTemplate in Character.MartialAttacks.Values)
+    {
+        <Card>
+            <StringInput @bind-Value="@attackTemplate.Name" ValidationFor="() => attackTemplate.Name" />
+            <div> @attackTemplate.Id </div>
+            <ModifiersTemplateEditable @bind-Template="attackTemplate.Modifiers" />
+            <div style="margin: 10px;">
+                @foreach (var damageTemplate in attackTemplate.Damages)
+                {
+                    <div style="margin: 5px;">
+                        <DamageRollTemplateEditable DamageRollTemplate="damageTemplate" />
+                        <ButtonCard Color="ThemeColor.Danger" OnMouseClickCallBack="() => RemoveDamageFromAttack(attackTemplate, damageTemplate)"> Delete </ButtonCard>
+                    </div>
+                }
+                <ButtonCard OnMouseClickCallBack="() => AddNewDamageInAttack(attackTemplate)"> Add damage type </ButtonCard>
+
+            </div>
+            <div style="margin: 10px;">
+                @foreach (var status in attackTemplate.Statuses.Values)
+                {
+                    <div sstyle="margin: 5px;">
+                        <StatusTemplateEditable StatusTemplate="status" />
+                        <ButtonCard Color="ThemeColor.Danger" OnMouseClickCallBack="() => RemoveStatusFromAttack(attackTemplate, status)"> Delete </ButtonCard>
+                    </div>
+                }
+                <ButtonCard OnMouseClickCallBack="() => AddNewStatusInAttack(attackTemplate)" > Add new Status </ButtonCard>
+            </div>
+        </Card>
+    }
+</EditForm>

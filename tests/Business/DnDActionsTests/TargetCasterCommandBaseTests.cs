@@ -1,6 +1,6 @@
-﻿using DnDActions;
+﻿using DnDFightTool.Business.DnDActions;
 using FakeItEasy;
-using Fight;
+using DnDFightTool.Domain.Fight;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
@@ -11,13 +11,13 @@ namespace DnDActionsTests;
 public class TargetCasterCommandBaseTests
 {
     IFightContext _fightContext = null!;
-    TargetCasterCommandBase _command = null!;
+    CasterTargetCommandBase _command = null!;
 
     [SetUp]
     public void SetUp()
     {
         _fightContext = A.Fake<IFightContext>();
-        _command = new TargetCasterCommandBase(Guid.NewGuid(), Guid.NewGuid());
+        _command = new CasterTargetCommandBase(Guid.NewGuid(), Guid.NewGuid());
 
         A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
             .Returns(null);

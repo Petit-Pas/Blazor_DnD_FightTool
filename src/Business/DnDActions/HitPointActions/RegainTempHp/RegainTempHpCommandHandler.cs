@@ -1,8 +1,8 @@
-﻿using Fight;
+﻿using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
-namespace DnDActions.HitPointActions.RegainTempHp;
+namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
 
 public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand>
 {
@@ -13,7 +13,7 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
         _fightContext = fightContext;
     }
 
-    public override ICommandResponse<NoResponse> Execute(RegainTempHpCommand command)
+    public override Task<ICommandResponse<NoResponse>> Execute(RegainTempHpCommand command)
     {
         var hitPoints = command.GetHitPoints(_fightContext);
 
@@ -22,7 +22,7 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
 
         hitPoints.CurrentTempHps += command.CorrectedAmount.Value;
 
-        return CommandResponse.Success();
+        return Task.FromResult(CommandResponse.Success());
     }
 
     public override void Undo(RegainTempHpCommand command)
@@ -40,10 +40,8 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
 
     }
 
-    public override void Redo(RegainTempHpCommand command)
+    public override async Task Redo(RegainTempHpCommand command)
     {
-        base.Redo(command);
-
-        Execute(command);
+        await Execute(command);
     }
 }

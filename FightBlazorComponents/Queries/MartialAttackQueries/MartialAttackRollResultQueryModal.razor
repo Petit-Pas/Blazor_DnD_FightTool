@@ -1,0 +1,49 @@
+﻿@using SharedComponents.Modals
+@using SharedComponents.Modals.Common;
+@using DnDFightTool.Domain.DnDEntities.Damage;
+@using Morris.Blazor.Validation;
+@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;
+
+<ModalBase>
+    <ModalActions>
+        <ModalCloseButton OnMouseClickCallBack="Cancel"></ModalCloseButton>
+    </ModalActions>
+
+    <ModalBody>
+        @if (_editContext != null)
+        {
+            <EditForm EditContext=@_editContext>
+                <Validate />
+
+                <FightingCharacterPicker @bind-SelectedCharacterId=MartialAttackRollResult.TargetId ValidationFor="() => MartialAttackRollResult.TargetId"></FightingCharacterPicker>
+
+                <HitRollResultEditable HitRollResult="MartialAttackRollResult.HitRoll" Caster="Caster"></HitRollResultEditable>
+
+                @foreach (var damage in MartialAttackRollResult.DamageRolls)
+                {
+                    <div style="margin-bottom: 15px;">
+                        <IntInput @bind-Value="damage.Damage" ValidationFor="() => damage.Damage" ValidateOnKeyPress=true>
+                            <PrefixRenderFragment>
+                                @damage.Dices.DicesToRollExpression()
+                            </PrefixRenderFragment>
+                            <SuffixRenderFragment>
+                                @damage.Dices.GetScoreModifier(Caster).ModifierString @damage.DamageType.ToReadableString() damage
+                            </SuffixRenderFragment>
+
+                        </IntInput>
+                    </div>
+                }
+
+            </EditForm>
+        }
+    </ModalBody>
+
+    <ModalFooter>
+        <ButtonCard Color="ThemeColor.Danger" OnMouseClickCallBack="Cancel">
+            Cancel
+        </ButtonCard>
+        <ButtonCard Color="ThemeColor.Primary" OnMouseClickCallBack="Validate">
+            Validate
+        </ButtonCard>
+    </ModalFooter>
+</ModalBase>
