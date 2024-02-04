@@ -40,7 +40,7 @@ public class ApplyDamageRollResultsCommandHandlerTests
 
         _damageRollResults = new DamageRollResult[]
         {
-            DamageRollResultFactory.Build(DamageTypeEnum.Fire, 10),
+            DamageRollResultFactory.BuildRolledDice(DamageTypeEnum.Fire, 10),
         };
 
         _target.DamageAffinities = new DamageAffinitiesCollection(true);

@@ -1,22 +1,24 @@
-﻿
-<div class="armor-class-container">
-    <div class="armor-class">
-        <IntInput Label="Armor Class" @bind-Value="ArmorClass.BaseArmorClass" ValidationFor="@(() => ArmorClass.BaseArmorClass)" />
-    </div>
-    <div class="shield">
-        <div class="has-a-shield-container">
-            <div class="has-a-shield">
-                Can wear a shield
+﻿@if (ArmorClass != default)
+{
+    <div class="armor-class-container">
+        <div class="armor-class">
+            <IntInput Label="Armor Class" @bind-Value="ArmorClass.BaseArmorClass" ValidationFor="@(() => ArmorClass.BaseArmorClass)" />
+        </div>
+        <div class="shield">
+            <div class="has-a-shield-container">
+                <div class="has-a-shield">
+                    Can wear a shield
+                </div>
+                <div class="has-a-shield-checkbox">
+                    <CheckBox @bind-IsChecked="ArmorClass.HasShieldEquipped"></CheckBox>
+                </div>
             </div>
-            <div class="has-a-shield-checkbox">
-                <CheckBox @bind-IsChecked="ArmorClass.HasShieldEquipped"></CheckBox>
+            <div class="shield-value-field @ShieldInputVisibility">
+                <IntInput @bind-Value="ArmorClass.ShieldArmorClass" ValidationFor="@(() => ArmorClass.ShieldArmorClass)">
+                    <PrefixRenderFragment> Shield value </PrefixRenderFragment>
+                </IntInput>
             </div>
         </div>
-        <div class="shield-value-field @ShieldInputVisibility">
-            <IntInput @bind-Value="ArmorClass.ShieldArmorClass" ValidationFor="@(() => ArmorClass.ShieldArmorClass)">
-                <PrefixRenderFragment> Shield value </PrefixRenderFragment>
-            </IntInput>
-        </div>
     </div>
+}
 
-</div>

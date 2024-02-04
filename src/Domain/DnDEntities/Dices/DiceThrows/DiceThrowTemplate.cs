@@ -13,26 +13,47 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 [DebuggerDisplay("{Expression}")]
 public class DiceThrowTemplate : IHashable
 {
+    /// <summary>
+    ///     Ctor for empty expression
+    ///     As well as for serializer
+    /// </summary>
     public DiceThrowTemplate()
     {
     }
 
+    /// <summary>
+    ///     Ctor that receives the expression
+    /// </summary>
+    /// <param name="expression"></param>
     public DiceThrowTemplate(string expression)
     {
         Expression = expression;
     }
 
-    public static Regex Regex = new Regex(@"^((?:[0-9]+)|(?:[0-9]+d[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:(?:\+|\-)(?:[0-9]+d[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
+    /// <summary>
+    ///     The regex that validates and parses the expression
+    /// </summary>
+    internal static readonly Regex Regex = new Regex(@"^((?:[0-9]+)|(?:[0-9]+d[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:(?:\+|\-)(?:[0-9]+d[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
 
-    public string Expression { get => CreateExpression(); set => AnalyzeExpression(value); }
+    /// <summary>
+    ///     Accessors for the expression
+    ///     Get builds it from the internal state
+    ///     Set parses it and sets the internal state
+    /// </summary>
+    public string Expression { get => CreateExpression(); set => ParseExpression(value); }
 
-    private void AnalyzeExpression(string expression)
+    /// <summary>
+    ///     Internal method to parse the expression
+    /// </summary>
+    /// <param name="expression"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    private void ParseExpression(string expression)
     {
-        if (string.IsNullOrEmpty(expression))
+        if (string.IsNullOrWhiteSpace(expression))
         {
-            DicesToRoll = Array.Empty<Dices>();
-            Wildcards = Array.Empty<Wildcard>();
-            StaticModifier = 0;
+            _dicesToRoll = Array.Empty<Dices>();
+            _wildcards = Array.Empty<Wildcard>();
+            _staticModifier = 0;
             return;
         }
 
@@ -43,8 +64,8 @@ public class DiceThrowTemplate : IHashable
         }
 
         var dices = new List<Dices>();
-        var staticModifier = 0;
         var wildcards = new List<Wildcard>();
+        var staticModifier = 0;
 
         // We skip the first one because its a capture of the full expression.
         foreach (var capture in rgxMatch.Groups.Skip<Group>(1).SelectMany(x => x.Captures))
@@ -65,12 +86,17 @@ public class DiceThrowTemplate : IHashable
             }
         }
 
-        DicesToRoll = dices.Where(x => x.Amount != 0).OrderByDescending(x => x.Value).ToArray();
-        Wildcards = wildcards.ToArray();
-        StaticModifier = staticModifier;
+        _dicesToRoll = dices.Where(x => x.Amount != 0).OrderByDescending(x => x.Value).ToArray();
+        _wildcards = wildcards.ToArray();
+        _staticModifier = staticModifier;
     }
 
-    public void AddDices(List<Dices> dices, string diceExpression)
+    /// <summary>
+    ///     Private method to add dice expression to a dice list
+    /// </summary>
+    /// <param name="dices"></param>
+    /// <param name="diceExpression"></param>
+    private void AddDices(List<Dices> dices, string diceExpression)
     {
         var sepIndex = diceExpression.IndexOf('d');
         var amount = int.Parse(diceExpression[..sepIndex]);
@@ -87,13 +113,17 @@ public class DiceThrowTemplate : IHashable
         }
     }
 
+    /// <summary>
+    ///    Returns the expression that describes the dices to roll only
+    /// </summary>
+    /// <returns></returns>
     public string DicesToRollExpression()
     {
         var expression = string.Empty;
 
-        if (DicesToRoll.Length != 0)
+        if (_dicesToRoll.Length != 0)
         {
-            expression += string.Join("", DicesToRoll.Select(x => x.ToString(true)));
+            expression += string.Join("", _dicesToRoll.Select(x => x.ToString(true)));
 
             if (expression[0] == '+')
             {
@@ -104,20 +134,24 @@ public class DiceThrowTemplate : IHashable
         return expression;
     }
 
+    /// <summary>
+    ///     Build the full expression that describes the internal state
+    /// </summary>
+    /// <returns></returns>
     private string CreateExpression()
     {
         var expression = string.Empty;
 
         expression += DicesToRollExpression();
 
-        if (Wildcards.Length != 0)
+        if (_wildcards.Length != 0)
         {
-            expression += string.Join("", Wildcards.Select(x => $"+{x.Token}"));
+            expression += string.Join("", _wildcards.Select(x => $"+{x.Token}"));
         }
 
-        if (StaticModifier != 0)
+        if (_staticModifier != 0)
         {
-            expression += $"{(StaticModifier > 0 ? "+" : "")}{StaticModifier}";
+            expression += $"{(_staticModifier > 0 ? "+" : "")}{_staticModifier}";
         }
 
         if (expression[0] == '+')
@@ -128,29 +162,55 @@ public class DiceThrowTemplate : IHashable
         return expression;
     }
 
-    internal Dices[] DicesToRoll = Array.Empty<Dices>();
+    /// <summary>
+    ///     Internal state for the dices to roll
+    /// </summary>
+    internal Dices[] _dicesToRoll = Array.Empty<Dices>();
 
-    internal Wildcard[] Wildcards = Array.Empty<Wildcard>();
+    /// <summary>
+    ///     Internal state for the wildcards to add to the roll
+    /// </summary>
+    internal Wildcard[] _wildcards = Array.Empty<Wildcard>();
 
-    internal int StaticModifier = 0;
+    /// <summary>
+    ///     Internal state for the static modifier to add to the roll
+    /// </summary>
+    internal int _staticModifier = 0;
 
+    /// <summary>
+    ///     Gets the score modifier for the roll (resolved wildcards + static modifier)
+    /// </summary>
+    /// <param name="caster"> The character for which the wildcards needs to be resolved </param>
+    /// <returns></returns>
     public ScoreModifier GetScoreModifier(Character caster)
     {
-        return new ScoreModifier(StaticModifier + Wildcards.Sum(x => x.Resolve(caster).Modifier));
+        return new ScoreModifier(_staticModifier + _wildcards.Sum(x => x.Resolve(caster).Modifier));
     }
 
+    /// <summary>
+    ///     Gets the dices to roll only
+    /// </summary>
+    /// <returns></returns>
     public Dices[] GetDicesToRoll()
     {
-        return DicesToRoll;
+        return _dicesToRoll;
     }
 
+    /// <summary>
+    ///     Gets the minimum to roll. That's without any wildcards or static modifier
+    /// </summary>
+    /// <returns></returns>
     public int MinimumRoll()
     {
-        return DicesToRoll.Sum(x => x.Amount);
+        return _dicesToRoll.Sum(x => x.Amount);
     }
 
+    /// <summary>
+    ///     Get the maximum to roll. That's without any wildcards or static modifier
+    /// </summary>
+    /// <returns></returns>
     public int MaximumRoll()
     {
-        return DicesToRoll.Sum(x => x.MaximumRoll());
+        return _dicesToRoll.Sum(x => x.MaximumRoll());
     }
 }

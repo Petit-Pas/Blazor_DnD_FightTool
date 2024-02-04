@@ -48,7 +48,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
 
     private double ApplySaveModifier(double actualDamage, SituationalDamageModifierEnum modifier, SaveRollResult? save, Character target, Character caster)
     {
-        if (save != null && save.IsSuccesfull(target, caster))
+        if (save != null && save.IsSuccessful(target, caster))
         {
             var factor = modifier.GetFactor();
             return factor.ApplyOn(actualDamage);

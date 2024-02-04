@@ -22,10 +22,10 @@ public class ModifierExpressionTests
             modifier.Expression = "STR+INT+DEX+3+MAS";
 
             // Assert
-            modifier.Wildcards.Should().Contain(x => x.Token == "STR");
-            modifier.Wildcards.Should().Contain(x => x.Token == "INT");
-            modifier.Wildcards.Should().Contain(x => x.Token == "DEX");
-            modifier.Wildcards.Should().Contain(x => x.Token == "MAS");
+            modifier._wildcards.Should().Contain(x => x.Token == "STR");
+            modifier._wildcards.Should().Contain(x => x.Token == "INT");
+            modifier._wildcards.Should().Contain(x => x.Token == "DEX");
+            modifier._wildcards.Should().Contain(x => x.Token == "MAS");
         }
 
         [Test]
@@ -38,7 +38,7 @@ public class ModifierExpressionTests
             modifier.Expression = "STR+2+INT+DEX+3+MAS-1";
 
             // Assert
-            modifier.StaticModifier.Should().Be(4);
+            modifier._staticModifier.Should().Be(4);
         }
     }
 

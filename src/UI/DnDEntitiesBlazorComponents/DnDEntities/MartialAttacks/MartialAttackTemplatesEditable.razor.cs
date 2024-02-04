@@ -41,7 +41,7 @@ public partial class MartialAttackTemplatesEditable
 
     private void RemoveStatusFromAttack(MartialAttackTemplate attack, StatusTemplate status)
     {
-        attack.Statuses.Remove(status);
+        attack.Statuses.Remove(status.Id);
     }
 
     private void AddNewStatusInAttack(MartialAttackTemplate attack)

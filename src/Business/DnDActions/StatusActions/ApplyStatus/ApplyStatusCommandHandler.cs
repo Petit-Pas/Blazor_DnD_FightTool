@@ -8,9 +8,9 @@ namespace DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
 public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
 {
     private readonly IFightContext _fightContext;
-    private readonly IAppliedStatusCollection _appliedStatusCollection;
+    private readonly IAppliedStatusRepository _appliedStatusCollection;
 
-    public ApplyStatusCommandHandler(IUndoableMediator mediator, IFightContext fightContext, IAppliedStatusCollection appliedStatusCollection) : base(mediator)
+    public ApplyStatusCommandHandler(IUndoableMediator mediator, IFightContext fightContext, IAppliedStatusRepository appliedStatusCollection) : base(mediator)
     {
         _fightContext = fightContext ?? throw new ArgumentNullException(nameof(fightContext));
         _appliedStatusCollection = appliedStatusCollection ?? throw new ArgumentNullException(nameof(appliedStatusCollection));
@@ -37,4 +37,6 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
 
         _appliedStatusCollection.RemoveIfExists(command.AppliedStatusId);
     }
+
+    // No need to redo, the status should never be applied blindly, so the TryApplyStatus.Redo will never use the history
 }

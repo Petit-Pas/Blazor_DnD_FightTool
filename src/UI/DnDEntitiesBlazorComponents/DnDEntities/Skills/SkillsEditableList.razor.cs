@@ -13,7 +13,7 @@ public partial class SkillsEditableList : ComponentBase
         {
             if (value != null)
             {
-                SkillMasteries = value.Select(x => new MasteryDto(x));
+                SkillMasteries = value.Values.Select(x => new MasteryDto(x)).ToArray();
             }
         }
         get => new SkillCollection(SkillMasteries.Select(x => x.Skill));
@@ -22,11 +22,12 @@ public partial class SkillsEditableList : ComponentBase
     [Parameter] public BorderRadius? BorderRadius { get; set; } = new (1, "em");
 
 
-    private IEnumerable<MasteryDto> SkillMasteries { get; set; } = new List<MasteryDto>();
+    private MasteryDto[] SkillMasteries { get; set; } = Array.Empty<MasteryDto>();
 
     [Parameter, EditorRequired]
     public AbilityScoresCollection? Abilities { get; set; }
 
+    // TODO maybe these can be computed properties in the Skill object directly, to avoid having to create a DTO
     private class MasteryDto
     {
         public readonly Skill Skill;

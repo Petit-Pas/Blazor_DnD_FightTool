@@ -4,8 +4,14 @@ using FluentValidation;
 
 namespace DnDFightTool.Domain.DnDEntities.Characters.Validation;
 
+/// <summary>
+///     Validator for <see cref="Character"/>
+/// </summary>
 public class CharacterValidator : AbstractValidator<Character>
 {
+    /// <summary>
+    ///     Ctor
+    /// </summary>
     public CharacterValidator()
     {
         RuleFor(x => x.Name)
@@ -15,6 +21,6 @@ public class CharacterValidator : AbstractValidator<Character>
             .SetValidator(HitPointsValidator.Instance);
 
         RuleFor(x => x.ArmorClass)
-            .SetValidator(new ArmorClassValidator());
+            .SetValidator(ArmorClassValidator.Instance);
     }
 }

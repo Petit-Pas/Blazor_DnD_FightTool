@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="8.1.0" />
     <PackageReference Include="FluentAssertions" Version="6.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="NUnit" Version="3.13.3" />
@@ -20,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Domain\DnDEntities\DnDEntities.csproj" />
     <ProjectReference Include="..\..\..\src\Domain\Fight\Fight.csproj" />
+    <ProjectReference Include="..\DomainTestsUtilities\DomainTestsUtilities.csproj" />
   </ItemGroup>
 
 </Project>

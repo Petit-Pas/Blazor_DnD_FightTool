@@ -7,7 +7,7 @@
 <EditForm EditContext="_editContext">
     <Validate />
 
-    @foreach(var attackTemplate in Character.MartialAttacks)
+    @foreach(var attackTemplate in Character.MartialAttacks.Values)
     {
         <Card>
             <StringInput @bind-Value="@attackTemplate.Name" ValidationFor="() => attackTemplate.Name" />
@@ -25,7 +25,7 @@
 
             </div>
             <div style="margin: 10px;">
-                @foreach (var status in attackTemplate.Statuses)
+                @foreach (var status in attackTemplate.Statuses.Values)
                 {
                     <div sstyle="margin: 5px;">
                         <StatusTemplateEditable StatusTemplate="status" />

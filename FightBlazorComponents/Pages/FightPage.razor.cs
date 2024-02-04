@@ -31,26 +31,26 @@ public partial class FightPage
     {
         base.OnInitialized();
         ResetMovingCharacter();
-        FightContext.MovingCharacterChanged += FightContext_MovingCharacterChanged;
+        FightContext.MovingFighterChanged += FightContext_MovingCharacterChanged;
     }
 
-    private void FightContext_MovingCharacterChanged(object? sender, FightingCharacter? e)
+    private void FightContext_MovingCharacterChanged(object? sender, Fighter? e)
     {
         ResetMovingCharacter();
     }
 
     private void ResetMovingCharacter()
     {
-        MovingCharacter = FightContext.GetMovingCharacter();
+        MovingCharacter = FightContext.GetMovingFighterCharacter();
         StateHasChanged();
     }
 
     public async Task Attack()
     {
-        var character = FightContext.GetMovingCharacter();
+        var character = FightContext.GetMovingFighterCharacter();
         if (character != null)
         {
-            var attackCommand = new ExecuteMartialAttackCommand(character.Id, character.MartialAttacks.First().Id);
+            var attackCommand = new ExecuteMartialAttackCommand(character.Id, character.MartialAttacks.Keys.First());
             await Mediator.Execute(attackCommand, (status) => status is RequestStatus.Success);
         }
     }

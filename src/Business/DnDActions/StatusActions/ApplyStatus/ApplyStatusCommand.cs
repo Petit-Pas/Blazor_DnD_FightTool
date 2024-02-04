@@ -10,7 +10,14 @@ public class ApplyStatusCommand : CasterTargetCommandBase
         SaveRollResult = saveRollResult;
     }
 
+    /// <summary>
+    ///     The id of the applied status
+    /// </summary>
     public Guid StatusId { get; }
+
+    /// <summary>
+    ///     The result of the save roll if there was one. 
+    /// </summary>
     public SaveRollResult? SaveRollResult { get; }
 
     /// <summary>

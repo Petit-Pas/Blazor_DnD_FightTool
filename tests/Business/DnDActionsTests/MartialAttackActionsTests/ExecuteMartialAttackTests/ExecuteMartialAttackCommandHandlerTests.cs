@@ -16,6 +16,9 @@ using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 using UndoableMediator.Queries;
 using FluentAssertions;
 using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DomainTestsUtilities.Factories.MartialAttacks;
+using System;
+using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 
 namespace DnDActionsTests.MartialAttackActionsTests.ExecuteMartialAttackTests;
 
@@ -32,25 +35,15 @@ public class ExecuteMartialAttackCommandHandlerTests
     private ExecuteMartialAttackCommand _command = null!;
     private ExecuteMartialAttackCommandHandler _commandHandler = null!;
 
-    private DamageRollResult[] _damageRollResults = null!;
-    private HitRollResult _hitRollResult = new HitRollResult() { Result = 10 };
-    private RequestStatus _attackRollResultQueryStatus;
-
     [SetUp]
     public void SetUp()
     {
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
-        _attackRollResultQueryStatus = RequestStatus.Success;
 
         _caster = new Character(true);
-        _caster.MartialAttacks.Add(new MartialAttackTemplate());
+        _caster.MartialAttacks.Add(MartialAttackTemplateFactory.Build()); ;
         _target = new Character(true);
-
-        _damageRollResults = new DamageRollResult[]
-        {
-            DamageRollResultFactory.Build(DamageTypeEnum.Thunder, 7),
-        };
 
         _target.DamageAffinities = new DamageAffinitiesCollection(true);
 
@@ -62,29 +55,33 @@ public class ExecuteMartialAttackCommandHandlerTests
         A.CallTo(() => _fightContext.GetCharacterById(_target.Id))
             .Returns(_target);
 
-        A.CallTo(() => _mediator.Execute(A<MartialAttackRollResultQuery>._))
-            .ReturnsLazily((_) => Task.FromResult(BuildQueryResponse()));
-
+        When_Query_Returns();
     }
 
-    MartialAttackTemplate _attackTemplate => _caster.MartialAttacks.First();
+    MartialAttackTemplate _attackTemplate => _caster.MartialAttacks.Values.First();
 
-    IQueryResponse<MartialAttackRollResult> BuildQueryResponse()
+    /// <summary>
+    ///     Allows to configure the result of the query. Will configure a default success one if nothing is specified.
+    /// </summary>
+    /// <param name="result"></param>
+    /// <param name="status"></param>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void When_Query_Returns(MartialAttackRollResult? result = null, RequestStatus status = RequestStatus.Success)
     {
-        var rollResult = new MartialAttackRollResult(_hitRollResult, _damageRollResults)
-        {
-            TargetId = _target.Id,
-        };
+        result ??= MartialAttackRollResultFactory.Build();
 
-        return _attackRollResultQueryStatus switch
+        // TODO should update mediator package to make the constructor public, this is annoying as hell in the end.
+        var queryResponse = status switch
         {
-            RequestStatus.Success => QueryResponse<MartialAttackRollResult>.Success(rollResult),
-            RequestStatus.Canceled => QueryResponse<MartialAttackRollResult>.Canceled(rollResult),
-            RequestStatus.Failed => QueryResponse<MartialAttackRollResult>.Failed(rollResult),
+            RequestStatus.Success => QueryResponse<MartialAttackRollResult>.Success(result),
+            RequestStatus.Canceled => QueryResponse<MartialAttackRollResult>.Canceled(result),
+            RequestStatus.Failed => QueryResponse<MartialAttackRollResult>.Failed(result),
             _ => throw new System.NotImplementedException(),
         };
-    }
 
+        A.CallTo(() => _mediator.Execute(A<MartialAttackRollResultQuery>._))
+            .Returns(queryResponse);
+    }
 
     [TestFixture]
     public class ExecuteTests : ExecuteMartialAttackCommandHandlerTests
@@ -95,8 +92,8 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Return_A_Command_Response_Equivalent_To_The_Query_When_Query_Failed(RequestStatus queryStatus)
         {
             // Arrange
-            _attackRollResultQueryStatus = queryStatus;
-
+            When_Query_Returns(status: queryStatus);
+            
             // Act
             var result = await _commandHandler.Execute(_command);
 
@@ -117,21 +114,28 @@ public class ExecuteMartialAttackCommandHandlerTests
         [Test]
         public async Task Should_Store_Result_Of_Query_In_Command()
         {
+            // Arrange
+            var result = MartialAttackRollResultFactory.Build();
+            When_Query_Returns(result);
+
             // Act
             await _commandHandler.Execute(_command);
 
             // Assert
-            _command.MartialAttackRollResult.Should().NotBeNull();
+            _command.MartialAttackRollResult.Should().Be(result);
         }
 
         [Test]
         public async Task Should_Get_Target_By_Id_In_The_MartialAttackRollResult()
         {
             // Act
+            var result = MartialAttackRollResultFactory.Build(targetId: Guid.NewGuid());
+            When_Query_Returns(result);
+
             await _commandHandler.Execute(_command);
 
             // Assert
-            A.CallTo(() => _fightContext.GetCharacterById(_target.Id))
+            A.CallTo(() => _fightContext.GetCharacterById(result.TargetId))
                 .MustHaveHappenedOnceExactly();
         }
 
@@ -139,7 +143,8 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Not_Apply_Damage_When_The_Attack_Does_Not_Hit()
         {
             // Arrange
-            _hitRollResult.Result = 3;
+            var result = MartialAttackRollResultFactory.Build(hitRollResult: new HitRollResult() { Result = 3 });
+            When_Query_Returns(result);
 
             // Act
             await _commandHandler.Execute(_command);
@@ -153,7 +158,14 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Apply_Rolled_Damage_When_The_Attack_Does_Hit()
         {
             // Arrange
-            _hitRollResult.Result = 17;
+            var result = 
+                MartialAttackRollResultFactory.Build(
+                    hitRollResult: new HitRollResult() { Result = 17 }, 
+                    damageRollResult: new[] { 
+                        DamageRollResultFactory.BuildRolledDice(
+                            damageType: DamageTypeEnum.Thunder, 
+                            damage: 7) });
+            When_Query_Returns(result);
 
             // Act
             await _commandHandler.Execute(_command);
@@ -163,6 +175,135 @@ public class ExecuteMartialAttackCommandHandlerTests
                 x.DamageRolls.Count(d => d.DamageType == DamageTypeEnum.Thunder && d.Damage == 7) == 1
             ), null))
                 .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_Try_Applying_Status_When_The_Attack_Does_Hit()
+        {
+            // Arrange
+            var result = MartialAttackRollResultFactory.Build(hitRollResult: new HitRollResult() { Result = 17 });
+            When_Query_Returns(result);
+
+            // Act
+            await _commandHandler.Execute(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.Execute(An<TryApplyStatusCommand>.That.Matches(x => x.StatusId == _attackTemplate.Statuses.First().Value.Id), null))
+                .MustHaveHappenedOnceExactly();
+        }
+    }
+
+    [TestFixture]
+    public class RedoTests : ExecuteMartialAttackCommandHandlerTests
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            
+        }
+
+        [Test]
+        public async Task Should_Recompute_If_The_Attack_Hits_In_Case_Target_Got_Updated()
+        {
+            // Arrange
+            _target.ArmorClass.BaseArmorClass = 20;
+            _target.HitPoints.CurrentHps = 100;
+            var result =
+                MartialAttackRollResultFactory.Build(
+                    targetId: _target.Id,
+                    hitRollResult: new HitRollResult() { Result = 17 },
+                    damageRollResult: new[] {
+                        DamageRollResultFactory.BuildRolledDice(
+                            damageType: DamageTypeEnum.Thunder,
+                            damage: 7) });
+            When_Query_Returns(result);
+
+            await _commandHandler.Execute(_command);
+            A.CallTo(() => _mediator.Execute(A<ApplyDamageRollResultsCommand>._, null))
+                .MustNotHaveHappened();
+            _commandHandler.Undo(_command);
+
+            _target.ArmorClass.BaseArmorClass = 1;
+
+            // Act
+            await _commandHandler.Redo(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.Execute(A<ApplyDamageRollResultsCommand>.That.Matches(x => x.DamageRolls.First().Damage == 7), null))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_Not_Redo_Query_When_Template_Is_The_Same()
+        {
+            // Arrange
+            var result = MartialAttackRollResultFactory.Build();
+            When_Query_Returns(result);
+
+            await _commandHandler.Execute(_command);
+            _commandHandler.Undo(_command);
+
+            // Act
+            await _commandHandler.Redo(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.Execute(A<MartialAttackRollResultQuery>._))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_Redo_Even_The_Query_When_Template_Got_Updated()
+        {
+            // Arrange
+            When_Query_Returns(MartialAttackRollResultFactory.Build());
+            await _commandHandler.Execute(_command);
+            _commandHandler.Undo(_command);
+            _attackTemplate.Name = "New name to change hash value";
+            A.CallTo(() => _mediator.Execute(A<MartialAttackRollResultQuery>._))
+                .MustHaveHappenedOnceExactly();
+            // Act
+            await _commandHandler.Redo(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.Execute(A<MartialAttackRollResultQuery>._))
+                .MustHaveHappenedTwiceExactly();
+        }
+
+        [Test]
+        public async Task Should_Update_Hash_When_Template_Got_Updated()
+        {
+            // Arrange
+            When_Query_Returns(MartialAttackRollResultFactory.Build());
+            await _commandHandler.Execute(_command);
+            var firstHash = _command.AttackTemplateHash;
+            _commandHandler.Undo(_command);
+            _attackTemplate.Name = "New name to change hash value";
+
+            // Act
+            await _commandHandler.Redo(_command);
+
+            // Assert
+            firstHash.Should().NotBe(_command.AttackTemplateHash);
+        }
+
+        [Test]
+        public async Task Should_Clear_Sub_Commands_When_The_Attack_Does_Not_Hit()
+        {
+            // Arrange
+            _target.ArmorClass.BaseArmorClass = 1;
+            var result = MartialAttackRollResultFactory.Build(hitRollResult: new HitRollResult() { Result = 10 }, targetId: _target.Id);
+            When_Query_Returns(result);
+
+            await _commandHandler.Execute(_command);
+            _commandHandler.Undo(_command);
+
+            _target.ArmorClass.BaseArmorClass = 20;
+
+            // Act
+            await _commandHandler.Redo(_command);
+
+            // Assert
+            _command.SubCommands.Should().BeEmpty();
         }
     }
 

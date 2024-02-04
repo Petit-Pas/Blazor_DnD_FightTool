@@ -1,25 +1,35 @@
 ﻿namespace DnDFightTool.Domain.DnDEntities.HitPoint;
 
+/// <summary>
+///     Represents the hit points of a character
+/// </summary>
 public class HitPoints
 {
     /// <summary>
-    ///     Should only be used by serialization
+    ///     Ctor
     /// </summary>
-    public HitPoints() : this(false)
+    public HitPoints() 
     {
     }
 
-    public HitPoints(bool withDefault)
-    {
-        MaxHps = 10;
-        CurrentHps = 10;
-    }
+    /// <summary>
+    ///     The maximum hit points of a character
+    /// </summary>
+    public int MaxHps { get; set; } = 10;
 
-    public int MaxHps { get; set; }
+    /// <summary>
+    ///     The current hit points of a character
+    /// </summary>
+    public int CurrentHps { get; set; } = 10;
 
-    public int CurrentHps { get; set; }
+    /// <summary>
+    ///     The current temporary hit points of a character
+    ///     When receiving temporary hit points, the character gets the max between the current temporary hit points and the new temporary hit points
+    /// </summary>
+    public int CurrentTempHps { get; set; } = 0;
 
-    public int CurrentTempHps { get; set; }
-
+    /// <summary>
+    ///     A fraction like string to display the current hit points of a character as text.
+    /// </summary>
     public string HpRatioString => $"{CurrentHps}{(CurrentTempHps != 0 ? $"(+ {CurrentHps})" : "")} / {MaxHps}";
 }

@@ -2,6 +2,9 @@
 
 namespace DnDFightTool.Domain.DnDEntities.Skills;
 
+/// <summary>
+///     Enum for skills of D&D
+/// </summary>
 public enum SkillEnum
 {
     [Ability(AbilityEnum.Dexterity)] Acrobatic,
@@ -24,8 +27,16 @@ public enum SkillEnum
     [Ability(AbilityEnum.Wisdom)] Survival,
 }
 
+/// <summary>
+///     Extensions for <see cref="SkillEnum" />
+/// </summary>
 public static class SkillEnumExtensions
 {
+    /// <summary>
+    ///     Makes skills with underscores more readable
+    /// </summary>
+    /// <param name="skill"></param>
+    /// <returns></returns>
     public static string ToReadableString(this SkillEnum skill)
     {
         return skill.ToString().Replace("_", " ");

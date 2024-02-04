@@ -23,7 +23,7 @@ namespace FightBlazorComponents.Queries.MartialAttackQueries
         public override async Task<IQueryResponse<MartialAttackRollResult>> Execute(MartialAttackRollResultQuery query)
         {
             var caster = query.GetCaster(_fightContext);
-            var attackTemplate = caster.MartialAttacks.GetTemplateById(query.MartialAttackTemplateId) ?? throw new InvalidOperationException($"Could not get attack template.");
+            var attackTemplate = caster.MartialAttacks.GetTemplateByIdOrDefault(query.MartialAttackTemplateId) ?? throw new InvalidOperationException($"Could not get attack template.");
 
             var damageRolls = attackTemplate.Damages.Select(x => x.GetEmptyRollResult());
             var martialAttackRollResult = new MartialAttackRollResult(new HitRollResult(attackTemplate.Modifiers), damageRolls.ToArray());

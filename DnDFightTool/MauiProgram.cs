@@ -8,6 +8,7 @@ using DnDFightTool.Domain.Fight;
 using UndoableMediator.DependencyInjection;
 using DnDFightTool.Business.DnDActions;
 using FightBlazorComponents.Queries.MartialAttackQueries;
+using IO.Files;
 
 namespace DnDFightTool;
 
@@ -28,10 +29,10 @@ public static class MauiProgram
         builder.Services.AddBlazoredToast();
         builder.Services.AddBlazoredModal();
 
-        builder.Services.AddSingleton<ICharacterRepository, InMemoryCharacterRepository>();
+        builder.Services.AddSingleton<ICharacterRepository, LocalFileCharacterRepository>();
         builder.Services.AddSingleton<IFightContext, FightContext>();
-        builder.Services.AddSingleton<IFileManager, FileManager>();
-        builder.Services.AddSingleton<IAppliedStatusCollection, AppliedStatusCollection>();
+        builder.Services.AddSingleton<IFileManager, LocalFileManager>();
+        builder.Services.AddSingleton<IAppliedStatusRepository, AppliedStatusRepository>();
 
         builder.Services.ConfigureMediator(options =>
         {

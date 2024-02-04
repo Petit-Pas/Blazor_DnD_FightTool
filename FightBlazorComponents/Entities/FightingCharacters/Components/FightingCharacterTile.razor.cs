@@ -17,10 +17,10 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     public IFightContext FightContext { get; set; }
 
     [Parameter]
-    public FightingCharacter Fighter { get; set; }
+    public Fighter Fighter { get; set; }
 
     [Inject]
-    public IAppliedStatusCollection AppliedStatusCollection { get; set; }
+    public IAppliedStatusRepository AppliedStatusCollection { get; set; }
 
     private Character? Character = null;
 
@@ -31,7 +31,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
         base.OnInitialized();
         InitCharacter();
 
-        FightContext.MovingCharacterChanged += OnMovingCharacterChanged;
+        FightContext.MovingFighterChanged += OnMovingCharacterChanged;
         AppliedStatusCollection.AppliedStatusUpdated += AppliedStatusCollection_AppliedStatusUpdated;
     }
 
@@ -44,7 +44,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
         }
     }
 
-    private void OnMovingCharacterChanged(object? sender, FightingCharacter? fightingCharacter)
+    private void OnMovingCharacterChanged(object? sender, Fighter? fightingCharacter)
     {
         StateHasChanged();
     }
@@ -65,17 +65,17 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
 
     public void Dispose()
     {
-        FightContext.MovingCharacterChanged -= OnMovingCharacterChanged;
+        FightContext.MovingFighterChanged -= OnMovingCharacterChanged;
         AppliedStatusCollection.AppliedStatusUpdated -= AppliedStatusCollection_AppliedStatusUpdated;
     }
 
     private void TileClicked(MouseEventArgs _)
     {
-        FightContext.SetFightingCharacter(Fighter);
+        FightContext.SetMovingFighter(Fighter);
     }
 
     // UI Methods
-    private ThemeColor CardTheme => FightContext.MovingFightingCharacter == Fighter
+    private ThemeColor CardTheme => FightContext.MovingFighter == Fighter
         ? ThemeColor.Primary 
         : ThemeColor.Base;
 }

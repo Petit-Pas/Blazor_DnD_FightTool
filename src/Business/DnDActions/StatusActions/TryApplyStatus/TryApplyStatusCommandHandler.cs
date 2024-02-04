@@ -1,11 +1,9 @@
-﻿using System.Net.NetworkInformation;
-using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
-using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
-using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
+﻿using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using DnDFightTool.Domain.Fight;
+using Memory.Hashes;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
@@ -27,6 +25,8 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         var target = command.GetTarget(_fightContext);
         var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");
 
+        command.StatusHash = status.Hash();
+
         var saveQueryResult = await QuerySaveRoll(command, status);
         if (saveQueryResult != RequestStatus.Success)
         {
@@ -40,7 +40,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
 
     private async Task TryApplyStatus(TryApplyStatusCommand command, StatusTemplate status, Character caster, Character target)
     {
-        if (status.IsAppliedAutomatically || !command.SaveRollResult!.IsSuccesfull(caster, target))
+        if (status.ShouldBeApplied(caster, target, command.SaveRollResult))
         {
             var applyStatusCommand = new ApplyStatusCommand(caster.Id, target.Id, status.Id, command.SaveRollResult);
             await _mediator.Execute(applyStatusCommand);
@@ -66,6 +66,20 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         var caster = command.GetCaster(_fightContext);
         var target = command.GetTarget(_fightContext);
         var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");
+
+        var statusHash = status.Hash();
+        if (statusHash != command.StatusHash)
+        {
+            command.SaveRollResult = null;
+            command.StatusHash = statusHash;
+            
+            // Cannot accept a failure here, since we are in a redo operation
+            var result = await QuerySaveRoll(command, status);
+            while (result != RequestStatus.Success)
+            {
+                result = await QuerySaveRoll(command, status);
+            }
+        }
 
         command.SubCommands.Clear();
 

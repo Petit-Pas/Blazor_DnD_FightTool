@@ -2,5 +2,5 @@
 
 @if (DifficultyClass != null)
 {
-    <DiceThrowTemplateInput @bind-Value=DifficultyClass.Expression ValidationFor="() => DifficultyClass.Expression"></DiceThrowTemplateInput>
+    <ModifiersTemplateInput @bind-Value=DifficultyClass.DifficultyClassExpression ValidationFor="() => DifficultyClass.DifficultyClassExpression"></ModifiersTemplateInput>
 }

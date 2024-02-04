@@ -3,6 +3,9 @@ using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Saves;
 
+/// <summary>
+///     Template for a save roll
+/// </summary>
 public class SaveRollTemplate : IHashable
 {
     /// <summary>
@@ -15,6 +18,10 @@ public class SaveRollTemplate : IHashable
     /// </summary>
     public DifficultyClass Difficulty { get; set; } = new DifficultyClass("DC");
 
+    /// <summary>
+    ///     Creates a SaveRollResult from the template
+    /// </summary>
+    /// <returns></returns>
     public SaveRollResult GetEmptyRollResult()
     {
         return new SaveRollResult(Difficulty, TargetAbility);

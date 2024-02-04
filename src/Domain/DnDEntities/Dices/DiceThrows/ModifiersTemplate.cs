@@ -9,29 +9,51 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 /// <summary>
 ///     This describes a modifier to apply to a dice, since it does not contain the dice expression, its only for static modifiers and wildcards
 ///     such as 2+WIS
+///     For full expressions containing dices too, use <see cref="DiceThrowTemplate" />
 /// </summary>
 public class ModifiersTemplate : IHashable
 {
+    /// <summary>
+    ///     Empty ctor for no modifiers or serializer
+    /// </summary>
     public ModifiersTemplate()
     {
     }
 
+    /// <summary>
+    ///     Ctor that receives the expression
+    /// </summary>
+    /// <param name="expression"></param>
     public ModifiersTemplate(string expression)
     {
         Expression = expression;
     }
 
-    public static Regex Regex = new Regex(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
+    /// <summary>
+    ///     Regex to validate and parse the expression
+    /// </summary>
+    internal static readonly Regex Regex = new Regex(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
 
-    public string Expression { get => CreateExpression(); set => AnalyzeExpression(value); }
+    /// <summary>
+    ///     Accessors for the expression
+    ///     Get builds it from the internal state
+    ///     Set parses it and sets the internal state
+    /// </summary>
+    public string Expression { get => CreateExpression(); set => ParseExpression(value); }
 
-    private void AnalyzeExpression(string expression)
+    /// <summary>
+    ///     Internal method to parse the expression
+    /// </summary>
+    /// <param name="expression"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    private void ParseExpression(string expression)
     {
         // TODO this error handling can probably be improved, same in DiceThrowTemplate
-        if (string.IsNullOrEmpty(expression)) 
+        // Should it though? we have validators in the UI, and this is a domain object, so it should be valid
+        if (string.IsNullOrWhiteSpace(expression)) 
         {
-            Wildcards = Array.Empty<Wildcard>();
-            StaticModifier = 0;
+            _wildcards = Array.Empty<Wildcard>();
+            _staticModifier = 0;
             return;
         };
 
@@ -59,22 +81,26 @@ public class ModifiersTemplate : IHashable
             }
         }
 
-        Wildcards = wildcards.ToArray();
-        StaticModifier = staticModifier;
+        _wildcards = wildcards.ToArray();
+        _staticModifier = staticModifier;
     }
 
+    /// <summary>
+    ///     Build the full expression that describes the internal state
+    /// </summary>
+    /// <returns></returns>
     private string CreateExpression()
     {
         var expression = string.Empty;
 
-        if (Wildcards.Length != 0)
+        if (_wildcards.Length != 0)
         {
-            expression += string.Join("", Wildcards.Select(x => $"+{x.Token}"));
+            expression += string.Join("", _wildcards.Select(x => $"+{x.Token}"));
         }
 
-        if (StaticModifier != 0)
+        if (_staticModifier != 0)
         {
-            expression += $"{(StaticModifier > 0 ? "+" : "")}{StaticModifier}";
+            expression += $"{(_staticModifier > 0 ? "+" : "")}{_staticModifier}";
         }
 
         if (expression.Length > 0 && expression[0] == '+')
@@ -85,12 +111,23 @@ public class ModifiersTemplate : IHashable
         return expression;
     }
 
-    internal Wildcard[] Wildcards = Array.Empty<Wildcard>();
+    /// <summary>
+    ///     Wildcards to apply
+    /// </summary>
+    internal Wildcard[] _wildcards = Array.Empty<Wildcard>();
 
-    internal int StaticModifier = 0;
+    /// <summary>
+    ///     Static modifier
+    /// </summary>
+    internal int _staticModifier = 0;
 
+    /// <summary>
+    ///     Gets the score modifier. Resolved wildcards + static modifier
+    /// </summary>
+    /// <param name="caster"> The character for which the wildcards needs to be resolved </param>
+    /// <returns></returns>
     public ScoreModifier GetScoreModifier(Character caster)
     {
-        return new ScoreModifier(StaticModifier + Wildcards.Sum(x => x.Resolve(caster).Modifier));
+        return new ScoreModifier(_staticModifier + _wildcards.Sum(x => x.Resolve(caster).Modifier));
     }
 }

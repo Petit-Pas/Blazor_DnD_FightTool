@@ -37,10 +37,10 @@ public class DiceThrowExpressionTests
             diceThrow.Expression = "STR+INT+DEX+1d6+3+MAS";
 
             // Assert
-            diceThrow.Wildcards.Should().Contain(x => x.Token == "STR");
-            diceThrow.Wildcards.Should().Contain(x => x.Token == "INT");
-            diceThrow.Wildcards.Should().Contain(x => x.Token == "DEX");
-            diceThrow.Wildcards.Should().Contain(x => x.Token == "MAS");
+            diceThrow._wildcards.Should().Contain(x => x.Token == "STR");
+            diceThrow._wildcards.Should().Contain(x => x.Token == "INT");
+            diceThrow._wildcards.Should().Contain(x => x.Token == "DEX");
+            diceThrow._wildcards.Should().Contain(x => x.Token == "MAS");
         }
 
         [Test]
@@ -53,7 +53,7 @@ public class DiceThrowExpressionTests
             diceThrow.Expression = "STR+2+INT+DEX+1d6+3+MAS-1";
 
             // Assert
-            diceThrow.StaticModifier.Should().Be(4);
+            diceThrow._staticModifier.Should().Be(4);
         }
     }
 

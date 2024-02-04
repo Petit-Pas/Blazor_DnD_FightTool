@@ -4,6 +4,9 @@ using UndoableMediator.Commands;
 
 namespace DnDFightTool.Business.DnDActions;
 
+/// <summary>
+///    Base class for commands that affect a target
+/// </summary>
 public class TargetCommandBase : CommandBase
 {
     public TargetCommandBase(Guid targetId)

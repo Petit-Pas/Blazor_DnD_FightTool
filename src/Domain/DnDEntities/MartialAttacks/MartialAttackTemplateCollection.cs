@@ -1,17 +1,26 @@
-﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
-using DnDFightTool.Domain.DnDEntities.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.Damage;
 using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
-using DnDFightTool.Domain.DnDEntities.Saves;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 
 namespace DnDFightTool.Domain.DnDEntities.MartialAttacks;
 
-public class MartialAttackTemplateCollection : List<MartialAttackTemplate>
+/// <summary>
+///     Collection of <see cref="MartialAttackTemplate" />
+/// </summary>
+public class MartialAttackTemplateCollection : Dictionary<Guid, MartialAttackTemplate>
 {
+    /// <summary>
+    ///     Empty ctor, should only be used by serializers
+    /// </summary>
+    [Obsolete("Should only be used by serializers")]
     public MartialAttackTemplateCollection() : this(false) 
     { 
     }
 
+    /// <summary>
+    ///     Ctor with tha ability to add a default attack.
+    /// </summary>
+    /// <param name="withDefault"></param>
     public MartialAttackTemplateCollection(bool withDefault = false)
     {
         if (withDefault)
@@ -39,8 +48,19 @@ public class MartialAttackTemplateCollection : List<MartialAttackTemplate>
         }
     }
 
-    public MartialAttackTemplate? GetTemplateById(Guid attackId)
+    public void Add(MartialAttackTemplate attackTemplate)
     {
-        return this.FirstOrDefault(x => x.Id == attackId);
+        Add(attackTemplate.Id, attackTemplate);
+    }
+
+    /// <summary>
+    ///     Get an attack template by its id if it exists
+    /// </summary>
+    /// <param name="attackId"></param>
+    /// <returns></returns>
+    public MartialAttackTemplate? GetTemplateByIdOrDefault(Guid attackId)
+    {
+        this.TryGetValue(attackId, out var attackTemplate);
+        return attackTemplate;
     }
 }
