@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Blazored.Modal" Version="7.1.0" />
-    <PackageReference Include="NeoBlazorphic" Version="1.0.0-rc4" />
+    <PackageReference Include="NeoBlazorphic" Version="1.0.1-alpha1" />
   </ItemGroup>
 
 

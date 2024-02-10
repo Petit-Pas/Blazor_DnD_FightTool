@@ -13,7 +13,8 @@
             <StringInput @bind-Value="@attackTemplate.Name" ValidationFor="() => attackTemplate.Name" />
             <div> @attackTemplate.Id </div>
             <ModifiersTemplateEditable @bind-Template="attackTemplate.Modifiers" />
-            <div style="margin: 10px;">
+            <DamageRollTemplateCollectionEditable DamageRollTemplateCollection="attackTemplate.Damages" />
+            @* <div style="margin: 10px;">
                 @foreach (var damageTemplate in attackTemplate.Damages)
                 {
                     <div style="margin: 5px;">
@@ -23,7 +24,7 @@
                 }
                 <ButtonCard OnMouseClickCallBack="() => AddNewDamageInAttack(attackTemplate)"> Add damage type </ButtonCard>
 
-            </div>
+            </div> *@
             <div style="margin: 10px;">
                 @foreach (var status in attackTemplate.Statuses.Values)
                 {

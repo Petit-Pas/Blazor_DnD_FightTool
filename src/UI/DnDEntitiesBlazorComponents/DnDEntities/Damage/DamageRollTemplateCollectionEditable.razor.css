@@ -1,0 +1,32 @@
+﻿.delete-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+}
+
+.icon {
+    font-size: 17px;
+}
+
+.add-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+}
+
+.add-button-container {
+    display: flex;
+    justify-content: right;
+}
+
+.damage-input {
+    margin: 1em 0;
+}
+
+.damage-collection {
+    width: 380px
+}

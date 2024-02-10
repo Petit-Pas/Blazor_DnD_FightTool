@@ -1,0 +1,36 @@
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+@using DnDFightTool.Domain.DnDEntities.Damage
+
+@if (DamageRollTemplateCollection != null)
+{
+    <div class="damage-collection">
+        @foreach (var damageTemplate in DamageRollTemplateCollection)
+        {
+            <div class="damage-input">
+                <DiceThrowTemplateInput ValidateOnKeyPress="false" @bind-Value="damageTemplate.Dices" ValidationFor=@(() => damageTemplate.Dices) >
+                    <PrefixRenderFragment>
+                        <DamageTypePicker @bind-DamageType="damageTemplate.Type"></DamageTypePicker>
+                    </PrefixRenderFragment>
+                    <SuffixRenderFragment>
+                        <div>
+                            <ButtonCard Padding="Spacing._0" Color="ThemeColor.Danger" OnMouseClickCallBack="() => DamageRollTemplateCollection.Remove(damageTemplate)"> 
+                                <div class="delete-button">
+                                    <i class="icon fa-regular fa-trash-can"></i> 
+                                </div>
+                            </ButtonCard>
+                        </div>
+                    </SuffixRenderFragment>
+                </DiceThrowTemplateInput>
+            </div>
+        }
+        <div class="add-button-container">
+            <ButtonCard Padding="Spacing._0" Color="ThemeColor.Primary" OnMouseClickCallBack="() => DamageRollTemplateCollection.Add(new DamageRollTemplate())">
+                <div>
+                    <div class="add-button">
+                        <i class="icon fa-regular fa-plus"></i>
+                    </div>
+                </div>
+            </ButtonCard>
+        </div>
+    </div>
+}

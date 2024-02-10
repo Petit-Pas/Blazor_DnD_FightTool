@@ -50,11 +50,19 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="wwwroot\css\bootstrap\bootstrap.min.css.map" />
+      <None Include="wwwroot\css\open-iconic\FONT-LICENSE" />
+      <None Include="wwwroot\css\open-iconic\font\fonts\open-iconic.svg" />
+      <None Include="wwwroot\css\open-iconic\ICON-LICENSE" />
+      <None Include="wwwroot\css\open-iconic\README.md" />
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Blazored.Toast" Version="4.1.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
         <PackageReference Include="Morris.Blazor.FluentValidation" Version="2.0.0" />
         <PackageReference Include="Morris.Blazor.Validation" Version="2.0.0" />
-        <PackageReference Include="NeoBlazorphic" Version="1.0.0-rc4" />
+        <PackageReference Include="NeoBlazorphic" Version="1.0.1-alpha1" />
         <PackageReference Include="UndoableMediator" Version="1.0.0-rc8" />
     </ItemGroup>
 
