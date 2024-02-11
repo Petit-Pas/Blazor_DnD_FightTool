@@ -1,4 +1,4 @@
-﻿
+﻿/*
 select {
     background: var(--base-main-color);
     outline: none;
@@ -6,4 +6,31 @@ select {
 
 select:focus {
     background: var(--primary-main-color);
+}
+*/
+
+.select {
+    display: flex;
+    width: 100px;
+    height: 100%;
+}
+
+.select-padding {
+    width: 100%;
+    border-right: 1px solid white;
+    margin-right: 10px;
+    margin-top: -5px;
+    margin-bottom: -5px;
+    color: var(--text-color);
+}
+
+.selected-element {
+}
+
+.select-arrow {
+    transition: all 0.3s ease;
+}
+
+.select:hover .select-arrow {
+    transform: translateY(-2px);
 }

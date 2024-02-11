@@ -1,8 +1,20 @@
 ﻿@using DnDFightTool.Domain.DnDEntities.Damage
 
-<InputSelect TValue="DamageTypeEnum" ValueExpression="@(() => DamageType)" Value="DamageType" ValueChanged="(value) => OnValueChanged(value)">
+@* <InputSelect TValue="DamageTypeEnum" ValueExpression="@(() => DamageType)" Value="DamageType" ValueChanged="(value) => OnValueChanged(value)">
     @foreach (var damageType in Enum.GetValues(typeof(DamageTypeEnum)))
     {
         <option value="@damageType">@damageType</option>
     }
-</InputSelect>
+</InputSelect> *@
+
+
+
+<div class="select" >
+    <div class="selected-element">
+        @DamageType
+    </div>
+    <div class="select-padding"></div>
+    <div class="select-arrow">
+        <i class="fas fa-caret-up" />
+    </div>
+</div>

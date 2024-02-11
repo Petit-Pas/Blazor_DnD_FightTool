@@ -14,17 +14,6 @@
             <div> @attackTemplate.Id </div>
             <ModifiersTemplateEditable @bind-Template="attackTemplate.Modifiers" />
             <DamageRollTemplateCollectionEditable DamageRollTemplateCollection="attackTemplate.Damages" />
-            @* <div style="margin: 10px;">
-                @foreach (var damageTemplate in attackTemplate.Damages)
-                {
-                    <div style="margin: 5px;">
-                        <DamageRollTemplateEditable DamageRollTemplate="damageTemplate" />
-                        <ButtonCard Color="ThemeColor.Danger" OnMouseClickCallBack="() => RemoveDamageFromAttack(attackTemplate, damageTemplate)"> Delete </ButtonCard>
-                    </div>
-                }
-                <ButtonCard OnMouseClickCallBack="() => AddNewDamageInAttack(attackTemplate)"> Add damage type </ButtonCard>
-
-            </div> *@
             <div style="margin: 10px;">
                 @foreach (var status in attackTemplate.Statuses.Values)
                 {

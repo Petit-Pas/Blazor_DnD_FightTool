@@ -15,7 +15,7 @@ public partial class MenuBlade
 
     // UI Methods
     private string PositionClass => Position switch
-    {
+    { 
         ElementRelativePosition.Top => "top",
         ElementRelativePosition.Bottom => "bottom",
         ElementRelativePosition.Right => "right",
