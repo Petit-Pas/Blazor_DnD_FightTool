@@ -7,20 +7,7 @@
         @foreach (var damageTemplate in DamageRollTemplateCollection)
         {
             <div class="damage-input">
-                <DiceThrowTemplateInput ValidateOnKeyPress="false" @bind-Value="damageTemplate.Dices" ValidationFor=@(() => damageTemplate.Dices) >
-                    <PrefixRenderFragment>
-                        <DamageTypePicker @bind-DamageType="damageTemplate.Type"></DamageTypePicker>
-                    </PrefixRenderFragment>
-                    <SuffixRenderFragment>
-                        <div>
-                            <ButtonCard Padding="Spacing._0" Color="ThemeColor.Danger" OnMouseClickCallBack="() => DamageRollTemplateCollection.Remove(damageTemplate)"> 
-                                <div class="delete-button">
-                                    <i class="icon fa-regular fa-trash-can"></i> 
-                                </div>
-                            </ButtonCard>
-                        </div>
-                    </SuffixRenderFragment>
-                </DiceThrowTemplateInput>
+                <DamageRollTemplateEditable Template="damageTemplate" Deleted="() => Remove(damageTemplate)" />
             </div>
         }
         <div class="add-button-container">

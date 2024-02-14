@@ -1,11 +1,4 @@
-﻿.delete-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-}
-
+﻿
 .icon {
     font-size: 17px;
 }
@@ -30,3 +23,4 @@
 .damage-collection {
     width: 380px
 }
+

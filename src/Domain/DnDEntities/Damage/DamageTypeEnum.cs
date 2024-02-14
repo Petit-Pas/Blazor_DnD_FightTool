@@ -28,6 +28,8 @@ public enum DamageTypeEnum
     Thunder
 }
 
+
+
 /// <summary>
 ///     Extensions methods for <see cref="DamageTypeEnum"/>
 /// </summary>
@@ -42,4 +44,6 @@ public static class DamageTypeEnumExtensions
     {
         return skill.ToString().Replace("_", " ");
     }
+
+    public static DamageTypeEnum[] All = (DamageTypeEnum[])Enum.GetValues(typeof(DamageTypeEnum));
 }

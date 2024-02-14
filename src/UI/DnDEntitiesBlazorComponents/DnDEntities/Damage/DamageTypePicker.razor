@@ -1,4 +1,6 @@
-﻿@using DnDFightTool.Domain.DnDEntities.Damage
+﻿@using DnDFightTool.Domain.DnDEntities.Damage;
+@using NeoBlazorphic.Components.NeoPopover;
+@using NeoBlazorphic.Components.Lists.NeoPlainLists;
 
 @* <InputSelect TValue="DamageTypeEnum" ValueExpression="@(() => DamageType)" Value="DamageType" ValueChanged="(value) => OnValueChanged(value)">
     @foreach (var damageType in Enum.GetValues(typeof(DamageTypeEnum)))
@@ -9,12 +11,27 @@
 
 
 
-<div class="select" >
-    <div class="selected-element">
-        @DamageType
-    </div>
-    <div class="select-padding"></div>
-    <div class="select-arrow">
-        <i class="fas fa-caret-up" />
-    </div>
-</div>
+<NeoPopover @ref=_popOver>
+    <ChildContent>
+        <div class="select-button" @onclick="() => _popOver.TogglePopover()">
+            <div class="selected-element">
+                @DamageType.ToReadableString()
+            </div>
+            <div class="select-padding"></div>
+            <div class="select-arrow">
+                <i class="fas fa-caret-up" />
+            </div>
+        </div>
+    </ChildContent>
+    <PopoverContent>
+        <div class="select-popover">
+            <NeoPlainList T=DamageTypeEnum Items="DamageTypeEnumExtensions.All" OnElementClickCallBack=UpdateSelectedElement>
+                <ItemRenderFragment Context="item">
+                    <div class="select-item">
+                        @item.ToReadableString()
+                    </div>
+                </ItemRenderFragment>
+            </NeoPlainList>
+        </div>
+    </PopoverContent>
+</NeoPopover>

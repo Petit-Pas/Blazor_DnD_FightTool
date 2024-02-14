@@ -62,7 +62,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
         <PackageReference Include="Morris.Blazor.FluentValidation" Version="2.0.0" />
         <PackageReference Include="Morris.Blazor.Validation" Version="2.0.0" />
-        <PackageReference Include="NeoBlazorphic" Version="1.0.1-alpha1" />
+        <PackageReference Include="NeoBlazorphic" Version="1.0.1-alpha4" />
         <PackageReference Include="UndoableMediator" Version="1.0.0-rc8" />
     </ItemGroup>
 

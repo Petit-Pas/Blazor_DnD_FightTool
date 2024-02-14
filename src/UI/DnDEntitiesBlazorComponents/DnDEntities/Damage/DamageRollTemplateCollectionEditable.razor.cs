@@ -7,5 +7,13 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.Damage
     {
         [Parameter]
         public DamageRollTemplateCollection? DamageRollTemplateCollection { get; set; }
+
+        private void Remove(DamageRollTemplate damageTemplate)
+        {
+            if (DamageRollTemplateCollection != null)
+            {
+                DamageRollTemplateCollection.Remove(damageTemplate);
+            }
+        }
     }
 }

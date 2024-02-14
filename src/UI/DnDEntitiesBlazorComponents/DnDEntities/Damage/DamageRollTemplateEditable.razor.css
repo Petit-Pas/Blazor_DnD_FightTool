@@ -1,13 +1,13 @@
-﻿/*
-select {
-    background: var(--base-main-color);
-    outline: none;
+﻿
+
+.delete-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
 }
 
-select:focus {
-    background: var(--primary-main-color);
-}
-*/
 
 .select-padding {
     border-right: 1px solid white;
@@ -28,12 +28,19 @@ select:focus {
     transform: translateY(-2px);
 }
 
+.select-popover-container {
+    
+    background: green;
+    padding: 1em;
+}
+
 .select-popover {
-    height: 250px;
-    overflow-y: auto;
-    padding: 0.5em;
+    height: 300px;
+    padding: 1em;
+    margin: 1em;
+    background: red;
     /*overflow: hidden;*/
-    /*margin: 10px;*/   
+    /*margin: 10px;*/
 }
 
 .select-item {

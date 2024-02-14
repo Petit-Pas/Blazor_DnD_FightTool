@@ -1,7 +1,51 @@
-﻿@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;
+@using DnDFightTool.Domain.DnDEntities.Damage;
+@using NeoBlazorphic.Components.NeoPopover;
+@using NeoBlazorphic.Components.Lists.NeoPlainLists;
 
-@if (DamageRollTemplate != null)
+
+@if (Template != null)
 {
-    <DamageTypePicker @bind-DamageType="DamageRollTemplate.Type"></DamageTypePicker>
-    <DiceThrowTemplateEditable @bind-Template="DamageRollTemplate.Dices"></DiceThrowTemplateEditable>
+    <div class="damage-input">
+        <NeoPopover @ref=_popOver>
+            <ChildContent>
+                <DiceThrowTemplateInput ValidateOnKeyPress="false" @bind-Value="Template.Dices" ValidationFor=@(() => Template.Dices)>
+                    <PrefixRenderFragment>
+                        <div class="select-button" @onclick="() => _popOver.TogglePopover()">
+                            <div class="selected-element">
+                                @Template.Type.ToReadableString()
+                            </div>
+                            <div class="select-padding"></div>
+                            <div class="select-arrow">
+                                <i class="fas fa-caret-up" />
+                            </div>
+                        </div>
+                    </PrefixRenderFragment>
+                    <SuffixRenderFragment>
+                        <div>
+                            <ButtonCard Padding="Spacing._0" Color="ThemeColor.Danger" OnMouseClickCallBack="NotifyDeleted">
+                                <div class="delete-button">
+                                    <i class="icon fa-regular fa-trash-can"></i>
+                                </div>
+                            </ButtonCard>
+                        </div>
+                    </SuffixRenderFragment>
+                </DiceThrowTemplateInput>
+            </ChildContent>
+            <PopoverContent>
+                <div class="select-popover-container">
+                <div class="select-popover">
+                    <NeoPlainList T=DamageTypeEnum Items="DamageTypeEnumExtensions.All" OnElementClickCallBack="UpdateType">
+                        <ItemRenderFragment Context="item">
+                            <div class="select-item">
+                                @item.ToReadableString()
+                            </div>
+                        </ItemRenderFragment>
+                    </NeoPlainList>
+                </div>
+                </div>
+            </PopoverContent>
+        </NeoPopover>
+    </div>
 }
+
