@@ -1,5 +1,6 @@
 ﻿@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
 @using DnDFightTool.Domain.DnDEntities.Damage
+@using SharedComponents.Inputs.Buttons
 
 @if (DamageRollTemplateCollection != null)
 {
@@ -11,13 +12,7 @@
             </div>
         }
         <div class="add-button-container">
-            <ButtonCard Padding="Spacing._0" Color="ThemeColor.Primary" OnMouseClickCallBack="() => DamageRollTemplateCollection.Add(new DamageRollTemplate())">
-                <div>
-                    <div class="add-button">
-                        <i class="icon fa-regular fa-plus"></i>
-                    </div>
-                </div>
-            </ButtonCard>
+            <AddButton SizeInPx="45" OnClick="() => DamageRollTemplateCollection.Add(new DamageRollTemplate())" />
         </div>
     </div>
 }

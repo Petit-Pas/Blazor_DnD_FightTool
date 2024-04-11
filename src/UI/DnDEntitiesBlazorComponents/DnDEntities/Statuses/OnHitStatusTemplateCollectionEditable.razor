@@ -1,0 +1,19 @@
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+@using DnDFightTool.Domain.DnDEntities.Damage
+@using DnDFightTool.Domain.DnDEntities.Statuses
+@using SharedComponents.Inputs.Buttons
+
+@if (OnHitStatusTemplateCollection != null)
+{
+    <div class="status-collection">
+        @foreach (var statusTemplate in OnHitStatusTemplateCollection.Values)
+        {
+            <div class="template-input">
+                <OnHitStatusTemplateEditable Template="statusTemplate" Deleted="() => OnHitStatusTemplateCollection.Remove(statusTemplate.Id)" />
+            </div>
+        }
+        <div class="add-button-container">
+            <AddButton SizeInPx="45" OnClick="() => OnHitStatusTemplateCollection.Add(new StatusTemplate())" />
+        </div>
+    </div>
+}

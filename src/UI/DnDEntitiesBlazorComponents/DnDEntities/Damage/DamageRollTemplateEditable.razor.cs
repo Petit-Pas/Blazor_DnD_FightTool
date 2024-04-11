@@ -14,6 +14,11 @@ public partial class DamageRollTemplateEditable
 
     private NeoPopover _popOver { get; set; }
 
+    private void OnPopoverOpenedChanged()
+    {
+        StateHasChanged();
+    }
+
     private async Task NotifyDeleted()
     {
         await Deleted.InvokeAsync();
@@ -25,7 +30,7 @@ public partial class DamageRollTemplateEditable
         {
             Template.Type = newType;
         }
-        await _popOver.TogglePopover();
+        await _popOver.TogglePopoverAsync();
     }
 
 }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>DnDFightTool.Business.DnDActions</RootNamespace>
@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="UndoableMediator" Version="1.0.0-rc8" />
+		<PackageReference Include="UndoableMediator" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

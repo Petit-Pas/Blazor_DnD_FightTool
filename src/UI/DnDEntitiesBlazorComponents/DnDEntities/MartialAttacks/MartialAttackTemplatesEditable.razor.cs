@@ -28,17 +28,6 @@ public partial class MartialAttackTemplatesEditable
         }
     }
 
-
-    private void RemoveDamageFromAttack(MartialAttackTemplate attack, DamageRollTemplate damage)
-    {
-        attack.Damages.Remove(damage);
-    }
-
-    private void AddNewDamageInAttack(MartialAttackTemplate attack)
-    {
-        attack.Damages.Add(new DamageRollTemplate());
-    }
-
     private void RemoveStatusFromAttack(MartialAttackTemplate attack, StatusTemplate status)
     {
         attack.Statuses.Remove(status.Id);

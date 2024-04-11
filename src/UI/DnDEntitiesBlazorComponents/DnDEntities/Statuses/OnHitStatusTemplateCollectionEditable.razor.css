@@ -1,5 +1,4 @@
-﻿
-.icon {
+﻿.icon {
     font-size: 17px;
 }
 
@@ -8,11 +7,10 @@
     justify-content: right;
 }
 
-.damage-input {
+.status-input {
     margin: 1em 0;
 }
 
-.damage-collection {
+.status-collection {
     width: 480px
 }
-

@@ -10,19 +10,29 @@
     @foreach(var attackTemplate in Character.MartialAttacks.Values)
     {
         <Card>
-            <StringInput @bind-Value="@attackTemplate.Name" ValidationFor="() => attackTemplate.Name" />
-            <div> @attackTemplate.Id </div>
-            <ModifiersTemplateEditable @bind-Template="attackTemplate.Modifiers" />
-            <DamageRollTemplateCollectionEditable DamageRollTemplateCollection="attackTemplate.Damages" />
-            <div style="margin: 10px;">
-                @foreach (var status in attackTemplate.Statuses.Values)
-                {
-                    <div sstyle="margin: 5px;">
-                        <StatusTemplateEditable StatusTemplate="status" />
-                        <ButtonCard Color="ThemeColor.Danger" OnMouseClickCallBack="() => RemoveStatusFromAttack(attackTemplate, status)"> Delete </ButtonCard>
-                    </div>
-                }
-                <ButtonCard OnMouseClickCallBack="() => AddNewStatusInAttack(attackTemplate)" > Add new Status </ButtonCard>
+            <div style="display: flex; flex-direction: column">
+                <StringInput @bind-Value="@attackTemplate.Name" ValidationFor="() => attackTemplate.Name">
+                    <PrefixRenderFragment>
+                        Name:
+                    </PrefixRenderFragment>
+                </StringInput>
+                <ModifiersTemplateInput @bind-Value="attackTemplate.Modifiers" ValidationFor="() => attackTemplate.Modifiers">
+                    <PrefixRenderFragment>
+                        Bonus to hit:
+                    </PrefixRenderFragment>
+                </ModifiersTemplateInput>
+                <DamageRollTemplateCollectionEditable DamageRollTemplateCollection="attackTemplate.Damages" />
+                <OnHitStatusTemplateCollectionEditable OnHitStatusTemplateCollection="attackTemplate.Statuses" />
+                <div style="margin: 10px;">
+                    @foreach (var status in attackTemplate.Statuses.Values)
+                    {
+                        <div sstyle="margin: 5px;">
+                            <StatusTemplateEditable StatusTemplate="status" />
+                            <ButtonCard Color="ThemeColor.Danger" OnMouseClickCallBack="() => RemoveStatusFromAttack(attackTemplate, status)"> Delete </ButtonCard>
+                        </div>
+                    }
+                    <ButtonCard OnMouseClickCallBack="() => AddNewStatusInAttack(attackTemplate)" > Add new Status </ButtonCard>
+                </div>
             </div>
         </Card>
     }

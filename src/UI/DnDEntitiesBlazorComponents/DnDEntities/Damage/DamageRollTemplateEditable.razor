@@ -2,47 +2,42 @@
 @using DnDFightTool.Domain.DnDEntities.Damage;
 @using NeoBlazorphic.Components.NeoPopover;
 @using NeoBlazorphic.Components.Lists.NeoPlainLists;
+@using SharedComponents.Inputs.Buttons
 
 
 @if (Template != null)
 {
-    <div class="damage-input">
-        <NeoPopover @ref=_popOver>
+    <div class="damage-input-container">
+        <NeoPopover @ref=_popOver PopoverOpenedChanged="OnPopoverOpenedChanged">
             <ChildContent>
-                <DiceThrowTemplateInput ValidateOnKeyPress="false" @bind-Value="Template.Dices" ValidationFor=@(() => Template.Dices)>
-                    <PrefixRenderFragment>
-                        <div class="select-button" @onclick="() => _popOver.TogglePopover()">
-                            <div class="selected-element">
-                                @Template.Type.ToReadableString()
-                            </div>
-                            <div class="select-padding"></div>
-                            <div class="select-arrow">
-                                <i class="fas fa-caret-up" />
-                            </div>
-                        </div>
-                    </PrefixRenderFragment>
-                    <SuffixRenderFragment>
-                        <div>
-                            <ButtonCard Padding="Spacing._0" Color="ThemeColor.Danger" OnMouseClickCallBack="NotifyDeleted">
-                                <div class="delete-button">
-                                    <i class="icon fa-regular fa-trash-can"></i>
+                <div class="damage-input">
+                    <DiceThrowTemplateInput ValidateOnKeyPress="false" @bind-Value="Template.Dices" ValidationFor=@(() => Template.Dices) PrefixPadding="Spacing._0">
+                        <PrefixRenderFragment>
+                            <div class="select p-2" @onclick="() => _popOver.TogglePopoverAsync()">
+                                <div class="selected-element">
+                                    @Template.Type.ToReadableString()
                                 </div>
-                            </ButtonCard>
-                        </div>
-                    </SuffixRenderFragment>
-                </DiceThrowTemplateInput>
+                                <div class="select-padding"></div>
+                                <div class="select-arrow @(_popOver.PopoverOpened ? "open" : "")">
+                                    <i class="fas fa-caret-up" />
+                                </div>
+                            </div>
+                        </PrefixRenderFragment>
+                        <SuffixRenderFragment>
+                            <DeleteButton OnClick="NotifyDeleted" />
+                        </SuffixRenderFragment>
+                    </DiceThrowTemplateInput>
+                </div>
             </ChildContent>
             <PopoverContent>
-                <div class="select-popover-container">
                 <div class="select-popover">
                     <NeoPlainList T=DamageTypeEnum Items="DamageTypeEnumExtensions.All" OnElementClickCallBack="UpdateType">
                         <ItemRenderFragment Context="item">
-                            <div class="select-item">
+                            <div class="select-item p-1">
                                 @item.ToReadableString()
                             </div>
                         </ItemRenderFragment>
                     </NeoPlainList>
-                </div>
                 </div>
             </PopoverContent>
         </NeoPopover>

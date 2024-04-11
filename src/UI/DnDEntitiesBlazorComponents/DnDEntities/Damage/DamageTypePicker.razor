@@ -13,7 +13,7 @@
 
 <NeoPopover @ref=_popOver>
     <ChildContent>
-        <div class="select-button" @onclick="() => _popOver.TogglePopover()">
+        <div class="select-button" @onclick="() => _popOver.TogglePopoverAsync()">
             <div class="selected-element">
                 @DamageType.ToReadableString()
             </div>

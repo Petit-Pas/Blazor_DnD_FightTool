@@ -16,4 +16,6 @@ public static class AbilityEnumExtensions
     {
         return ability.ToString().Substring(0, 3).ToUpper();
     }
+    
+    public static AbilityEnum[] All = (AbilityEnum[])Enum.GetValues(typeof(AbilityEnum));
 }

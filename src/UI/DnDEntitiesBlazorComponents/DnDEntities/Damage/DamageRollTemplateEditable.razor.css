@@ -1,55 +1,51 @@
-﻿
-
-.delete-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
+﻿.damage-input-container {
+    /* required to counter the padding-left of damage-input */
+    margin-left: -1em;
 }
 
+.damage-input {
+    /* The only way I found to align the dropdown properly */
+    padding-left: 1em;
+}
 
+/* The whole select button */
+.select {
+    display: flex;
+    width: 200px;
+    height: 100%;
+}
+
+/* The part of the select that display the currently selected element */
+.selected-element {
+    transition: all 0.3s ease-in-out;
+}
+.select:hover .selected-element {
+    transform: translateY(-2px);
+}
+
+/* middle section that splits selected-element with select-arrow */
 .select-padding {
-    border-right: 1px solid white;
-    margin-right: 10px;
-    margin-bottom: -5px;
+    border-right: 1px solid var(--neo-light-main-color);
+    margin-right: 13px;
     color: var(--text-color);
     flex-grow: 1;
 }
 
-.selected-element {
-}
-
+/* The arrow that indicates the dropdown */
 .select-arrow {
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
+    align-items: center;
+    display: flex;
 }
-
-.select:hover .select-arrow {
-    transform: translateY(-2px);
-}
-
-.select-popover-container {
-    
-    background: green;
-    padding: 1em;
+.select-arrow.open {
+    transform: rotate(180deg);
 }
 
 .select-popover {
     height: 300px;
-    padding: 1em;
-    margin: 1em;
-    background: red;
-    /*overflow: hidden;*/
-    /*margin: 10px;*/
+    padding: 0.3em 1em 0.3em 1em;
 }
 
 .select-item {
-    padding: 5px;
     width: 200px;
-}
-
-.select-button {
-    display: flex;
-    width: 200px;
-    height: 100%;
 }

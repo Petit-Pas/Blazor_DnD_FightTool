@@ -31,6 +31,6 @@ public partial class DamageTypePicker
     private async Task UpdateSelectedElement(DamageTypeEnum selected)
     {
         await OnValueChanged(selected);
-        await _popOver.TogglePopover();
+        await _popOver.TogglePopoverAsync();
     }
 }

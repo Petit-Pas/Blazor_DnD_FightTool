@@ -1,0 +1,58 @@
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+@using DnDEntitiesBlazorComponents.DnDEntities.Saves
+@using DnDFightTool.Domain.DnDEntities.AbilityScores
+@using SharedComponents.Inputs.Buttons
+@using NeoBlazorphic.Components.NeoPopover;
+@using NeoBlazorphic.Components.Lists.NeoPlainLists;
+
+@if (Template != null)
+{
+    <div style="display: flex; flex-direction: column;">
+        <div style="display: flex; flex-direction: row;">
+            <StringInput @bind-Value="Template.Name" ValidationFor="() => Template.Name">
+                <PrefixRenderFragment>
+                    Name:
+                </PrefixRenderFragment>
+            </StringInput>
+            <DeleteButton OnClick="NotifyDeleted" /> 
+        </div>
+        <div style="display: flex; flex-direction: row;"> 
+            <div> Applied automatically: </div>
+            <CheckBox @bind-IsChecked="Template.IsAppliedAutomatically"/>
+        </div>
+
+        @if (!Template.IsAppliedAutomatically)
+        {
+            <div>
+                <NeoPopover @ref=_popOver PopoverOpenedChanged="OnPopoverOpenedChanged">
+                    <ChildContent>
+                        <ModifiersTemplateInput @bind-Value="Template.Save.Difficulty.DifficultyClassExpression" ValidationFor="() => Template.Save.Difficulty.DifficultyClassExpression">
+                            <PrefixRenderFragment>
+                                <div class="select p-2" @onclick="() => _popOver.TogglePopoverAsync()">
+                                    <div class="selected-element">
+                                        @Template.Save.TargetAbility
+                                    </div>
+                                    <div class="select-padding"></div>
+                                    <div class="select-arrow @(_popOver.PopoverOpened ? "open" : "")">
+                                        <i class="fas fa-caret-up" />
+                                    </div>
+                                </div>
+                            </PrefixRenderFragment>
+                        </ModifiersTemplateInput>
+                    </ChildContent>
+                    <PopoverContent>
+                        <div class="select-popover">
+                            <NeoPlainList T=AbilityEnum Items="AbilityEnumExtensions.All" OnElementClickCallBack="UpdateAbility">
+                                <ItemRenderFragment Context="item">
+                                    <div class="select-item p-1">
+                                        @item
+                                    </div>
+                                </ItemRenderFragment>
+                            </NeoPlainList>
+                        </div>
+                    </PopoverContent>
+                </NeoPopover>
+            </div>
+        }
+    </div>
+}
