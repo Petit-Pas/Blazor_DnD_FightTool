@@ -9,6 +9,9 @@ using UndoableMediator.DependencyInjection;
 using DnDFightTool.Business.DnDActions;
 using FightBlazorComponents.Queries.MartialAttackQueries;
 using IO.Files;
+using DnDFightTool.Domain.DnDEntities.IoC;
+
+using Mapping;
 
 namespace DnDFightTool;
 
@@ -34,14 +37,17 @@ public static class MauiProgram
         builder.Services.AddSingleton<IFileManager, LocalFileManager>();
         builder.Services.AddSingleton<IAppliedStatusRepository, AppliedStatusRepository>();
 
+        builder.Services.AddSingleton<IMapper, Mapper>();
+        builder.Services.RegisterDnDEntitiesMappingConfigurations();
+
         builder.Services.ConfigureMediator(options =>
         {
             options.ShouldScanAutomatically = false;
-            options.AssembliesToScan = new System.Reflection.Assembly[]
-            {
+            options.AssembliesToScan =
+            [
                 typeof(CasterCommandBase).Assembly,
                 typeof(MartialAttackRollResultQueryHandler).Assembly
-            };
+            ];
         });
 
 #if DEBUG

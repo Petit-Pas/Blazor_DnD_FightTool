@@ -1,5 +1,6 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.Fight.Characters;
+using Mapping;
 using Microsoft.Extensions.Logging;
 
 namespace DnDFightTool.Domain.Fight;
@@ -11,10 +12,11 @@ public class FightContext : IFightContext
     /// </summary>
     /// <param name="log"></param>
     /// <param name="characterRepository"></param>
-    public FightContext(ILogger<FightContext> log, ICharacterRepository characterRepository)
+    public FightContext(ILogger<FightContext> log, ICharacterRepository characterRepository, IMapper mapper)
     {
         _log = log;
         _characterRepository = characterRepository;
+        _mapper = mapper;
     }
 
     private readonly ILogger<FightContext> _log;
@@ -28,6 +30,10 @@ public class FightContext : IFightContext
     ///     Since the players (or NPCs) are unique, we keep their reference in the character repository
     /// </summary>
     private readonly ICharacterRepository _characterRepository;
+    /// <summary>
+    ///     Used to deep clone
+    /// </summary>
+    private readonly IMapper _mapper;
 
     /// <summary>
     ///     Since the monsters are not unique, they are just a copy of a template, we store the list as a copy here. 
@@ -43,7 +49,7 @@ public class FightContext : IFightContext
                 _fighters.Add(new Fighter(character));
                 break;
             case CharacterType.Monster:
-                var monsterCopy = character.Duplicate();
+                var monsterCopy = _mapper.Clone(character);
                 _monstersInFight.Add(monsterCopy);
                 _fighters.Add(new Fighter(monsterCopy));
                 break;

@@ -1,6 +1,6 @@
 ﻿using Blazored.Toast.Services;
 using DnDFightTool.Domain.DnDEntities.Characters;
-using FastDeepCloner;
+using Mapping;
 using Microsoft.AspNetCore.Components;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
@@ -14,6 +14,8 @@ public partial class EditCharacterPage
     public NavigationManager Navigation { get; set; }
     [Inject]
     public IToastService ToastService { get; set; }
+    [Inject]
+    public IMapper Mapper { get; set; }
 
 
     [Inject]
@@ -42,7 +44,13 @@ public partial class EditCharacterPage
         }
         else {
             var id = Guid.Parse(CharacterId);
-            _character = CharacterRepository.GetCharacterById(id).Clone();
+            var character = CharacterRepository.GetCharacterById(id);
+            if (character == null)
+            {
+                Navigation.NavigateTo("/Characters");
+                return;
+            }
+            _character = Mapper.Copy(CharacterRepository.GetCharacterById(id)!);
         }
     }
 

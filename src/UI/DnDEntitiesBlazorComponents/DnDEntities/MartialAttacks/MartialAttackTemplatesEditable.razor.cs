@@ -1,5 +1,4 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Damage;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using Microsoft.AspNetCore.Components;

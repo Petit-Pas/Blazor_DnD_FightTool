@@ -1,0 +1,92 @@
+@using DnDEntitiesBlazorComponents.DnDEntities.Damage
+@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+@using DnDEntitiesBlazorComponents.DnDEntities.Statuses
+@using SharedComponents.Inputs.Buttons.Actions
+
+@if (Character != null)
+{
+    <div id="attack-template-collection" class="attack-template-collection-container" style="background: blue; overflow: auto; height: 100%; padding: 1em;">
+
+        @{
+            var i = -1;
+        }
+        @foreach(var attackTemplate in Character.MartialAttacks.Values)
+        {
+            var editing = EditedTemplate is not null && EditedTemplate.Id == attackTemplate.Id;
+            i += 1;
+            <div id="@("attack-template-card-" + i)" class="attack-template-summary-container @(editing ? "editing" : "")" style="">
+                <Card BorderRadius="@TemplateBorderRadius" Padding="Spacing._0">
+                    @if (!editing)
+                    {
+                        <!-- Smaller summary card -->
+                        <div class="attack-template-summary">
+                            <div class="attack-template-name">
+                                @attackTemplate.Name
+                            </div>
+                            
+                            @if (EditedTemplate == null)
+                            {
+                                <div class="action-containers">
+                                    <CardActionCollection>
+                                        <CardActionCollectionElement>
+                                            <EditButton SizeInPx="35" OnClick="() => Edit(attackTemplate)" />
+                                        </CardActionCollectionElement>
+                                        <CardActionCollectionElement>
+                                            <DuplicateButton SizeInPx="35" OnClick="() => Duplicate(attackTemplate)" />
+                                        </CardActionCollectionElement>
+                                        <CardActionCollectionElement>
+                                            <DeleteButton SizeInPx="35" OnClick="() => Delete(attackTemplate)" />
+                                        </CardActionCollectionElement>
+                                    </CardActionCollection>
+                                </div>
+                            }
+                        
+                            <div class="attack-template-tags">
+                                <Card BorderType="NeoBorderType.NeoLightBorder" Shape="BackgroundShape.Concave" Padding="Spacing._1">
+                                    <div class="attack-template-tag">
+                                        @attackTemplate.Modifiers.GetScoreModifier(Character).ModifierString
+                                    </div>
+                                </Card>
+                                <Card BorderType="NeoBorderType.NeoLightBorder" Shape="BackgroundShape.Concave" Padding="Spacing._1">
+                                    <div class="attack-template-tag">
+                                        @attackTemplate.Damages.MinimumResult(Character) - @attackTemplate.Damages.MaximumResult(Character)
+                                    </div>
+                                </Card>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+
+                        <!-- Bigger detailed editable card -->
+                        <div style="height: 100%;">
+                            @attackTemplate.Name
+                            <div class="action-containers">
+                                <CardActionCollection>
+                                    <CardActionCollectionElement>
+                                        <CancelButton SizeInPx="35" OnClick="() => CancelEdit()" />
+                                    </CardActionCollectionElement>
+                                    <CardActionCollectionElement>
+                                        <ValidateButton SizeInPx="35" OnClick="() => SaveEdit()" />
+                                    </CardActionCollectionElement>
+                                </CardActionCollection>
+                            </div>
+                        </div>
+                    }
+                </Card>
+            </div>
+        }
+
+        @if (EditedTemplate == null)
+        {
+            <ButtonCard BorderRadius="@TemplateBorderRadius" Color="ThemeColor.Primary" OnMouseClickCallBack="() => CreateNew()">
+                <div class="add-template-button" style="">
+                    +
+                </div>
+            </ButtonCard>
+        }
+
+    </div>
+
+}
+

@@ -206,11 +206,31 @@ public class DiceThrowTemplate : IHashable
     }
 
     /// <summary>
+    ///     Gets the minimum rollable result, so dice + modifiers
+    /// </summary>
+    /// <param name="character"></param>
+    /// <returns></returns>
+    public int MinimumResult(Character character)
+    {
+        return MinimumRoll() + GetScoreModifier(character).Modifier;
+    }
+
+    /// <summary>
     ///     Get the maximum to roll. That's without any wildcards or static modifier
     /// </summary>
     /// <returns></returns>
     public int MaximumRoll()
     {
         return _dicesToRoll.Sum(x => x.MaximumRoll());
+    }
+
+    /// <summary>
+    ///     Gets the maximum rollable result, so dice + modifiers
+    /// </summary>
+    /// <param name="character"></param>
+    /// <returns></returns>
+    public int MaximumResult(Character character)
+    {
+        return MaximumRoll() + GetScoreModifier(character);
     }
 }

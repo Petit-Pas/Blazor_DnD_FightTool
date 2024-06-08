@@ -1,0 +1,22 @@
+﻿.actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 10px;
+    gap: 8px;
+}
+
+
+.action {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+/* Can only work within a card */
+.neo-card:hover .action {
+    opacity: 1;
+    transform: translateY(0);
+    transition-property: opacity, transform;
+    transition-duration: 0.3s;
+}

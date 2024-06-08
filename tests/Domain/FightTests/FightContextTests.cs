@@ -6,6 +6,7 @@ using DnDFightTool.Domain.Fight.Characters;
 using DomainTestsUtilities.Factories.Characters;
 using FakeItEasy;
 using FluentAssertions;
+using Mapping;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
@@ -16,6 +17,7 @@ namespace FightTests
     {
         private ILogger<FightContext> _log = null!;
         private ICharacterRepository _characterRepository = null!;
+        private IMapper _mapper = null!;
 
         private FightContext _fightContext = null!;
 
@@ -24,8 +26,9 @@ namespace FightTests
         {
             _log = A.Fake<ILogger<FightContext>>();
             _characterRepository = A.Fake<ICharacterRepository>();
+            _mapper = A.Fake<IMapper>();
 
-            _fightContext = new FightContext(_log, _characterRepository);
+            _fightContext = new FightContext(_log, _characterRepository, _mapper);
         }
 
         [TestFixture] 

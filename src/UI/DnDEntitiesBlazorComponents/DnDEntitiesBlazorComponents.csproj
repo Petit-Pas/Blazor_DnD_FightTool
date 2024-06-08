@@ -33,6 +33,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\DnDEntities\DnDEntities.csproj" />
     <ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Mapping\Mapping.csproj" />
+    <ProjectReference Include="..\JavascriptInteropExtensions\JavascriptInteropExtensions.csproj" />
     <ProjectReference Include="..\SharedComponents\SharedComponents.csproj" />
   </ItemGroup>
 

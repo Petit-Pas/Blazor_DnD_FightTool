@@ -108,6 +108,10 @@ public class ModifiersTemplate : IHashable
             expression = expression[1..];
         }
 
+        if (expression.Length == 0)
+        {
+            return "0";
+        }
         return expression;
     }
 

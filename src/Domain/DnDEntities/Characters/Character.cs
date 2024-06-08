@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using DnDFightTool.Domain.DnDEntities.AbilityScores;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
 using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses;
 using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using DnDFightTool.Domain.DnDEntities.HitPoint;
@@ -7,7 +6,6 @@ using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.Saves;
 using DnDFightTool.Domain.DnDEntities.Skills;
 using DnDFightTool.Domain.DnDEntities.Statuses;
-using FastDeepCloner;
 
 namespace DnDFightTool.Domain.DnDEntities.Characters;
 
@@ -92,17 +90,6 @@ public class Character
     ///     The default DC to use for spells and effects used by this character
     /// </summary>
     public DifficultyClass Dc { get; set; }
-
-    /// <summary>
-    ///     Will do a deep copy of this character, then give it a new ID
-    /// </summary>
-    /// <returns></returns>
-    public Character Duplicate()
-    {
-        var copy = this.Clone();
-        copy.Id = Guid.NewGuid();
-        return copy;
-    }
 
     /// <summary>
     ///     This method is made to fetch a possibly applied status by it GUID.

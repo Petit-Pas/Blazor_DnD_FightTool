@@ -1,0 +1,19 @@
+﻿@if (ChildContent != null)
+{
+
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+
+    @if (Actions != null && Actions.Count > 0)
+    {
+        <div class="actions">
+            @for (var i = 0; i != Actions.Count; i += 1)
+            {
+                <div class="action" style="transition-delay: 0.@((5 * i).ToString("00"))s">
+                    @Actions[i].ChildContent
+                </div>
+            }
+        </div>
+    }
+}

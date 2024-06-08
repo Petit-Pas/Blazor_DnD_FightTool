@@ -18,15 +18,63 @@ public class MartialAttackTemplateCollection : Dictionary<Guid, MartialAttackTem
     }
 
     /// <summary>
-    ///     Ctor with tha ability to add a default attack.
+    ///     Ctor with tha ability to add a default attack.   
     /// </summary>
     /// <param name="withDefault"></param>
     public MartialAttackTemplateCollection(bool withDefault = false)
     {
         if (withDefault)
         {
+            for (int i = 0; i != 20; i += 1)
+            {
+                this.Add(new MartialAttackTemplate()
+                {
+                    Name = $"Default Attack - {i}",
+                    Damages = new DamageRollTemplateCollection()
+                {
+                    new DamageRollTemplate()
+                    {
+                        Dices = new DiceThrowTemplate("1d8"),
+                        Type = DamageTypeEnum.Cold
+                    },
+                    new DamageRollTemplate()
+                    {
+                        Dices = new DiceThrowTemplate("1d4+3"),
+                        Type = DamageTypeEnum.Thunder
+                    }
+                },
+                    Statuses = new StatusTemplateCollection()
+                {
+                    new StatusTemplate()
+                }
+                });
+            }
+
             this.Add(new MartialAttackTemplate()
             {
+                Name = "Default Attack",
+                Damages = new DamageRollTemplateCollection()
+                {
+                    new DamageRollTemplate()
+                    {
+                        Dices = new DiceThrowTemplate("1d8"),
+                        Type = DamageTypeEnum.Cold
+                    },
+                    new DamageRollTemplate()
+                    {
+                        Dices = new DiceThrowTemplate("1d4+3"),
+                        Type = DamageTypeEnum.Thunder
+                    }
+                },
+                Statuses = new StatusTemplateCollection()
+                {
+                    new StatusTemplate()
+                }
+            });
+
+            this.Add(new MartialAttackTemplate()
+            {
+                Name = "Default Attack2",
                 Damages = new DamageRollTemplateCollection()
                 {
                     new DamageRollTemplate()

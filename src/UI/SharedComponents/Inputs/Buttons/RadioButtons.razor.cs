@@ -2,7 +2,7 @@
 
 namespace SharedComponents.Inputs.Buttons;
 
-public partial class RadioButtons<T> 
+public partial class RadioButtons<T>
 {
     [Parameter]
     public Dictionary<string, T> KeyValues { get; set; }
@@ -11,7 +11,7 @@ public partial class RadioButtons<T>
     public T Value { get; set; }
 
     [Parameter]
-    public EventCallback<T> OnValueChanged { get;set; }
+    public EventCallback<T> OnValueChanged { get; set; }
 
     private void UpdateValue(T newValue)
     {

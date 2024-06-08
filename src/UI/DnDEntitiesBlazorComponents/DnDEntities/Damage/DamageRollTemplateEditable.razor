@@ -7,11 +7,11 @@
 
 @if (Template != null)
 {
-    <div class="damage-input-container">
+     <div class="damage-input-container">
         <NeoPopover @ref=_popOver PopoverOpenedChanged="OnPopoverOpenedChanged">
             <ChildContent>
                 <div class="damage-input">
-                    <DiceThrowTemplateInput ValidateOnKeyPress="false" @bind-Value="Template.Dices" ValidationFor=@(() => Template.Dices) PrefixPadding="Spacing._0">
+                     <DiceThrowTemplateInput ValidateOnKeyPress="false" @bind-Value="Template.Dices" ValidationFor=@(() => Template.Dices) PrefixPadding="Spacing._0">
                         <PrefixRenderFragment>
                             <div class="select p-2" @onclick="() => _popOver.TogglePopoverAsync()">
                                 <div class="selected-element">
@@ -41,6 +41,6 @@
                 </div>
             </PopoverContent>
         </NeoPopover>
-    </div>
+    </div> 
 }
 
