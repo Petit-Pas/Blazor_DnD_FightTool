@@ -22,10 +22,34 @@ public partial class MartialAttackTemplateCollectionEditable
     private static BorderRadius TemplateBorderRadius = new BorderRadius(2, "em");
 
     private MartialAttackTemplate? EditedTemplate { get; set; } = null;
+    
+    /// <summary>
+    ///     When we want to scroll to the edited element, we need to wait for the page to first refresh.
+    ///     Since otherwise the element doesn't have its definitive size yet, which is an issue when it's at the bottom of the parent div.
+    /// </summary>
+    private bool WaitingForOpeningOfEdit { get; set; } = false;
 
-    private void CreateNew()
+    /// <summary>
+    ///     When we are editing a new (or duplicated) element, we should know it so that we can get rid of it when the modification is cancelled.
+    /// </summary>
+    private bool EditedElementIsANewOne { get; set; } = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        Character.MartialAttacks.Add(new MartialAttackTemplate());
+        base.OnAfterRender(firstRender);
+        if (WaitingForOpeningOfEdit)
+        {
+            WaitingForOpeningOfEdit = false;
+            await ScrollTo(EditedTemplate);
+        }
+    }
+
+    private async Task CreateNewAsync()
+    {
+        var newTemplate = new MartialAttackTemplate();
+        Character.MartialAttacks.Add(newTemplate);
+        EditedElementIsANewOne = true;
+        await Edit(newTemplate);
     }
 
     private void Delete(MartialAttackTemplate martialAttackTemplate)
@@ -36,7 +60,8 @@ public partial class MartialAttackTemplateCollectionEditable
     private async Task Edit(MartialAttackTemplate martialAttackTemplate)
     {
         EditedTemplate = Mapper.Copy(martialAttackTemplate);
-        await ScrollTo(martialAttackTemplate);
+        WaitingForOpeningOfEdit = true;
+        StateHasChanged();
     }
 
     private async Task ScrollTo(MartialAttackTemplate martialAttackTemplate)
@@ -47,12 +72,20 @@ public partial class MartialAttackTemplateCollectionEditable
 
     private async Task Duplicate(MartialAttackTemplate martialAttackTemplate)
     {
-        Character.MartialAttacks.Add(Mapper.Clone(martialAttackTemplate));
+        var newTemplate = Mapper.Clone(martialAttackTemplate);
+        Character.MartialAttacks.Add(newTemplate);
+        EditedElementIsANewOne = true;
+        await Edit(newTemplate);
     }
 
     private async Task CancelEdit()
     {
         await JsRuntime.UnlockScroll("attack-template-collection");
+        if (EditedElementIsANewOne)
+        {
+            Delete(EditedTemplate);
+            EditedElementIsANewOne = false;
+        }
         EditedTemplate = null;
     }
 
@@ -60,6 +93,7 @@ public partial class MartialAttackTemplateCollectionEditable
     {
         await JsRuntime.UnlockScroll("attack-template-collection");
         EditedTemplate = null;
+        EditedElementIsANewOne = false;
     }
 
     // TODO recheck every css class and avoid using magic strings when sending to the js interop
