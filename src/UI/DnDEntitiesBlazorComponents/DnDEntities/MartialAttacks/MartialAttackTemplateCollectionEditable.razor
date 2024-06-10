@@ -1,20 +1,22 @@
 @using DnDEntitiesBlazorComponents.DnDEntities.Damage
 @using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
 @using DnDEntitiesBlazorComponents.DnDEntities.Statuses
+@using DnDFightTool.Domain.DnDEntities.MartialAttacks
+@using Morris.Blazor.Validation
 @using SharedComponents.Inputs.Buttons.Actions
 
 @if (Character != null)
 {
-    <div id="attack-template-collection" class="attack-template-collection-container" style="background: blue; overflow: auto; height: 100%; padding: 1em;">
+    <div id="attack-template-collection" class="attack-template-collection-container" style="overflow: auto; height: 100%; padding: 1em;">
 
         @{
             var i = -1;
         }
         @foreach(var attackTemplate in Character.MartialAttacks.Values)
         {
-            var editing = EditedTemplate is not null && EditedTemplate.Id == attackTemplate.Id;
+            var editing = EditContext is not null && ((MartialAttackTemplate)EditContext.Model).Id == attackTemplate.Id;
             i += 1;
-            <div id="@("attack-template-card-" + i)" class="attack-template-summary-container @(editing ? "editing" : "")" style="">
+            <div id="@("attack-template-card-" + i)" class="attack-template-container @(editing ? "editing" : "")" style="">
                 <Card BorderRadius="@TemplateBorderRadius" Padding="Spacing._0">
                     @if (!editing)
                     {
@@ -24,21 +26,19 @@
                                 @attackTemplate.Name
                             </div>
                             
-                            @if (EditedTemplate == null)
+                            @if (EditContext == null)
                             {
-                                <div class="action-containers">
-                                    <CardActionCollection>
-                                        <CardActionCollectionElement>
-                                            <EditButton SizeInPx="35" OnClick="() => Edit(attackTemplate)" />
-                                        </CardActionCollectionElement>
-                                        <CardActionCollectionElement>
-                                            <DuplicateButton SizeInPx="35" OnClick="() => Duplicate(attackTemplate)" />
-                                        </CardActionCollectionElement>
-                                        <CardActionCollectionElement>
-                                            <DeleteButton SizeInPx="35" OnClick="() => Delete(attackTemplate)" />
-                                        </CardActionCollectionElement>
-                                    </CardActionCollection>
-                                </div>
+                                <CardActionCollection>
+                                    <CardActionCollectionElement>
+                                        <EditButton SizeInPx="35" OnClick="() => Edit(attackTemplate)" />
+                                    </CardActionCollectionElement>
+                                    <CardActionCollectionElement>
+                                        <DuplicateButton SizeInPx="35" OnClick="() => Duplicate(attackTemplate)" />
+                                    </CardActionCollectionElement>
+                                    <CardActionCollectionElement>
+                                        <DeleteButton SizeInPx="35" OnClick="() => Delete(attackTemplate)" />
+                                    </CardActionCollectionElement>
+                                </CardActionCollection>
                             }
                         
                             <div class="attack-template-tags">
@@ -59,27 +59,29 @@
                     {
 
                         <!-- Bigger detailed editable card -->
-                        <div style="height: 100%;">
-                            @attackTemplate.Name
-                            <div class="action-containers">
+                        <EditForm EditContext="EditContext">
+                            <Validate />
+                            <div style="height: 100%;">
+                                <MartialAttackTemplateEditable EditContext="EditContext" />
+
                                 <CardActionCollection>
                                     <CardActionCollectionElement>
                                         <CancelButton SizeInPx="35" OnClick="() => CancelEdit()" />
                                     </CardActionCollectionElement>
                                     <CardActionCollectionElement>
-                                        <ValidateButton SizeInPx="35" OnClick="() => SaveEdit()" />
+                                        <ValidateButton SizeInPx="35" OnClick="() => SaveEdit()" IsEnabled="!EditContext!.GetValidationMessages().Any()" />
                                     </CardActionCollectionElement>
                                 </CardActionCollection>
                             </div>
-                        </div>
+                        </EditForm>
                     }
                 </Card>
             </div>
         }
 
-        @if (EditedTemplate == null)
+        @if (EditContext == null)
         {
-            <ButtonCard BorderRadius="@TemplateBorderRadius" Color="ThemeColor.Primary" OnMouseClickCallBack="() => CreateNewAsync()">
+            <ButtonCard BorderRadius="@TemplateBorderRadius" Color="ThemeColor.Primary" OnMouseClickCallBack="() => CreateNew()">
                 <div class="add-template-button" style="">
                     +
                 </div>

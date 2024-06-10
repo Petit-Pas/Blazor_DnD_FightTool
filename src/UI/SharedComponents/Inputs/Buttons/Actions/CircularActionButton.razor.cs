@@ -17,6 +17,9 @@ public partial class CircularActionButton
     [Parameter]
     public virtual int SizeInPx { get; set; } = 28;
 
+    [Parameter]
+    public virtual bool IsEnabled { get; set; } = true;
+
     private string _buttonIcon;
     private ThemeColor _themeColor;
 

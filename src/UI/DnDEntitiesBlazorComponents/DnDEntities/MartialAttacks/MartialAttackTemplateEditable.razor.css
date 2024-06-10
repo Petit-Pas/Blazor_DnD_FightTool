@@ -1,0 +1,21 @@
+﻿
+.template-container {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.main-info-label {
+    width: 184px;
+}
+
+.main-info-field {
+    width: 481px;
+}
+
+.detailed-informations {
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}

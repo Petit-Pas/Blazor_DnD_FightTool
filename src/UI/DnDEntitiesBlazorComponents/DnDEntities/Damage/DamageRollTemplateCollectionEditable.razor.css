@@ -9,10 +9,13 @@
 }
 
 .damage-input {
-    margin: 1em 0;
+/*    margin: 1em 0;*/
 }
 
 .damage-collection {
-    width: 480px
+    width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 

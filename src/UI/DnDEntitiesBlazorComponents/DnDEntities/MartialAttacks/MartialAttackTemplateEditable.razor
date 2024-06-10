@@ -1,0 +1,39 @@
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Damage
+@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+@using DnDEntitiesBlazorComponents.DnDEntities.Statuses
+
+@if (Template != null) 
+{
+
+    <div class="template-container">
+        <div class="main-info-field">
+            <StringInput @bind-Value="@Template.Name" ValidationFor="() => Template.Name">
+                <PrefixRenderFragment>
+                    <div class="main-info-label">
+                        Name:
+                    </div>
+                </PrefixRenderFragment>
+            </StringInput>
+        </div>
+        <div class="main-info-field">
+            <ModifiersTemplateInput @bind-Value="Template.Modifiers" ValidationFor="() => Template.Modifiers">
+                <PrefixRenderFragment>
+                    <div class="main-info-label">
+                        Bonus to hit:
+                    </div>
+                </PrefixRenderFragment>
+            </ModifiersTemplateInput>
+        </div>
+
+        <div class="detailed-informations">
+            <div>
+                <div> Damage </div>
+                <DamageRollTemplateCollectionEditable DamageRollTemplateCollection="Template.Damages" />
+            </div>
+            <div>
+                <div> Applied Status </div>
+                <OnHitStatusTemplateCollectionEditable OnHitStatusTemplateCollection="Template.Statuses" />
+            </div>
+        </div>
+    </div>
+}

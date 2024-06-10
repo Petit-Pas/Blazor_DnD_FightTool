@@ -3,6 +3,7 @@ using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using JsInterop;
 using Mapping;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using NeoBlazorphic.StyleParameters;
 
@@ -21,7 +22,7 @@ public partial class MartialAttackTemplateCollectionEditable
 
     private static BorderRadius TemplateBorderRadius = new BorderRadius(2, "em");
 
-    private MartialAttackTemplate? EditedTemplate { get; set; } = null;
+    private EditContext? EditContext { get; set; } = null;
     
     /// <summary>
     ///     When we want to scroll to the edited element, we need to wait for the page to first refresh.
@@ -40,16 +41,16 @@ public partial class MartialAttackTemplateCollectionEditable
         if (WaitingForOpeningOfEdit)
         {
             WaitingForOpeningOfEdit = false;
-            await ScrollTo(EditedTemplate);
+            await ScrollTo((MartialAttackTemplate)EditContext!.Model);
         }
     }
 
-    private async Task CreateNewAsync()
+    private void CreateNew()
     {
         var newTemplate = new MartialAttackTemplate();
         Character.MartialAttacks.Add(newTemplate);
         EditedElementIsANewOne = true;
-        await Edit(newTemplate);
+        Edit(newTemplate);
     }
 
     private void Delete(MartialAttackTemplate martialAttackTemplate)
@@ -57,10 +58,19 @@ public partial class MartialAttackTemplateCollectionEditable
         Character.MartialAttacks.Remove(martialAttackTemplate.Id);
     }
 
-    private async Task Edit(MartialAttackTemplate martialAttackTemplate)
+    private void Edit(MartialAttackTemplate martialAttackTemplate)
     {
-        EditedTemplate = Mapper.Copy(martialAttackTemplate);
+        var editedTemplate = Mapper.Copy(martialAttackTemplate);
+        EditContext = new EditContext(editedTemplate);
         WaitingForOpeningOfEdit = true;
+
+        EditContext.OnValidationStateChanged += ValidationChanged;
+
+        StateHasChanged();
+    }
+
+    private void ValidationChanged(object? sender, ValidationStateChangedEventArgs e)
+    {
         StateHasChanged();
     }
 
@@ -70,29 +80,49 @@ public partial class MartialAttackTemplateCollectionEditable
         await JsRuntime.LockScroll("attack-template-collection");
     }
 
-    private async Task Duplicate(MartialAttackTemplate martialAttackTemplate)
+    private void Duplicate(MartialAttackTemplate martialAttackTemplate)
     {
         var newTemplate = Mapper.Clone(martialAttackTemplate);
         Character.MartialAttacks.Add(newTemplate);
         EditedElementIsANewOne = true;
-        await Edit(newTemplate);
+        Edit(newTemplate);
     }
 
     private async Task CancelEdit()
     {
+        if (EditContext == null)
+        {
+            return;
+        }
+        
         await JsRuntime.UnlockScroll("attack-template-collection");
         if (EditedElementIsANewOne)
         {
-            Delete(EditedTemplate);
+            Delete((MartialAttackTemplate)EditContext.Model);
             EditedElementIsANewOne = false;
         }
-        EditedTemplate = null;
+        EditContext.OnValidationStateChanged -= ValidationChanged;
+        EditContext = null;
     }
 
     private async Task SaveEdit()
     {
+        if (EditContext == null)
+        {
+            return;
+        }
+        if (!EditContext.Validate())
+        {
+            return;
+        }
+
         await JsRuntime.UnlockScroll("attack-template-collection");
-        EditedTemplate = null;
+
+        var editedTemplate = (MartialAttackTemplate)EditContext.Model;
+        Character.MartialAttacks[editedTemplate.Id] = editedTemplate;
+
+        EditContext.OnValidationStateChanged -= ValidationChanged;
+        EditContext = null;
         EditedElementIsANewOne = false;
     }
 

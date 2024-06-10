@@ -54,7 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IO", "src\Infrastructure\IO
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mapping", "src\Infrastructure\Mapping\Mapping.csproj", "{1B861C55-1857-4989-89AA-C176A8DED850}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JavascriptInteropExtensions", "src\UI\JavascriptInteropExtensions\JavascriptInteropExtensions.csproj", "{EF646EF9-A562-46A6-A058-28AEA8035D2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JavascriptInteropExtensions", "src\UI\JavascriptInteropExtensions\JavascriptInteropExtensions.csproj", "{EF646EF9-A562-46A6-A058-28AEA8035D2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,7 +167,7 @@ Global
 		{EF646EF9-A562-46A6-A058-28AEA8035D2C} = {BD09E90F-6B05-45E9-A5D5-EA0E525A31EC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4F0A421B-176D-4E26-BD1F-6466C90520DF}
 		        SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
+		SolutionGuid = {4F0A421B-176D-4E26-BD1F-6466C90520DF}
 	EndGlobalSection
 EndGlobal
