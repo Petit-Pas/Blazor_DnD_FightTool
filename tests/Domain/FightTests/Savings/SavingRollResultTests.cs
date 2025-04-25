@@ -49,73 +49,59 @@ public class SavingRollResultTests
             result.Should().Be(expectedResult);
         }
 
-        //[Test]
-        //[TestCase(9, false)]
-        ////[TestCase(10, true)]
-        ////[TestCase(11, true)]
-        //public void Should_Use_Caster_Saving_Throw_When_Target_Is_DC(int rolledResult, bool expectedResult)
-        //{
-        //    // Arrange
-        //    _saveRoll.RolledResult = rolledResult;
-        //    _saveRoll.Target = new DifficultyClass("DC");
-
-        //    // Act
-        //    var result = _saveRoll.IsSuccessful(_caster, _target);
-
-        //    // Assert
-        //    result.Should().Be(expectedResult);
-        //}
-
         [Test]
-        public void Should_Use_Caster_Saving_Throw_When_Target_Is_DC()
+        [TestCase(9, false)]
+        [TestCase(10, true)]
+        [TestCase(11, true)]
+        public void Should_Use_Caster_Saving_Throw_When_Target_Is_DC(int rolledResult, bool expectedResult)
         {
             // Arrange
-            _saveRoll.RolledResult = 9;
+            _saveRoll.RolledResult = rolledResult;
             _saveRoll.Target = new DifficultyClass("DC");
 
             // Act
             var result = _saveRoll.IsSuccessful(_caster, _target);
 
             // Assert
-            result.Should().Be(false);
+            result.Should().Be(expectedResult);
         }
 
-        //[Test]
-        //[TestCase(AbilityEnum.Strength, true)]
-        //[TestCase(AbilityEnum.Intelligence, false)]
-        //public void Should_Use_Modifier_Of_The_Proper_Ability(AbilityEnum ability, bool expectedResult)
-        //{
-        //    // Arrange
-        //    _saveRoll.RolledResult = 8;
-        //    _saveRoll.Ability = ability;
+        [Test]
+        [TestCase(AbilityEnum.Strength, true)]
+        [TestCase(AbilityEnum.Intelligence, false)]
+        public void Should_Use_Modifier_Of_The_Proper_Ability(AbilityEnum ability, bool expectedResult)
+        {
+            // Arrange
+            _saveRoll.RolledResult = 8;
+            _saveRoll.Ability = ability;
 
-        //    // Act
-        //    var result = _saveRoll.IsSuccessful(_caster, _target);
+            // Act
+            var result = _saveRoll.IsSuccessful(_caster, _target);
 
-        //    // Assert
-        //    result.Should().Be(expectedResult);
-        //}
+            // Assert
+            result.Should().Be(expectedResult);
+        }
 
-        //[Test]
-        //[TestCase(8, 12, false, false)]
-        //[TestCase(9, 12, false, true)]
-        //[TestCase(10, 12, false, true)]
-        //[TestCase(6, 12, true, false)]
-        //[TestCase(7, 12, true, true)]
-        //[TestCase(8, 12, true, true)]
-        //public void Should_Use_Modifier_With_Mastery_As_Bonus_To_The_RolledResult(int rolledResult, int abilityScore, bool mastery, bool expectedResult)
-        //{
-        //    // Arrange
-        //    var ability = _target.AbilityScores.First(x => x.Ability == AbilityEnum.Intelligence);
-        //    ability.HasMastery = mastery;
-        //    ability.Score = abilityScore;
-        //    _saveRoll.RolledResult = rolledResult;
+        [Test]
+        [TestCase(8, 12, false, false)]
+        [TestCase(9, 12, false, true)]
+        [TestCase(10, 12, false, true)]
+        [TestCase(6, 12, true, false)]
+        [TestCase(7, 12, true, true)]
+        [TestCase(8, 12, true, true)]
+        public void Should_Use_Modifier_With_Mastery_As_Bonus_To_The_RolledResult(int rolledResult, int abilityScore, bool mastery, bool expectedResult)
+        {
+            // Arrange
+            var ability = _target.AbilityScores.First(x => x.Ability == AbilityEnum.Intelligence);
+            ability.HasMastery = mastery;
+            ability.Score = abilityScore;
+            _saveRoll.RolledResult = rolledResult;
 
-        //    // Act
-        //    var result = _saveRoll.IsSuccessful(_caster, _target);
+            // Act
+            var result = _saveRoll.IsSuccessful(_caster, _target);
 
-        //    // Assert
-        //    result.Should().Be(expectedResult);
-        //}
+            // Assert
+            result.Should().Be(expectedResult);
+        }
     }
 }

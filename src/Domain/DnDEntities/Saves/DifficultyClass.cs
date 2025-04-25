@@ -30,7 +30,7 @@ public class DifficultyClass : IHashable
     /// <summary>
     ///     The expression describing the difficulty class
     /// </summary>
-    public ModifiersTemplate DifficultyClassExpression { get; set; } = new ModifiersTemplate("");
+    public ModifiersTemplate DifficultyClassExpression { get; set; } = new ModifiersTemplate("DC");
 
     /// <summary>
     ///    Get the actual value of the difficulty class by evaluating the wildcards in the expression

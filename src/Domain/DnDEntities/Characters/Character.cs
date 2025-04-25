@@ -38,7 +38,8 @@ public class Character
         DamageAffinities = new DamageAffinitiesCollection(withDefaults);
         HitPoints = new HitPoints();
         MartialAttacks = new MartialAttackTemplateCollection(withDefaults);
-        Dc = new DifficultyClass();
+        // TODO a "DC" token in here will make a stack overflow
+        Dc = new DifficultyClass("10");
     }
 
     /// <summary>
