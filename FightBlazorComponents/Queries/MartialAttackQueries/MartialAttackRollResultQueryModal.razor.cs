@@ -9,15 +9,15 @@ namespace FightBlazorComponents.Queries.MartialAttackQueries;
 public partial class MartialAttackRollResultQueryModal : ComponentBase
 {
     [Parameter]
-    public MartialAttackRollResult MartialAttackRollResult { get; set; }
+    public required MartialAttackRollResult MartialAttackRollResult { get; set; }
 
     [CascadingParameter] 
-    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    private BlazoredModalInstance BlazoredModal { get; set; } = default!;
 
     [Parameter]
-    public Character Caster { get; set; }
+    public required Character Caster { get; set; }
 
-    private EditContext _editContext;
+    private EditContext? _editContext;
 
     protected override void OnParametersSet()
     {
@@ -33,6 +33,11 @@ public partial class MartialAttackRollResultQueryModal : ComponentBase
 
     private async Task Validate()
     {
+        if (_editContext == null)
+        {
+            return;
+        }
+        
         var validationSuccessful = _editContext.Validate();
         if (!validationSuccessful)
         {

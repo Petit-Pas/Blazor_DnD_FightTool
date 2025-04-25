@@ -16,7 +16,7 @@ public class AppliedStatusRepositoryTests
     [SetUp]
     public void Setup()
     {
-        _repository = new AppliedStatusRepository();
+        _repository = [];
     }
 
     [TestFixture]

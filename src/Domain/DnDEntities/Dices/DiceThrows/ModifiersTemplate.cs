@@ -32,7 +32,7 @@ public class ModifiersTemplate : IHashable
     /// <summary>
     ///     Regex to validate and parse the expression
     /// </summary>
-    internal static readonly Regex Regex = new Regex(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
+    internal readonly static Regex _regex = new(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
 
     /// <summary>
     ///     Accessors for the expression
@@ -52,12 +52,12 @@ public class ModifiersTemplate : IHashable
         // Should it though? we have validators in the UI, and this is a domain object, so it should be valid
         if (string.IsNullOrWhiteSpace(expression)) 
         {
-            _wildcards = Array.Empty<Wildcard>();
+            _wildcards = [];
             _staticModifier = 0;
             return;
         };
 
-        var rgxMatch = Regex.Match(expression);
+        var rgxMatch = _regex.Match(expression);
         if (!rgxMatch.Success)
         {
             throw new InvalidOperationException($"The expression {expression} is not a valid expression to describe a dice modifier expression.");
@@ -76,12 +76,12 @@ public class ModifiersTemplate : IHashable
             }
             else
             {
-                var token = term[0] == '+' ? term.Substring(1) : term;
+                var token = term[0] == '+' ? term[1..] : term;
                 wildcards.Add(new Wildcard(token));
             }
         }
 
-        _wildcards = wildcards.ToArray();
+        _wildcards = [.. wildcards];
         _staticModifier = staticModifier;
     }
 
@@ -114,7 +114,7 @@ public class ModifiersTemplate : IHashable
     /// <summary>
     ///     Wildcards to apply
     /// </summary>
-    internal Wildcard[] _wildcards = Array.Empty<Wildcard>();
+    internal Wildcard[] _wildcards = [];
 
     /// <summary>
     ///     Static modifier

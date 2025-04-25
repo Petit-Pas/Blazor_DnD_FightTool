@@ -10,10 +10,7 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.Damage
 
         private void Remove(DamageRollTemplate damageTemplate)
         {
-            if (DamageRollTemplateCollection != null)
-            {
-                DamageRollTemplateCollection.Remove(damageTemplate);
-            }
+            DamageRollTemplateCollection?.Remove(damageTemplate);
         }
     }
 }

@@ -29,7 +29,7 @@ public class DiceThrowTemplateValidator : AbstractValidator<DiceThrowTemplate>
         {
             return true;
         }
-        var regexEvaluation = DiceThrowTemplate.Regex.Match(expression);
+        var regexEvaluation = DiceThrowTemplate._regex.Match(expression);
         return regexEvaluation.Success;
     }
 }

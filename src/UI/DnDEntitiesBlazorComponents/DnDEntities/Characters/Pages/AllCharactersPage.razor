@@ -3,7 +3,7 @@
 
 <div class="all-characters">
     <MenuBlade Position="ElementRelativePosition.Top">
-        <Card BorderRadius="@HeaderBorderRadius">
+        <Card BorderRadius="@_headerBorderRadius">
             <div class="tab-container">
                 @if (_typeDisplayed == CharacterType.Player)
                 {
@@ -58,7 +58,7 @@
     </CardsList>
 
     <MenuBlade Position="ElementRelativePosition.Bottom">
-        <Card BorderRadius="@FooterBorderRadius">
+        <Card BorderRadius="_footerBorderRadius">
             <div>
                 <ButtonCard OnMouseClickCallBack="CreateNew">
                     <div class="tab">

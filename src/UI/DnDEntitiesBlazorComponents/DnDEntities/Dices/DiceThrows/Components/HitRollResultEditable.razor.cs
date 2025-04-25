@@ -7,8 +7,8 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;
 public partial class HitRollResultEditable
 {
     [Parameter]
-    public HitRollResult HitRollResult { get; set; }
+    public required HitRollResult HitRollResult { get; set; }
 
     [Parameter]
-    public Character Caster { get; set; }
+    public required Character Caster { get; set; }
 }

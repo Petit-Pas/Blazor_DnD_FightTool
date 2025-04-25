@@ -1,7 +1,6 @@
 ﻿using Blazored.Toast;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using Microsoft.Extensions.Logging;
-using DnDFightTool.Data;
 using Morris.Blazor.Validation;
 using Blazored.Modal;
 using DnDFightTool.Domain.Fight;
@@ -37,11 +36,11 @@ public static class MauiProgram
         builder.Services.ConfigureMediator(options =>
         {
             options.ShouldScanAutomatically = false;
-            options.AssembliesToScan = new System.Reflection.Assembly[]
-            {
+            options.AssembliesToScan =
+            [
                 typeof(CasterCommandBase).Assembly,
                 typeof(MartialAttackRollResultQueryHandler).Assembly
-            };
+            ];
         });
 
 #if DEBUG
@@ -55,9 +54,6 @@ public static class MauiProgram
                     typeof(Character).Assembly);
             }
         );
-
-
-        builder.Services.AddSingleton<WeatherForecastService>();
 
 		return builder.Build();
 	}

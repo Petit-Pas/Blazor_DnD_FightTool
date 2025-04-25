@@ -9,25 +9,25 @@ public record class DamageFactor
     ///    Damage will remain as it is when this factor is applied
     /// </summary>
     public const double DoNothingFactor = 1;
-    public static readonly DamageFactor DoNothing = new(DoNothingFactor);
+    public readonly static DamageFactor DoNothing = new(DoNothingFactor);
 
     /// <summary>
     ///     Damage will be halved when this factor is applied
     /// </summary>
     public const double HalfFactor = 0.5;
-    public static readonly DamageFactor Half = new(HalfFactor);
+    public readonly static DamageFactor Half = new(HalfFactor);
 
     /// <summary>
     ///     Damage will be doubled when this factor is applied
     /// </summary>
     public const double DoubleFactor = 2;
-    public static readonly DamageFactor Double = new(DoubleFactor);
+    public readonly static DamageFactor Double = new(DoubleFactor);
 
     /// <summary>
     ///     Damage will be nullified when this factor is applied
     /// </summary>
     public const double NullifyFactor = 0;
-    public static readonly DamageFactor Nullify = new(NullifyFactor);
+    public readonly static DamageFactor Nullify = new(NullifyFactor);
 
     /// <summary>
     ///     Ctor
@@ -35,13 +35,13 @@ public record class DamageFactor
     /// <param name="factor"> by how much damage should be multiplied </param>
     public DamageFactor(double factor)
     {
-        _factor = factor;
+        Factor = factor;
     }
 
     /// <summary>
     ///     The stored factor
     /// </summary>
-    private double _factor;
+    public double Factor { get ; private set; }
 
     /// <summary>
     ///     Allows to apply the factor to a damage value
@@ -50,7 +50,7 @@ public record class DamageFactor
     /// <returns></returns>
     public double ApplyOn(int baseDamage)
     {
-        return baseDamage * _factor;
+        return baseDamage * Factor;
     }
 
     /// <summary>
@@ -60,7 +60,7 @@ public record class DamageFactor
     /// <returns></returns>
     public double ApplyOn(double baseDamage)
     {
-        return baseDamage * _factor;
+        return baseDamage * Factor;
     }
 
     /// <summary>
@@ -69,6 +69,6 @@ public record class DamageFactor
     /// <param name="d"></param>
     public static implicit operator double(DamageFactor d)
     {
-        return d._factor;
+        return d.Factor;
     }
 }

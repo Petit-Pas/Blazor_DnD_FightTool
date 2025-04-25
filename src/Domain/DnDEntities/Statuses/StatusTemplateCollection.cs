@@ -19,10 +19,7 @@ public class StatusTemplateCollection : Dictionary<Guid, StatusTemplate>, IHasha
     {
         if (withDefault)
         {
-            this.Add(new StatusTemplate()
-            {
-                Name = "TestStatus"
-            });
+            Add(new StatusTemplate("TestStatus"));
         }
     }
 
@@ -32,7 +29,7 @@ public class StatusTemplateCollection : Dictionary<Guid, StatusTemplate>, IHasha
     /// <param name="template"></param>
     public void Add(StatusTemplate template)
     {
-        this.Add(template.Id, template);
+        Add(template.Id, template);
     }
 
     /// <summary>
@@ -43,7 +40,7 @@ public class StatusTemplateCollection : Dictionary<Guid, StatusTemplate>, IHasha
     {
         foreach (var template in templates)
         {
-            this.Add(template);
+            Add(template);
         }
     }
 }

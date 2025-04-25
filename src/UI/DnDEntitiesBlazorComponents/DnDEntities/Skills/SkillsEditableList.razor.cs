@@ -16,13 +16,13 @@ public partial class SkillsEditableList : ComponentBase
                 SkillMasteries = value.Values.Select(x => new MasteryDto(x)).ToArray();
             }
         }
-        get => new SkillCollection(SkillMasteries.Select(x => x.Skill));
+        get => new(SkillMasteries.Select(x => x.Skill));
     }
 
     [Parameter] public BorderRadius? BorderRadius { get; set; } = new (1, "em");
 
 
-    private MasteryDto[] SkillMasteries { get; set; } = Array.Empty<MasteryDto>();
+    private MasteryDto[] SkillMasteries { get; set; } = [];
 
     [Parameter, EditorRequired]
     public AbilityScoresCollection? Abilities { get; set; }

@@ -29,8 +29,10 @@ internal class RegainHpCommandHandlerTests
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
 
-        _character = new Character();
-        _character.HitPoints = new HitPoints() { CurrentHps = 12, MaxHps = 25 };
+        _character = new Character
+        {
+            HitPoints = new HitPoints() { CurrentHps = 12, MaxHps = 25 }
+        };
 
         _command = new RegainHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
         _commandHandler = new RegainHpCommandHandler(_mediator, _fightContext);

@@ -41,7 +41,7 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
         hitPoints.CurrentHps -= command.CorrectedAmount.Value;
     }
 
-    public override async Task Redo(RegainHpCommand command)
+    public async override Task Redo(RegainHpCommand command)
     {
         await Execute(command);
     }

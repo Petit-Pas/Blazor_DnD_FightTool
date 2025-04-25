@@ -12,9 +12,16 @@ public class StatusTemplate : IHashable
     /// <summary>
     ///     Ctor
     /// </summary>
-    public StatusTemplate()
+    public StatusTemplate() : this("Default status name")
     {
-        Name = "Default status name";
+    }
+
+    /// <summary>
+    ///     Ctor
+    /// </summary>
+    public StatusTemplate(string name)
+    {
+        Name = name;
         Save = new SaveRollTemplate();
     }
 
@@ -26,7 +33,7 @@ public class StatusTemplate : IHashable
     /// <summary>
     ///    A meaningful name for the status
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; }
 
     /// <summary>
     ///     If set to true, the Saving can be ignored

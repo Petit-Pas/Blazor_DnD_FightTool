@@ -12,20 +12,20 @@ namespace FightBlazorComponents.Pages;
 public partial class FightPage
 {
     [Inject]
-    public IFightContext FightContext { get; set; }
+    public required IFightContext FightContext { get; set; }
 
     [Inject]
-    public IUndoableMediator Mediator { get; set; }
+    public required IUndoableMediator Mediator { get; set; }
 
     [Inject]
-    public ICharacterRepository CharacterRepository { get; set; }
+    public required ICharacterRepository CharacterRepository { get; set; }
 
     [CascadingParameter]
     public IModalService ModalService { get => SingletonModalService; set => SingletonModalService = value; }
     // Commands need an access to this instance, and can't inject it since the proper instance is a cascading parameter, so a singleton fixed it.
     public static IModalService SingletonModalService;
 
-    private Character? MovingCharacter = null;
+    private Character? _movingCharacter = null;
 
     protected override void OnInitialized()
     {
@@ -41,7 +41,7 @@ public partial class FightPage
 
     private void ResetMovingCharacter()
     {
-        MovingCharacter = FightContext.GetMovingFighterCharacter();
+        _movingCharacter = FightContext.GetMovingFighterCharacter();
         StateHasChanged();
     }
 
@@ -74,5 +74,4 @@ public partial class FightPage
             await Mediator.RedoLastUndoneCommand();
         }
     }
-
 }

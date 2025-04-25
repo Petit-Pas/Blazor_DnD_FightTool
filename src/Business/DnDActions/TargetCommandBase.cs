@@ -24,5 +24,8 @@ public class TargetCommandBase : CommandBase
     /// </summary>
     /// <param name="fightContext"> A required dependency for the method. Since the handlers is injected through DI, its easier for it to provide the service. </param>
     /// <returns> the target affected by the command </returns>
-    public Character GetTarget(IFightContext fightContext) => fightContext.GetCharacterById(TargetId) ?? throw new InvalidOperationException($"Could not get target for {GetType()}.");
+    public Character GetTarget(IFightContext fightContext)
+    {
+        return fightContext.GetCharacterById(TargetId) ?? throw new InvalidOperationException($"Could not get target for {GetType()}.");
+    }
 }

@@ -1,5 +1,4 @@
 ﻿
-using System.ComponentModel.DataAnnotations;
 using Blazored.Modal;
 using Microsoft.AspNetCore.Components;
 
@@ -8,13 +7,13 @@ namespace SharedComponents.Modals.Templates;
 public partial class ValidateCancelModal
 {
     [CascadingParameter]
-    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    public required BlazoredModalInstance BlazoredModal { get; set; }
 
     [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    public required RenderFragment ChildContent { get; set; }
 
-    [Parameter, Required]
-    public Func<bool> CanBeValidated { get; set; }
+    [Parameter]
+    public required Func<bool> CanBeValidated { get; set; }
 
     private async Task Validate()
     {

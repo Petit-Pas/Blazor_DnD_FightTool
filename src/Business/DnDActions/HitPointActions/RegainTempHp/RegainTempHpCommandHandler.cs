@@ -40,7 +40,7 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
 
     }
 
-    public override async Task Redo(RegainTempHpCommand command)
+    public async override Task Redo(RegainTempHpCommand command)
     {
         await Execute(command);
     }

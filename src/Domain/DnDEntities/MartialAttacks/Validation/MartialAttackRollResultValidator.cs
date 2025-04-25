@@ -1,9 +1,8 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Damage;
 using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using FluentValidation;
 
-namespace DnDEntities.MartialAttacks.Validation;
+namespace DnDFightTool.Domain.DnDEntities.MartialAttacks.Validation;
 
 /// <summary>
 ///     Validator for <see cref="MartialAttackRollResult" />

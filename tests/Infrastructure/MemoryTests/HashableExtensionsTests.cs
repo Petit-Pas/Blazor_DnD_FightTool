@@ -167,7 +167,7 @@ public class HashableExtensionsTests
         [SetUp]
         public void Setup()
         {
-            _class = new ClassWithListOfNormalProperties(10, new() { 1, 2, 3, 4 });
+            _class = new ClassWithListOfNormalProperties(10, [1, 2, 3, 4]);
         }
 
         [Test]
@@ -193,11 +193,12 @@ public class HashableExtensionsTests
         [SetUp]
         public void Setup()
         {
-            _class = new ClassWithListOfHashableProperties(10, new ClassWithNormalProperties[] { 
+            _class = new ClassWithListOfHashableProperties(10, 
+            [
                 new (10, "hello world"),
                 new (11, "John Doe"),
                 new (33, "an apple a day")
-            });
+            ]);
         }
 
         [Test]
@@ -319,11 +320,11 @@ public class HashableExtensionsTests
         public void Editing_An_Element_Not_Hashed_Should_Not_Have_An_Impact()
         {
             // Arrange 
-            var hash = _class.Hash(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))! });
+            var hash = _class.Hash([typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))!]);
             _class.String = "world";
 
             // Act
-            var newHash = _class.Hash(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))! });
+            var newHash = _class.Hash([typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))!]);
 
             // Assert
             newHash.Should().Be(hash);
@@ -333,11 +334,11 @@ public class HashableExtensionsTests
         public void Editing_a_Hashed_Element_Should_Have_An_Impact()
         {
             // Arrange 
-            var hash = _class.Hash(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))! });
+            var hash = _class.Hash([typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))!]);
             _class.Integer = 156;
 
             // Act
-            var newHash = _class.Hash(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))! });
+            var newHash = _class.Hash([typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.Integer))!]);
 
             // Assert
             newHash.Should().NotBe(hash);
@@ -359,11 +360,11 @@ public class HashableExtensionsTests
         public void Editing_An_Element_Not_Hashed_Should_Not_Have_An_Impact()
         {
             // Arrange 
-            var hash = _class.HashExcept(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))! });
+            var hash = _class.HashExcept([typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))!]);
             _class.String = "world";
 
             // Act
-            var newHash = _class.HashExcept(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))! });
+            var newHash = _class.HashExcept([typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))!]);
 
             // Assert
             newHash.Should().Be(hash);
@@ -373,11 +374,11 @@ public class HashableExtensionsTests
         public void Editing_a_Hashed_Element_Should_Have_An_Impact()
         {
             // Arrange 
-            var hash = _class.HashExcept(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))! });
+            var hash = _class.HashExcept([typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))!]);
             _class.Integer = 156;
 
             // Act
-            var newHash = _class.HashExcept(new[] { typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))! });
+            var newHash = _class.HashExcept([typeof(ClassWithNormalProperties).GetProperty(nameof(ClassWithNormalProperties.String))!]);
 
             // Assert
             newHash.Should().NotBe(hash);

@@ -21,7 +21,7 @@ public partial class DamageAffinitiesEditableList : ComponentBase
     [Parameter] 
     public BorderRadius? BorderRadius { get; set; } = new (1, "em");
 
-    private IEnumerable<AffinityDto> AffinitiesDtos { get; set; } = new List<AffinityDto>();
+    private IEnumerable<AffinityDto> AffinitiesDtos { get; set; } = [];
 
     private class AffinityDto
     {

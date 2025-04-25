@@ -13,25 +13,25 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
 public partial class AllCharactersPage
 {
     [Inject]
-    public ICharacterRepository CharacterRepository { get; set; }
+    public required ICharacterRepository CharacterRepository { get; set; }
 
     [Inject]
-    public NavigationManager Navigation { get; set; }
+    public required NavigationManager Navigation { get; set; }
 
     [Inject]
-    public IModalService Modal { get; set; }
+    public required IModalService Modal { get; set; }
 
     [Inject]
-    public IFightContext FightContext { get; set; }
+    public required IFightContext FightContext { get; set; }
 
-    private Character[] _players;
+    private Character[] _players = [];
 
-    private Character[] _monsters;
+    private Character[] _monsters = [];
 
     private CharacterType _typeDisplayed { get; set; } = CharacterType.Player;
 
-    private static readonly BorderRadius HeaderBorderRadius = new BorderRadius(0, 0, 1, 1, "rem");
-    private static readonly BorderRadius FooterBorderRadius = new BorderRadius(1, 1, 0, 0, "rem");
+    private readonly static BorderRadius _headerBorderRadius = new (0, 0, 1, 1, "rem");
+    private readonly static BorderRadius _footerBorderRadius = new (1, 1, 0, 0, "rem");
 
     protected override void OnInitialized()
     {

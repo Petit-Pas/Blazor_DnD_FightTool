@@ -16,11 +16,9 @@ public class DiceThrowExpressionTests
         public void Should_Parse_Dices_Properly()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
-
+            var diceThrow = new DiceThrowTemplate("3d12+1d8+3+MAS+2d4");
+            
             // Act
-            diceThrow.Expression = "3d12+1d8+3+MAS+2d4";
-
             // Assert
             diceThrow.GetDicesToRoll().SingleOrDefault(x => x.Value == 12)!.Amount.Should().Be(3);
             diceThrow.GetDicesToRoll().SingleOrDefault(x => x.Value == 8)!.Amount.Should().Be(1);
@@ -31,11 +29,9 @@ public class DiceThrowExpressionTests
         public void Should_Parse_Wildcards()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
+            var diceThrow = new DiceThrowTemplate("STR+INT+DEX+1d6+3+MAS");
 
             // Act
-            diceThrow.Expression = "STR+INT+DEX+1d6+3+MAS";
-
             // Assert
             diceThrow._wildcards.Should().Contain(x => x.Token == "STR");
             diceThrow._wildcards.Should().Contain(x => x.Token == "INT");
@@ -47,11 +43,9 @@ public class DiceThrowExpressionTests
         public void Should_Parse_Modifier()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
+            var diceThrow = new DiceThrowTemplate("STR+2+INT+DEX+1d6+3+MAS-1");
 
             // Act
-            diceThrow.Expression = "STR+2+INT+DEX+1d6+3+MAS-1";
-
             // Assert
             diceThrow._staticModifier.Should().Be(4);
         }
@@ -64,11 +58,9 @@ public class DiceThrowExpressionTests
         public void Should_Merge_Dices_With_Same_Value()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
+            var diceThrow = new DiceThrowTemplate("1d12+2d12-1d12");
 
             // Act
-            diceThrow.Expression = "1d12+2d12-1d12";
-
             // Assert
             diceThrow.Expression.Should().Be("2d12");
         }
@@ -77,11 +69,9 @@ public class DiceThrowExpressionTests
         public void Should_Order_Dices_By_Growing_Value()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
+            var diceThrow = new DiceThrowTemplate("1d12+1d4-1d8");
 
             // Act
-            diceThrow.Expression = "1d12+1d4-1d8";
-
             // Assert
             diceThrow.Expression.Should().Be("1d12-1d8+1d4");
         }
@@ -90,11 +80,9 @@ public class DiceThrowExpressionTests
         public void Should_Merge_Modifiers()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
+            var diceThrow = new DiceThrowTemplate("2+8");
 
             // Act
-            diceThrow.Expression = "2+8";
-
             // Assert
             diceThrow.Expression.Should().Be("10");
         }
@@ -103,11 +91,9 @@ public class DiceThrowExpressionTests
         public void Should_Order_Elements_Properly()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
+            var diceThrow = new DiceThrowTemplate("8+MAS+1d8");
 
             // Act
-            diceThrow.Expression = "8+MAS+1d8";
-
             // Assert
             diceThrow.Expression.Should().Be("1d8+MAS+8");
         }
@@ -116,10 +102,7 @@ public class DiceThrowExpressionTests
         public void Should_Not_Keep_Modifier_When_Empty()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
-
-            // Act
-            diceThrow.Expression = "1d8+1-1";
+            var diceThrow = new DiceThrowTemplate("1d8+1-1");
 
             // Assert
             diceThrow.Expression.Should().Be("1d8");
@@ -133,28 +116,31 @@ public class DiceThrowExpressionTests
         public void Should_Include_Static_Modifiers()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
+            var diceThrow = new DiceThrowTemplate("1d8+2");
 
             // Act
-            diceThrow.Expression = "1d8+2";
+            var scoreModifier = diceThrow.GetScoreModifier(null!);
 
             // Assert
-            diceThrow.GetScoreModifier(null).Modifier.Should().Be(2);
+            ((int)scoreModifier).Should().Be(2);
         }
 
         [Test]
         public void Should_Resolve_Wildcards()
         {
             // Arrange
-            var diceThrow = new DiceThrowTemplate();
             var character = new Character(true);
             character.AbilityScores.MasteryBonus = 7;
+            var diceThrow = new DiceThrowTemplate()
+            {
+                Expression = "1d8+MAS"
+            };
 
             // Act
-            diceThrow.Expression = "1d8+MAS";
+            var scoreModifier = diceThrow.GetScoreModifier(character);
 
             // Assert
-            diceThrow.GetScoreModifier(character).Modifier.Should().Be(7);
+            ((int)scoreModifier).Should().Be(7);
         }
     }
 }

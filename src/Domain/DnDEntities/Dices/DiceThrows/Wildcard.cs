@@ -17,7 +17,7 @@ public record Wildcard(string Token)
     /// <returns></returns>
     private bool IsAnAbility(out AbilityEnum abilityOut)
     {
-        foreach (AbilityEnum ability in Enum.GetValues(typeof(AbilityEnum)))
+        foreach (var ability in Enum.GetValues<AbilityEnum>())
         {
             if (Token == ability.ShortName())
             {

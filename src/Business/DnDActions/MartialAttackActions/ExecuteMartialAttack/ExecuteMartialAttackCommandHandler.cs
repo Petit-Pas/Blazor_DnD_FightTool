@@ -31,7 +31,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
         _fightContext = fightContext;
     }
 
-    public override async Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
+    public async override Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
     {
         var caster = command.GetCaster(_fightContext);
         var attackTemplate = command.GetAttackTemplate(caster) ?? throw new InvalidOperationException($"Could not get attack template.");
@@ -55,7 +55,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
         return CommandResponse.Success();
     }
 
-    public override async Task Redo(ExecuteMartialAttackCommand command)
+    public async override Task Redo(ExecuteMartialAttackCommand command)
     {
         var caster = command.GetCaster(_fightContext);
         var attackTemplate = command.GetAttackTemplate(caster) ?? throw new InvalidOperationException($"Could not get attack template.");

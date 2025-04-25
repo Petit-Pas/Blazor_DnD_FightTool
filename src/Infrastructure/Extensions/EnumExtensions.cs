@@ -9,13 +9,13 @@ public static class EnumExtensions
         if (name == default)
         {
             Console.WriteLine($"WARNING: Could not find the name {value} in enum {type}.");
-            return Array.Empty<TAttribute>();
+            return [];
         }
         var field = type.GetField(name);
         if (field == default)
         {
             Console.WriteLine($"WARNING: Could not find the field {name} in enum {type}.");
-            return Array.Empty<TAttribute>();
+            return [];
         }
         return field.GetCustomAttributes(false)
             .OfType<TAttribute>();
@@ -41,7 +41,7 @@ public static class EnumExtensions
 
         var attributes = field.GetCustomAttributes(false)
             .OfType<TAttribute>().ToArray();
-        if (!attributes.Any())
+        if (attributes.None())
         {
             Console.WriteLine($"WARNING: Could not find an attribute of type {typeof(TAttribute).Name} in enum {type}.");
             return default;

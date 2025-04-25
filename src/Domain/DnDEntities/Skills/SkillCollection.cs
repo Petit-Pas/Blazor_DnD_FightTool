@@ -36,27 +36,7 @@ public class SkillCollection : Dictionary<SkillEnum, Skill>
     {
         if (withDefaults)
         {
-            AddRange(new Skill[]
-            {
-                new(SkillEnum.Acrobatic),
-                new(SkillEnum.Animal_Handling),
-                new(SkillEnum.Arcana),
-                new(SkillEnum.Athletics),
-                new(SkillEnum.Deception),
-                new(SkillEnum.History),
-                new(SkillEnum.Insight),
-                new(SkillEnum.Intimidation),
-                new(SkillEnum.Investigation),
-                new(SkillEnum.Medicine),
-                new(SkillEnum.Nature),
-                new(SkillEnum.Perception),
-                new(SkillEnum.Performance),
-                new(SkillEnum.Persuasion),
-                new(SkillEnum.Religion),
-                new(SkillEnum.Sleight_Of_Hand),
-                new(SkillEnum.Stealth),
-                new(SkillEnum.Survival),
-            });
+            AddRange(SkillEnumExtensions.All.Select(x => new Skill(x)));
         }
     }
 
@@ -66,7 +46,7 @@ public class SkillCollection : Dictionary<SkillEnum, Skill>
     /// <param name="skill"></param>
     private void Add(Skill skill)
     {
-        this.Add(skill.Name, skill);
+        Add(skill.Name, skill);
     }
 
     /// <summary>
@@ -89,7 +69,7 @@ public class SkillCollection : Dictionary<SkillEnum, Skill>
     /// <returns></returns>
     public ScoreModifier GetModifier(SkillEnum skillName, AbilityScoresCollection abilityScores)
     {
-        if (this.TryGetValue(skillName, out var skill))
+        if (TryGetValue(skillName, out var skill))
         {
             return skill.GetModifier(abilityScores);
         }

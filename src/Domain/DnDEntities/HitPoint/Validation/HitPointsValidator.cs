@@ -11,7 +11,7 @@ public class HitPointsValidator : AbstractValidator<HitPoints>
     ///     Since the usual comportment of a validator is to be stateless, we can use a singleton
     ///     This avoids for the need of injection or newing up when setting this validator as a sub validator
     /// </summary>
-    public static readonly HitPointsValidator Instance = new ();
+    public readonly static HitPointsValidator Instance = new();
 
     /// <summary>
     ///     Ctor

@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <!--<TargetFrameworks>net7.0-android;net7.0-ios;net7.0-maccatalyst</TargetFrameworks>-->
-        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
         <OutputType>Exe</OutputType>
@@ -59,10 +59,10 @@
 
     <ItemGroup>
         <PackageReference Include="Blazored.Toast" Version="4.2.1" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-        <PackageReference Include="Morris.Blazor.FluentValidation" Version="3.0.0" />
-        <PackageReference Include="Morris.Blazor.Validation" Version="3.0.0" />
-        <PackageReference Include="NeoBlazorphic" Version="1.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.4" />
+        <PackageReference Include="Morris.Blazor.FluentValidation" Version="3.1.5" />
+        <PackageReference Include="Morris.Blazor.Validation" Version="3.1.5" />
+        <PackageReference Include="NeoBlazorphic" Version="1.0.2" />
         <PackageReference Include="UndoableMediator" Version="1.0.0" />
     </ItemGroup>
 
@@ -74,11 +74,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Update="Microsoft.AspNetCore.Components.WebView.Maui" Version="8.0.20" />
+      <PackageReference Update="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.60" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.20" />
+      <PackageReference Update="Microsoft.Maui.Controls" Version="9.0.60" />
     </ItemGroup>
 
     <ItemGroup>

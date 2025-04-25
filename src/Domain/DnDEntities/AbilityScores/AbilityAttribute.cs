@@ -1,13 +1,15 @@
-﻿namespace DnDFightTool.Domain.DnDEntities.AbilityScores;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace DnDFightTool.Domain.DnDEntities.AbilityScores;
+
+[AttributeUsage(AttributeTargets.Field)]
 public class AbilityAttribute : Attribute
 {
-    private readonly AbilityEnum _ability;
-    
-    public AbilityEnum GetAbility() => _ability;
+    public required AbilityEnum Ability { get; set; }
 
+    [SetsRequiredMembers]
     public AbilityAttribute(AbilityEnum ability)
     {
-        _ability = ability;
+        Ability = ability;
     }
 }

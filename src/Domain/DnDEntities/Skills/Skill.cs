@@ -45,14 +45,18 @@ public class Skill
             return ScoreModifier.Empty;
         }
 
-        var baseScore = abilityScores.GetModifierWithoutMastery(skillAttribute.GetAbility()).Modifier;
+        var baseScore = abilityScores.GetModifierWithoutMastery(skillAttribute.Ability).Modifier;
 
         return new ScoreModifier(Mastery switch
         {
             SkillMasteryEnum.Normal => baseScore,
             SkillMasteryEnum.Mastery => baseScore + abilityScores.MasteryBonus,
             SkillMasteryEnum.Expertise => baseScore + abilityScores.MasteryBonus * 2,
+#pragma warning disable IDE0079
+#pragma warning disable CA2208
             _ => throw new ArgumentOutOfRangeException(nameof(Mastery), "Invalid value for SkillMasteryEnum")
+#pragma warning restore CA2208
+#pragma warning restore IDE0079
         });
     }
 }

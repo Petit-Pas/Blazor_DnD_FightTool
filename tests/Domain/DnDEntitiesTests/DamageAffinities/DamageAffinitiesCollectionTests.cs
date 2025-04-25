@@ -9,7 +9,7 @@ namespace DnDEntitiesTests.DamageAffinities;
 [TestFixture]
 public class DamageAffinitiesCollectionTests
 {
-    protected DamageAffinitiesCollection _affinities = null!;
+    private DamageAffinitiesCollection _affinities = null!;
 
     [SetUp]
     public void SetUp()

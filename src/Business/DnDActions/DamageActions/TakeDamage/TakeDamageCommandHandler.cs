@@ -42,7 +42,7 @@ public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
         return Task.FromResult(CommandResponse.Success());
     }
 
-    public override async Task Redo(TakeDamageCommand command)
+    public async override Task Redo(TakeDamageCommand command)
     {
         // The subcommands of this one are applying damages based on the current hp/temp hps of the target
         // Since hitPoints might have changed, we clear the subcommands and re execute the command fully

@@ -17,7 +17,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         _fightContext = fightContext;
     }
 
-    public override async Task<ICommandResponse<NoResponse>> Execute(ApplyDamageRollResultsCommand command)
+    public async override Task<ICommandResponse<NoResponse>> Execute(ApplyDamageRollResultsCommand command)
     {
         var target = command.GetTarget(_fightContext);
         var caster = command.GetCaster(_fightContext);
@@ -39,14 +39,14 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         return CommandResponse.Success();
     }
 
-    private double ApplyAffinity(int damage, DamageTypeEnum damageType, Character target)
+    private static double ApplyAffinity(int damage, DamageTypeEnum damageType, Character target)
     {
         var damageFactor = target.DamageAffinities.GetDamageFactorFor(damageType);
 
         return damageFactor.ApplyOn(damage);
     }
 
-    private double ApplySaveModifier(double actualDamage, SituationalDamageModifierEnum modifier, SaveRollResult? save, Character target, Character caster)
+    private static double ApplySaveModifier(double actualDamage, SituationalDamageModifierEnum modifier, SaveRollResult? save, Character target, Character caster)
     {
         if (save != null && save.IsSuccessful(target, caster))
         {
@@ -56,7 +56,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         return actualDamage;
     }
 
-    public override async Task Redo(ApplyDamageRollResultsCommand command)
+    public async override Task Redo(ApplyDamageRollResultsCommand command)
     {
         // The subcommands of this one are applying damages that were computed with resistance.
         // Since resistance might have changed, we clear the subcommands and re execute the command fully

@@ -67,12 +67,11 @@ public class LocalFileCharacterRepository : ICharacterRepository
     /// <inheritdoc />
     public Character? GetCharacterById(Guid characterById)
     {
-        if (!_characters.ContainsKey(characterById))
+        if (_characters.TryGetValue(characterById, out var character))
         {
-            return null;
+            return character;
         }
-
-        return _characters[characterById];
+        return null;
     }
 
     /// <inheritdoc />
@@ -93,6 +92,7 @@ public class LocalFileCharacterRepository : ICharacterRepository
     {
         _characters[character.Id] = character;
         
+        // TODO this should be injected ?
         var serializerOptions = new JsonSerializerOptions();
         serializerOptions.Converters.Add(new JsonStringEnumConverter());
 

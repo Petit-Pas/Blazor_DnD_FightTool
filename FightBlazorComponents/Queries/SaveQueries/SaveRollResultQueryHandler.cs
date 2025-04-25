@@ -19,7 +19,7 @@ public class SaveRollResultQueryHandler : QueryHandlerBase<SaveRollResultQuery, 
         _fightContext = fightContext;
     }
 
-    public override async Task<IQueryResponse<SaveRollResult>> Execute(SaveRollResultQuery query)
+    public async override Task<IQueryResponse<SaveRollResult>> Execute(SaveRollResultQuery query)
     {
         var caster = _fightContext.GetCharacterById(query.CasterId);
         var target = _fightContext.GetCharacterById(query.TargetId);

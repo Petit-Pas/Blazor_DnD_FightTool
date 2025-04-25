@@ -29,8 +29,10 @@ internal class LooseTempHpCommandHandlerTests
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
 
-        _character = new Character();
-        _character.HitPoints = new HitPoints() { CurrentTempHps = 12 };
+        _character = new Character
+        {
+            HitPoints = new HitPoints() { CurrentTempHps = 12 }
+        };
 
         _command = new LooseTempHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
         _commandHandler = new LooseTempHpCommandHandler(_mediator, _fightContext);

@@ -25,28 +25,7 @@ public class DamageAffinitiesCollection : List<DamageAffinity>
     {
         if (withDefaults)
         {
-            AddRange(new[]
-            {
-                new DamageAffinity(DamageTypeEnum.Bludgeoning),
-                new DamageAffinity(DamageTypeEnum.Piercing),
-                new DamageAffinity(DamageTypeEnum.Slashing),
-                new DamageAffinity(DamageTypeEnum.Bludgeoning_Silver),
-                new DamageAffinity(DamageTypeEnum.Piercing_Silver),
-                new DamageAffinity(DamageTypeEnum.Slashing_Silver),
-                new DamageAffinity(DamageTypeEnum.Bludgeoning_Magic),
-                new DamageAffinity(DamageTypeEnum.Piercing_Magic),
-                new DamageAffinity(DamageTypeEnum.Slashing_Magic),
-                new DamageAffinity(DamageTypeEnum.Acid),
-                new DamageAffinity(DamageTypeEnum.Cold),
-                new DamageAffinity(DamageTypeEnum.Fire),
-                new DamageAffinity(DamageTypeEnum.Force),
-                new DamageAffinity(DamageTypeEnum.Lightning),
-                new DamageAffinity(DamageTypeEnum.Necrotic),
-                new DamageAffinity(DamageTypeEnum.Poison),
-                new DamageAffinity(DamageTypeEnum.Psychic),
-                new DamageAffinity(DamageTypeEnum.Radiant),
-                new DamageAffinity(DamageTypeEnum.Thunder),
-            });
+            AddRange(DamageTypeEnumExtensions.All.Select(x => new DamageAffinity(x)));
         }
     }
 

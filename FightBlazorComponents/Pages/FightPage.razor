@@ -7,10 +7,10 @@
             <FightingCharacterTile Fighter="@fighter" />
         }
     </div>
-    @if (MovingCharacter != null)
+    @if (_movingCharacter != null)
     {
         <div class="character-actions">
-            <div> actions of @MovingCharacter.Name </div>
+            <div> actions of @_movingCharacter.Name </div>
             <ButtonCard OnMouseClickCallBack="Attack"> Attack </ButtonCard>
         </div>
 

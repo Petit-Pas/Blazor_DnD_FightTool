@@ -1,15 +1,15 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Damage;
 using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 
-namespace FightTestsUtilities.Factories.Damage;
+namespace DomainTestsUtilities.Factories.Damage;
 
 public static class DamageRollResultFactory
 {
     public static DamageRollResult BuildRolledDice(DamageTypeEnum? damageType = null, int? damage = null)
     {
-        return new DamageRollResult(default!, damageType ?? DamageTypeEnum.Fire) 
-        { 
-            Damage = damage ?? 10 
+        return new DamageRollResult(default!, damageType ?? DamageTypeEnum.Fire)
+        {
+            Damage = damage ?? 10
         };
     }
 
@@ -23,6 +23,6 @@ public static class DamageRollResultFactory
 
     public static DamageRollResult[] BuildCollection()
     {
-        return new DamageRollResult[] { Build() };
+        return [Build()];
     }
 }

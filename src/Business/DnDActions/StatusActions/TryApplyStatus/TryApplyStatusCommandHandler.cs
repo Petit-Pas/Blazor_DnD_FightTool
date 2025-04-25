@@ -19,7 +19,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         _fightContext = fightContext;
     }
 
-    public override async Task<ICommandResponse<NoResponse>> Execute(TryApplyStatusCommand command)
+    public async override Task<ICommandResponse<NoResponse>> Execute(TryApplyStatusCommand command)
     {
         var caster = command.GetCaster(_fightContext);
         var target = command.GetTarget(_fightContext);
@@ -61,7 +61,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         return saveQueryResponse.Status;
     }
 
-    public override async Task Redo(TryApplyStatusCommand command)
+    public async override Task Redo(TryApplyStatusCommand command)
     {
         var caster = command.GetCaster(_fightContext);
         var target = command.GetTarget(_fightContext);
