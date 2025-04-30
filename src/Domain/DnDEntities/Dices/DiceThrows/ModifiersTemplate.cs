@@ -11,7 +11,7 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 ///     such as 2+WIS
 ///     For full expressions containing dices too, use <see cref="DiceThrowTemplate" />
 /// </summary>
-public class ModifiersTemplate : IHashable
+public partial class ModifiersTemplate : IHashable
 {
     /// <summary>
     ///     Empty ctor for no modifiers or serializer
@@ -32,7 +32,7 @@ public class ModifiersTemplate : IHashable
     /// <summary>
     ///     Regex to validate and parse the expression
     /// </summary>
-    internal readonly static Regex _regex = new(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
+    internal readonly static Regex _regex = ModifiersTemplateRegex();
 
     /// <summary>
     ///     Accessors for the expression
@@ -130,4 +130,7 @@ public class ModifiersTemplate : IHashable
     {
         return new ScoreModifier(_staticModifier + _wildcards.Sum(x => x.Resolve(caster).Modifier));
     }
+
+    [GeneratedRegex(@"^((?:-?[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase, "fr-BE")]
+    private static partial Regex ModifiersTemplateRegex();
 }

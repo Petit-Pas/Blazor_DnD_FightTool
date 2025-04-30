@@ -18,7 +18,9 @@ public partial class DamageTypePicker
     [Parameter]
     public virtual EventCallback<DamageTypeEnum> DamageTypeChanged { get; set; }
 
+#pragma warning disable CS8618
     private NeoPopover _popOver { get; set; }
+#pragma warning restore CS8618
 
     private async Task OnValueChanged(DamageTypeEnum damageType)
     {

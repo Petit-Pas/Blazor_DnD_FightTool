@@ -11,7 +11,7 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 ///     So it can be represented as for instance: 1d8+2d4+3+STR
 /// </summary>
 [DebuggerDisplay("{Expression}")]
-public class DiceThrowTemplate : IHashable
+public partial class DiceThrowTemplate : IHashable
 {
     /// <summary>
     ///     Ctor for empty expression
@@ -33,7 +33,7 @@ public class DiceThrowTemplate : IHashable
     /// <summary>
     ///     The regex that validates and parses the expression
     /// </summary>
-    internal readonly static Regex _regex = new(@"^((?:[0-9]+)|(?:[0-9]+d[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:(?:\+|\-)(?:[0-9]+d[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
+    internal readonly static Regex _regex = DiceThrowTemplateRegex();
 
     /// <summary>
     ///     Accessors for the expression
@@ -213,4 +213,7 @@ public class DiceThrowTemplate : IHashable
     {
         return _dicesToRoll.Sum(x => x.MaximumRoll());
     }
+
+    [GeneratedRegex(@"^((?:[0-9]+)|(?:[0-9]+d[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:(?:\+|\-)(?:[0-9]+d[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase, "fr-BE")]
+    private static partial Regex DiceThrowTemplateRegex();
 }

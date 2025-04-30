@@ -141,10 +141,13 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     {
         if (command.MartialAttackRollResult == null)
         {
+            // TODO should warn in the console and stop
+#pragma warning disable
             throw new ArgumentNullException($"Cannot apply damage of a null roll result.");
+#pragma warning restore
         }
 
-        var applyDamageRollResultCommand = new ApplyDamageRollResultsCommand(caster.Id, target.Id, command.MartialAttackRollResult.DamageRolls);
+            var applyDamageRollResultCommand = new ApplyDamageRollResultsCommand(caster.Id, target.Id, command.MartialAttackRollResult.DamageRolls);
         command.AddToSubCommands(applyDamageRollResultCommand);
         await _mediator.Execute(applyDamageRollResultCommand);
     }
@@ -157,11 +160,14 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <param name="command"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    private bool AttackHits(Character caster, Character target, ExecuteMartialAttackCommand command)
+    private static bool AttackHits(Character caster, Character target, ExecuteMartialAttackCommand command)
     {
         if (command.MartialAttackRollResult == null)
         {
+            // TODO should warn in the console and stop
+#pragma warning disable
             throw new ArgumentNullException($"Cannot evaluate a rollResult that was not requested first.");
+#pragma warning restore
         }
         return command.MartialAttackRollResult.HitRoll.Hits(target, caster);
     }

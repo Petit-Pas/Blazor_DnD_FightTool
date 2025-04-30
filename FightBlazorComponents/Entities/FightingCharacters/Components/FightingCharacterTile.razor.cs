@@ -67,6 +67,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     {
         FightContext.MovingFighterChanged -= OnMovingCharacterChanged;
         AppliedStatusCollection.AppliedStatusUpdated -= AppliedStatusCollection_AppliedStatusUpdated;
+        GC.SuppressFinalize(this);
     }
 
     private void TileClicked(MouseEventArgs _)

@@ -47,7 +47,7 @@ public static class HashableExtensions
         combinedProperties.Append(hashable.Hash([.. properties]));
         
         var hashBytes = MD5.HashData(Encoding.UTF8.GetBytes(combinedProperties.ToString()));
-        return BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+        return Convert.ToHexString(hashBytes);
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public static class HashableExtensions
         }
 
         var hashBytes = MD5.HashData(Encoding.UTF8.GetBytes(combinedProperties.ToString()));
-        return BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+        return Convert.ToHexString(hashBytes);
     }
 
     private static string HashProperty(object value)

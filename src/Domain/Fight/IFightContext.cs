@@ -12,14 +12,14 @@ public interface IFightContext
     ///     Generic method to add a player or a monster to a fight
     /// </summary>
     /// <param name="character"></param>
-    public void AddToFight(Character character);
+    void AddToFight(Character character);
 
     /// <summary>
     ///     Method set a character as currently moving.
     ///     It is the one that is doing an action atm, not especially the one whose turn it is.
     /// </summary>
     /// <param name="fighter"></param>
-    public void SetMovingFighter(Fighter fighter);
+    void SetMovingFighter(Fighter fighter);
 
     /// <summary>
     ///     the moving fighter is not the one whose turn it is.
@@ -36,19 +36,20 @@ public interface IFightContext
     ///     Gets all fighters in the fight
     /// </summary>
     /// <returns></returns>
-    public IEnumerable<Fighter> GetFighters();
+    IEnumerable<Fighter> GetFighters();
 
     /// <summary>
     ///     Gets the character that is currently moving, not the fighter but the full character
     /// </summary>
     /// <returns></returns>
-    public Character? GetMovingFighterCharacter();
+    Character? GetMovingFighterCharacter();
 
     /// <summary>
     ///     Gets a character by id.
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public Character? GetCharacterById(Guid id);
+    Character? GetCharacterById(Guid id);
+
 
 }

@@ -28,7 +28,7 @@ public class MartialAttackRollResult
     /// <summary>
     ///     The damageRolls, will start as a template and contain data after the roll
     /// </summary>
-    public DamageRollResult[] DamageRolls { get; set; } = Array.Empty<DamageRollResult>();
+    public DamageRollResult[] DamageRolls { get; set; } = [];
 
     /// <summary>
     ///     The unique non meaningful id of the target

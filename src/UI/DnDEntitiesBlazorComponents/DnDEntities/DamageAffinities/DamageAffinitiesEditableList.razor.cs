@@ -7,7 +7,9 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities;
 public partial class DamageAffinitiesEditableList : ComponentBase
 {
     [Parameter]
+#pragma warning disable BL0007 // Component parameters should be auto properties
     public DamageAffinitiesCollection? Affinities
+#pragma warning restore BL0007 // Component parameters should be auto properties
     {
         set
         {

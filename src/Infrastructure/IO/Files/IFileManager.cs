@@ -17,7 +17,7 @@ public interface IFileManager
     ///     Will create it otherwise
     /// </summary>
     /// <param name="folderName"></param>
-    public void EnsureDirectoryExists(string folderName);
+    void EnsureDirectoryExists(string folderName);
 
     /// <summary>
     ///     Read all files in the given folder as strings.

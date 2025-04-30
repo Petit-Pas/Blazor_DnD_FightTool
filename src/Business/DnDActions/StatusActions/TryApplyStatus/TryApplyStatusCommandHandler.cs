@@ -23,7 +23,10 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
     {
         var caster = command.GetCaster(_fightContext);
         var target = command.GetTarget(_fightContext);
+        // TODO should warn in the console and stop
+#pragma warning disable
         var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");
+#pragma warning restore
 
         command.StatusHash = status.Hash();
 
@@ -65,7 +68,10 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
     {
         var caster = command.GetCaster(_fightContext);
         var target = command.GetTarget(_fightContext);
+        // TODO should warn in the console and stop
+#pragma warning disable
         var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");
+#pragma warning restore
 
         var statusHash = status.Hash();
         if (statusHash != command.StatusHash)

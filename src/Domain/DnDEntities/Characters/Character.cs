@@ -39,6 +39,8 @@ public class Character
         HitPoints = new HitPoints();
         MartialAttacks = new MartialAttackTemplateCollection(withDefaults);
         // TODO a "DC" token in here will make a stack overflow
+        // DificultyClass should only be used fot he saving directly, but not for the configuration in itself
+        // DCTemplate? like for DiceThrowTemplate? 
         Dc = new DifficultyClass("10");
     }
 

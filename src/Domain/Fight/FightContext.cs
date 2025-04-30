@@ -49,7 +49,7 @@ public class FightContext : IFightContext
                 break;
             case CharacterType.Unknown:
             default:
-                _log.LogWarning($"Cannot add to fight a character of type {character.Type}");
+                _log.LogWarning("Cannot add to fight a character of type {characterType}", character.Type);
                 break;
         }
     }
@@ -91,7 +91,7 @@ public class FightContext : IFightContext
         {
             CharacterType.Player => _characterRepository.GetCharacterById(fighter.CharacterId),
             CharacterType.Monster => _monstersInFight.SingleOrDefault(x => x.Id == fighter.CharacterId),
-            _ => throw new ArgumentOutOfRangeException($"There should not be a fighting character of type {fighter.CharacterId}"),
+            _ => throw new ArgumentOutOfRangeException($"There should not be a fighting character of type {fighter.CharacterType}"),
         };
     }
 

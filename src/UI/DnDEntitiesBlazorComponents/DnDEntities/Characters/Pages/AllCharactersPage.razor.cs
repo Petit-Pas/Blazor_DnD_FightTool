@@ -38,8 +38,8 @@ public partial class AllCharactersPage
         base.OnInitialized();
         
         var characters = CharacterRepository.GetAllCharacters().ToArray();
-        _players = characters.Where(x => x.Type is CharacterType.Player).ToArray();
-        _monsters = characters.Where(x => x.Type is CharacterType.Monster).ToArray();
+        _players = [.. characters.Where(x => x.Type is CharacterType.Player)];
+        _monsters = [.. characters.Where(x => x.Type is CharacterType.Monster)];
     }
 
     private void SwitchType(MouseEventArgs _)
@@ -65,11 +65,11 @@ public partial class AllCharactersPage
             CharacterRepository.Delete(character);
             if (character.Type is CharacterType.Player)
             {
-                _players = _players.Where(x => x.Id != character.Id).ToArray();
+                _players = [.. _players.Where(x => x.Id != character.Id)];
             }
             else
             {
-                _monsters = _monsters.Where(x => x.Id != character.Id).ToArray();
+                _monsters = [.. _monsters.Where(x => x.Id != character.Id)];
             }
         }
     }

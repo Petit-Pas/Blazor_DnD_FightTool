@@ -2,9 +2,6 @@
 @using DnDFightTool.Domain.DnDEntities.Characters;
 @using NeoBlazorphic.StyleParameters
 @using Morris.Blazor.Validation;
-@using DnDEntities.AbilityScores
-@using DnDEntities.DamageAffinities
-@using DnDEntities.Skills
 @using DnDEntitiesBlazorComponents.DnDEntities.AttackRolls
 @using DnDEntitiesBlazorComponents.DnDEntities.AbilityScores
 @using DnDEntitiesBlazorComponents.DnDEntities.Skills
@@ -15,49 +12,52 @@
     Character Sheet
 </h1>
 
-<EditForm EditContext="_editContext">
-    <Validate />
-    @*<DataAnnotationsValidator />*@
+@if (_editContext != null)
+{
+    <EditForm EditContext="_editContext">
+        <Validate />
+        @*<DataAnnotationsValidator />*@
 
-    <div>
-        <StringInput @bind-Value="Character.Name" ValidationFor="() => Character.Name" Label="Name"></StringInput>
-    </div>
-    <div>
-        <HitPointsEditable HitPoints="Character.HitPoints"></HitPointsEditable>
-    </div>
-    <div>
-        <ArmorClassEditable ArmorClass="Character.ArmorClass"></ArmorClassEditable>
-    </div>
-
-
-    <div class="character-sheet">
-        <div class="character-sheet-header">
-        
-            <h1> HEADER </h1>
-
-        </div>
-        <div class="character-sheet-body">
-            
-            <div class="m-2">
-                <AbilityScoresEditableList Abilities="Character.AbilityScores"></AbilityScoresEditableList>
-            </div>
-            <div class="m-2" style="width: 400px">
-                <SkillsEditableList Skills="Character.Skills" Abilities="Character.AbilityScores"></SkillsEditableList>
-            </div>
-            <h1> BODY </h1>
-
+        <div>
+            <StringInput @bind-Value="Character.Name" ValidationFor="() => Character.Name" Label="Name"></StringInput>
         </div>
         <div>
-            <DamageAffinitiesEditableList Affinities="Character.DamageAffinities" ></DamageAffinitiesEditableList>
+            <HitPointsEditable HitPoints="Character.HitPoints"></HitPointsEditable>
         </div>
-    </div>
+        <div>
+            <ArmorClassEditable ArmorClass="Character.ArmorClass"></ArmorClassEditable>
+        </div>
 
-</EditForm>
+
+        <div class="character-sheet">
+            <div class="character-sheet-header">
+
+                <h1> HEADER </h1>
+
+            </div>
+            <div class="character-sheet-body">
+
+                <div class="m-2">
+                    <AbilityScoresEditableList Abilities="Character.AbilityScores"></AbilityScoresEditableList>
+                </div>
+                <div class="m-2" style="width: 400px">
+                    <SkillsEditableList Skills="Character.Skills" Abilities="Character.AbilityScores"></SkillsEditableList>
+                </div>
+                <h1> BODY </h1>
+
+            </div>
+            <div>
+                <DamageAffinitiesEditableList Affinities="Character.DamageAffinities"></DamageAffinitiesEditableList>
+            </div>
+        </div>
+
+    </EditForm>
+}
 
 @code
 {
 
-    [Parameter] public Character Character { get; set; }
+    [Parameter] public required Character Character { get; set; }
 
     protected override void OnInitialized()
     {
@@ -77,5 +77,5 @@
         }
     }
 
-    public EditContext _editContext;
+    public EditContext? _editContext;
 }

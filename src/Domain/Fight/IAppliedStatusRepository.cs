@@ -20,7 +20,7 @@ public interface IAppliedStatusRepository
     /// <summary>
     ///     Warns whenever a status is added or removed from the repository
     /// </summary>
-    public event AppliedStatusUpdatedEventHandler AppliedStatusUpdated;
+    event AppliedStatusUpdatedEventHandler AppliedStatusUpdated;
 
     /// <summary>
     ///     Get all the statuses applied to a given character

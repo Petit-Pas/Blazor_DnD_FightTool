@@ -8,6 +8,8 @@ using UndoableMediator.DependencyInjection;
 using DnDFightTool.Business.DnDActions;
 using FightBlazorComponents.Queries.MartialAttackQueries;
 using IO.Files;
+using IO.Serialization;
+using FightBlazorComponents;
 
 namespace DnDFightTool;
 
@@ -32,6 +34,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IFightContext, FightContext>();
         builder.Services.AddSingleton<IFileManager, LocalFileManager>();
         builder.Services.AddSingleton<IAppliedStatusRepository, AppliedStatusRepository>();
+        builder.Services.AddSingleton<IJsonSerializer, JsonSerializer>();
+        builder.Services.AddSingleton<IModalServiceProvider, ModalServiceProvider>();
 
         builder.Services.ConfigureMediator(options =>
         {

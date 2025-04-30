@@ -19,7 +19,9 @@ public partial class OnHitStatusTemplateEditable
         Deleted.InvokeAsync();
     }
 
+#pragma warning disable CS8618
     private NeoPopover _popOver { get; set; }
+#pragma warning restore CS8618
 
     private void OnPopoverOpenedChanged()
     {
