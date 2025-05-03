@@ -65,7 +65,7 @@ public record Wildcard(string Token)
         }
         if (IsDc())
         {
-            return new ScoreModifier(caster.Dc.GetValue(caster));
+            return new ScoreModifier(caster.Dc.GetDc(caster));
         }
 
         return ScoreModifier.Empty;

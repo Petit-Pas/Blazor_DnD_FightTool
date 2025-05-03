@@ -38,10 +38,7 @@ public class Character
         DamageAffinities = new DamageAffinitiesCollection(withDefaults);
         HitPoints = new HitPoints();
         MartialAttacks = new MartialAttackTemplateCollection(withDefaults);
-        // TODO a "DC" token in here will make a stack overflow
-        // DificultyClass should only be used fot he saving directly, but not for the configuration in itself
-        // DCTemplate? like for DiceThrowTemplate? 
-        Dc = new DifficultyClass("10");
+        Dc = new CharacterDifficultyClassTemplate("10");
     }
 
     /// <summary>
@@ -94,7 +91,7 @@ public class Character
     /// <summary>
     ///     The default DC to use for spells and effects used by this character
     /// </summary>
-    public DifficultyClass Dc { get; set; }
+    public CharacterDifficultyClassTemplate Dc { get; set; }
 
     /// <summary>
     ///     Will do a deep copy of this character, then give it a new ID

@@ -44,6 +44,8 @@ public partial class DiceThrowTemplate : IHashable
 
     /// <summary>
     ///     Internal method to parse the expression
+    ///     Doing this instead of keeping the original expression makes sure that we "clean" it up everytime
+    ///         Ex: 1d8+1d8 will be automatically translated to 2d8
     /// </summary>
     /// <param name="expression"></param>
     /// <exception cref="InvalidOperationException"></exception>

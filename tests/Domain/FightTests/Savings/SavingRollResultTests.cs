@@ -13,10 +13,10 @@ public class SavingRollResultTests
     [TestFixture]
     public class IsSuccesfullTests : SavingRollResultTests
     {
-        private Character _caster;
-        private Character _target;
+        private Character _caster = null!;
+        private Character _target = null!;
 
-        private SaveRollResult _saveRoll;
+        private SaveRollResult _saveRoll = null!;
 
         [SetUp]
         public void SetUp()
