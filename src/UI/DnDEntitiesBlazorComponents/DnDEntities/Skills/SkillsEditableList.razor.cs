@@ -7,22 +7,24 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.Skills;
 
 public partial class SkillsEditableList : ComponentBase
 {
+#pragma warning disable BL0007 // Component parameters should be auto properties
     [Parameter, EditorRequired]
-    public SkillCollection? Skills {
+    public SkillCollection? Skills 
+    { 
         set
         {
             if (value != null)
             {
-                SkillMasteries = value.Values.Select(x => new MasteryDto(x)).ToArray();
+                SkillMasteries = [.. value.Values.Select(x => new MasteryDto(x))];
             }
         }
-        get => new SkillCollection(SkillMasteries.Select(x => x.Skill));
     }
+#pragma warning restore BL0007 // Component parameters should be auto properties
 
     [Parameter] public BorderRadius? BorderRadius { get; set; } = new (1, "em");
 
 
-    private MasteryDto[] SkillMasteries { get; set; } = Array.Empty<MasteryDto>();
+    private MasteryDto[] SkillMasteries { get; set; } = [];
 
     [Parameter, EditorRequired]
     public AbilityScoresCollection? Abilities { get; set; }

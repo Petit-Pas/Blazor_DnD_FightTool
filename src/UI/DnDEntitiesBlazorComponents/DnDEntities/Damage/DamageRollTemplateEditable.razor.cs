@@ -12,7 +12,7 @@ public partial class DamageRollTemplateEditable
     [Parameter]
     public virtual EventCallback Deleted { get; set; }
 
-    private NeoPopover _popOver { get; set; }
+    private NeoPopover _popOver { get; set; } = null!;
 
     private void OnPopoverOpenedChanged()
     {

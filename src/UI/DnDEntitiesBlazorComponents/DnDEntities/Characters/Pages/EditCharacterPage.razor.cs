@@ -8,18 +8,18 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages;
 public partial class EditCharacterPage
 {
     [Parameter]
-    public string CharacterId { get; set; }
+    public required string CharacterId { get; set; }
 
     [Inject]
-    public NavigationManager Navigation { get; set; }
+    public required NavigationManager Navigation { get; set; }
     [Inject]
-    public IToastService ToastService { get; set; }
+    public required IToastService ToastService { get; set; }
     [Inject]
-    public IMapper Mapper { get; set; }
+    public required IMapper Mapper { get; set; }
 
 
     [Inject]
-    public ICharacterRepository CharacterRepository { get; set; }
+    public required ICharacterRepository CharacterRepository { get; set; }
 
     private Character? _character { get; set; }
 
@@ -35,7 +35,7 @@ public partial class EditCharacterPage
             };
         }
         else if (CharacterId == "newMonster")
-        {
+        { 
             _character = new Character(true)
             {
                 Name = "new character",
@@ -68,16 +68,7 @@ public partial class EditCharacterPage
 
     private EditCharacterPageState PageState { get; set; } = EditCharacterPageState.MainInformations;
 
-    private void UpdatePageState(EditCharacterPageState newState)
-    {
-        if (newState != PageState)
-        {
-            PageState = newState;
-            StateHasChanged();
-        }
-    }
-
-    private static Dictionary<string, EditCharacterPageState> PageStatesDictionary = new() 
+    private readonly static Dictionary<string, EditCharacterPageState> _pageStatesDictionary = new()
     { 
         { "Main", EditCharacterPageState.MainInformations},
         { "Attacks", EditCharacterPageState.Attacks}
@@ -88,7 +79,5 @@ public partial class EditCharacterPage
         MainInformations,
         Attacks
     }
-
-
 }
 

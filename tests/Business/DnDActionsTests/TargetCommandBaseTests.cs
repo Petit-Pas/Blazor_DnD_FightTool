@@ -10,8 +10,8 @@ namespace DnDActionsTests;
 [TestFixture]
 public class TargetCommandBaseTests
 {
-    IFightContext _fightContext = null!;
-    TargetCommandBase _command = null!;
+    private IFightContext _fightContext = null!;
+    private TargetCommandBase _command = null!;
 
     [SetUp]
     public void SetUp()

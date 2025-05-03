@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
 using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using FakeItEasy;
-using FightTestsUtilities.Factories.Damage;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using System.Linq;
 using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
@@ -19,6 +18,7 @@ using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 using DomainTestsUtilities.Factories.MartialAttacks;
 using System;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
+using DomainTestsUtilities.Factories.Damage;
 
 namespace DnDActionsTests.MartialAttackActionsTests.ExecuteMartialAttackTests;
 
@@ -43,9 +43,10 @@ public class ExecuteMartialAttackCommandHandlerTests
 
         _caster = new Character(true);
         _caster.MartialAttacks.Add(MartialAttackTemplateFactory.Build()); ;
-        _target = new Character(true);
-
-        _target.DamageAffinities = new DamageAffinitiesCollection(true);
+        _target = new Character(true)
+        {
+            DamageAffinities = new DamageAffinitiesCollection(true)
+        };
 
         _command = new ExecuteMartialAttackCommand(_caster.Id, _attackTemplate.Id);
         _commandHandler = new ExecuteMartialAttackCommandHandler(_mediator, _fightContext);
@@ -58,7 +59,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         When_Query_Returns();
     }
 
-    MartialAttackTemplate _attackTemplate => _caster.MartialAttacks.Values.First();
+    private MartialAttackTemplate _attackTemplate => _caster.MartialAttacks.Values.First();
 
     /// <summary>
     ///     Allows to configure the result of the query. Will configure a default success one if nothing is specified.
@@ -66,7 +67,7 @@ public class ExecuteMartialAttackCommandHandlerTests
     /// <param name="result"></param>
     /// <param name="status"></param>
     /// <exception cref="System.NotImplementedException"></exception>
-    public void When_Query_Returns(MartialAttackRollResult? result = null, RequestStatus status = RequestStatus.Success)
+    private void When_Query_Returns(MartialAttackRollResult? result = null, RequestStatus status = RequestStatus.Success)
     {
         result ??= MartialAttackRollResultFactory.Build();
 
@@ -160,11 +161,11 @@ public class ExecuteMartialAttackCommandHandlerTests
             // Arrange
             var result = 
                 MartialAttackRollResultFactory.Build(
-                    hitRollResult: new HitRollResult() { Result = 17 }, 
-                    damageRollResult: new[] { 
+                    hitRollResult: new HitRollResult() { Result = 17 },
+                    damageRollResult: [
                         DamageRollResultFactory.BuildRolledDice(
                             damageType: DamageTypeEnum.Thunder, 
-                            damage: 7) });
+                            damage: 7) ]);
             When_Query_Returns(result);
 
             // Act
@@ -196,12 +197,6 @@ public class ExecuteMartialAttackCommandHandlerTests
     [TestFixture]
     public class RedoTests : ExecuteMartialAttackCommandHandlerTests
     {
-        [SetUp]
-        public void SetUp()
-        {
-            
-        }
-
         [Test]
         public async Task Should_Recompute_If_The_Attack_Hits_In_Case_Target_Got_Updated()
         {
@@ -212,10 +207,10 @@ public class ExecuteMartialAttackCommandHandlerTests
                 MartialAttackRollResultFactory.Build(
                     targetId: _target.Id,
                     hitRollResult: new HitRollResult() { Result = 17 },
-                    damageRollResult: new[] {
+                    damageRollResult: [
                         DamageRollResultFactory.BuildRolledDice(
                             damageType: DamageTypeEnum.Thunder,
-                            damage: 7) });
+                            damage: 7) ]);
             When_Query_Returns(result);
 
             await _commandHandler.Execute(_command);

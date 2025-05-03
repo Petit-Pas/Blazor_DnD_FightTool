@@ -21,5 +21,8 @@ public class CasterCommandBase : CommandBase
     /// </summary>
     /// <param name="fightContext"> A required dependency for the method. Since the handlers is injected through DI, its easier for it to provide the service. </param>
     /// <returns> The caster executing the command </returns>
-    public Character GetCaster(IFightContext fightContext) => fightContext.GetCharacterById(CasterId) ?? throw new InvalidOperationException($"Could not get caster for {GetType()}.");
+    public Character GetCaster(IFightContext fightContext)
+    {
+        return fightContext.GetCharacterById(CasterId) ?? throw new InvalidOperationException($"Could not get caster for {GetType()}.");
+    }
 }

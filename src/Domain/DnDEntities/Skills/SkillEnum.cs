@@ -41,4 +41,6 @@ public static class SkillEnumExtensions
     {
         return skill.ToString().Replace("_", " ");
     }
+
+    public readonly static SkillEnum[] All = Enum.GetValues<SkillEnum>();
 }

@@ -10,8 +10,8 @@ namespace DnDActionsTests.HitPointActionsTests;
 [TestFixture]
 public class HitPointCommandBaseTests
 {
-    IFightContext _fightContext = null!;
-    HitPointCommandBase _command = null!;
+    private IFightContext _fightContext = null!;
+    private HitPointCommandBase _command = null!;
 
     [SetUp]
     public void SetUp()

@@ -8,7 +8,7 @@ namespace DnDEntitiesTests.AbilityScores;
 [TestFixture]
 public class AbilityScoresCollectionTests
 {
-    private AbilityScoresCollection _abilityCollection = new AbilityScoresCollection(true);
+    private readonly AbilityScoresCollection _abilityCollection = new(true);
 
     [SetUp]
     public void SetUp()

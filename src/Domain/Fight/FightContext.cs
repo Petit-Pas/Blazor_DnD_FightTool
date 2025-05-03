@@ -24,7 +24,7 @@ public class FightContext : IFightContext
     /// <summary>
     ///     Hosts lightweight representations of all the characters in the fight
     /// </summary>
-    private readonly List<Fighter> _fighters = new();
+    private readonly List<Fighter> _fighters = [];
     
     /// <summary>
     ///     Since the players (or NPCs) are unique, we keep their reference in the character repository
@@ -38,7 +38,7 @@ public class FightContext : IFightContext
     /// <summary>
     ///     Since the monsters are not unique, they are just a copy of a template, we store the list as a copy here. 
     /// </summary>
-    private readonly List<Character> _monstersInFight = new ();
+    private readonly List<Character> _monstersInFight = [];
 
     /// <inheritdoc/>
     public void AddToFight(Character character)
@@ -55,7 +55,7 @@ public class FightContext : IFightContext
                 break;
             case CharacterType.Unknown:
             default:
-                _log.LogWarning($"Cannot add to fight a character of type {character.Type}");
+                _log.LogWarning("Cannot add to fight a character of type {characterType}", character.Type);
                 break;
         }
     }
@@ -93,16 +93,12 @@ public class FightContext : IFightContext
             return null;
         }
 
-        switch (fighter.CharacterType)
+        return fighter.CharacterType switch
         {
-            case CharacterType.Player:
-                return _characterRepository.GetCharacterById(fighter.CharacterId);
-            case CharacterType.Monster:
-                return _monstersInFight.SingleOrDefault(x => x.Id == fighter.CharacterId);
-            case CharacterType.Unknown:
-            default:
-                throw new ArgumentOutOfRangeException($"There should not be a fighting character of type {fighter.CharacterId}");
-        }
+            CharacterType.Player => _characterRepository.GetCharacterById(fighter.CharacterId),
+            CharacterType.Monster => _monstersInFight.SingleOrDefault(x => x.Id == fighter.CharacterId),
+            _ => throw new ArgumentOutOfRangeException($"There should not be a fighting character of type {fighter.CharacterType}"),
+        };
     }
 
     /// <inheritdoc/>

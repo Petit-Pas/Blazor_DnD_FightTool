@@ -9,6 +9,7 @@ using UndoableMediator.Mediators;
 using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
 using DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
 using DnDFightTool.Business.DnDActions.HitPointActions.LooseTempHp;
+using System.Threading.Tasks;
 
 namespace DnDActionsTests.DamageActionsTests.TakeDamageTests;
 
@@ -29,8 +30,10 @@ public class TakeDamageCommandHandlerTests
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
 
-        _character = new Character();
-        _character.HitPoints = new HitPoints() { MaxHps = 25, CurrentHps = 12 };
+        _character = new Character
+        {
+            HitPoints = new HitPoints() { MaxHps = 25, CurrentHps = 12 }
+        };
 
         _command = new TakeDamageCommand(Guid.NewGuid(), 10);
         _commandHandler = new TakeDamageCommandHandler(_mediator, _fightContext);
@@ -99,13 +102,13 @@ public class TakeDamageCommandHandlerTests
         }
 
         [Test]
-        public void Should_Clear_SubCommands_To_Avoid_Multiplying_Them()
+        public async Task Should_Clear_SubCommands_To_Avoid_Multiplying_Them()
         {
             // Arrange
             _command.AddToSubCommands(_command);
 
             // Act
-            _commandHandler.Redo(_command);
+            await _commandHandler.Redo(_command);
 
             // Assert
             _command.SubCommands.Should().NotContain(_command);

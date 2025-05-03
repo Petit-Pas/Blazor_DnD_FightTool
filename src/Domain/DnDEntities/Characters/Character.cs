@@ -36,7 +36,7 @@ public class Character
         DamageAffinities = new DamageAffinitiesCollection(withDefaults);
         HitPoints = new HitPoints();
         MartialAttacks = new MartialAttackTemplateCollection(withDefaults);
-        Dc = new DifficultyClass();
+        Dc = new CharacterDifficultyClassTemplate("10");
     }
 
     /// <summary>
@@ -89,7 +89,7 @@ public class Character
     /// <summary>
     ///     The default DC to use for spells and effects used by this character
     /// </summary>
-    public DifficultyClass Dc { get; set; }
+    public CharacterDifficultyClassTemplate Dc { get; set; }
 
     /// <summary>
     ///     This method is made to fetch a possibly applied status by it GUID.

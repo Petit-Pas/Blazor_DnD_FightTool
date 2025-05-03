@@ -5,7 +5,6 @@ using NUnit.Framework;
 using System;
 using UndoableMediator.Mediators;
 using DnDFightTool.Domain.DnDEntities.Damage;
-using FightTestsUtilities.Factories.Damage;
 using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using FluentAssertions;
 using System.Linq;
@@ -13,6 +12,7 @@ using DomainTestsUtilities.Fakes.Savings;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+using DomainTestsUtilities.Factories.Damage;
 
 namespace DnDActionsTests.DamageActionsTests.ApplyDamageRollResultsTests;
 
@@ -38,10 +38,10 @@ public class ApplyDamageRollResultsCommandHandlerTests
         _caster = new Character();
         _target = new Character();
 
-        _damageRollResults = new DamageRollResult[]
-        {
+        _damageRollResults =
+        [
             DamageRollResultFactory.BuildRolledDice(DamageTypeEnum.Fire, 10),
-        };
+        ];
 
         _target.DamageAffinities = new DamageAffinitiesCollection(true);
 
@@ -54,7 +54,7 @@ public class ApplyDamageRollResultsCommandHandlerTests
             .Returns(_target);
     }
 
-    DamageAffinitiesCollection _affinities { get => _target.DamageAffinities; }
+    private DamageAffinitiesCollection _affinities { get => _target.DamageAffinities; }
 
     [TestFixture]
     public class ExecuteTests : ApplyDamageRollResultsCommandHandlerTests
@@ -75,7 +75,7 @@ public class ApplyDamageRollResultsCommandHandlerTests
         public async Task Should_Sum_All_DamageRolls()
         {
             // Arrange
-            _damageRollResults = new DamageRollResult[] { _damageRollResults.First(), _damageRollResults.First() };
+            _damageRollResults = [_damageRollResults.First(), _damageRollResults.First()];
             _command = new ApplyDamageRollResultsCommand(Guid.NewGuid(), Guid.NewGuid(), _damageRollResults);
 
             // Act

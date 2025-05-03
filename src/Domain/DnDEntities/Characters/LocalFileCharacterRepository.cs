@@ -1,6 +1,5 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using IO.Files;
+﻿using IO.Files;
+using IO.Serialization;
 
 namespace DnDFightTool.Domain.DnDEntities.Characters;
 
@@ -14,11 +13,12 @@ public class LocalFileCharacterRepository : ICharacterRepository
 
     private readonly Dictionary<Guid, Character> _characters;
     private readonly IFileManager _fileManager;
+    private readonly IJsonSerializer _jsonSerializer;
 
-    public LocalFileCharacterRepository(IFileManager fileManager)
+    public LocalFileCharacterRepository(IFileManager fileManager, IJsonSerializer jsonSerializer)
     {
         _fileManager = fileManager ?? throw new ArgumentNullException(nameof(fileManager));
-
+        _jsonSerializer = jsonSerializer ?? throw new ArgumentNullException(nameof(jsonSerializer));
         _characters = LoadCharacters();
     }
 
@@ -33,12 +33,9 @@ public class LocalFileCharacterRepository : ICharacterRepository
         
         var serializedCharacters = ReadAllSaveFiles();
 
-        var serializerOptions = new JsonSerializerOptions();
-        serializerOptions.Converters.Add(new JsonStringEnumConverter());
-
         foreach (var serializedCharacter in serializedCharacters)
         {
-            var character = JsonSerializer.Deserialize<Character>(serializedCharacter, serializerOptions);
+            var character = _jsonSerializer.Deserialize<Character>(serializedCharacter);
             if (character == null)
             {
                 // TODO error handling should be better
@@ -67,12 +64,11 @@ public class LocalFileCharacterRepository : ICharacterRepository
     /// <inheritdoc />
     public Character? GetCharacterById(Guid characterById)
     {
-        if (!_characters.ContainsKey(characterById))
+        if (_characters.TryGetValue(characterById, out var character))
         {
-            return null;
+            return character;
         }
-
-        return _characters[characterById];
+        return null;
     }
 
     /// <inheritdoc />
@@ -92,11 +88,8 @@ public class LocalFileCharacterRepository : ICharacterRepository
     public void Save(Character character)
     {
         _characters[character.Id] = character;
-        
-        var serializerOptions = new JsonSerializerOptions();
-        serializerOptions.Converters.Add(new JsonStringEnumConverter());
 
-        _fileManager.SaveAs(JsonSerializer.Serialize(character, serializerOptions), $"{character.Id}");
+        _fileManager.SaveAs(_jsonSerializer.Serialize(character), $"{character.Id}");
     }
 
     /// <inheritdoc />

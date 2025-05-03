@@ -1,23 +1,23 @@
 ﻿@using DnDFightTool.Domain.Fight;
 
 <div class="character-tile-wrap" @onclick="TileClicked">
-    <Card Color="@CardTheme" BorderRadius="@BorderRadius">
+    <Card Color="@CardTheme" BorderRadius="@_borderRadius">
         <div class="character-tile">
-            @if (Character == null)
+            @if (_character == null)
             {
                 <p> Character not found </p>
             }
             else
             {
                 <div class="character-tile-header">
-                    @Character.Name
+                    @_character.Name
                 </div>
                 <div class="character-tile-hps">
-                    @Character.HitPoints.HpRatioString
+                    @_character.HitPoints.HpRatioString
                 </div>
 
                 <div class="applied-statuses">
-                @foreach (var appliedStatus in AppliedStatusCollection.GetStatusAppliedTo(Character.Id))
+                @foreach (var appliedStatus in AppliedStatusCollection.GetStatusAppliedTo(_character.Id))
                 {
                     <div> @appliedStatus.Name </div>
                 }

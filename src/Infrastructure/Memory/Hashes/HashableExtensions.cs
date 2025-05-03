@@ -16,7 +16,7 @@ public static class HashableExtensions
             .Where(p => !propertiesToIgnore.Contains(p))
             .OrderBy(x => x.Name);
 
-        return hashable.Hash(properties.ToArray());
+        return hashable.Hash([.. properties]);
     }
 
     /// <summary>
@@ -44,10 +44,10 @@ public static class HashableExtensions
             .Where(p => p.DeclaringType != typeof(IEnumerable))
             .OrderBy(x => x.Name);
         
-        combinedProperties.Append(hashable.Hash(properties.ToArray()));
+        combinedProperties.Append(hashable.Hash([.. properties]));
         
         var hashBytes = MD5.HashData(Encoding.UTF8.GetBytes(combinedProperties.ToString()));
-        return BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+        return Convert.ToHexString(hashBytes);
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public static class HashableExtensions
         }
 
         var hashBytes = MD5.HashData(Encoding.UTF8.GetBytes(combinedProperties.ToString()));
-        return BitConverter.ToString(hashBytes).Replace("-", string.Empty);
+        return Convert.ToHexString(hashBytes);
     }
 
     private static string HashProperty(object value)

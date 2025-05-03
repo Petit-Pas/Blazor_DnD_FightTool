@@ -8,9 +8,6 @@ namespace FightBlazorComponents.Queries.SaveQueries;
 
 public partial class SaveRollResultQueryModal
 {
-    [CascadingParameter]
-    BlazoredModalInstance BlazoredModal { get; set; } = default!;
-
     [Parameter]
     public Character? Caster { get; set; }
 

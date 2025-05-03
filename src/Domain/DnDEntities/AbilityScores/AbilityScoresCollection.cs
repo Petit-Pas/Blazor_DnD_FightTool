@@ -27,15 +27,7 @@ public class AbilityScoresCollection : List<AbilityScore>
     {
         if (withDefaults)
         {
-            AddRange(new AbilityScore[]
-            {
-                new (AbilityEnum.Strength, 10),
-                new (AbilityEnum.Dexterity, 10),
-                new (AbilityEnum.Constitution, 10),
-                new (AbilityEnum.Intelligence, 10),
-                new (AbilityEnum.Wisdom, 10),
-                new (AbilityEnum.Charisma, 10),
-            });
+            AddRange(AbilityEnumExtensions.All.Select(x => new AbilityScore(x)));
         }
     }
 

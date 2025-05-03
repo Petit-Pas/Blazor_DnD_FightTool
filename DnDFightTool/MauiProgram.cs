@@ -1,7 +1,6 @@
 ﻿using Blazored.Toast;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using Microsoft.Extensions.Logging;
-using DnDFightTool.Data;
 using Morris.Blazor.Validation;
 using Blazored.Modal;
 using DnDFightTool.Domain.Fight;
@@ -12,6 +11,8 @@ using IO.Files;
 using DnDFightTool.Domain.DnDEntities.IoC;
 
 using Mapping;
+using IO.Serialization;
+using FightBlazorComponents;
 
 namespace DnDFightTool;
 
@@ -36,6 +37,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IFightContext, FightContext>();
         builder.Services.AddSingleton<IFileManager, LocalFileManager>();
         builder.Services.AddSingleton<IAppliedStatusRepository, AppliedStatusRepository>();
+        builder.Services.AddSingleton<IJsonSerializer, JsonSerializer>();
+        builder.Services.AddSingleton<IModalServiceProvider, ModalServiceProvider>();
 
         builder.Services.AddSingleton<IMapper, Mapper>();
         builder.Services.RegisterDnDEntitiesMappingConfigurations();
@@ -61,9 +64,6 @@ public static class MauiProgram
                     typeof(Character).Assembly);
             }
         );
-
-
-        builder.Services.AddSingleton<WeatherForecastService>();
 
 		return builder.Build();
 	}

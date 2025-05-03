@@ -11,7 +11,7 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 ///     So it can be represented as for instance: 1d8+2d4+3+STR
 /// </summary>
 [DebuggerDisplay("{Expression}")]
-public class DiceThrowTemplate : IHashable
+public partial class DiceThrowTemplate : IHashable
 {
     /// <summary>
     ///     Ctor for empty expression
@@ -33,7 +33,7 @@ public class DiceThrowTemplate : IHashable
     /// <summary>
     ///     The regex that validates and parses the expression
     /// </summary>
-    internal static readonly Regex Regex = new Regex(@"^((?:[0-9]+)|(?:[0-9]+d[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:(?:\+|\-)(?:[0-9]+d[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase);
+    internal readonly static Regex _regex = DiceThrowTemplateRegex();
 
     /// <summary>
     ///     Accessors for the expression
@@ -44,6 +44,8 @@ public class DiceThrowTemplate : IHashable
 
     /// <summary>
     ///     Internal method to parse the expression
+    ///     Doing this instead of keeping the original expression makes sure that we "clean" it up everytime
+    ///         Ex: 1d8+1d8 will be automatically translated to 2d8
     /// </summary>
     /// <param name="expression"></param>
     /// <exception cref="InvalidOperationException"></exception>
@@ -51,13 +53,13 @@ public class DiceThrowTemplate : IHashable
     {
         if (string.IsNullOrWhiteSpace(expression))
         {
-            _dicesToRoll = Array.Empty<Dices>();
-            _wildcards = Array.Empty<Wildcard>();
+            _dicesToRoll = [];
+            _wildcards = [];
             _staticModifier = 0;
             return;
         }
 
-        var rgxMatch = Regex.Match(expression);
+        var rgxMatch = _regex.Match(expression);
         if (!rgxMatch.Success) 
         {
             throw new InvalidOperationException($"The expression {expression} is not a valid expression to describe a dice throw.");
@@ -71,7 +73,7 @@ public class DiceThrowTemplate : IHashable
         foreach (var capture in rgxMatch.Groups.Skip<Group>(1).SelectMany(x => x.Captures))
         {
             var term = capture.ToString();
-            if (term.Contains("d"))
+            if (term.Contains('d'))
             {
                 AddDices(dices, term);
             }
@@ -81,13 +83,13 @@ public class DiceThrowTemplate : IHashable
             }
             else
             {
-                var token = term[0] == '+' ? term.Substring(1) : term;
+                var token = term[0] == '+' ? term[1..] : term;
                 wildcards.Add(new Wildcard(token));
             }
         }
 
-        _dicesToRoll = dices.Where(x => x.Amount != 0).OrderByDescending(x => x.Value).ToArray();
-        _wildcards = wildcards.ToArray();
+        _dicesToRoll = [.. dices.Where(x => x.Amount != 0).OrderByDescending(x => x.Value)];
+        _wildcards = [.. wildcards];
         _staticModifier = staticModifier;
     }
 
@@ -96,7 +98,7 @@ public class DiceThrowTemplate : IHashable
     /// </summary>
     /// <param name="dices"></param>
     /// <param name="diceExpression"></param>
-    private void AddDices(List<Dices> dices, string diceExpression)
+    private static void AddDices(List<Dices> dices, string diceExpression)
     {
         var sepIndex = diceExpression.IndexOf('d');
         var amount = int.Parse(diceExpression[..sepIndex]);
@@ -165,12 +167,12 @@ public class DiceThrowTemplate : IHashable
     /// <summary>
     ///     Internal state for the dices to roll
     /// </summary>
-    internal Dices[] _dicesToRoll = Array.Empty<Dices>();
+    internal Dices[] _dicesToRoll = [];
 
     /// <summary>
     ///     Internal state for the wildcards to add to the roll
     /// </summary>
-    internal Wildcard[] _wildcards = Array.Empty<Wildcard>();
+    internal Wildcard[] _wildcards = [];
 
     /// <summary>
     ///     Internal state for the static modifier to add to the roll
@@ -233,4 +235,7 @@ public class DiceThrowTemplate : IHashable
     {
         return MaximumRoll() + GetScoreModifier(character);
     }
+
+    [GeneratedRegex(@"^((?:[0-9]+)|(?:[0-9]+d[0-9]+)|(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC)))((?:(?:\+|\-)(?:[0-9]+))|(?:(?:\+|\-)(?:[0-9]+d[0-9]+))|(?:\+(?:(?:STR)|(?:DEX)|(?:CON)|(?:WIS)|(?:INT)|(?:CHA)|(?:MAS)|(?:DC))))*$", RegexOptions.IgnoreCase, "fr-BE")]
+    private static partial Regex DiceThrowTemplateRegex();
 }

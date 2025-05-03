@@ -6,13 +6,13 @@ namespace SharedComponents.Modals.Templates;
 
 public partial class ConfirmationModal
 {
-    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    [CascadingParameter] private BlazoredModalInstance BlazoredModal { get; set; } = default!;
 
     [Parameter]
-    public string Message { get; set; }
+    public required string Message { get; set; }
 
     [Parameter]
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     public async Task Close()
     {

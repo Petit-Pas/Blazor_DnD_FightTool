@@ -42,7 +42,7 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
         hitPoints.CurrentTempHps += command.CorrectedAmount.Value;
     }
 
-    public override async Task Redo(LooseTempHpCommand command)
+    public async override Task Redo(LooseTempHpCommand command)
     {
         await Execute(command);
     }

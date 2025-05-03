@@ -31,12 +31,12 @@ public class MartialAttackTemplate : IHashable
     /// <summary>
     ///     The damage to apply to the target if the attack hits
     /// </summary>
-    public DamageRollTemplateCollection Damages { get; set; } = new DamageRollTemplateCollection();
+    public DamageRollTemplateCollection Damages { get; set; } = [];
 
     /// <summary>
     ///     The statuses that the attack might apply to the target if the attack hits
     /// </summary>
-    public StatusTemplateCollection Statuses { get; set; } = new StatusTemplateCollection();
+    public StatusTemplateCollection Statuses { get; set; } = [];
 
     /// <summary>
     ///     A unique non meaningful identifier for this attack

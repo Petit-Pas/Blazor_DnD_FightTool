@@ -29,8 +29,10 @@ internal class RegainTempHpCommandHandlerBase
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
 
-        _character = new Character();
-        _character.HitPoints = new HitPoints() { CurrentTempHps = 5 };
+        _character = new Character
+        {
+            HitPoints = new HitPoints() { CurrentTempHps = 5 }
+        };
 
         _command = new RegainTempHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
         _commandHandler = new RegainTempHpCommandHandler(_mediator, _fightContext);

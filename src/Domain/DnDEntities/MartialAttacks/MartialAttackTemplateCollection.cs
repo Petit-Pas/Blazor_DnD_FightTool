@@ -25,58 +25,10 @@ public class MartialAttackTemplateCollection : Dictionary<Guid, MartialAttackTem
     {
         if (withDefault)
         {
-            for (int i = 0; i != 20; i += 1)
+            Add(new MartialAttackTemplate()
             {
-                this.Add(new MartialAttackTemplate()
-                {
-                    Name = $"Default Attack - {i}",
-                    Damages = new DamageRollTemplateCollection()
-                {
-                    new DamageRollTemplate()
-                    {
-                        Dices = new DiceThrowTemplate("1d8"),
-                        Type = DamageTypeEnum.Cold
-                    },
-                    new DamageRollTemplate()
-                    {
-                        Dices = new DiceThrowTemplate("1d4+3"),
-                        Type = DamageTypeEnum.Thunder
-                    }
-                },
-                    Statuses = new StatusTemplateCollection()
-                {
-                    new StatusTemplate()
-                }
-                });
-            }
-
-            this.Add(new MartialAttackTemplate()
-            {
-                Name = "Default Attack",
-                Damages = new DamageRollTemplateCollection()
-                {
-                    new DamageRollTemplate()
-                    {
-                        Dices = new DiceThrowTemplate("1d8"),
-                        Type = DamageTypeEnum.Cold
-                    },
-                    new DamageRollTemplate()
-                    {
-                        Dices = new DiceThrowTemplate("1d4+3"),
-                        Type = DamageTypeEnum.Thunder
-                    }
-                },
-                Statuses = new StatusTemplateCollection()
-                {
-                    new StatusTemplate()
-                }
-            });
-
-            this.Add(new MartialAttackTemplate()
-            {
-                Name = "Default Attack2",
-                Damages = new DamageRollTemplateCollection()
-                {
+                Damages =
+                [
                     new DamageRollTemplate()
                     {
                         Dices = new DiceThrowTemplate("2d12"),
@@ -87,7 +39,7 @@ public class MartialAttackTemplateCollection : Dictionary<Guid, MartialAttackTem
                         Dices = new DiceThrowTemplate("1d4+3"),
                         Type = DamageTypeEnum.Thunder
                     }
-                },
+                ],
                 Statuses = new StatusTemplateCollection()
                 {
                     new StatusTemplate()
@@ -108,7 +60,7 @@ public class MartialAttackTemplateCollection : Dictionary<Guid, MartialAttackTem
     /// <returns></returns>
     public MartialAttackTemplate? GetTemplateByIdOrDefault(Guid attackId)
     {
-        this.TryGetValue(attackId, out var attackTemplate);
+        TryGetValue(attackId, out var attackTemplate);
         return attackTemplate;
     }
 }

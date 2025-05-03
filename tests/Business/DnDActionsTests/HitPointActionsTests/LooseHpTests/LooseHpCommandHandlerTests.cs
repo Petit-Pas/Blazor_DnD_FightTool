@@ -29,8 +29,10 @@ internal class LooseHpCommandHandlerTests
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
 
-        _character = new Character();
-        _character.HitPoints = new HitPoints() { MaxHps = 25, CurrentHps = 12 };
+        _character = new Character
+        {
+            HitPoints = new HitPoints() { MaxHps = 25, CurrentHps = 12 }
+        };
 
         _command = new LooseHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
         _commandHandler = new LooseHpCommandHandler(_mediator, _fightContext);
@@ -154,15 +156,15 @@ internal class LooseHpCommandHandlerTests
     public class FullCycleTest : LooseHpCommandHandlerTests
     {
         [Test]
-        public void Redo_Should_Do_The_Same_As_Execute()
+        public async Task Redo_Should_Do_The_Same_As_Execute()
         {
             // Arrange
-            _commandHandler.Execute(_command);
+            await _commandHandler.Execute(_command);
             var remainingHps = _hps;
             _commandHandler.Undo(_command);
 
             // Act
-            _commandHandler.Redo(_command);
+            await _commandHandler.Redo(_command);
 
             // Assert
             _hps.Should().Be(remainingHps);

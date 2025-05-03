@@ -17,7 +17,7 @@ public record Wildcard(string Token)
     /// <returns></returns>
     private bool IsAnAbility(out AbilityEnum abilityOut)
     {
-        foreach (AbilityEnum ability in Enum.GetValues(typeof(AbilityEnum)))
+        foreach (var ability in Enum.GetValues<AbilityEnum>())
         {
             if (Token == ability.ShortName())
             {
@@ -65,7 +65,7 @@ public record Wildcard(string Token)
         }
         if (IsDc())
         {
-            return new ScoreModifier(caster.Dc.GetValue(caster));
+            return new ScoreModifier(caster.Dc.GetDc(caster));
         }
 
         return ScoreModifier.Empty;

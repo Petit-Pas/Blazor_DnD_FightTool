@@ -28,7 +28,7 @@ public class ModifiersTemplateValidator : AbstractValidator<ModifiersTemplate>
         {
             return true;
         }
-        var regexEvaluation = ModifiersTemplate.Regex.Match(expression);
+        var regexEvaluation = ModifiersTemplate._regex.Match(expression);
         return regexEvaluation.Success;
     }
 }

@@ -8,7 +8,7 @@ public partial class ModalCloseButton
     [Parameter]
     public virtual EventCallback<MouseEventArgs> OnMouseClickCallBack { get; set; }
 
-    protected virtual async Task OnMouseClick(MouseEventArgs args)
+    protected async virtual Task OnMouseClick(MouseEventArgs args)
     {
         await OnMouseClickCallBack.InvokeAsync(args);
     }

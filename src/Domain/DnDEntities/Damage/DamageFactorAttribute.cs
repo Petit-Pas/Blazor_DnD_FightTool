@@ -3,6 +3,7 @@
 /// <summary>
 ///     Attribute used to mark a property as a damage factor
 /// </summary>
+[AttributeUsage(AttributeTargets.Field)]
 public class DamageFactorAttribute : Attribute
 {
     /// <summary>
@@ -23,5 +24,8 @@ public class DamageFactorAttribute : Attribute
     ///     A way to retrieve the modifier from the attribute
     /// </summary>
     /// <returns></returns>
-    public DamageFactor GetModifier() => new DamageFactor(_modifier);
+    public DamageFactor GetModifier()
+    {
+        return new DamageFactor(_modifier);
+    }
 }

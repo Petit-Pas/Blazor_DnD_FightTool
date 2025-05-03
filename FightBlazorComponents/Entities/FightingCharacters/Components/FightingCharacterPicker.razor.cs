@@ -27,7 +27,7 @@ public partial class FightingCharacterPicker
 
         if (_fightingCharacters == null && FightContext != null)
         {
-            _fightingCharacters = FightContext.GetFighters().ToArray();
+            _fightingCharacters = [.. FightContext.GetFighters()];
             StateHasChanged();
         }
     }

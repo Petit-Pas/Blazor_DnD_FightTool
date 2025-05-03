@@ -45,5 +45,5 @@ public static class DamageTypeEnumExtensions
         return skill.ToString().Replace("_", " ");
     }
 
-    public static DamageTypeEnum[] All = (DamageTypeEnum[])Enum.GetValues(typeof(DamageTypeEnum));
+    public readonly static DamageTypeEnum[] All = Enum.GetValues<DamageTypeEnum>();
 }

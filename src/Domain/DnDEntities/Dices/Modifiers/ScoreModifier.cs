@@ -9,7 +9,7 @@ public record ScoreModifier(int Modifier)
     /// <summary>
     ///    Empty modifier
     /// </summary>
-    public static readonly ScoreModifier Empty = new (0);
+    public readonly static ScoreModifier Empty = new(0);
 
     /// <summary>
     ///     Add + sign to the modifier when needed.

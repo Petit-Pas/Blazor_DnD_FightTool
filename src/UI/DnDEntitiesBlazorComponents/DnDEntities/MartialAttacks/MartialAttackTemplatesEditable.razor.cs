@@ -9,9 +9,9 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.MartialAttacks;
 public partial class MartialAttackTemplatesEditable
 {
     [Parameter]
-    public Character Character { get; set; }
+    public required Character Character { get; set; }
 
-    private EditContext _editContext { get; set; }
+    private EditContext? _editContext { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -27,14 +27,13 @@ public partial class MartialAttackTemplatesEditable
         }
     }
 
-    private void RemoveStatusFromAttack(MartialAttackTemplate attack, StatusTemplate status)
+    private static void RemoveStatusFromAttack(MartialAttackTemplate attack, StatusTemplate status)
     {
         attack.Statuses.Remove(status.Id);
     }
 
-    private void AddNewStatusInAttack(MartialAttackTemplate attack)
+    private static void AddNewStatusInAttack(MartialAttackTemplate attack)
     {
         attack.Statuses.Add(new StatusTemplate());
     }
-
 }

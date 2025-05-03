@@ -17,6 +17,14 @@ public class AbilityScore
     }
 
     /// <summary>
+    ///     Ctor with default values for the ability
+    /// </summary>
+    /// <param name="ability"></param>
+    public AbilityScore(AbilityEnum ability) : this(ability, 10, false)
+    {
+    }
+
+    /// <summary>
     ///     Ctor
     /// </summary>
     /// <param name="ability"></param>
@@ -63,5 +71,8 @@ public class AbilityScore
     /// </summary>
     /// <param name="masteryBonus"></param>
     /// <returns></returns>
-    public ScoreModifier GetModifier(int masteryBonus = 0) => new ScoreModifier(Score / 2 - 5 + (HasMastery ? masteryBonus : 0));
+    public ScoreModifier GetModifier(int masteryBonus = 0)
+    {
+        return new(Score / 2 - 5 + (HasMastery ? masteryBonus : 0));
+    }
 }

@@ -11,20 +11,20 @@ namespace FightBlazorComponents.Entities.FightingCharacters.Components;
 public partial class FightingCharacterTile : ComponentBase, IDisposable
 {
     [Inject]
-    public ICharacterRepository CharacterRepository { get; set; }
+    public required ICharacterRepository CharacterRepository { get; set; }
 
     [Inject]
-    public IFightContext FightContext { get; set; }
+    public required IFightContext FightContext { get; set; }
+
+    [Inject]
+    public required IAppliedStatusRepository AppliedStatusCollection { get; set; }
 
     [Parameter]
-    public Fighter Fighter { get; set; }
+    public required Fighter Fighter { get; set; }
 
-    [Inject]
-    public IAppliedStatusRepository AppliedStatusCollection { get; set; }
+    private Character? _character = null;
 
-    private Character? Character = null;
-
-    private BorderRadius BorderRadius = new (2, "em");
+    private readonly static BorderRadius _borderRadius = new(2, "em");
 
     protected override void OnInitialized()
     {
@@ -37,7 +37,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
 
     private void AppliedStatusCollection_AppliedStatusUpdated(object _, AppliedStatusUpdatedEventArgs e)
     {
-        if (e.AffectedCharacterId == Character?.Id)
+        if (e.AffectedCharacterId == _character?.Id)
         {
             // TODO the refresh works without that, but I think its because the whole state is recomputed when the HPs change, to try with an attack that has no damage 
             StateHasChanged();
@@ -57,9 +57,9 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
 
     private void InitCharacter()
     {
-        if (Character == null || Character.Id != Fighter.CharacterId)
+        if (_character == null || _character.Id != Fighter.CharacterId)
         {
-            Character = FightContext.GetCharacterById(Fighter.CharacterId);
+            _character = FightContext.GetCharacterById(Fighter.CharacterId);
         }
     }
 
@@ -67,6 +67,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     {
         FightContext.MovingFighterChanged -= OnMovingCharacterChanged;
         AppliedStatusCollection.AppliedStatusUpdated -= AppliedStatusCollection_AppliedStatusUpdated;
+        GC.SuppressFinalize(this);
     }
 
     private void TileClicked(MouseEventArgs _)
