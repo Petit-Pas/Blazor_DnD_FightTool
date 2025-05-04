@@ -1,6 +1,6 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
-using JsInterop;
+using JavascriptInteropExtensions;
 using Mapping;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -12,15 +12,15 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.MartialAttacks;
 public partial class MartialAttackTemplateCollectionEditable
 {
     [Inject]
-    public IMapper Mapper { get; set; }
+    public required IMapper Mapper { get; set; }
 
     [Inject]
-    public IJSRuntime JsRuntime { get; set; }
+    public required IJSRuntime JsRuntime { get; set; }
 
     [Parameter]
-    public Character Character { get; set; }
+    public required Character Character { get; set; }
 
-    private static BorderRadius TemplateBorderRadius = new BorderRadius(2, "em");
+    private readonly static BorderRadius _templateBorderRadius = new(2, "em");
 
     private EditContext? EditContext { get; set; } = null;
     
@@ -35,7 +35,7 @@ public partial class MartialAttackTemplateCollectionEditable
     /// </summary>
     private bool EditedElementIsANewOne { get; set; } = false;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         base.OnAfterRender(firstRender);
         if (WaitingForOpeningOfEdit)

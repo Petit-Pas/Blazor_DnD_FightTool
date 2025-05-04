@@ -10,8 +10,8 @@ namespace SharedComponents.Inputs.Buttons.Actions;
 /// </summary>
 public partial class CardActionCollection
 {
-    [Parameter]
-    public RenderFragment ChildContent { get; set; }
+    [Parameter, EditorRequired]
+    public required RenderFragment ChildContent { get; set; }
 
     private List<CardActionCollectionElement> Actions { get; set; } = new List<CardActionCollectionElement>(5);
 

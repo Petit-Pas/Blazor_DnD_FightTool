@@ -36,7 +36,7 @@ public class Mapper : IMapper
     public T Clone<T>(T source, params ValueTuple<string, object>[] runtimeParameters)
             where T : class
     {
-        return Map<T, T>(source, runtimeParameters.Concat(new[] { ("IsADuplication", true as object) }).ToArray());
+        return Map<T, T>(source, [.. runtimeParameters, ("IsADuplication", true)]);
     }
 
     public T Copy<T>(T source, params ValueTuple<string, object>[] runtimeParameters)

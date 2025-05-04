@@ -17,7 +17,7 @@
             var editing = EditContext is not null && ((MartialAttackTemplate)EditContext.Model).Id == attackTemplate.Id;
             i += 1;
             <div id="@("attack-template-card-" + i)" class="attack-template-container @(editing ? "editing" : "")" style="">
-                <Card BorderRadius="@TemplateBorderRadius" Padding="Spacing._0">
+                <Card BorderRadius="@_templateBorderRadius" Padding="Spacing._0">
                     @if (!editing)
                     {
                         <!-- Smaller summary card -->
@@ -81,7 +81,7 @@
 
         @if (EditContext == null)
         {
-            <ButtonCard BorderRadius="@TemplateBorderRadius" Color="ThemeColor.Primary" OnMouseClickCallBack="() => CreateNew()">
+            <ButtonCard BorderRadius="@_templateBorderRadius" Color="ThemeColor.Primary" OnMouseClickCallBack="() => CreateNew()">
                 <div class="add-template-button" style="">
                     +
                 </div>

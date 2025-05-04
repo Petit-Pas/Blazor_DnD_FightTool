@@ -20,8 +20,8 @@ public partial class CircularActionButton
     [Parameter]
     public virtual bool IsEnabled { get; set; } = true;
 
-    private string _buttonIcon;
-    private ThemeColor _themeColor;
+    private readonly string _buttonIcon;
+    private readonly ThemeColor _themeColor;
 
     private async Task NotifyClick()
     {

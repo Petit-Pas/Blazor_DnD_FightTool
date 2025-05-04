@@ -4,14 +4,18 @@ namespace SharedComponents.Inputs.Buttons.Actions;
 
 public class CardActionCollectionElement : ComponentBase
 {
-    private RenderFragment? _childContent;
-    private CardActionCollection? _parent;
-
     [Parameter]
-    public RenderFragment? ChildContent { get => _childContent; set { _childContent = value; SendToParent(); } }
+    public RenderFragment? ChildContent { get; set; }
 
     [CascadingParameter]
-    public CardActionCollection? Parent { get => _parent; set { _parent = value; SendToParent(); } }
+    public CardActionCollection? Parent { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        SendToParent();
+    }
 
     private void SendToParent()
     {

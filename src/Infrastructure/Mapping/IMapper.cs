@@ -14,7 +14,7 @@ public interface IMapper
     /// <param name="source"></param>
     /// <param name="runtimeParameters"></param>
     /// <returns></returns>
-    public T Clone<T>(T source, params ValueTuple<string, object>[] runtimeParameters)
+    T Clone<T>(T source, params ValueTuple<string, object>[] runtimeParameters)
             where T : class;
 
     /// <summary>
@@ -25,7 +25,7 @@ public interface IMapper
     /// <param name="source"></param>
     /// <param name="runtimeParameters"></param>
     /// <returns></returns>
-    public T Copy<T>(T source, params ValueTuple<string, object>[] runtimeParameters)
+    T Copy<T>(T source, params ValueTuple<string, object>[] runtimeParameters)
             where T : class;
 
     TTarget Map<TSource, TTarget>(TSource source)

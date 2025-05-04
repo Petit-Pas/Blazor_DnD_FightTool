@@ -11,15 +11,4 @@ public partial class MartialAttackTemplateEditable
     public EditContext? EditContext { get; set; }
 
     private MartialAttackTemplate? Template => EditContext is null ? null : EditContext.Model as MartialAttackTemplate ?? throw new ArgumentNullException("EditContext", $"The EditContext for MartialAttackTemplateEditable should have a model of type {typeof(MartialAttackTemplate)}");
-
-
-    private void RemoveStatusFromAttack(MartialAttackTemplate attack, StatusTemplate status)
-    {
-        attack.Statuses.Remove(status.Id);
-    }
-
-    private void AddNewStatusInAttack(MartialAttackTemplate attack)
-    {
-        attack.Statuses.Add(new StatusTemplate());
-    }
 }
