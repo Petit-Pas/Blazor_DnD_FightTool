@@ -1,5 +1,7 @@
-﻿using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses.Validation;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores.Validation;
+using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses.Validation;
 using DnDFightTool.Domain.DnDEntities.HitPoint.Validation;
+using Extensions;
 using FluentValidation;
 
 namespace DnDFightTool.Domain.DnDEntities.Characters.Validation;
@@ -7,7 +9,7 @@ namespace DnDFightTool.Domain.DnDEntities.Characters.Validation;
 /// <summary>
 ///     Validator for <see cref="Character"/>
 /// </summary>
-public class CharacterValidator : AbstractValidator<Character>
+public class CharacterValidator : PropertyTargetedValidator<Character>
 {
     /// <summary>
     ///     Ctor
@@ -22,5 +24,8 @@ public class CharacterValidator : AbstractValidator<Character>
 
         RuleFor(x => x.ArmorClass)
             .SetValidator(ArmorClassValidator.Instance);
+
+        RuleFor(x => x.AbilityScores)
+            .SetValidator(AbilityScoresValidator.Instance);
     }
 }

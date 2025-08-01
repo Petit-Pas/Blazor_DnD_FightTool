@@ -1,0 +1,21 @@
+﻿@using MudBlazor
+
+@if (Character is not null)
+{
+    <MudForm Model=@Character Validation="@(CharacterValidator.ValidateValue)" @ref=_mainForm FieldChanged="NotifyChangedAsync">
+        <MudPaper Class="pa-4" Elevation="2" Square>
+            <MudText Class="mb-5" Typo="Typo.h5"> Ability scores </MudText>
+            <MudGrid>
+                @foreach (var abilityScore in Character.AbilityScores)
+                {
+                    <MudItem xs=12>
+                        <AbilityScoreEditorComponent Character="@Character" AbilityScore="@abilityScore" OnChanged="NotifyChangedAsync" />
+                    </MudItem>
+                }
+                <MudItem xs=12>
+                    <MudNumericField HideSpinButtons="true" Label="Mastery bonus" @bind-Value="@Character.AbilityScores.MasteryBonus" For="@(() => Character.AbilityScores.MasteryBonus)" Immediate="true" />
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudForm>
+}

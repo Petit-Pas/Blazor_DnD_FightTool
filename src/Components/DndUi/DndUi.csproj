@@ -47,10 +47,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
-        <PackageReference Include="MudBlazor" Version="8.9.0" />
+        <PackageReference Include="Blazored.FluentValidation" Version="2.2.0" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.90" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.90" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
+        <PackageReference Include="Morris.Blazor.FluentValidation" Version="3.1.5" />
+        <PackageReference Include="Morris.Blazor.Validation" Version="3.1.5" />
+        <PackageReference Include="MudBlazor" Version="8.10.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
     </ItemGroup>
 
 </Project>

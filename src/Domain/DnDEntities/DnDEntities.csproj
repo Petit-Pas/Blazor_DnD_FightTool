@@ -8,6 +8,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="AbilityScores\Validation\AbilityScoresValidator.cs~RF4d750a.TMP" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="FastDeepCloner" Version="1.3.6" />
 		<PackageReference Include="FluentValidation" Version="11.11.0" />
 	</ItemGroup>

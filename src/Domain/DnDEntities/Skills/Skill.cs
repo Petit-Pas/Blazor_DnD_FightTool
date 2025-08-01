@@ -1,4 +1,5 @@
 ﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 using Extensions;
 
@@ -12,10 +13,11 @@ public class Skill
     /// <summary>
     ///     Ctor with the name of the skill
     /// </summary>
-    /// <param name="name"></param>
-    public Skill(SkillEnum name)
+    /// <param name="skillName"></param>
+    public Skill(SkillEnum skillName)
     {
-        Name = name;
+        Name = skillName;
+        Ability = skillName.GetAttribute<AbilityAttribute>()!.Ability;
     }
 
     /// <summary>
@@ -28,6 +30,32 @@ public class Skill
     ///     Can be Normal, Mastery or Expertise
     /// </summary>
     public SkillMasteryEnum Mastery { get; set; }
+
+    /// <summary>
+    ///     The ability to use to do the skill check.
+    ///     Default is set by <see cref="AbilityAttribute"/> on <see cref="SkillEnum"/>
+    /// </summary>
+    public AbilityEnum Ability { get; set; }
+
+    public void RotateMastery()
+    {
+        Mastery = Mastery switch {
+            SkillMasteryEnum.Normal => SkillMasteryEnum.Mastery,
+            SkillMasteryEnum.Mastery => SkillMasteryEnum.Expertise,
+            SkillMasteryEnum.Expertise => SkillMasteryEnum.Normal,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
+    /// <summary>
+    ///     Shorter way to call <see cref="GetModifier(AbilityScoresCollection)"/>
+    /// </summary>
+    /// <param name="character"></param>
+    /// <returns></returns>
+    public ScoreModifier GetModifier(Character character)
+    {
+        return GetModifier(character.AbilityScores);
+    }
 
     /// <summary>
     ///     Gets a score modifier to a skill check based on the ability scores of the character as well as its mastery of the skill

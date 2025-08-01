@@ -1,0 +1,52 @@
+/* MudBlazor extensions */
+
+.mud-appbar-text {
+    color: var(--mud-palette-appbar-text) !important;
+}
+
+.mud-primary-button {
+    background-color: var(--mud-palette-primary) !important;
+    color: var(--mud-palette-primary-text);
+}
+
+/* The way MudBlazor handles this for tabs makes no sense, the whole content is shifted away and then brought back, which makes some padding make no sense afterward */
+.mud-tabs-panels > .mud-grid-spacing-xs-6 {
+    margin: 0 !important;
+    width: auto !important;
+}
+.mud-tabs-panels > .mud-grid-spacing-xs-6 > .mud-grid-item {
+    padding: 12px !important;
+}
+
+/* 
+ * 
+ *  Custom styles for the DnD UI  
+ *  
+*/
+
+/* The ability score chip with the roll modifiers display */
+.ability-score-chip.mud-chip {
+    width: 60px;
+}
+.ability-score-badge > .mud-badge-wrapper > .mud-badge {
+    transform: translate(-8px, -3px);
+}
+
+
+html, body, #app, .mud-main-content {
+    height: 100%;
+}
+
+/* meant to be used instead of flex-fill to define what happens when the content is too big */
+.flex-fill-shrink {
+    flex: 1 1 auto !important;
+    min-height: 0;
+}
+.flex-fill-scroll {
+    flex: 1 1 auto !important;
+    overflow-y: auto;
+}
+
+.w-1 {
+    width: 1%;
+}

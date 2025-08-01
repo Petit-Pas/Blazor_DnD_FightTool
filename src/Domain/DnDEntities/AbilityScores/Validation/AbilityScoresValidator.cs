@@ -7,6 +7,8 @@ namespace DnDFightTool.Domain.DnDEntities.AbilityScores.Validation;
 /// </summary>
 public class AbilityScoresValidator : AbstractValidator<AbilityScoresCollection>
 {
+    public readonly static AbilityScoresValidator Instance = new();
+
     /// <summary>
     ///     Ctor
     /// </summary>

@@ -1,0 +1,17 @@
+@using MudBlazor
+
+<MudBreakpointProvider OnBreakpointChanged="OnBreakpointChanged">
+    <MudText Class="mud-appbar-text">
+        @CurrentBreakpoint
+    </MudText>
+</MudBreakpointProvider>
+
+@code {
+    private Breakpoint CurrentBreakpoint = Breakpoint.Xs;
+
+    private void OnBreakpointChanged(Breakpoint breakpoint)
+    {
+        CurrentBreakpoint = breakpoint;
+        StateHasChanged();
+    }
+}

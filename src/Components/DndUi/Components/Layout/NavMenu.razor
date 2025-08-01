@@ -1,22 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">DndUi</a>
-    </div>
-</div>
+﻿@using MudBlazor
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Characters">
-                <span class="bi bi-people-fill-nav-menu" aria-hidden="true"></span> Character Configuration
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fight">
-                <span class="bi bi-sword-nav-menu" aria-hidden="true"></span> Fight
-            </NavLink>
-        </div>
-    </nav>
-</div>
+<MudNavMenu>
+    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.ManageAccounts" HRef="characters">Characters</MudNavLink>
+    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.AutoFixHigh" HRef="fight">Fight</MudNavLink>
+</MudNavMenu>

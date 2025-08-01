@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using Microsoft.Extensions.Logging;
+using Morris.Blazor.Validation;
 using MudBlazor.Services;
 
 namespace DndUi;
@@ -23,6 +25,12 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 
-		return builder.Build();
+        builder.Services.AddFormValidation(config =>
+        {
+            config.AddFluentValidation(
+                typeof(Character).Assembly);
+        });
+
+        return builder.Build();
 	}
 }

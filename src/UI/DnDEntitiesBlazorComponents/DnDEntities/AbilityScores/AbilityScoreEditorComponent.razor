@@ -1,0 +1,20 @@
+﻿@using MudBlazor
+@using DnDFightTool.Domain.DnDEntities.AbilityScores
+
+@if (Character is not null && AbilityScore is not null)
+{
+    <MudForm Model=AbilityScore Validation="@(AbilityScoreValidator.ValidateValue)" FieldChanged="NotifyChangedAsync">
+        <div class="d-flex flex-grow-1 gap-3 align-items-center">
+            <MudBadge Class="ability-score-badge" Color="Color.Secondary" Overlap="true" Content="Character.AbilityScores.ModifiersString(AbilityScore)">
+                <MudChip Class="ability-score-chip"
+                    T="string" Color="Color.Primary" Variant=@((AbilityScore.HasMastery ? Variant.Filled : Variant.Outlined)) OnClick="() => AbilityScore.HasMastery = !AbilityScore.HasMastery">
+                    <MudText>
+                        @AbilityScore.Ability.ShortName()
+                    </MudText>
+                </MudChip>
+            </MudBadge>
+            <MudNumericField HideSpinButtons="true" @bind-Value="@AbilityScore.Score" For="@(() => AbilityScore.Score)" Immediate="true" />
+            <MudField> Not set yet </MudField>
+        </div>
+    </MudForm>
+}

@@ -31,6 +31,10 @@ public class Character
     /// <param name="withDefaults"></param>
     public Character(bool withDefaults = false)
     {
+        if (withDefaults)
+        {
+            Name = "Name";
+        }
         AbilityScores = new AbilityScoresCollection(withDefaults);
         Skills = new SkillCollection(withDefaults);
         DamageAffinities = new DamageAffinitiesCollection(withDefaults);

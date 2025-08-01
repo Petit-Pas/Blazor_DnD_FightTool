@@ -67,6 +67,11 @@ public class AbilityScoresCollection : List<AbilityScore>
         return ability.GetModifier(MasteryBonus);
     }
 
+    public string ModifiersString(AbilityScore abilityScore)
+    {
+        return $"{GetModifierWithoutMastery(abilityScore.Ability)}/{GetModifierWithMastery(abilityScore.Ability)}";
+    }
+
     /// <summary>
     ///     The mastery bonus
     /// </summary>

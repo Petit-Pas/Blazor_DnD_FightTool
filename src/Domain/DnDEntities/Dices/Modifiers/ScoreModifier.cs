@@ -34,4 +34,9 @@ public record ScoreModifier(int Modifier)
     {
         return modifier.Modifier;
     }
+
+    public override string ToString()
+    {
+        return ModifierString;
+    }
 }

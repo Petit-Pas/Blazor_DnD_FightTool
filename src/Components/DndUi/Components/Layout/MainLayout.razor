@@ -1,29 +1,37 @@
 ﻿@inherits LayoutComponentBase
+@using DndUi.Components.Shared
 @using MudBlazor
 
-<MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
+<MudPopoverProvider />
+<MudThemeProvider @ref="_mudThemeProvider" IsDarkMode="_isDarkMode" IsDarkModeChanged="OnIsDarkModeChanged" />
 
-<!-- Minimal MudBlazor Example: Remove after verification -->
-<MudPaper Class="pa-4 ma-4" Elevation="4">
-    <MudText Typo="Typo.h6">MudBlazor Minimal Example</MudText>
-    <MudButton Variant="Variant.Filled" Color="Color.Primary">Click Me</MudButton>
-</MudPaper>
-<!-- End Minimal MudBlazor Example -->
-
-<div class="page">
-    <div class="sidebar">
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudSpacer />
+        <ScreenSizeBadge />
+        <ThemeToggle MudThemeProvider="@_mudThemeProvider" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true" ClipMode="DrawerClipMode.Docked">
         <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+    </MudDrawer>
+    <MudMainContent Class="px-16 h-100">
+        <CascadingValue Value="_isDarkMode" Name="IsDarkMode">
             @Body
-        </article>
-    </main>
-</div>
+        </CascadingValue>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _open = false;
+    private MudThemeProvider? _mudThemeProvider;
+    private bool _isDarkMode;
+
+    private void OnIsDarkModeChanged(bool value)
+    {
+        _isDarkMode = value;
+        StateHasChanged();
+    }
+}
+
