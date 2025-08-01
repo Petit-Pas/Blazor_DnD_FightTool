@@ -10,21 +10,33 @@ public enum DamageAffinityEnum
     /// <summary>
     ///     Default value, should never be used
     /// </summary>
-    [DamageFactor(1)]   Unknown = 0,
+    [DamageFactor(1)]
+    Unknown = 0,
     /// <summary>
     ///     creature is weak to a given damage type
     /// </summary>
-    [DamageFactor(2)]   Weak,
+    [DamageFactor(2)]
+    Weak,
     /// <summary>
     ///     creature interacts normally with a given damage type
     /// </summary>
-    [DamageFactor(1)]   Normal,
+    [DamageFactor(1)]
+    Normal,
     /// <summary>
     ///     creature is resistant to a given damage type
     /// </summary>
-    [DamageFactor(0.5)] Resistant,
+    [DamageFactor(0.5)] 
+    Resistant,
     /// <summary>
     ///    creature is immune to a given damage type
     /// </summary>
-    [DamageFactor(0)]   Immune
+    [DamageFactor(0)]   
+    Immune,
+
+    // TOPO unit tests
+    /// <summary>
+    ///     Creature is healed by a given damage type
+    /// </summary>
+    [DamageFactor(-1)]
+    Heal
 }

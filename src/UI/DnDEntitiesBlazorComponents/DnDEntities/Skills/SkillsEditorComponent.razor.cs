@@ -14,9 +14,9 @@ public partial class SkillsEditorComponent
     {
         return skill.Mastery switch
         {
-            SkillMasteryEnum.Normal => FontAwesomeIcons.EmptyStar,
-            SkillMasteryEnum.Mastery => FontAwesomeIcons.HalfStar,
-            SkillMasteryEnum.Expertise => FontAwesomeIcons.FullStar,
+            SkillMasteryEnum.Normal => FontAwesomeIcons.StarEmpty,
+            SkillMasteryEnum.Mastery => FontAwesomeIcons.StarHalf,
+            SkillMasteryEnum.Expertise => FontAwesomeIcons.StarFull,
             _ => throw new ArgumentOutOfRangeException()
         };
     }

@@ -91,7 +91,7 @@ public class ApplyDamageRollResultsCommandHandlerTests
         public async Task Should_Apply_Damage_Resistance()
         {
             // Arrange
-            _affinities.First(x => x.Type == DamageTypeEnum.Fire).Affinity = DamageAffinityEnum.Weak;
+            _affinities[DamageTypeEnum.Fire].Affinity = DamageAffinityEnum.Weak;
 
             // Act
             await _commandHandler.Execute(_command);

@@ -11,7 +11,7 @@
 @if (Character is not null)
 {
     <MudForm Model="Character" Validation="@(CharacterValidator.ValidateValue)" @ref="@_form">
-        <MudPaper Class="pa-4" Elevation="2" Square>
+        <MudPaper Class="pa-4" Elevation="2" Square >
             <MudGrid>
                 <MudItem xs="12">
                     <MudTextField Label="Name" @bind-Value="Character.Name" For="@(() => Character.Name)" Typo="Typo.h5"/>
@@ -41,8 +41,4 @@
             </MudGrid>
         </MudPaper>
     </MudForm>
-
-    <MudButton OnClick="ValidateAsync">
-        Validate & Show Errors & Refresh
-    </MudButton>
 }

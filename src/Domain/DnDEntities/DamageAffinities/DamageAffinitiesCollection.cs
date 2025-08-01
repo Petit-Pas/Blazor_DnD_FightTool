@@ -1,4 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.Damage;
 
 namespace DnDFightTool.Domain.DnDEntities.DamageAffinities;
 
@@ -7,7 +8,7 @@ namespace DnDFightTool.Domain.DnDEntities.DamageAffinities;
 /// <summary>
 ///     A collection of damage affinities
 /// </summary>
-public class DamageAffinitiesCollection : List<DamageAffinity>
+public class DamageAffinitiesCollection : Dictionary<DamageTypeEnum, DamageAffinity>
 {
     /// <summary>
     ///     default ctor, Will not populate the collection with default values
@@ -30,19 +31,39 @@ public class DamageAffinitiesCollection : List<DamageAffinity>
     }
 
     /// <summary>
+    ///     Helper method to add in the dictionary without having to take care about the key
+    /// </summary>
+    /// <param name="affinity"></param>
+    private void Add(DamageAffinity affinity)
+    {
+        Add(affinity.DamageType, affinity);
+    }
+
+    /// <summary>
+    ///     Helper method to bulk insert in the dictionary without having to take care about the key
+    /// </summary>
+    /// <param name="skills"></param>
+    private void AddRange(IEnumerable<DamageAffinity> damageAffinities)
+    {
+        foreach (var damageAffinity in damageAffinities)
+        {
+            Add(damageAffinity);
+        }
+    }
+
+    /// <summary>
     ///     Get the damage affinity object for a specific damage type
     /// </summary>
     /// <param name="damageType"></param>
     /// <returns></returns>
     private DamageAffinity? GetDamageAffinityFor(DamageTypeEnum damageType)
     {
-        var damageAffinity = this.SingleOrDefault(x => x.Type == damageType);
-        if (damageAffinity == null)
+        if (TryGetValue(damageType, out var damageAffinity))
         {
-            // TODO warn
-            return null;
+            return damageAffinity;
         }
-        return damageAffinity;
+        // Warn?
+        return new DamageAffinity(damageType);
     }
 
     /// <summary>

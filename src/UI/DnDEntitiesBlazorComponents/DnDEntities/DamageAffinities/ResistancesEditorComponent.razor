@@ -1,0 +1,17 @@
+@using MudBlazor
+@using DnDFightTool.Domain.DnDEntities.Damage;
+
+@if (Character != null)
+{
+    <MudPaper Class="pa-4 d-flex flex-column h-100" Elevation="2" Square>
+        <MudText Class="mb-2" Typo="Typo.h5"> Weakness Resistances and Immunities </MudText>
+        <MudTable ContainerClass="pt-2" Class="flex-fill-scroll" Elevation=0 Items="@Character.DamageAffinities.Values" Dense="true" Striped="true" Hover="true">
+            <RowTemplate>
+                <MudTd class="w-1">
+                    <MudIconButton Icon="@GetIconFor(context)" Color=Color.Primary OnClick="context.IncreaseAffinity" @oncontextmenu="context.DecreaseAffinity" />
+                </MudTd>
+                <MudTd> @context.DamageType.ToReadableString() </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudPaper>
+}

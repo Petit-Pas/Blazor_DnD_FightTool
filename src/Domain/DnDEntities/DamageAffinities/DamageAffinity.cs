@@ -23,9 +23,19 @@ public class DamageAffinity
     /// <param name="modifier"></param>
     public DamageAffinity(DamageTypeEnum type, DamageAffinityEnum modifier = DamageAffinityEnum.Normal)
     {
-        Type = type;
+        DamageType = type;
         Affinity = modifier;
     }
+
+    /// <summary>
+    ///     The type of damage
+    /// </summary>
+    public DamageTypeEnum DamageType { get; set; }
+
+    /// <summary>
+    ///     The affinity of the character for this type of damage
+    /// </summary>
+    public DamageAffinityEnum Affinity { get; set; }
 
     /// <summary>
     ///    A way to retrieve the Damage factor according to the affinity to this type of damage.
@@ -36,20 +46,37 @@ public class DamageAffinity
         var modifier = Affinity.GetAttribute<DamageFactorAttribute>();
         if (modifier == null)
         {
-            Console.WriteLine($"WARNING: the skill {Type} has no DamageAffinitFactory attribute.");
+            Console.WriteLine($"WARNING: the skill {DamageType} has no DamageAffinitFactory attribute.");
             return DamageFactor.DoNothing;
         }
 
         return new DamageFactor(modifier.GetModifier());
     }
 
-    /// <summary>
-    ///     The type of damage
-    /// </summary>
-    public DamageTypeEnum Type { get; set; }
 
-    /// <summary>
-    ///     The affinity of the character for this type of damage
-    /// </summary>
-    public DamageAffinityEnum Affinity { get; set; }
+    public void IncreaseAffinity()
+    {
+        Affinity = Affinity switch
+        {
+            DamageAffinityEnum.Weak => DamageAffinityEnum.Normal,
+            DamageAffinityEnum.Normal => DamageAffinityEnum.Resistant,
+            DamageAffinityEnum.Resistant => DamageAffinityEnum.Immune,
+            DamageAffinityEnum.Immune => DamageAffinityEnum.Heal,
+            DamageAffinityEnum.Heal => DamageAffinityEnum.Heal,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
+    public void DecreaseAffinity()
+    {
+        Affinity = Affinity switch
+        {
+            DamageAffinityEnum.Weak => DamageAffinityEnum.Weak,
+            DamageAffinityEnum.Normal => DamageAffinityEnum.Weak,
+            DamageAffinityEnum.Resistant => DamageAffinityEnum.Normal,
+            DamageAffinityEnum.Immune => DamageAffinityEnum.Resistant,
+            DamageAffinityEnum.Heal => DamageAffinityEnum.Immune,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
 }

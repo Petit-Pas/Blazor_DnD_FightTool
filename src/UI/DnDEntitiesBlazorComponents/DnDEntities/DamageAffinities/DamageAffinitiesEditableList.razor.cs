@@ -15,7 +15,7 @@ public partial class DamageAffinitiesEditableList : ComponentBase
         {
             if (value != null)
             {
-                AffinitiesDtos = value.Select(x => new AffinityDto(x));
+                AffinitiesDtos = value.Select(x => new AffinityDto(x.Value));
             }
         }
     }

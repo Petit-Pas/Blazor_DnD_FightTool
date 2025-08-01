@@ -16,10 +16,10 @@ public class DamageAffinitiesCollectionTests
     {
         _affinities = new DamageAffinitiesCollection(true);
 
-        _affinities.First(x => x.Type == DamageTypeEnum.Cold).Affinity = DamageAffinityEnum.Immune;
-        _affinities.First(x => x.Type == DamageTypeEnum.Thunder).Affinity = DamageAffinityEnum.Resistant;
-        _affinities.First(x => x.Type == DamageTypeEnum.Fire).Affinity = DamageAffinityEnum.Normal;
-        _affinities.First(x => x.Type == DamageTypeEnum.Poison).Affinity = DamageAffinityEnum.Weak;
+        _affinities[DamageTypeEnum.Cold].Affinity = DamageAffinityEnum.Immune;
+        _affinities[DamageTypeEnum.Thunder].Affinity = DamageAffinityEnum.Resistant;
+        _affinities[DamageTypeEnum.Fire].Affinity = DamageAffinityEnum.Normal;
+        _affinities[DamageTypeEnum.Poison].Affinity = DamageAffinityEnum.Weak;
     }
 
     [TestFixture]

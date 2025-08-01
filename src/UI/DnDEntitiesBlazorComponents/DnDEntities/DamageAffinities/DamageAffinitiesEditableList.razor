@@ -12,7 +12,7 @@
         @foreach (var affinity in AffinitiesDtos)
         {
             <tr class="ability-row">
-                <td> @affinity.Affinity.Type.ToReadableString() </td>
+                <td> @affinity.Affinity.DamageType.ToReadableString() </td>
 
                 <td>
                     <CheckBox @bind-IsChecked="@affinity.Weak"> </CheckBox>

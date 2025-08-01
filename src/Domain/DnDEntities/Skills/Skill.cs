@@ -43,12 +43,23 @@ public class Skill
     /// </summary>
     public AbilityEnum DefaultAbility { get; private init; }
 
-    public void RotateMastery()
+    public void IncreaseMastery()
     {
         Mastery = Mastery switch {
             SkillMasteryEnum.Normal => SkillMasteryEnum.Mastery,
             SkillMasteryEnum.Mastery => SkillMasteryEnum.Expertise,
-            SkillMasteryEnum.Expertise => SkillMasteryEnum.Normal,
+            SkillMasteryEnum.Expertise => SkillMasteryEnum.Expertise,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
+    public void DecreaseMastery()
+    {
+        Mastery = Mastery switch
+        {
+            SkillMasteryEnum.Normal => SkillMasteryEnum.Normal,
+            SkillMasteryEnum.Mastery => SkillMasteryEnum.Normal,
+            SkillMasteryEnum.Expertise => SkillMasteryEnum.Mastery,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
