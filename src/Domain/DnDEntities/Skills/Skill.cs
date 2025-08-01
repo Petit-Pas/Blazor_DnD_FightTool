@@ -18,6 +18,7 @@ public class Skill
     {
         Name = skillName;
         Ability = skillName.GetAttribute<AbilityAttribute>()!.Ability;
+        DefaultAbility = Ability;
     }
 
     /// <summary>
@@ -36,6 +37,11 @@ public class Skill
     ///     Default is set by <see cref="AbilityAttribute"/> on <see cref="SkillEnum"/>
     /// </summary>
     public AbilityEnum Ability { get; set; }
+
+    /// <summary>
+    ///     The ability used by default to do the skill check
+    /// </summary>
+    public AbilityEnum DefaultAbility { get; private init; }
 
     public void RotateMastery()
     {
@@ -65,17 +71,9 @@ public class Skill
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public ScoreModifier GetModifier(AbilityScoresCollection abilityScores)
     {
-        var skillAttribute = Name.GetAttribute<AbilityAttribute>();
+        var baseScore = abilityScores.GetModifier(Ability);
 
-        if (skillAttribute == null)
-        {
-            Console.WriteLine($"WARNING: the skill {Name} does not have a linked attribute.");
-            return ScoreModifier.Empty;
-        }
-
-        var baseScore = abilityScores.GetModifierWithoutMastery(skillAttribute.Ability).Modifier;
-
-        return new ScoreModifier(Mastery switch
+        return Mastery switch
         {
             SkillMasteryEnum.Normal => baseScore,
             SkillMasteryEnum.Mastery => baseScore + abilityScores.MasteryBonus,
@@ -85,6 +83,6 @@ public class Skill
             _ => throw new ArgumentOutOfRangeException(nameof(Mastery), "Invalid value for SkillMasteryEnum")
 #pragma warning restore CA2208
 #pragma warning restore IDE0079
-        });
+        };
     }
 }

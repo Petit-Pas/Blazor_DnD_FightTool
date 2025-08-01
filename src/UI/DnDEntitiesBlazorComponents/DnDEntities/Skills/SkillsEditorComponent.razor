@@ -14,13 +14,27 @@
                     <MudIconButton Icon="@GetIconFor(context.Value)" OnClick="@context.Value.RotateMastery" Color=Color.Primary />
                 </MudTd>
                 <MudTd class="w-1">
-                    <MudBadge Class="ability-score-badge" Color="Color.Secondary" Overlap="true" Content="context.Value.GetModifier(Character).ToString()">
-                        <MudChip Class="ability-score-chip" T="string" Variant=Variant.Filled>
-                            <MudText>
-                                @(context.Key.GetAttribute<AbilityAttribute>()!.Ability.ShortName())
-                            </MudText>
-                        </MudChip>
-                    </MudBadge>
+                    <MudMenu>
+                        <ActivatorContent>
+                            <MudBadge Class="ability-score-badge" Color="Color.Secondary" Overlap="true" Content="context.Value.GetModifier(Character).ToString()">
+                                <MudChip Class="ability-score-chip" T="string" Variant=Variant.Filled Color=Color.Primary CloseIcon="@Icons.Material.Filled.ArrowDropUp">
+                                    <MudText>
+                                        @(context.Value.Ability.ShortName())
+                                    </MudText>
+                                </MudChip>
+                            </MudBadge>
+                        </ActivatorContent>
+                        <ChildContent>
+                            @foreach (var abilityEnum in Enum.GetValues<AbilityEnum>())
+                            {
+                                <MudMenuItem OnClick="() => context.Value.Ability = abilityEnum" >
+                                    <MudText Class="@(abilityEnum == context.Value.Ability ? "fw-bold" : "")">
+                                        @($"{abilityEnum.ShortName()}{(context.Value.DefaultAbility == abilityEnum ? " (default)" : "")}")
+                                    </MudText>
+                                </MudMenuItem>
+                            }
+                        </ChildContent>
+                    </MudMenu>
                 </MudTd>
                 <MudTd> @context.Key.ToReadableString() </MudTd>
             </RowTemplate>

@@ -13,8 +13,9 @@
                     </MudText>
                 </MudChip>
             </MudBadge>
-            <MudNumericField HideSpinButtons="true" @bind-Value="@AbilityScore.Score" For="@(() => AbilityScore.Score)" Immediate="true" />
-            <MudField> Not set yet </MudField>
+            <div></div>
+            <MudNumericField Label="Ability score" HideSpinButtons="true" @bind-Value="@AbilityScore.Score" For="@(() => AbilityScore.Score)" Immediate="true" />
+            <MudNumericField Label="Save bonus" HideSpinButtons="true" @bind-Value="@AbilityScore.ArbitrarySaveModifier" For="@(() => AbilityScore.ArbitrarySaveModifier)" Immediate="true" />
         </div>
     </MudForm>
 }

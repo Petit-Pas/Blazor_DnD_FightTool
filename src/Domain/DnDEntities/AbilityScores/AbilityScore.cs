@@ -55,14 +55,18 @@ public class AbilityScore
     /// </summary>
     public int Score { get; set; }
 
-    // TODO maybe this information should not be there, the mastery is a separated concept. Should maybe be moved when we implement the fact that a save can have a default additional modifier (ring/cloak of protection)
+    /// <summary>
+    ///     An additional amount to add to the saving throw for this ability
+    /// </summary>
+    public int ArbitrarySaveModifier { get; set; } = 0;
+
     /// <summary>
     ///     If this ability is mastered
     /// </summary>
     public bool HasMastery { get; set; }
 
     /// <summary>
-    ///     Gets the modifier for this ability score (with mastery bonus if applicable and provided)
+    ///     Gets the modifier for this ability score
     ///     eg: 
     ///         - 10 => 0, 
     ///         - 16 => 3, 
@@ -70,8 +74,18 @@ public class AbilityScore
     /// </summary>
     /// <param name="masteryBonus"></param>
     /// <returns></returns>
-    public ScoreModifier GetModifier(int masteryBonus = 0)
+    public ScoreModifier GetModifier()
     {
-        return new(Score / 2 - 5 + (HasMastery ? masteryBonus : 0));
+        return Score / 2 - 5;
+    }
+
+    /// <summary>
+    ///     Gets the modifier for this ability score, with the potential mastery bonus applied if necessary
+    /// </summary>
+    /// <param name="masteryBonus"></param>
+    /// <returns></returns>
+    public ScoreModifier GetSavingModifier(int masteryBonus)
+    {
+        return GetModifier() + (HasMastery ? masteryBonus : 0) + ArbitrarySaveModifier;
     }
 }

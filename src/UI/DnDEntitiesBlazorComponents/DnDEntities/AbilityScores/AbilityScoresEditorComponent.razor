@@ -4,7 +4,7 @@
 {
     <MudForm Model=@Character Validation="@(CharacterValidator.ValidateValue)" @ref=_mainForm FieldChanged="NotifyChangedAsync">
         <MudPaper Class="pa-4" Elevation="2" Square>
-            <MudText Class="mb-5" Typo="Typo.h5"> Ability scores </MudText>
+            <MudText Class="mb-5" Typo="Typo.h5"> Abilities </MudText>
             <MudGrid>
                 @foreach (var abilityScore in Character.AbilityScores)
                 {

@@ -21,13 +21,13 @@ public class AbilityScoresCollectionTests
     [Test]
     [TestCase(10, 0)]
     [TestCase(14, 2)]
-    public void Should_Return_Modifier_Without_Mastery_When_Not_Asked(int score, int expectedModifier)
+    public void Should_Return_Modifier_Without_Mastery(int score, int expectedModifier)
     {
         // Arrange
         _abilityCollection.First(x => x.Ability == AbilityEnum.Strength).Score = score;
 
         // Act
-        var scoreModifier = _abilityCollection.GetModifierWithoutMastery(AbilityEnum.Strength);
+        var scoreModifier = _abilityCollection.GetModifier(AbilityEnum.Strength);
 
         // Assert
         scoreModifier.Modifier.Should().Be(expectedModifier);
@@ -36,13 +36,13 @@ public class AbilityScoresCollectionTests
     [Test]
     [TestCase(3, 3)]
     [TestCase(1, 1)]
-    public void Should_Return_Modifier_With_Mastery_When_Asked(int masteryBonus, int expectedModifier)
+    public void Should_Return_Modifier_With_Mastery_When_Asked_For_Saving(int masteryBonus, int expectedModifier)
     {
         // Arrange
         _abilityCollection.MasteryBonus = masteryBonus;
 
         // Act
-        var scoreModifier = _abilityCollection.GetModifierWithMastery(AbilityEnum.Strength);
+        var scoreModifier = _abilityCollection.GetSavingModifier(AbilityEnum.Strength);
 
         // Assert
         scoreModifier.Modifier.Should().Be(expectedModifier);
@@ -54,7 +54,7 @@ public class AbilityScoresCollectionTests
     public void Should_Return_Modifier_Corresponding_To_The_Ability_Requested(AbilityEnum ability, int expectedModifier)
     {
         // Act
-        var scoreModifier = _abilityCollection.GetModifierWithoutMastery(ability);
+        var scoreModifier = _abilityCollection.GetModifier(ability);
 
         // Assert
         scoreModifier.Modifier.Should().Be(expectedModifier);

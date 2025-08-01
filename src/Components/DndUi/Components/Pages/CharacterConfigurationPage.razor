@@ -9,14 +9,18 @@
 <div class="h-100 py-2">
     <MudTabs Elevation=2 Rounded=true ApplyEffectsToContainer=true PanelClass="flex-fill-shrink" OnPreviewInteraction="OnPreviewInteraction" @bind-ActivePanelIndex="_activeIndex" Class="h-100">
         <MudTabPanel Text="Basic infos">
-            <CharacterMainInfoEditorComponent @ref=_mainInfoComponent Character=@_character />
-        </MudTabPanel>
-        <MudTabPanel Text="Skills & Abilities">
             <MudGrid Class="h-100">
-                <MudItem xs=4>
+                <MudItem xs=12>
+                    <CharacterMainInfoEditorComponent @ref=_mainInfoComponent Character=@_character />
+                </MudItem>
+            </MudGrid>
+        </MudTabPanel>
+        <MudTabPanel Text="Abilities & Skills">
+            <MudGrid Class="h-100">
+                <MudItem xs=6>
                     <AbilityScoresEditorComponent @ref=_abilityScoreComponent Character=@_character OnChanged="StateHasChanged"/>
                 </MudItem>
-                <MudItem xs=8 Class="h-100">
+                <MudItem xs=6 Class="h-100">
                     <SkillsEditorComponent Character=@_character />
                 </MudItem>
             </MudGrid>

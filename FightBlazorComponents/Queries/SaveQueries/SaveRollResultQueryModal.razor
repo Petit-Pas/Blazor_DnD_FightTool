@@ -17,7 +17,7 @@
                     DC @SaveRollResult.Target.GetValue(Caster!) @SaveRollResult.Ability.ShortName()
                 </PrefixRenderFragment>
                 <SuffixRenderFragment>
-                    @Target!.AbilityScores.GetModifierWithMastery(SaveRollResult.Ability).ModifierString
+                    @Target!.AbilityScores.GetSavingModifier(SaveRollResult.Ability).ModifierString
                 </SuffixRenderFragment>
             </IntInput>
         </EditForm>

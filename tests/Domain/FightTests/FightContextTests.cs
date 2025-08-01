@@ -39,14 +39,15 @@ namespace FightTests
             {
                 // Arrange
                 var monster = CharacterFactory.BuildMonster(name: "Imp");
+                var clonedMonster = CharacterFactory.BuildMonster(name: "Imp2");
+                A.CallTo(() => _mapper.Clone(monster))
+                    .Returns(clonedMonster);
 
                 // Act
                 _fightContext.AddToFight(monster);
 
                 // Assert
-                var fighters = _fightContext.GetFighters().ToArray();
-                fighters.Should().Contain(x => x.Name == monster.Name);
-                fighters.Should().NotContain(x => x.CharacterId == monster.Id);
+                _fightContext.GetCharacterById(clonedMonster.Id).Should().Be(clonedMonster);
             }
 
             [Test]

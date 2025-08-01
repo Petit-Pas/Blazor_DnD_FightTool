@@ -36,7 +36,7 @@ public class AbilityScoresCollection : List<AbilityScore>
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public ScoreModifier GetModifierWithoutMastery(AbilityEnum name)
+    public ScoreModifier GetModifier(AbilityEnum name)
     {
         var ability = this.FirstOrDefault(x => x.Ability == name);
 
@@ -54,7 +54,7 @@ public class AbilityScoresCollection : List<AbilityScore>
     /// </summary>
     /// <param name="name"></param>
     /// <returns></returns>
-    public ScoreModifier GetModifierWithMastery(AbilityEnum name)
+    public ScoreModifier GetSavingModifier(AbilityEnum name)
     {
         var ability = this.FirstOrDefault(x => x.Ability == name);
 
@@ -64,12 +64,12 @@ public class AbilityScoresCollection : List<AbilityScore>
             return ScoreModifier.Empty;
         }
 
-        return ability.GetModifier(MasteryBonus);
+        return ability.GetSavingModifier(MasteryBonus);
     }
 
     public string ModifiersString(AbilityScore abilityScore)
     {
-        return $"{GetModifierWithoutMastery(abilityScore.Ability)}/{GetModifierWithMastery(abilityScore.Ability)}";
+        return $"{GetModifier(abilityScore.Ability)}/{GetSavingModifier(abilityScore.Ability)}";
     }
 
     /// <summary>

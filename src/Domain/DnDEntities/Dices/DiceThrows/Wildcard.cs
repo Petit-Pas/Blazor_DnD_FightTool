@@ -57,7 +57,7 @@ public record Wildcard(string Token)
     {
         if (IsAnAbility(out var ability))
         {
-            return caster.AbilityScores.GetModifierWithoutMastery(ability);
+            return caster.AbilityScores.GetModifier(ability);
         }
         if (IsMastery())
         {

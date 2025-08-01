@@ -47,7 +47,7 @@ public class SaveRollResult
     {
         var target = Target.GetValue(casterCharacter);
 
-        var modifier = targetCharacter.AbilityScores.GetModifierWithMastery(Ability);
+        var modifier = targetCharacter.AbilityScores.GetSavingModifier(Ability);
 
         return RolledResult + modifier.Modifier >= target;
     }

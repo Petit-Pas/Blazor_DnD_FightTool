@@ -35,6 +35,11 @@ public record ScoreModifier(int Modifier)
         return modifier.Modifier;
     }
 
+    public static implicit operator ScoreModifier(int value)
+    {
+        return new ScoreModifier(value);
+    }
+
     public override string ToString()
     {
         return ModifierString;

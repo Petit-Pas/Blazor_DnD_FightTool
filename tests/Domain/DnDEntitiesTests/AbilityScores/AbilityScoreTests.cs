@@ -64,15 +64,31 @@ public class AbilityScoreTests
     [TestCase(20, 5)]
     [TestCase(21, 5)]
     [TestCase(22, 6)]
-    public void GetModifierWithMasteryTests(int score, int expectedModifier)
+    public void GetSavingModifierTests(int score, int expectedModifier)
     {
         // Arrange
         var abilityScore = new AbilityScore(AbilityEnum.Strength, score, true);
 
         // Arrange
-        var modifier = abilityScore.GetModifier(2);
+        var modifier = abilityScore.GetSavingModifier(2);
 
         // Assert
         modifier.Modifier.Should().Be(expectedModifier + 2);
+    }
+
+    [Test]
+    public void GetSavingModifierTests_With_Arbitrary_Mastery_Bonus()
+    {
+        // Arrange
+        var abilityScore = new AbilityScore(AbilityEnum.Strength, 10, false)
+        {
+            ArbitrarySaveModifier = 3
+        };
+
+        // Arrange
+        var modifier = abilityScore.GetSavingModifier(0);
+
+        // Assert
+        modifier.Modifier.Should().Be(3);
     }
 }
