@@ -10,6 +10,11 @@ namespace DnDFightTool.Domain.DnDEntities.Skills;
 /// </summary>
 public class Skill
 {
+    [Obsolete("Only to be used by deserialization")]
+    public Skill()
+    {
+    }
+    
     /// <summary>
     ///     Ctor with the name of the skill
     /// </summary>

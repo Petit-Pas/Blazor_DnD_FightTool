@@ -6,7 +6,7 @@ namespace DndUi.Components.Shared
     public partial class ThemeToggle : ComponentBase
     {
         [Parameter]
-        public bool IsDarkMode { get; set; } = true;
+        public bool IsDarkMode { get; set; }
 
         [Parameter]
         public MudThemeProvider? MudThemeProvider { get; set; }
