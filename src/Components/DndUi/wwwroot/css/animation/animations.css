@@ -1,0 +1,31 @@
+﻿/** Animations based on a parent trigger **/
+
+/* To be used to mark a parent as the trigger of an animation */
+.parent-hover-trigger {
+}
+
+/* Translations */
+
+.parent-hover-jump {
+    transition: transform 0.2s ease-in-out;
+}
+.parent-hover-trigger:hover .parent-hover-jump {
+    transform: translateY(-10%);
+}
+
+/* Rotations */
+
+.parent-hover-rotate-90 {
+    transition: transform 0.2s ease-in-out;
+}
+.parent-hover-trigger:hover .parent-hover-rotate-90 {
+    transform: rotate(90deg);
+}
+
+/** Animations based on self trigger **/
+.click-translate {
+    transition: transform 0.2s cubic-bezier(.4,2,.6,1);
+}
+.click-translate:active {
+    transform: translateY(3%);
+}

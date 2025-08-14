@@ -47,7 +47,7 @@ public partial class EditCharacterPage
             var character = CharacterRepository.GetCharacterById(id);
             if (character == null)
             {
-                Navigation.NavigateTo("/Characters");
+                Navigation.NavigateTo("/oldCharacters");
                 return;
             }
             _character = Mapper.Copy(CharacterRepository.GetCharacterById(id)!);
@@ -58,12 +58,12 @@ public partial class EditCharacterPage
     {
         CharacterRepository.Save(_character!);
         ToastService.ShowError($"Character {_character?.Name} has been successfully saved!");
-        Navigation.NavigateTo("/Characters");
+        Navigation.NavigateTo("/oldCharacters");
     }
 
     private void CancelClicked()
     {
-        Navigation.NavigateTo("/Characters");
+        Navigation.NavigateTo("/oldCharacters");
     }
 
     private EditCharacterPageState PageState { get; set; } = EditCharacterPageState.MainInformations;

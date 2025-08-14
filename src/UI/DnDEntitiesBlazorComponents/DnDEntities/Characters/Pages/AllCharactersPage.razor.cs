@@ -49,7 +49,7 @@ public partial class AllCharactersPage
 
     private void CreateNew(MouseEventArgs _)
     {
-        Navigation.NavigateTo($"characters/edit/{(_typeDisplayed is CharacterType.Player ? "newPlayer" : "newMonster")}");
+        Navigation.NavigateTo($"oldcharacters/edit/{(_typeDisplayed is CharacterType.Player ? "newPlayer" : "newMonster")}");
     }
 
     private async Task Delete(Character character)
@@ -81,7 +81,7 @@ public partial class AllCharactersPage
 
     private void Edit(Character character)
     {
-        Navigation.NavigateTo($"characters/edit/{character.Id}");
+        Navigation.NavigateTo($"oldcharacters/edit/{character.Id}");
     }
 
     // UI Methods

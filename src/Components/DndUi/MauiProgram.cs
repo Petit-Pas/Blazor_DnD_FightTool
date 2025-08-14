@@ -1,7 +1,13 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using IO.Files;
+using IO.Serialization;
+using Mapping;
 using Microsoft.Extensions.Logging;
 using Morris.Blazor.Validation;
 using MudBlazor.Services;
+using DnDFightTool.Domain.DnDEntities.IoC;
+using AspNetCoreExtensions.IoC;
+using DnDEntitiesBlazorComponents.IoC;
 
 namespace DndUi;
 
@@ -31,6 +37,18 @@ public static class MauiProgram
                 typeof(Character).Assembly);
         });
 
-        return builder.Build();
+        builder.Services.AddSingleton<ICharacterRepository, LocalFileCharacterRepository>();
+        builder.Services.AddSingleton<IFileManager, LocalFileManager>();
+        builder.Services.AddSingleton<IJsonSerializer, JsonSerializer>();
+
+        builder.Services.AddSingleton<IMapper, Mapper>();
+        
+        builder.Services
+            .RegisterDnDEntitiesMappingConfigurations()
+            .RegisterAspNetCoreExtensions()
+            .RegisterDnDEntitiesBlazorComponentsServices();
+
+        var app = builder.Build();
+        return app;
 	}
 }

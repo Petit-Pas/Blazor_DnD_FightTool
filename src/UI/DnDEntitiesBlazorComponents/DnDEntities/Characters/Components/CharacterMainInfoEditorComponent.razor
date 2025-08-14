@@ -7,10 +7,13 @@
 @using MudBlazor
 @using Microsoft.AspNetCore.Components.Forms
 @using Morris.Blazor.Validation
+@using SharedComponents
+
+@inherits StylableComponentBase
 
 @if (Character is not null)
 {
-    <MudForm Model="Character" Validation="@(CharacterValidator.ValidateValue)" @ref="@_form">
+    <MudForm Model="Character" Validation="@(CharacterValidator.ValidateValue)" @ref="@_form" Class=@Class Style=@Style>
         <MudPaper Class="pa-4" Elevation="2" Square >
             <MudGrid>
                 <MudItem xs="12">

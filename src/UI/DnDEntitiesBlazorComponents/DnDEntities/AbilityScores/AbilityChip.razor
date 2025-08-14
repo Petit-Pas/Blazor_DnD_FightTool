@@ -1,0 +1,29 @@
+﻿@using DnDFightTool.Domain.DnDEntities.AbilityScores;
+@using MudBlazor
+@using SharedComponents
+
+@inherits StylableComponentBase;
+
+<div class=@Class style=@Style>
+    @if (!string.IsNullOrWhiteSpace(BadgeContent))
+    {
+        <MudBadge Class="ability-score-badge" Color=@BadgeColor Overlap="true" Content=@BadgeContent>
+            <MudChip Class="ability-score-chip"
+                     T="string" Color=@Color Variant=@Variant OnClick=OnClick>
+                <MudText>
+                    @Ability.ShortName()
+                </MudText>
+            </MudChip>
+        </MudBadge>
+    }
+    else
+    {
+        <MudChip Class="ability-score-chip"
+                 T="string" Color=@Color Variant=@Variant OnClick=OnClick>
+            <MudText>
+                @Ability.ShortName()
+            </MudText>
+        </MudChip>
+    }
+
+</div>

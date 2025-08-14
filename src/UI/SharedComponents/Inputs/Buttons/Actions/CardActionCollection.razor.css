@@ -3,7 +3,7 @@
     flex-direction: row;
     justify-content: flex-end;
     margin-right: 10px;
-    gap: 8px;
+    gap: 4px;
     position: absolute;
     top: 7px;
     right: 5px;
@@ -18,6 +18,13 @@
 
 /* Can only work within a card */
 .neo-card:hover .action {
+    opacity: 1;
+    transform: translateY(0);
+    transition-property: opacity, transform;
+    transition-duration: 0.3s;
+}
+
+.mud-paper:hover .action {
     opacity: 1;
     transform: translateY(0);
     transition-property: opacity, transform;

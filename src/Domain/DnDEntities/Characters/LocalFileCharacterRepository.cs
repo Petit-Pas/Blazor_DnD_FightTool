@@ -1,4 +1,5 @@
-﻿using IO.Files;
+﻿using System.Diagnostics;
+using IO.Files;
 using IO.Serialization;
 
 namespace DnDFightTool.Domain.DnDEntities.Characters;
@@ -80,6 +81,7 @@ public class LocalFileCharacterRepository : ICharacterRepository
     /// <inheritdoc />
     public void Delete(Character character)
     {
+        Trace.WriteLine($"deleting file for {character.Id}");
         _fileManager.Delete(character.Id.ToString());
         _characters.Remove(character.Id);
     }

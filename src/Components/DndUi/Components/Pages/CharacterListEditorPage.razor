@@ -1,0 +1,59 @@
+@page "/"
+@page "/Characters"
+
+@using DnDEntitiesBlazorComponents.DnDEntities.AbilityScores
+@using DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities
+@using DnDEntitiesBlazorComponents.DnDEntities.Skills
+@using DnDFightTool.Domain.DnDEntities.Characters
+@using MudBlazor
+@using DnDEntitiesBlazorComponents.DnDEntities.Characters.Components
+@using SharedComponents.Icons
+@using SharedComponents.Inputs.Buttons.Actions
+
+<div class="h-100 py-2">
+    <MudTabs Elevation=2 Rounded=true ApplyEffectsToContainer=true PanelClass="flex-fill-shrink" Class="h-100 p-2">
+        <MudTabPanel Class="hw-100" Text="Players">
+            <div class="h-100 d-flex flex-column gap-2">
+                <div class="h-100 overflow-y-auto">
+                    @foreach (var player in _players)
+                    {
+                        <MudPaper @key="player.Id" Class="p-4 my-2 position-relative" Elevation="2">
+                            <MudText>
+                                @player.Name @player.Id
+                            </MudText>
+                            <CardActionCollection>
+                                <CardActionCollectionElement>
+                                    <MudIconButton Icon=@CustomIcons.SvgRepo.Swords Color=Color.Secondary Variant="Variant.Filled"
+                                                   Class="rounded-circle" OnClick="() => AddToFight(player)" />
+                                </CardActionCollectionElement>
+                                <CardActionCollectionElement>
+                                    <MudIconButton Icon=@Icons.Material.Filled.Edit Color=Color.Primary Variant="Variant.Filled"
+                                                   Class="rounded-circle" OnClick="() => Edit(player)" />
+                                </CardActionCollectionElement>
+                                <CardActionCollectionElement>
+                                    <MudIconButton Icon=@Icons.Material.Filled.ContentCopy Color=Color.Primary Variant="Variant.Filled"
+                                                   Class="rounded-circle" OnClick="() => Duplicate(player)" />
+                                </CardActionCollectionElement>
+                                <CardActionCollectionElement>
+                                    <MudIconButton Icon=@Icons.Material.Filled.Delete Color=Color.Error Variant="Variant.Filled"
+                                                   Class="rounded-circle" OnClick="() => Delete(player)" />
+                                </CardActionCollectionElement>
+                            </CardActionCollection>
+                        </MudPaper>
+                    }
+                </div>
+                <MudButton Class="w-100 parent-hover-trigger click-translate" Variant=Variant.Filled Color=Color.Primary OnClick="() => AddNew(CharacterType.Player)">
+                    <div class="parent-hover-jump">
+                        <MudIcon Class="parent-hover-rotate-90 large-icon" Icon=@Icons.Material.Filled.AddCircle />
+                    </div>
+                </MudButton>
+            </div>
+        </MudTabPanel>
+        <MudTabPanel Class="hw-100" Text="Monsters">
+            <MudGrid Class="h-100">
+                <MudItem xs=12 Class="h-100">
+                </MudItem>
+            </MudGrid>
+        </MudTabPanel>
+    </MudTabs>
+</div>

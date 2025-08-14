@@ -1,14 +1,18 @@
-﻿@using DnDFightTool.Domain.DnDEntities.AbilityScores
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.AbilityScores
+@using DnDFightTool.Domain.DnDEntities.AbilityScores
 @using Extensions
 @using MudBlazor
 @using DnDFightTool.Domain.DnDEntities.Skills;
+@using SharedComponents
 @using SharedComponents.Icons;
+
+@inherits StylableComponentBase
 
 @if (Character is not null)
 {
-    <MudPaper Class="pa-4 d-flex flex-column h-100" Elevation="2" Square>
+    <MudPaper Class="@("pa-4 d-flex flex-column h-100" + Class)" Style=@Style Elevation="2" Square>
         <MudText Class="mb-2" Typo="Typo.h5"> Skills </MudText>
-        <MudTable ContainerClass="pt-2" Class="flex-fill-scroll" Elevation=0 Items="@Character.Skills.Values" Dense="true" Striped="true" Hover="true">
+        <MudTable ContainerClass="pt-2" Class="overflow-y-auto" Elevation=0 Items="@Character.Skills.Values" Dense="true" Striped="true" Hover="true">
             <RowTemplate>
                 <MudTd class="w-1">
                     <MudIconButton Icon="@GetIconFor(context)" OnClick="@context.IncreaseMastery" @oncontextmenu="@context.DecreaseMastery" Color=Color.Primary />
@@ -16,13 +20,10 @@
                 <MudTd class="w-1">
                     <MudMenu>
                         <ActivatorContent>
-                            <MudBadge Class="ability-score-badge" Color="Color.Secondary" Overlap="true" Content="context.GetModifier(Character).ToString()">
-                                <MudChip Class="ability-score-chip" T="string" Variant=Variant.Filled Color=Color.Primary CloseIcon="@Icons.Material.Filled.ArrowDropUp">
-                                    <MudText>
-                                        @(context.Ability.ShortName())
-                                    </MudText>
-                                </MudChip>
-                            </MudBadge>
+                            <AbilityChip Ability=@context.Ability
+                                         BadgeContent=@context.GetModifier(Character).ToString()
+                                         Variant=Variant.Filled
+                                         Color=Color.Primary/>
                         </ActivatorContent>
                         <ChildContent>
                             @foreach (var abilityEnum in Enum.GetValues<AbilityEnum>())

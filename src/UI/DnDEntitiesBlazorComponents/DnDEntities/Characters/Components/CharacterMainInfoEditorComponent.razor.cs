@@ -2,10 +2,11 @@
 using DnDFightTool.Domain.DnDEntities.Characters.Validation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using SharedComponents;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Characters.Components;
 
-public partial class CharacterMainInfoEditorComponent
+public partial class CharacterMainInfoEditorComponent : StylableComponentBase
 {
     [Inject]
 #pragma warning disable 8618

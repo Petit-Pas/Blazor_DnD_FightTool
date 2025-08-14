@@ -1,4 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+﻿using System.Text.Json.Serialization;
+using DnDFightTool.Domain.DnDEntities.AbilityScores;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 using Extensions;
@@ -46,7 +47,8 @@ public class Skill
     /// <summary>
     ///     The ability used by default to do the skill check
     /// </summary>
-    public AbilityEnum DefaultAbility { get; private init; }
+    [JsonInclude]
+    public AbilityEnum DefaultAbility { get; private init ; }
 
     public void IncreaseMastery()
     {

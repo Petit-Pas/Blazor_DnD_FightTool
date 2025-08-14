@@ -1,4 +1,7 @@
-﻿<Router AppAssembly="@typeof(MauiProgram).Assembly">
+﻿@using DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages
+
+<Router AppAssembly="@typeof(MauiProgram).Assembly"
+        AdditionalAssemblies="new [] { typeof(CharacterEditorPage).Assembly }">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />

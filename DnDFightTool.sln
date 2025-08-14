@@ -60,6 +60,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndUi", "src\Components\DndUi\DndUi.csproj", "{C94F95AA-6C0C-E5B9-5A17-1439C8ABEAD1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreExtensions", "src\Infrastructure\AspNetCoreExtensions\AspNetCoreExtensions.csproj", "{C85691FC-7B64-4394-BBED-FC6481ACBD7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +147,10 @@ Global
 		{C94F95AA-6C0C-E5B9-5A17-1439C8ABEAD1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{C94F95AA-6C0C-E5B9-5A17-1439C8ABEAD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C94F95AA-6C0C-E5B9-5A17-1439C8ABEAD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C85691FC-7B64-4394-BBED-FC6481ACBD7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C85691FC-7B64-4394-BBED-FC6481ACBD7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C85691FC-7B64-4394-BBED-FC6481ACBD7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C85691FC-7B64-4394-BBED-FC6481ACBD7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +182,7 @@ Global
 		{EF646EF9-A562-46A6-A058-28AEA8035D2C} = {BD09E90F-6B05-45E9-A5D5-EA0E525A31EC}
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {2C978B9F-B364-4776-99AF-20B4AE7AC298}
 		{C94F95AA-6C0C-E5B9-5A17-1439C8ABEAD1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{C85691FC-7B64-4394-BBED-FC6481ACBD7C} = {4A095976-38E6-41B5-9F88-C24D62702B81}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4F0A421B-176D-4E26-BD1F-6466C90520DF}

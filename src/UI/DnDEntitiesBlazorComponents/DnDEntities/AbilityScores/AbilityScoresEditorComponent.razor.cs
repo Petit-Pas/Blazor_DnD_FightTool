@@ -2,11 +2,11 @@
 using DnDFightTool.Domain.DnDEntities.Characters.Validation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using MudBlazor.Utilities;
+using SharedComponents;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.AbilityScores;
 
-public partial class AbilityScoresEditorComponent
+public partial class AbilityScoresEditorComponent : StylableComponentBase
 {
     [Inject]
 #pragma warning disable 8618

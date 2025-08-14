@@ -20,6 +20,8 @@
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <ApplicationVersion>1</ApplicationVersion>
+		
+		<ApplicationIdGuid>11111111-409B-4E30-9924-80BB0C745CD5</ApplicationIdGuid>
 
         <!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
         <WindowsPackageType>None</WindowsPackageType>
@@ -53,10 +55,11 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
         <PackageReference Include="Morris.Blazor.FluentValidation" Version="3.1.5" />
         <PackageReference Include="Morris.Blazor.Validation" Version="3.1.5" />
-        <PackageReference Include="MudBlazor" Version="8.10.0" />
+        <PackageReference Include="MudBlazor" Version="8.11.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Infrastructure\AspNetCoreExtensions\AspNetCoreExtensions.csproj" />
       <ProjectReference Include="..\..\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
     </ItemGroup>
 

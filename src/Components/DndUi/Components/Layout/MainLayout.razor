@@ -11,7 +11,7 @@
     <MudAppBar Elevation="1">
         <MudSpacer />
         <ScreenSizeBadge />
-        <ThemeToggle MudThemeProvider="@_mudThemeProvider" />
+        <ThemeToggle MudThemeProvider="@_mudThemeProvider" IsDarkMode="_isDarkMode" />
     </MudAppBar>
     <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true" ClipMode="DrawerClipMode.Docked">
         <NavMenu />
@@ -26,7 +26,7 @@
 @code {
     private bool _open = false;
     private MudThemeProvider? _mudThemeProvider;
-    private bool _isDarkMode;
+    private bool _isDarkMode = true;
 
     private void OnIsDarkModeChanged(bool value)
     {

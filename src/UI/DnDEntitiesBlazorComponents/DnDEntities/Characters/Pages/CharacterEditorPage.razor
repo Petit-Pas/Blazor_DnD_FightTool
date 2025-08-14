@@ -1,0 +1,52 @@
+﻿@page "/Characters/Edit"
+@using DnDEntitiesBlazorComponents.DnDEntities.AbilityScores
+@using DnDEntitiesBlazorComponents.DnDEntities.Characters.Components
+@using DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities
+@using DnDEntitiesBlazorComponents.DnDEntities.Skills
+@using MudBlazor
+@using SharedComponents.Inputs.Buttons
+
+@if (_character is not null)
+{
+    <div class="h-100 py-2">
+        <MudTabs Elevation=2 Rounded=true ApplyEffectsToContainer=true PanelClass="flex-fill-shrink" OnPreviewInteraction="OnPreviewInteraction" @bind-ActivePanelIndex="_tabActiveIndex" Class="h-100 p-2">
+            <MudTabPanel Class="hw-100" Text="Basic infos">
+                <div class="h-100 mud-paper-grid" style="grid-template-rows: 1fr auto;">
+                    <!-- Top row: abilities and skills columns -->
+                    <CharacterMainInfoEditorComponent 
+                        @ref=_mainInfoComponent Character=@_character 
+                        Style="min-height: 0; overflow: auto" />
+                    <!-- Bottom row: button -->
+                    <CancelSaveButtonRow 
+                        SaveClicked=Save CancelClicked=Cancel 
+                        Style="grid-row: 2" />
+                </div>
+            </MudTabPanel>
+            <MudTabPanel Class="hw-100" Text="Abilities & Skills">
+                <div class="h-100 mud-paper-grid" style="grid-template-rows: 1fr auto; grid-template-columns: 1fr 1fr;">
+                    <!-- Top row: abilities and skills columns -->
+                    <AbilityScoresEditorComponent @ref=_abilityScoreComponent Character=@_character OnChanged="StateHasChanged" Style="grid-column: 1; min-height: 0; overflow: visible" />
+                    <SkillsEditorComponent
+                        Character=@_character 
+                        Style="grid-column: 2; min-height: 0;" />
+                    <!-- Bottom row: button -->
+                    <CancelSaveButtonRow 
+                        SaveClicked=Save CancelClicked=Cancel
+                        Style="grid-row: 2; grid-column: 1 / span 2;" />
+                </div>
+            </MudTabPanel>
+            <MudTabPanel Class="hw-100 test" Text=Resistances>
+                <div class="h-100 mud-paper-grid" style="grid-template-rows: 1fr auto;">
+                    <!-- Top row: abilities and skills columns -->
+                    <ResistancesEditorComponent 
+                        Character=@_character 
+                        Style="min-height: 0;" />
+                    <!-- Bottom row: button -->
+                    <CancelSaveButtonRow 
+                        SaveClicked=Save CancelClicked=Cancel 
+                        Style="grid-row: 2" />
+                </div>
+            </MudTabPanel>
+        </MudTabs>
+    </div>
+}

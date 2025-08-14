@@ -2,11 +2,12 @@
 using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using SharedComponents;
 using SharedComponents.Icons;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities;
 
-public partial class ResistancesEditorComponent
+public partial class ResistancesEditorComponent : StylableComponentBase
 {
     [Parameter, EditorRequired]
     public Character? Character { get; set; } = default!;
@@ -15,11 +16,11 @@ public partial class ResistancesEditorComponent
     {
         return damageAffinity.Affinity switch
         {
-            DamageAffinityEnum.Weak => FontAwesomeIcons.HeartBroken,
-            DamageAffinityEnum.Normal => FontAwesomeIcons.HeartFull,
-            DamageAffinityEnum.Resistant => FontAwesomeIcons.ShieldHalf,
-            DamageAffinityEnum.Immune => FontAwesomeIcons.ShieldFull,
-            DamageAffinityEnum.Heal => FontAwesomeIcons.ShieldHeart,
+            DamageAffinityEnum.Weak => CustomIcons.FontAwesome.HeartBroken,
+            DamageAffinityEnum.Normal => CustomIcons.FontAwesome.HeartFull,
+            DamageAffinityEnum.Resistant => CustomIcons.FontAwesome.ShieldHalf,
+            DamageAffinityEnum.Immune => CustomIcons.FontAwesome.ShieldFull,
+            DamageAffinityEnum.Heal => CustomIcons.FontAwesome.ShieldHeart,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
