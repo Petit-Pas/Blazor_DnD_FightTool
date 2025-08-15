@@ -1,0 +1,8 @@
+﻿::deep .ability-score-chip.mud-chip {
+    width: 60px;
+}
+
+::deep .ability-score-badge > .mud-badge-wrapper > .mud-badge {
+    transform: translate(-8px, -3px);
+}
+                                                                                                                        
