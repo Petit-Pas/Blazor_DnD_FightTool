@@ -1,0 +1,8 @@
+﻿.attack-list {
+    /* required for the drop shadow to be properly visible, without having a too high gap with parent padding */
+    margin-left: -0.5em;
+    margin-right: -0.5em;
+    margin-top: 0.5em; /* That one can still be positive to avoid swallowing the interface above */
+    margin-bottom: -0.5em;
+    padding: 0.5em;
+}

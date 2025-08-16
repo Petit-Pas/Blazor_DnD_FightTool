@@ -24,7 +24,7 @@
     transition-duration: 0.3s;
 }
 
-.mud-paper:hover .action {
+.mud-paper:hover > .actions > .action {
     opacity: 1;
     transform: translateY(0);
     transition-property: opacity, transform;

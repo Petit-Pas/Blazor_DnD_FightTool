@@ -24,7 +24,7 @@ public class HitPoints
 
     /// <summary>
     ///     The current temporary hit points of a character
-    ///     When receiving temporary hit points, the character gets the max between the current temporary hit points and the new temporary hit points
+    ///     When receiving temporary hit points, the character should get the max between the current temporary hit points and the new temporary hit points
     /// </summary>
     public int CurrentTempHps { get; set; } = 0;
 

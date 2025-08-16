@@ -6,7 +6,7 @@
 @if (Character is not null)
 {
     <MudForm Model=@Character Validation="@(CharacterValidator.ValidateValue)" @ref=_mainForm FieldChanged="NotifyChangedAsync" Class="@("h-100" + Class)" Style=@Style>
-        <MudPaper Class="d-flex flex-column h-100 pa-4" Elevation="2" Square>
+        <MudPaper Class="d-flex flex-column h-100 p-3" Elevation="2" Square>
             <MudText Class="mb-3" Typo="Typo.h5"> Abilities </MudText>
             <div class="overflow-y-auto">
                 @foreach (var abilityScore in Character.AbilityScores)

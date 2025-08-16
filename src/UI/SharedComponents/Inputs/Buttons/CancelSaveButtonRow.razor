@@ -2,15 +2,21 @@
 
 @inherits StylableComponentBase
 
-<div class="d-grid mud-paper-grid @Class" style=@Style>
-    <MudButton Class="w-100 parent-hover-trigger click-translate" Variant=Variant.Filled Color=Color.Error OnClick="Cancel">
+<div class="f-row gap-2 justify-content-end @Class" style=@("" + Style)>
+    <MudButton 
+        Class="parent-hover-trigger click-translate" Style="width: 12em;"
+        Variant=Variant.Filled Color=Color.Default 
+        OnClick="Cancel">
         <div class="parent-hover-jump">
-            <MudIcon Class="parent-hover-rotate-90 large-icon" Icon=@Icons.Material.Filled.Cancel />
+            <MudIcon Class="parent-hover-rotate-90" Size=Size.Large Icon=@Icons.Material.Filled.Cancel />
         </div>
     </MudButton>
-    <MudButton Style="grid-column: 2" Class="w-100 parent-hover-trigger click-translate" Variant=Variant.Filled Color=Color.Success OnClick="Save">
+    <MudButton 
+        Class="parent-hover-trigger click-translate" Style="grid-column: 2; width: 12em;" 
+        Variant=Variant.Filled Color=Color.Success 
+        OnClick="Save">
         <div class="parent-hover-jump">
-            <MudIcon Class="large-icon" Icon=@Icons.Material.Filled.Save />
+            <MudIcon Size=Size.Large Icon=@Icons.Material.Filled.Save />
         </div>
     </MudButton>
 </div>

@@ -6,7 +6,7 @@
 
 @if (Character != null)
 {
-    <MudPaper Class="@("pa-4 d-flex flex-column h-100" + @Class)" Style=@Style Elevation="2" Square>
+    <MudPaper Class="@("p-3 d-flex flex-column h-100" + @Class)" Style=@Style Elevation="2" Square>
         <MudText Class="mb-2" Typo="Typo.h5"> Weakness Resistances and Immunities </MudText>
         <MudTable ContainerClass="pt-2" Class="overflow-y-auto" Elevation=0 Items="@Character.DamageAffinities.Values" Dense="true" Striped="true" Hover="true">
             <RowTemplate>

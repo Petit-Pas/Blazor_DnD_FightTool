@@ -13,8 +13,8 @@
 
 @if (Character is not null)
 {
-    <MudForm Model="Character" Validation="@(CharacterValidator.ValidateValue)" @ref="@_form" Class=@Class Style=@Style>
-        <MudPaper Class="pa-4" Elevation="2" Square >
+    <MudForm Model="Character" Validation="@(CharacterValidator.ValidateValue)" @ref="@_form" Class=@($"h-100 {Class}") Style=@($"{Style}")>
+        <MudPaper Class="p-3 h-100" Elevation="2" Square >
             <MudGrid>
                 <MudItem xs="12">
                     <MudTextField Label="Name" @bind-Value="Character.Name" For="@(() => Character.Name)" Typo="Typo.h5"/>

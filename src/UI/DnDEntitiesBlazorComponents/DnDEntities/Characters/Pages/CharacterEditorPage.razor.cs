@@ -61,12 +61,11 @@ public partial class CharacterEditorPage
 
     private void Save()
     {
-        CharacterRepository.Save(_character!);
-        Navigation.NavigateBack();
+        GlobalEditContext.SaveEditedCharacter();
     }
 
     private void Cancel()
     {
-        Navigation.NavigateBack();
+        GlobalEditContext.CancelCharacterEdittion();
     }
 }

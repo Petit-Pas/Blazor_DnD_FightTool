@@ -3,7 +3,7 @@
     flex-direction: column;
 }
 
-f-row {
+.f-row {
     display: flex;
     flex-direction: row;
 }

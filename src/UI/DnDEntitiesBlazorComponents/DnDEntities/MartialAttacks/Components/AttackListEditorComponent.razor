@@ -1,0 +1,48 @@
+﻿@using MudBlazor
+@using SharedComponents
+@using SharedComponents.Inputs.Buttons.Actions
+
+@inherits StylableComponentBase
+
+@if (Character is not null)
+{
+    <MudCard Class=@($"h-100 p-3 {Class}") Style=@($"{Style}") Square>
+        <div class="f-row align-top">
+            <MudText Class="" Typo="Typo.h5"> Attacks </MudText>
+            <MudSpacer />
+            <MudIconButton Class="parent-hover-trigger click-translate rounded-circle"
+                           Style="margin-top: -10px;"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="() => AddNew()">
+                <div class="parent-hover-jump">
+                    <MudIcon Size=Size.Large Class="parent-hover-rotate-90" Icon="@Icons.Material.Filled.AddCircle" />
+                </div>
+            </MudIconButton>
+        </div>
+        <div class="h-100 f-column overflow-y-auto gap-2 attack-list">
+            @foreach (var attack in Character.MartialAttacks.Values)
+            {
+                <MudPaper @key="attack.Id" Class="p-4 position-relative" Elevation="4">
+                    <MudText>
+                        @attack.Name @attack.Modifiers.Expression
+                    </MudText>
+                    <CardActionCollection>
+                        <CardActionCollectionElement>
+                            <MudIconButton Icon=@Icons.Material.Filled.Edit Color=Color.Primary Variant="Variant.Filled"
+                                           Class="rounded-circle" OnClick="() => Edit(attack)" />
+                        </CardActionCollectionElement>
+                        <CardActionCollectionElement>
+                            <MudIconButton Icon=@Icons.Material.Filled.ContentCopy Color=Color.Primary Variant="Variant.Filled"
+                                           Class="rounded-circle" OnClick="() => Duplicate(attack)" />
+                        </CardActionCollectionElement>
+                        <CardActionCollectionElement>
+                            <MudIconButton Icon=@Icons.Material.Filled.Delete Color=Color.Error Variant="Variant.Filled"
+                                           Class="rounded-circle" OnClick="() => Delete(attack)" />
+                        </CardActionCollectionElement>
+                    </CardActionCollection>
+                </MudPaper>
+            }
+        </div>
+    </MudCard>
+}
