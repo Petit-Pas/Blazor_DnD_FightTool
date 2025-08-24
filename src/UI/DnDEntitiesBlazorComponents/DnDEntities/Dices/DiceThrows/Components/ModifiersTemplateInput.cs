@@ -4,9 +4,9 @@ using NeoBlazorphic.Components.Inputs.Fields;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;
 
-public class ModifiersTemplateInput : NeoBaseInput<ModifiersTemplate>
+public class ModifiersTemplateInput : NeoBaseInput<DiceThrowModifiersTemplate>
 {
-    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out ModifiersTemplate result, [NotNullWhen(false)] out string? validationErrorMessage)
+    protected override bool TryParseValueFromString(string? value, [MaybeNullWhen(false)] out DiceThrowModifiersTemplate result, [NotNullWhen(false)] out string? validationErrorMessage)
     {
         validationErrorMessage = null;
         result = null;
@@ -19,7 +19,7 @@ public class ModifiersTemplateInput : NeoBaseInput<ModifiersTemplate>
 
         try
         {
-            result = new ModifiersTemplate(value);
+            result = new DiceThrowModifiersTemplate(value);
             return true;
         }
         catch (InvalidOperationException)
@@ -29,7 +29,7 @@ public class ModifiersTemplateInput : NeoBaseInput<ModifiersTemplate>
         }
     }
 
-    protected override string? FormatValueAsString(ModifiersTemplate? value)
+    protected override string? FormatValueAsString(DiceThrowModifiersTemplate? value)
     {
         return value?.Expression;
     }

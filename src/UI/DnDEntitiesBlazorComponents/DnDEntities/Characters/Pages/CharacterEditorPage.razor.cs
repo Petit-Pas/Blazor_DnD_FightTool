@@ -59,9 +59,25 @@ public partial class CharacterEditorPage
         }
     }
 
-    private void Save()
+    private async Task<bool> AreAllValid()
     {
-        GlobalEditContext.SaveEditedCharacter();
+        if ((await Task
+            .WhenAll(
+                _mainInfoComponent?.ValidateAsync() ?? Task.FromResult(true), 
+                _abilityScoreComponent?.ValidateAsync() ?? Task.FromResult(true))
+            ).Any(valid => !valid))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private async Task Save()
+    {
+        if (await AreAllValid())
+        {
+            GlobalEditContext.SaveEditedCharacter();
+        }
     }
 
     private void Cancel()

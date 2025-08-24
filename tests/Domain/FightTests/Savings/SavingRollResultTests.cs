@@ -27,7 +27,7 @@ public class SavingRollResultTests
             _target.AbilityScores.First(x => x.Ability == AbilityEnum.Strength).Score = 14;
 
 
-            _saveRoll = new SaveRollResult(new DifficultyClass("10"), AbilityEnum.Intelligence)
+            _saveRoll = new SaveRollResult(new DifficultyClassTemplate("10"), AbilityEnum.Intelligence)
             {
                 RolledResult = 10,
             };
@@ -57,7 +57,7 @@ public class SavingRollResultTests
         {
             // Arrange
             _saveRoll.RolledResult = rolledResult;
-            _saveRoll.Target = new DifficultyClass("DC");
+            _saveRoll.Target = new DifficultyClassTemplate("DC");
 
             // Act
             var result = _saveRoll.IsSuccessful(_caster, _target);

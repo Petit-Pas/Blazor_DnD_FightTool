@@ -12,7 +12,7 @@ public static class MartialAttackTemplateFactory
 {
     public static MartialAttackTemplate Build(
         string? name = null,
-        ModifiersTemplate? modifiers = null,
+        DiceThrowModifiersTemplate? modifiers = null,
         DamageRollTemplateCollection? damages = null,
         StatusTemplateCollection? statuses = null,
         Guid? id = null
@@ -21,7 +21,7 @@ public static class MartialAttackTemplateFactory
         return new MartialAttackTemplate()
         {
             Name = name ?? "Attack template",
-            Modifiers = modifiers ?? ModifiersTemplateFactory.Build(),
+            ToHitModifiers = modifiers ?? ModifiersTemplateFactory.Build(),
             Damages = damages ?? DamageRollTemplateFactory.BuildCollection(),
             Statuses = statuses ?? StatusTemplateFactory.BuildCollection(),
             Id = id ?? Guid.NewGuid(),

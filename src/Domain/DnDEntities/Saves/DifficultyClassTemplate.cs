@@ -7,14 +7,14 @@ namespace DnDFightTool.Domain.DnDEntities.Saves;
 /// <summary>
 ///     Difficulty class
 ///     Meant to be used as a target for a <see cref="SaveRollResult"/>
-///     Is described by a <see cref="ModifiersTemplate"/> so it can be numbers & wildcards
+///     Is described by a <see cref="DiceThrowModifiersTemplate"/> so it can be numbers & wildcards
 /// </summary>
-public class DifficultyClass : IHashable
+public class DifficultyClassTemplate : IHashable
 {
     /// <summary>
     ///     Empty Ctor
     /// </summary>
-    public DifficultyClass()
+    public DifficultyClassTemplate()
     {
     }
 
@@ -22,15 +22,15 @@ public class DifficultyClass : IHashable
     ///     Ctor that allows for an expression
     /// </summary>
     /// <param name="expression"></param>
-    public DifficultyClass(string expression)
+    public DifficultyClassTemplate(string expression)
     {
-        DifficultyClassExpression = new ModifiersTemplate(expression);
+        DifficultyClassExpression = new DiceThrowModifiersTemplate(expression);
     }
 
     /// <summary>
     ///     The expression describing the difficulty class
     /// </summary>
-    public ModifiersTemplate DifficultyClassExpression { get; set; } = new ModifiersTemplate("DC");
+    public DiceThrowModifiersTemplate DifficultyClassExpression { get; set; } = new DiceThrowModifiersTemplate("DC");
 
     /// <summary>
     ///    Get the actual value of the difficulty class by evaluating the wildcards in the expression

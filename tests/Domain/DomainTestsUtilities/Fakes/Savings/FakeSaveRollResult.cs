@@ -8,7 +8,7 @@ public class FakeSaveRollResult : SaveRollResult
 {
     private readonly bool _isSuccessful;
 
-    public FakeSaveRollResult(bool isSuccessful) : base(new DifficultyClass("10"), AbilityEnum.Strength)
+    public FakeSaveRollResult(bool isSuccessful) : base(new DifficultyClassTemplate("10"), AbilityEnum.Strength)
     {
         _isSuccessful = isSuccessful;
     }

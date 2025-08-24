@@ -44,7 +44,7 @@
                             <div class="attack-template-tags">
                                 <Card BorderType="NeoBorderType.NeoLightBorder" Shape="BackgroundShape.Concave" Padding="Spacing._1">
                                     <div class="attack-template-tag">
-                                        @attackTemplate.Modifiers.GetScoreModifier(Character).ModifierString
+                                        @attackTemplate.ToHitModifiers.GetScoreModifier(Character).ModifierString
                                     </div>
                                 </Card>
                                 <Card BorderType="NeoBorderType.NeoLightBorder" Shape="BackgroundShape.Concave" Padding="Spacing._1">

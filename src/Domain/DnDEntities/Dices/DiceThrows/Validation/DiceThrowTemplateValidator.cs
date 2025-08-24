@@ -13,7 +13,8 @@ public class DiceThrowTemplateValidator : AbstractValidator<DiceThrowTemplate>
     public DiceThrowTemplateValidator()
     {
         RuleFor(x => x.Expression)
-            .Must(MatchRegex)
+            .NotEmpty()
+            .Matches(DiceThrowTemplate._regex)
             .WithMessage("The expression is not valid, it should look like 1d8+STR+2+MAS");
     }
 

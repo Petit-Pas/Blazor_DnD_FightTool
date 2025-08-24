@@ -3,9 +3,9 @@
 namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;
 
 /// <summary>
-///     Validator for <see cref="ModifiersTemplate" />
+///     Validator for <see cref="DiceThrowModifiersTemplate" />
 /// </summary>
-public class ModifiersTemplateValidator : AbstractValidator<ModifiersTemplate>
+public class ModifiersTemplateValidator : AbstractValidator<DiceThrowModifiersTemplate>
 {
     /// <summary>
     ///     Ctor
@@ -28,7 +28,7 @@ public class ModifiersTemplateValidator : AbstractValidator<ModifiersTemplate>
         {
             return true;
         }
-        var regexEvaluation = ModifiersTemplate._regex.Match(expression);
+        var regexEvaluation = DiceThrowModifiersTemplate._regex.Match(expression);
         return regexEvaluation.Success;
     }
 }

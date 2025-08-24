@@ -6,7 +6,7 @@ namespace DnDFightTool.Domain.DnDEntities.Saves.Validation;
 /// <summary>
 ///     Validator for DifficultyClass
 /// </summary>
-public class DifficultyClassValidator : AbstractValidator<DifficultyClass>
+public class DifficultyClassValidator : AbstractValidator<DifficultyClassTemplate>
 {
     /// <summary>
     ///     Ctor

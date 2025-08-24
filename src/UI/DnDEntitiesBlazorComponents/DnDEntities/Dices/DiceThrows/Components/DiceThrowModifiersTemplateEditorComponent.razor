@@ -1,0 +1,12 @@
+@using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows
+@using SharedComponents.Inputs
+
+@inherits RegexField<DiceThrowModifiersTemplate>;
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    protected override string ErrorMessage => "Invalid dice throw modifiers template, should match something like MAS+STR+1.";
+}

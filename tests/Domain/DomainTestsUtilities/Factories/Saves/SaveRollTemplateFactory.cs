@@ -6,7 +6,7 @@ namespace DomainTestsUtilities.Factories.Saves;
 public static class SaveRollTemplateFactory
 {
     public static SaveRollTemplate Build(
-        DifficultyClass? difficulty = null,
+        DifficultyClassTemplate? difficulty = null,
         AbilityEnum? targetAbility = null
         )
     {

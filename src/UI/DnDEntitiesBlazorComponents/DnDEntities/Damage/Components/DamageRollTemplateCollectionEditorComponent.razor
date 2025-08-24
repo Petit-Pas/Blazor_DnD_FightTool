@@ -1,0 +1,28 @@
+@using MudBlazor
+@using SharedComponents
+
+@inherits StylableComponentBase
+
+@if (DamageRollTemplates is not null)
+{
+    <MudPaper Class="@("p-3 d-flex flex-column h-100 gap-3 overflow-y-auto" + Class)" Style=@Style Elevation="2" Square>
+        <div class="f-row align-top">
+            <MudText Class="" Typo="Typo.h5"> Damages </MudText>
+            <MudSpacer />
+            <MudIconButton Class="parent-hover-trigger click-translate rounded-circle"
+                           Style="margin-top: -10px;"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           OnClick="() => AddNew()">
+                <div class="parent-hover-jump">
+                    <MudIcon Size=Size.Large Class="parent-hover-rotate-90" Icon="@Icons.Material.Filled.AddCircle" />
+                </div>
+            </MudIconButton>
+        </div>
+        @foreach (var damageTemplate in DamageRollTemplates)
+        {
+            <DamageRollTemplateEditorComponent @ref="DamageTemplateComponentReferences[damageTemplate]"
+                Template=@damageTemplate OnDeleted=@(() => Remove(damageTemplate)) />
+        }
+    </MudPaper>
+}

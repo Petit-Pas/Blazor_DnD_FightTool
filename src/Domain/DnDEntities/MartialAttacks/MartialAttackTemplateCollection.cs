@@ -50,7 +50,7 @@ public class MartialAttackTemplateCollection : Dictionary<Guid, MartialAttackTem
 
     public void Add(MartialAttackTemplate attackTemplate)
     {
-        Add(attackTemplate.Id, attackTemplate);
+        this[attackTemplate.Id] = attackTemplate;
     }
 
     /// <summary>

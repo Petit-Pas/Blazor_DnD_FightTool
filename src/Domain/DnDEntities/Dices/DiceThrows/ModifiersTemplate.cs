@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
+using Extensions;
 using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
@@ -11,12 +12,12 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 ///     such as 2+WIS
 ///     For full expressions containing dices too, use <see cref="DiceThrowTemplate" />
 /// </summary>
-public partial class ModifiersTemplate : IHashable
+public partial class DiceThrowModifiersTemplate : IHashable, IRegexValidated
 {
     /// <summary>
     ///     Empty ctor for no modifiers or serializer
     /// </summary>
-    public ModifiersTemplate()
+    public DiceThrowModifiersTemplate()
     {
     }
 
@@ -24,7 +25,7 @@ public partial class ModifiersTemplate : IHashable
     ///     Ctor that receives the expression
     /// </summary>
     /// <param name="expression"></param>
-    public ModifiersTemplate(string expression)
+    public DiceThrowModifiersTemplate(string expression)
     {
         Expression = expression;
     }
@@ -33,6 +34,7 @@ public partial class ModifiersTemplate : IHashable
     ///     Regex to validate and parse the expression
     /// </summary>
     internal readonly static Regex _regex = ModifiersTemplateRegex();
+    public Regex Regex => _regex;
 
     /// <summary>
     ///     Accessors for the expression

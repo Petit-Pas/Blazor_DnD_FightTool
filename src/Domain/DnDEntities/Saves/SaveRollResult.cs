@@ -15,7 +15,7 @@ public class SaveRollResult
     /// </summary>
     /// <param name="target"></param>
     /// <param name="ability"></param>
-    public SaveRollResult(DifficultyClass target, AbilityEnum ability)
+    public SaveRollResult(DifficultyClassTemplate target, AbilityEnum ability)
     {
         Target = target;
         Ability = ability;
@@ -29,7 +29,7 @@ public class SaveRollResult
     /// <summary>
     ///     DC of the save, Needs to be evaluated with the caster's ability score & all
     /// </summary>
-    public DifficultyClass Target { get; set; }
+    public DifficultyClassTemplate Target { get; set; }
 
     /// <summary>
     ///     The ability targeted by the save

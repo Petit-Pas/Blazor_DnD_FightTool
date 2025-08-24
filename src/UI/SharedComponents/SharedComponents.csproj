@@ -17,6 +17,10 @@
     <PackageReference Include="NeoBlazorphic" Version="1.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Domain\DnDEntities\DnDEntities.csproj" />
+  </ItemGroup>
+
 
 
 </Project>

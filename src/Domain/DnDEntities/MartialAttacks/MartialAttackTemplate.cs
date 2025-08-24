@@ -26,7 +26,7 @@ public class MartialAttackTemplate : IHashable
     /// <summary>
     ///     Modifiers to apply to the attack roll, supports wildcards and static modifiers
     /// </summary>
-    public ModifiersTemplate Modifiers { get; set; } = new ModifiersTemplate();
+    public DiceThrowModifiersTemplate ToHitModifiers { get; set; } = new DiceThrowModifiersTemplate();
 
     /// <summary>
     ///     The damage to apply to the target if the attack hits

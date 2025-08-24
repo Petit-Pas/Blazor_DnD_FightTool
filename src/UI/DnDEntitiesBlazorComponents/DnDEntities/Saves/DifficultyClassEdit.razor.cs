@@ -6,5 +6,5 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.Saves;
 public partial class DifficultyClassEdit
 {
     [Parameter, EditorRequired]
-    public DifficultyClass? DifficultyClass { get; set; }
+    public DifficultyClassTemplate? DifficultyClass { get; set; }
 }

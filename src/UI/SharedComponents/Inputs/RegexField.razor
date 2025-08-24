@@ -1,0 +1,17 @@
+@using Extensions
+@using MudBlazor
+
+@typeparam T where T : IRegexValidated
+@inherits StylableComponentBase
+
+@if (Value is not null)
+{
+    <div class=@Class style=@Style>
+        <MudTextField Label=@Label
+                      Value=@_currentInput
+                      ValueChanged="@(async (string value) => { await OnInputChangedAsync(value); })"
+                      Error="@(_validationError is not null)"
+                      ErrorText="@_validationError"
+                      Immediate=true />
+    </div>
+}

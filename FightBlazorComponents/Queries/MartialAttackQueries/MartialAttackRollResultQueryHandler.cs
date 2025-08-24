@@ -27,7 +27,7 @@ namespace FightBlazorComponents.Queries.MartialAttackQueries
             var attackTemplate = caster.MartialAttacks.GetTemplateByIdOrDefault(query.MartialAttackTemplateId) ?? throw new InvalidOperationException($"Could not get attack template.");
 
             var damageRolls = attackTemplate.Damages.Select(x => x.GetEmptyRollResult());
-            var martialAttackRollResult = new MartialAttackRollResult(new HitRollResult(attackTemplate.Modifiers), [.. damageRolls]);
+            var martialAttackRollResult = new MartialAttackRollResult(new HitRollResult(attackTemplate.ToHitModifiers), [.. damageRolls]);
 
 
             var parameters = new ModalParameters()

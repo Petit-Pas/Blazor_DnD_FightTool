@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 using Memory.Hashes;
 

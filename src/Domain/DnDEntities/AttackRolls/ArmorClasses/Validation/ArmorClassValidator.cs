@@ -1,18 +1,13 @@
-﻿using FluentValidation;
+﻿using Extensions;
+using FluentValidation;
 
 namespace DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses.Validation;
 
 /// <summary>
 ///     Validator for <see cref="ArmorClass"/>
 /// </summary>
-public class ArmorClassValidator : AbstractValidator<ArmorClass>
+public class ArmorClassValidator : PropertyTargetedValidator<ArmorClass>
 {
-    /// <summary>
-    ///     Since the usual comportment of a validator is to be stateless, we can use a singleton
-    ///     This avoids for the need of injection or newing up when setting this validator as a sub validator
-    /// </summary>
-    public readonly static ArmorClassValidator Instance = new();
-
     /// <summary>
     ///     Ctor
     /// </summary>

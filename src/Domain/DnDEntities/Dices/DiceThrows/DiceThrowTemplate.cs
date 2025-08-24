@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
+using Extensions;
 using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
@@ -11,7 +12,7 @@ namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 ///     So it can be represented as for instance: 1d8+2d4+3+STR
 /// </summary>
 [DebuggerDisplay("{Expression}")]
-public partial class DiceThrowTemplate : IHashable
+public partial class DiceThrowTemplate : IHashable, IRegexValidated
 {
     /// <summary>
     ///     Ctor for empty expression
@@ -34,6 +35,7 @@ public partial class DiceThrowTemplate : IHashable
     ///     The regex that validates and parses the expression
     /// </summary>
     internal readonly static Regex _regex = DiceThrowTemplateRegex();
+    public Regex Regex => _regex;
 
     /// <summary>
     ///     Accessors for the expression

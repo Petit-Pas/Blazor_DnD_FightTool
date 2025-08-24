@@ -18,7 +18,7 @@ public class HitRollResult : D20BaseRollResult
     ///     Ctor that allows for modifiers to be passed
     /// </summary>
     /// <param name="modifiersTemplate"> modifiers Example: STR+MAS+1 </param>
-    public HitRollResult(ModifiersTemplate modifiersTemplate)
+    public HitRollResult(DiceThrowModifiersTemplate modifiersTemplate)
     {
         Modifiers = modifiersTemplate;
     }
@@ -26,7 +26,7 @@ public class HitRollResult : D20BaseRollResult
     /// <summary>
     ///     Modifiers to be applied to the roll
     /// </summary>
-    public ModifiersTemplate Modifiers { get; set; } = new ModifiersTemplate();
+    public DiceThrowModifiersTemplate Modifiers { get; set; } = new DiceThrowModifiersTemplate();
 
     /// <summary>
     ///     Checks if the roll is a critical hit

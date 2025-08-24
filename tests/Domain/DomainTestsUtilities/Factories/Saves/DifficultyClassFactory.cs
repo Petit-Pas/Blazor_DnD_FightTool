@@ -4,8 +4,8 @@ namespace DomainTestsUtilities.Factories.Saves;
 
 public static class DifficultyClassFactory
 {
-    public static DifficultyClass Build(string? difficulty = null)
+    public static DifficultyClassTemplate Build(string? difficulty = null)
     {
-        return new DifficultyClass(difficulty ?? "8+MAS+WIS");
+        return new DifficultyClassTemplate(difficulty ?? "8+MAS+WIS");
     }
 }

@@ -16,7 +16,7 @@ public class ModifierExpressionTests
         public void Should_Parse_Wildcards()
         {
             // Arrange
-            var modifier = new ModifiersTemplate("STR+INT+DEX+3+MAS");
+            var modifier = new DiceThrowModifiersTemplate("STR+INT+DEX+3+MAS");
 
             // Act
             // Assert
@@ -30,7 +30,7 @@ public class ModifierExpressionTests
         public void Should_Parse_Modifier()
         {
             // Arrange
-            var modifier = new ModifiersTemplate("STR+2+INT+DEX+3+MAS-1");
+            var modifier = new DiceThrowModifiersTemplate("STR+2+INT+DEX+3+MAS-1");
 
             // Act
             // Assert
@@ -45,7 +45,7 @@ public class ModifierExpressionTests
         public void Should_Merge_Modifiers()
         {
             // Arrange
-            var modifier = new ModifiersTemplate("2+8");
+            var modifier = new DiceThrowModifiersTemplate("2+8");
 
             // Act
             // Assert
@@ -56,7 +56,7 @@ public class ModifierExpressionTests
         public void Should_Order_Elements_Properly()
         {
             // Arrange
-            var modifier = new ModifiersTemplate("8+MAS");
+            var modifier = new DiceThrowModifiersTemplate("8+MAS");
 
             // Act
             // Assert
@@ -67,7 +67,7 @@ public class ModifierExpressionTests
         public void Should_Not_Keep_Modifier_When_Empty()
         {
             // Arrange
-            var modifier = new ModifiersTemplate("MAS+1-1");
+            var modifier = new DiceThrowModifiersTemplate("MAS+1-1");
 
             // Act
             // Assert
@@ -82,7 +82,7 @@ public class ModifierExpressionTests
         public void Should_Include_Static_Modifiers()
         {
             // Arrange
-            var modifier = new ModifiersTemplate("2");
+            var modifier = new DiceThrowModifiersTemplate("2");
 
             // Act
             // Assert
@@ -93,7 +93,7 @@ public class ModifierExpressionTests
         public void Should_Resolve_Wildcards()
         {
             // Arrange
-            var modifier = new ModifiersTemplate("MAS");
+            var modifier = new DiceThrowModifiersTemplate("MAS");
             var character = new Character(true);
             character.AbilityScores.MasteryBonus = 7;
 

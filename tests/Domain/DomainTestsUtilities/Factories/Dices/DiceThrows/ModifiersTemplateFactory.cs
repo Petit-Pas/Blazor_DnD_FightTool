@@ -4,8 +4,8 @@ namespace DomainTestsUtilities.Factories.Dices.DiceThrows;
 
 public static class ModifiersTemplateFactory
 {
-    public static ModifiersTemplate Build(string? expression = null)
+    public static DiceThrowModifiersTemplate Build(string? expression = null)
     {
-        return new ModifiersTemplate(expression ?? "8+WIS");
+        return new DiceThrowModifiersTemplate(expression ?? "8+WIS");
     }
 }

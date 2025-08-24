@@ -1,14 +1,13 @@
-﻿using FluentValidation;
+﻿using Extensions;
+using FluentValidation;
 
 namespace DnDFightTool.Domain.DnDEntities.AbilityScores.Validation;
 
 /// <summary>
 ///     Validator for <see cref="AbilityScoresCollection"/>
 /// </summary>
-public class AbilityScoresValidator : AbstractValidator<AbilityScoresCollection>
+public class AbilityScoresValidator : PropertyTargetedValidator<AbilityScoresCollection>
 {
-    public readonly static AbilityScoresValidator Instance = new();
-
     /// <summary>
     ///     Ctor
     /// </summary>

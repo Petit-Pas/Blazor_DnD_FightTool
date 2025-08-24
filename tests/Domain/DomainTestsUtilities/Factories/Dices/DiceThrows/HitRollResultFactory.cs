@@ -4,7 +4,7 @@ namespace DomainTestsUtilities.Factories.Dices.DiceThrows;
 
 public static class HitRollResultFactory
 {
-    public static HitRollResult Build(int? result = null, ModifiersTemplate? modifiers = null)
+    public static HitRollResult Build(int? result = null, DiceThrowModifiersTemplate? modifiers = null)
     {
         return new HitRollResult()
         {
