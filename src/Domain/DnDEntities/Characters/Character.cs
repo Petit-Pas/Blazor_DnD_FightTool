@@ -13,22 +13,14 @@ namespace DnDFightTool.Domain.DnDEntities.Characters;
 ///     Represent a single character in the game.
 ///     Could be a player, could be a monster.
 /// </summary>
-public class Character
+public class Character : ICharacter
 {
-    /// <summary>
-    ///     empty ctor.
-    ///     Should only be used by serialization
-    ///     This was necessary, because if we established the default values in this ctor, then the default values would always be added upon each construction
-    /// </summary>
+    /// <inheritdoc />
     public Character() : this(false)
     {
     }
 
-    /// <summary>
-    ///     Ctor that should be used in the code.
-    ///     Allows to set the default values for a standard character (abilities, skills, affinities, etc.)
-    /// </summary>
-    /// <param name="withDefaults"></param>
+    /// <inheritdoc />
     public Character(bool withDefaults = false)
     {
         if (withDefaults)
@@ -43,66 +35,37 @@ public class Character
         Dc = new CharacterDifficultyClassTemplate("10");
     }
 
-    /// <summary>
-    ///     A unique, non meaningful identifier for this character
-    /// </summary>
+    /// <inheritdoc />
     public Guid Id { get; set; } = Guid.NewGuid();
 
-    /// <summary>
-    ///     A meaningful name for this character
-    /// </summary>
+    /// <inheritdoc />
     public string Name { get; set; } = "";
 
-    /// <summary>
-    ///     The type of the character, can be either a player or a monster
-    /// </summary>
+    /// <inheritdoc />
     public CharacterType Type { get; set; } = CharacterType.Unknown;
 
-    /// <summary>
-    ///     The armor class of the character
-    /// </summary>
-    public ArmorClass ArmorClass { get; set; } = new ();
+    /// <inheritdoc />
+    public ArmorClass ArmorClass { get; set; } = new();
 
-    /// <summary>
-    ///     The ability scores of the character
-    /// </summary>
+    /// <inheritdoc />
     public AbilityScoresCollection AbilityScores { get; set; }
 
-    /// <summary>
-    ///     The skills of the character
-    /// </summary>
+    /// <inheritdoc />
     public SkillCollection Skills { get; set; }
 
-    /// <summary>
-    ///     The damage affinities of the character
-    /// </summary>
+    /// <inheritdoc />
     public DamageAffinitiesCollection DamageAffinities { get; set; }
 
-    /// <summary>
-    ///     The martial attacks that the character can use
-    ///     A martial attack is anything that isn't a spell/effect.
-    ///     It is usually done with a weapon or a bodily feature (claws, tail, bite, etc.)
-    /// </summary>
+    /// <inheritdoc />
     public MartialAttackTemplateCollection MartialAttacks { get; set; }
 
-    /// <summary>
-    ///     The hit points of the character
-    /// </summary>
+    /// <inheritdoc />
     public HitPoints HitPoints { get; set; }
 
-    /// <summary>
-    ///     The default DC to use for spells and effects used by this character
-    /// </summary>
+    /// <inheritdoc />
     public CharacterDifficultyClassTemplate Dc { get; set; }
 
-    /// <summary>
-    ///     This method is made to fetch a possibly applied status by it GUID.
-    ///     It could come from anywhere from attacks and spells.
-    ///     This is required for the status commands to be generic.
-    /// </summary>
-    /// <param name="statusId"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <inheritdoc />
     public StatusTemplate? GetPossiblyAppliedStatus(Guid statusId)
     {
         return MartialAttacks.Values.SelectMany(x => x.Statuses).FirstOrDefault(x => x.Key == statusId).Value;

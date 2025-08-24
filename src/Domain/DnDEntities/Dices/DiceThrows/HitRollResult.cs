@@ -53,7 +53,7 @@ public class HitRollResult : D20BaseRollResult
     /// <param name="target"> the target of the attack </param>
     /// <param name="caster"> the character that attacks </param>
     /// <returns></returns>
-    public bool Hits(Character target, Character caster)
+    public bool Hits(ICharacter target, ICharacter caster)
     {
         if (IsACriticalMiss())
         {

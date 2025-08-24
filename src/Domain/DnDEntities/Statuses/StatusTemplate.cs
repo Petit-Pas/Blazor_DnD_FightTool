@@ -55,7 +55,7 @@ public class StatusTemplate : IHashable
     /// <param name="target"></param>
     /// <param name="saveRoll"></param>
     /// <returns></returns>
-    public bool ShouldBeApplied(Character caster, Character target, SaveRollResult? saveRoll)
+    public bool ShouldBeApplied(ICharacter caster, ICharacter target, SaveRollResult? saveRoll)
     {
         if (IsAppliedAutomatically || (saveRoll?.IsSuccessful(caster, target) ?? false))
         {

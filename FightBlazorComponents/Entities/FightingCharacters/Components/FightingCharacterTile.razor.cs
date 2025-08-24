@@ -20,9 +20,9 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     public required IAppliedStatusRepository AppliedStatusCollection { get; set; }
 
     [Parameter]
-    public required Fighter Fighter { get; set; }
+    public required FightingCharacter Fighter { get; set; }
 
-    private Character? _character = null;
+    private FightingCharacter? _character = null;
 
     private readonly static BorderRadius _borderRadius = new(2, "em");
 
@@ -31,7 +31,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
         base.OnInitialized();
         InitCharacter();
 
-        FightContext.MovingFighterChanged += OnMovingCharacterChanged;
+        FightContext.ActiveFighterChanged += OnMovingCharacterChanged;
         AppliedStatusCollection.AppliedStatusUpdated += AppliedStatusCollection_AppliedStatusUpdated;
     }
 
@@ -44,7 +44,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
         }
     }
 
-    private void OnMovingCharacterChanged(object? sender, Fighter? fightingCharacter)
+    private void OnMovingCharacterChanged(object? sender, FightingCharacter? fightingCharacter)
     {
         StateHasChanged();
     }
@@ -57,26 +57,26 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
 
     private void InitCharacter()
     {
-        if (_character == null || _character.Id != Fighter.CharacterId)
+        if (_character == null || _character.Id != Fighter.Id)
         {
-            _character = FightContext.GetCharacterById(Fighter.CharacterId);
+            _character = FightContext[Fighter.Id];
         }
     }
 
     public void Dispose()
     {
-        FightContext.MovingFighterChanged -= OnMovingCharacterChanged;
+        FightContext.ActiveFighterChanged -= OnMovingCharacterChanged;
         AppliedStatusCollection.AppliedStatusUpdated -= AppliedStatusCollection_AppliedStatusUpdated;
         GC.SuppressFinalize(this);
     }
 
     private void TileClicked(MouseEventArgs _)
     {
-        FightContext.SetMovingFighter(Fighter);
+        FightContext.SetActiveFighter(Fighter);
     }
 
     // UI Methods
-    private ThemeColor CardTheme => FightContext.MovingFighter == Fighter
+    private ThemeColor CardTheme => FightContext.ActiveFighter == Fighter
         ? ThemeColor.Primary 
         : ThemeColor.Base;
 }

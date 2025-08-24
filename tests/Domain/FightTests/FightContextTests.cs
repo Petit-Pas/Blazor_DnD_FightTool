@@ -28,7 +28,7 @@ namespace FightTests
             _characterRepository = A.Fake<ICharacterRepository>();
             _mapper = A.Fake<IMapper>();
 
-            _fightContext = new FightContext(_log, _characterRepository, _mapper);
+            _fightContext = new FightContext(_log, _mapper);
         }
 
         [TestFixture] 
@@ -47,7 +47,7 @@ namespace FightTests
                 _fightContext.AddToFight(monster);
 
                 // Assert
-                _fightContext.GetCharacterById(clonedMonster.Id).Should().Be(clonedMonster);
+                _fightContext[clonedMonster.Id].Id.Should().Be(clonedMonster.Id);
             }
 
             [Test]
@@ -60,14 +60,14 @@ namespace FightTests
                 _fightContext.AddToFight(player);
 
                 // Assert
-                var fighters = _fightContext.GetFighters().ToArray();
+                var fighters = _fightContext.Fighters.ToArray();
                 fighters.Should().Contain(x => x.Name == player.Name);
-                fighters.Should().Contain(x => x.CharacterId == player.Id);
+                fighters.Should().Contain(x => x.Id == player.Id);
             }
         }
 
         [TestFixture]
-        public class SetMovingFighter : FightContextTests
+        public class SetActiveFighter : FightContextTests
         {
             [Test]
             public void Should_Set_Moving_Fighter()
@@ -77,27 +77,27 @@ namespace FightTests
                 _fightContext.AddToFight(player);
 
                 // Act
-                _fightContext.SetMovingFighter(_fightContext.GetFighters().First());
+                _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
 
                 // Assert
-                _fightContext.MovingFighter.Should().NotBeNull();
-                _fightContext.MovingFighter!.CharacterId.Should().Be(player.Id);
+                _fightContext.ActiveFighter.Should().NotBeNull();
+                _fightContext.ActiveFighter!.Id.Should().Be(player.Id);
             }
 
             [Test]
             public void Should_Raise_Event_When_Moving_Fighter_Changes()
             {
                 // Arrange
-                Fighter? fighter = default;
+                FightingCharacter? fighter = default;
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
                 _fightContext.AddToFight(player);
 
                 // Act
-                _fightContext.MovingFighterChanged += (sender, args) => fighter = args;
-                _fightContext.SetMovingFighter(_fightContext.GetFighters().First());
+                _fightContext.ActiveFighterChanged += (sender, args) => fighter = args;
+                _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
 
                 // Assert
-                fighter.Should().Be(_fightContext.GetFighters().First());
+                fighter!.Id.Should().Be(_fightContext.Fighters.First().Id);
             }
 
             [Test]
@@ -106,11 +106,11 @@ namespace FightTests
                 // Arrange
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
                 _fightContext.AddToFight(player);
-                _fightContext.SetMovingFighter(_fightContext.GetFighters().First());
+                _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
 
                 // Act
-                _fightContext.MovingFighterChanged += (sender, args) => Assert.Fail("Should not raise event");
-                _fightContext.SetMovingFighter(_fightContext.GetFighters().First());
+                _fightContext.ActiveFighterChanged += (sender, args) => Assert.Fail("Should not raise event");
+                _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
 
                 // Assert
                 Assert.Pass();
@@ -118,7 +118,7 @@ namespace FightTests
         }
 
         [TestFixture]
-        public class GetMovingFighterCharacter : FightContextTests
+        public class GetActiveFighter : FightContextTests
         {
             [Test]
             public void Should_Return_Null_When_No_Moving_Fighter()
@@ -128,7 +128,7 @@ namespace FightTests
                 _fightContext.AddToFight(player);
 
                 // Act
-                var character = _fightContext.GetMovingFighterCharacter();
+                var character = _fightContext.ActiveFighter;
 
                 // Assert
                 character.Should().BeNull();
@@ -140,47 +140,12 @@ namespace FightTests
                 // Arrange
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
                 _fightContext.AddToFight(player);
-                _fightContext.SetMovingFighter(_fightContext.GetFighters().First());
+                _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
                 A.CallTo(() => _characterRepository.GetCharacterById(player.Id))
                     .Returns(player);
 
                 // Act
-                var character = _fightContext.GetMovingFighterCharacter();
-
-                // Assert
-                character.Should().NotBeNull();
-                character!.Id.Should().Be(player.Id);
-            }
-        }
-
-        [TestFixture]
-        public class GetCharacterById : FightContextTests
-        {
-            [Test]
-            public void Should_Return_Null_When_No_Character_With_Id()
-            {
-                // Arrange
-                var player = CharacterFactory.BuildPlayer(name: "Omesmo");
-                _fightContext.AddToFight(player);
-
-                // Act
-                var character = _fightContext.GetCharacterById(Guid.NewGuid());
-
-                // Assert
-                character.Should().BeNull();
-            }
-
-            [Test]
-            public void Should_Return_Character_With_Id()
-            {
-                // Arrange
-                var player = CharacterFactory.BuildPlayer(name: "Omesmo");
-                _fightContext.AddToFight(player);
-                A.CallTo(() => _characterRepository.GetCharacterById(player.Id))
-                    .Returns(player);
-
-                // Act
-                var character = _fightContext.GetCharacterById(player.Id);
+                var character = _fightContext.ActiveFighter;
 
                 // Assert
                 character.Should().NotBeNull();
@@ -199,11 +164,11 @@ namespace FightTests
                 _fightContext.AddToFight(player);
 
                 // Act
-                var fighters = _fightContext.GetFighters();
+                var fighters = _fightContext.Fighters;
 
                 // Assert
                 fighters.Should().NotBeEmpty();
-                fighters.Should().Contain(x => x.CharacterId == player.Id);
+                fighters.Should().Contain(x => x.Id == player.Id);
             }
         }
     }

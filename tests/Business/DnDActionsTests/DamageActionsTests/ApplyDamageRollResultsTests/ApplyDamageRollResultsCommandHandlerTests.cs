@@ -1,18 +1,19 @@
-﻿using DnDFightTool.Domain.DnDEntities.Characters;
-using FakeItEasy;
-using DnDFightTool.Domain.Fight;
-using NUnit.Framework;
-using System;
-using UndoableMediator.Mediators;
-using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.DamageAffinities;
-using FluentAssertions;
+﻿using System;
 using System.Linq;
-using DomainTestsUtilities.Fakes.Savings;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.DamageAffinities;
+using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
 using DomainTestsUtilities.Factories.Damage;
+using DomainTestsUtilities.Fakes.Savings;
+using FakeItEasy;
+using FluentAssertions;
+using NUnit.Framework;
+using UndoableMediator.Mediators;
 
 namespace DnDActionsTests.DamageActionsTests.ApplyDamageRollResultsTests;
 
@@ -22,8 +23,8 @@ public class ApplyDamageRollResultsCommandHandlerTests
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
 
-    private Character _caster = null!;
-    private Character _target = null!;
+    private FightingCharacter _caster = null!;
+    private FightingCharacter _target = null!;
     private DamageRollResult[] _damageRollResults = null!;
 
     private ApplyDamageRollResultsCommand _command = null!;
@@ -35,22 +36,24 @@ public class ApplyDamageRollResultsCommandHandlerTests
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
 
-        _caster = new Character();
-        _target = new Character();
+        var innerCaster = new Character();
+        var innerTarget = new Character();
+        _caster = new FightingCharacter(innerCaster);
+        _target = new FightingCharacter(innerTarget);
 
         _damageRollResults =
         [
             DamageRollResultFactory.BuildRolledDice(DamageTypeEnum.Fire, 10),
         ];
 
-        _target.DamageAffinities = new DamageAffinitiesCollection(true);
+        innerTarget.DamageAffinities = new DamageAffinitiesCollection(true);
 
         _command = new ApplyDamageRollResultsCommand(_caster.Id, _target.Id, _damageRollResults);
         _commandHandler = new ApplyDamageRollResultsCommandHandler(_mediator, _fightContext);
 
-        A.CallTo(() => _fightContext.GetCharacterById(_caster.Id))
+        A.CallTo(() => _fightContext[_caster.Id])
             .Returns(_caster);
-        A.CallTo(() => _fightContext.GetCharacterById(_target.Id))
+        A.CallTo(() => _fightContext[_target.Id])
             .Returns(_target);
     }
 

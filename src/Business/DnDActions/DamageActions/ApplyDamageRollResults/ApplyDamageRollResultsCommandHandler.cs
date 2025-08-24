@@ -39,14 +39,14 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         return CommandResponse.Success();
     }
 
-    private static double ApplyAffinity(int damage, DamageTypeEnum damageType, Character target)
+    private static double ApplyAffinity(int damage, DamageTypeEnum damageType, ICharacter target)
     {
         var damageFactor = target.DamageAffinities.GetDamageFactorFor(damageType);
 
         return damageFactor.ApplyOn(damage);
     }
 
-    private static double ApplySaveModifier(double actualDamage, SituationalDamageModifierEnum modifier, SaveRollResult? save, Character target, Character caster)
+    private static double ApplySaveModifier(double actualDamage, SituationalDamageModifierEnum modifier, SaveRollResult? save, ICharacter target, ICharacter caster)
     {
         if (save != null && save.IsSuccessful(target, caster))
         {

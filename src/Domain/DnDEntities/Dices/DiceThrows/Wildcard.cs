@@ -53,7 +53,7 @@ public record Wildcard(string Token)
     /// </summary>
     /// <param name="caster"> The character for which this wildcard needs to be computed </param>
     /// <returns> A score modifier that represent the resolved wildcard </returns>
-    public ScoreModifier Resolve(Character caster)
+    public ScoreModifier Resolve(ICharacter caster)
     {
         if (IsAnAbility(out var ability))
         {

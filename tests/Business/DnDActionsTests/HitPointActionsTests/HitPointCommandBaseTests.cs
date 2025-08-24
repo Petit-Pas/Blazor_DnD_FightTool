@@ -19,17 +19,7 @@ public class HitPointCommandBaseTests
         _fightContext = A.Fake<IFightContext>();
         _command = new HitPointCommandBase(Guid.NewGuid());
 
-        A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
-            .Returns(null);
-    }
-
-    [Test]
-    public void Should_Throw_InvalidOperationException_When_Cannot_Get_Valid_HitPoints()
-    {
-        // Arrange
-        var gettingHitPoints = () => _command.GetHitPoints(_fightContext);
-
-        // Act & Assert
-        gettingHitPoints.Should().Throw<InvalidOperationException>();
+        A.CallTo(() => _fightContext[A<Guid>._])
+            .Returns(null!);
     }
 }

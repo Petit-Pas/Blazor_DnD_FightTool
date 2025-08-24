@@ -129,7 +129,7 @@ public partial class CharacterDifficultyClassTemplate : IHashable
     /// </summary>
     /// <param name="caster"> The character for which DC is requested </param>
     /// <returns></returns>
-    public int GetDc(Character caster)
+    public int GetDc(ICharacter caster)
     {
         return new ScoreModifier(_staticModifier + _wildcards.Sum(x => x.Resolve(caster).Modifier));
     }

@@ -2,7 +2,7 @@
 
 <div class="fight-ui">
     <div class="character-tile-list">
-        @foreach (var fighter in FightContext.GetFighters())
+        @foreach (var fighter in FightContext.Fighters)
         {
             <FightingCharacterTile Fighter="@fighter" />
         }

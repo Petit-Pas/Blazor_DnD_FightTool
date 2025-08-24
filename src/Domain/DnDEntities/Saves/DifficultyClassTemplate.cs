@@ -37,7 +37,7 @@ public class DifficultyClassTemplate : IHashable
     /// </summary>
     /// <param name="caster"> Should be the character that prompts for a saving, since it's his wildcards that need resolving. </param>
     /// <returns></returns>
-    public int GetValue(Character caster)
+    public int GetValue(ICharacter caster)
     {
         return DifficultyClassExpression.GetScoreModifier(caster).Modifier;
     }

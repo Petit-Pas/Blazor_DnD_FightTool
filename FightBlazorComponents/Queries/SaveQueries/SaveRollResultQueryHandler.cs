@@ -22,8 +22,8 @@ public class SaveRollResultQueryHandler : QueryHandlerBase<SaveRollResultQuery, 
         var modalService = _modalServiceProvider.GetModalService();
         ArgumentNullException.ThrowIfNull(modalService, nameof(modalService));
 
-        var caster = _fightContext.GetCharacterById(query.CasterId);
-        var target = _fightContext.GetCharacterById(query.TargetId);
+        var caster = _fightContext[query.CasterId];
+        var target = _fightContext[query.TargetId];
         var saveRollResult = query.Save.GetEmptyRollResult();
 
         if (caster == null || target == null)

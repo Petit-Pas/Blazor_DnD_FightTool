@@ -10,7 +10,7 @@ public partial class FightingCharacterPicker
     [Inject]
     public IFightContext? FightContext { get; set; }
 
-    private Fighter[]? _fightingCharacters = null;
+    private FightingCharacter[]? _fightingCharacters = null;
 
     [Parameter]
     public Guid SelectedCharacterId { get; set; } = Guid.Empty;
@@ -27,7 +27,7 @@ public partial class FightingCharacterPicker
 
         if (_fightingCharacters == null && FightContext != null)
         {
-            _fightingCharacters = [.. FightContext.GetFighters()];
+            _fightingCharacters = [.. FightContext.Fighters];
             StateHasChanged();
         }
     }

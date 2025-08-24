@@ -6,6 +6,7 @@ using DnDFightTool.Domain.DnDEntities.Characters.Validation;
 using DnDFightTool.Domain.DnDEntities.IoC;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using DnDFightTool.Domain.DnDEntities.Statuses.Validation;
+using DnDFightTool.Domain.Fight;
 using Extensions;
 using FluentValidation;
 using IO.Files;
@@ -45,6 +46,7 @@ public static class MauiProgram
         //});
 
         builder.Services.AddSingleton<ICharacterRepository, LocalFileCharacterRepository>();
+        builder.Services.AddSingleton<IFightContext, FightContext>();
         builder.Services.AddSingleton<IFileManager, LocalFileManager>();
         builder.Services.AddSingleton<IJsonSerializer, JsonSerializer>();
 

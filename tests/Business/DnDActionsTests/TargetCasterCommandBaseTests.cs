@@ -19,28 +19,8 @@ public class TargetCasterCommandBaseTests
         _fightContext = A.Fake<IFightContext>();
         _command = new CasterTargetCommandBase(Guid.NewGuid(), Guid.NewGuid());
 
-        A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
-            .Returns(null);
-    }
-
-    [Test]
-    public void Should_Throw_InvalidOperationException_When_Cannot_Get_Valid_Target()
-    {
-        // Arrange
-        var gettingHitPoints = () => _command.GetTarget(_fightContext);
-
-        // Act & Assert
-        gettingHitPoints.Should().Throw<InvalidOperationException>();
-    }
-
-    [Test]
-    public void Should_Throw_InvalidOperationException_When_Cannot_Get_Valid_Caster()
-    {
-        // Arrange
-        var gettingHitPoints = () => _command.GetCaster(_fightContext);
-
-        // Act & Assert
-        gettingHitPoints.Should().Throw<InvalidOperationException>();
+        A.CallTo(() => _fightContext[A<Guid>._])
+            .Returns(null!);
     }
 }
 

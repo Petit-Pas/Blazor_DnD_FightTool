@@ -9,6 +9,8 @@ using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
 using DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
 using System.Threading.Tasks;
+using DomainTestsUtilities.Extensions;
+using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDActionsTests.HitPointActionsTests.RegainTempHpTests;
 
@@ -18,7 +20,7 @@ internal class RegainTempHpCommandHandlerBase
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
 
-    private Character _character = null!;
+    private FightingCharacter _character = null!;
     
     private RegainTempHpCommand _command = null!;
     private RegainTempHpCommandHandler _commandHandler = null!;
@@ -32,12 +34,12 @@ internal class RegainTempHpCommandHandlerBase
         _character = new Character
         {
             HitPoints = new HitPoints() { CurrentTempHps = 5 }
-        };
+        }.AsFighter();
 
         _command = new RegainTempHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
         _commandHandler = new RegainTempHpCommandHandler(_mediator, _fightContext);
 
-        A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
+        A.CallTo(() => _fightContext[A<Guid>._])
             .Returns(_character);
     }
 

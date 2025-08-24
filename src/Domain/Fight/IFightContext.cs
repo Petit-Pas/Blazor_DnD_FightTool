@@ -15,41 +15,34 @@ public interface IFightContext
     void AddToFight(Character character);
 
     /// <summary>
-    ///     Method set a character as currently moving.
-    ///     It is the one that is doing an action atm, not especially the one whose turn it is.
+    ///     All Fighters
     /// </summary>
-    /// <param name="fighter"></param>
-    void SetMovingFighter(Fighter fighter);
+    IEnumerable<FightingCharacter> Fighters { get; }
 
     /// <summary>
     ///     the moving fighter is not the one whose turn it is.
     ///     Is is the player whose possible actions will be displayed (aka the one the user clicked on, or the one whose turn it is when you switch turn)
     /// </summary>
-    Fighter? MovingFighter { get; }
+    FightingCharacter? ActiveFighter { get; }
+
+    /// <summary>
+    ///     Sets the moving fighter by id
+    /// </summary>
+    /// <param name="id"></param>
+    void SetActiveFighter(Guid id);
+    /// <summary>
+    ///     Sets the moving fighter
+    /// </summary>
+    /// <param name="id"></param>
+    void SetActiveFighter(FightingCharacter character) => SetActiveFighter(character.Id);
 
     /// <summary>
     ///     An event that is fired when the moving fighter changes
     /// </summary>
-    event EventHandler<Fighter?> MovingFighterChanged;
+    event EventHandler<FightingCharacter?> ActiveFighterChanged;
 
     /// <summary>
-    ///     Gets all fighters in the fight
+    ///     Indexer to access fighters by Guid
     /// </summary>
-    /// <returns></returns>
-    IEnumerable<Fighter> GetFighters();
-
-    /// <summary>
-    ///     Gets the character that is currently moving, not the fighter but the full character
-    /// </summary>
-    /// <returns></returns>
-    Character? GetMovingFighterCharacter();
-
-    /// <summary>
-    ///     Gets a character by id.
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
-    Character? GetCharacterById(Guid id);
-
-
+    FightingCharacter this[Guid id] { get; set; }
 }

@@ -41,7 +41,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         return CommandResponse.Success();
     }
 
-    private async Task TryApplyStatus(TryApplyStatusCommand command, StatusTemplate status, Character caster, Character target)
+    private async Task TryApplyStatus(TryApplyStatusCommand command, StatusTemplate status, ICharacter caster, ICharacter target)
     {
         if (status.ShouldBeApplied(caster, target, command.SaveRollResult))
         {

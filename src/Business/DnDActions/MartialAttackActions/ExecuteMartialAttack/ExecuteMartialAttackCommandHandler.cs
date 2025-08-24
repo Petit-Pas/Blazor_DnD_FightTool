@@ -8,6 +8,7 @@ using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using Memory.Hashes;
+using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
 
@@ -45,7 +46,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
             return new CommandResponse(queryStatus);
         }
 
-        var target = _fightContext.GetCharacterById(command.MartialAttackRollResult!.TargetId) ?? throw new InvalidOperationException($"Could not get target.");
+        var target = _fightContext[command.MartialAttackRollResult!.TargetId];
         if (AttackHits(caster, target, command))
         {
             await ApplyDamage(caster, target, command);
@@ -74,7 +75,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
             }
         }
 
-        var target = _fightContext.GetCharacterById(command.MartialAttackRollResult!.TargetId) ?? throw new InvalidOperationException($"Could not get target.");
+        var target = _fightContext[command.MartialAttackRollResult!.TargetId];
         if (AttackHits(caster, target, command))
         {
             // attack was already executed and had effect, so we can reuse the same commands
@@ -119,7 +120,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <param name="command"></param>
     /// <param name="attackTemplate"></param>
     /// <returns></returns>
-    private async Task ApplyStatuses(Character caster, Character target, ExecuteMartialAttackCommand command, MartialAttackTemplate attackTemplate)
+    private async Task ApplyStatuses(FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command, MartialAttackTemplate attackTemplate)
     {
         foreach (var onHitStatus in attackTemplate.Statuses.Values)
         {
@@ -137,7 +138,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <param name="command"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    private async Task ApplyDamage(Character caster, Character target, ExecuteMartialAttackCommand command)
+    private async Task ApplyDamage(FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command)
     {
         if (command.MartialAttackRollResult == null)
         {
@@ -160,7 +161,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <param name="command"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    private static bool AttackHits(Character caster, Character target, ExecuteMartialAttackCommand command)
+    private static bool AttackHits(FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command)
     {
         if (command.MartialAttackRollResult == null)
         {

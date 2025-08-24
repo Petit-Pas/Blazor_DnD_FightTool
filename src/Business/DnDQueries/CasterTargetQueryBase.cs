@@ -1,5 +1,6 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
 using UndoableMediator.Queries;
 
 namespace DnDFightTool.Business.DnDQueries;
@@ -37,9 +38,9 @@ public class CasterTargetQueryBase<T> : QueryBase<T>
     /// <param name="fightContext"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public Character GetCaster(IFightContext fightContext)
+    public FightingCharacter GetCaster(IFightContext fightContext)
     {
-        return fightContext.GetCharacterById(CasterId) ?? throw new InvalidOperationException($"Could not get caster for {GetType()}.");
+        return fightContext[CasterId];
     }
 
     /// <summary>
@@ -48,8 +49,8 @@ public class CasterTargetQueryBase<T> : QueryBase<T>
     /// <param name="fightContext"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public Character GetTarget(IFightContext fightContext)
+    public FightingCharacter GetTarget(IFightContext fightContext)
     {
-        return fightContext.GetCharacterById(TargetId) ?? throw new InvalidOperationException($"Could not get target for {GetType()}.");
+        return fightContext[TargetId];
     }
 }

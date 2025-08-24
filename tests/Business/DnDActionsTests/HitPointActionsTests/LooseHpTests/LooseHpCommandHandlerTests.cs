@@ -9,6 +9,7 @@ using System;
 using System.Threading.Tasks;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
+using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDActionsTests.HitPointActionsTests.LooseHpTests;
 
@@ -18,7 +19,7 @@ internal class LooseHpCommandHandlerTests
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
 
-    private Character _character = null!;
+    private FightingCharacter _character = null!;
 
     private LooseHpCommand _command = null!;
     private LooseHpCommandHandler _commandHandler = null!;
@@ -29,15 +30,15 @@ internal class LooseHpCommandHandlerTests
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
 
-        _character = new Character
+        _character = new FightingCharacter(new Character
         {
             HitPoints = new HitPoints() { MaxHps = 25, CurrentHps = 12 }
-        };
+        });
 
         _command = new LooseHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
         _commandHandler = new LooseHpCommandHandler(_mediator, _fightContext);
 
-        A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
+        A.CallTo(() => _fightContext[A<Guid>._])
             .Returns(_character);
     }
 

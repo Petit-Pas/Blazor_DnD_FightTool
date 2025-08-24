@@ -20,8 +20,8 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
     {
         // TODO should warn in the console and stop
 #pragma warning disable
-        var caster = _fightContext.GetCharacterById(command.CasterId) ?? throw new ArgumentNullException(nameof(command.CasterId));
-        var target = _fightContext.GetCharacterById(command.TargetId) ?? throw new ArgumentNullException(nameof(command.TargetId));
+        var caster = _fightContext[command.CasterId];
+        var target = _fightContext[command.TargetId];
         var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException(nameof(command.StatusId));
 #pragma warning restore
         var appliedStatus = new AppliedStatus(caster.Id, target.Id, status.Name);

@@ -5,6 +5,7 @@ using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using DnDFightTool.Domain.Fight;
+using DomainTestsUtilities.Extensions;
 using DomainTestsUtilities.Factories.Saves;
 using FakeItEasy;
 using FluentAssertions;
@@ -34,7 +35,7 @@ public class ApplyStatusCommandHandlerTests
         _command = new ApplyStatusCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), SaveRollResultFactory.Build());
         _commandHandler = new ApplyStatusCommandHandler(_mediator, _fightContext, _appliedStatusRepository);
 
-        A.CallTo(() => _fightContext.GetCharacterById(_command.CasterId))
+        A.CallTo(() => _fightContext[_command.CasterId])
             .Returns(new Character() 
             { 
                 Id = _command.CasterId,
@@ -52,13 +53,13 @@ public class ApplyStatusCommandHandlerTests
                         }
                     }
                 }
-            });
+            }.AsFighter());
 
-        A.CallTo(() => _fightContext.GetCharacterById(_command.TargetId))
+        A.CallTo(() => _fightContext[_command.TargetId])
             .Returns(new Character()
             {
                 Id = _command.TargetId
-            });
+            }.AsFighter());
     }
 
     [TestFixture]

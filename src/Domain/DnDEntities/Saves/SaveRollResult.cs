@@ -43,7 +43,7 @@ public class SaveRollResult
     /// <param name="casterCharacter"></param>
     /// <param name="targetCharacter"></param>
     /// <returns></returns>
-    public virtual bool IsSuccessful(Character casterCharacter, Character targetCharacter)
+    public virtual bool IsSuccessful(ICharacter casterCharacter, ICharacter targetCharacter)
     {
         var target = Target.GetValue(casterCharacter);
 

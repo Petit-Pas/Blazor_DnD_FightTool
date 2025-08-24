@@ -19,7 +19,7 @@
                     {
                         <MudPaper @key="player.Id" Class="p-4 my-2 position-relative" Elevation="2">
                             <MudText>
-                                @player.Name @player.Id
+                                @player.Name
                             </MudText>
                             <CardActionCollection>
                                 <CardActionCollectionElement>
@@ -50,10 +50,41 @@
             </div>
         </MudTabPanel>
         <MudTabPanel Class="hw-100" Text="Monsters">
-            <MudGrid Class="h-100">
-                <MudItem xs=12 Class="h-100">
-                </MudItem>
-            </MudGrid>
+            <div class="h-100 d-flex flex-column gap-2">
+                <div class="h-100 overflow-y-auto">
+                    @foreach (var monster in _monsters)
+                    {
+                        <MudPaper @key="monster.Id" Class="p-4 my-2 position-relative" Elevation="2">
+                            <MudText>
+                                @monster.Name
+                            </MudText>
+                            <CardActionCollection>
+                                <CardActionCollectionElement>
+                                    <MudIconButton Icon=@CustomIcons.SvgRepo.Swords Color=Color.Secondary Variant="Variant.Filled"
+                                                   Class="rounded-circle" OnClick="() => AddToFight(monster)" />
+                                </CardActionCollectionElement>
+                                <CardActionCollectionElement>
+                                    <MudIconButton Icon=@Icons.Material.Filled.Edit Color=Color.Primary Variant="Variant.Filled"
+                                                   Class="rounded-circle" OnClick="() => Edit(monster)" />
+                                </CardActionCollectionElement>
+                                <CardActionCollectionElement>
+                                    <MudIconButton Icon=@Icons.Material.Filled.ContentCopy Color=Color.Primary Variant="Variant.Filled"
+                                                   Class="rounded-circle" OnClick="() => Duplicate(monster)" />
+                                </CardActionCollectionElement>
+                                <CardActionCollectionElement>
+                                    <MudIconButton Icon=@Icons.Material.Filled.Delete Color=Color.Error Variant="Variant.Filled"
+                                                   Class="rounded-circle" OnClick="() => Delete(monster)" />
+                                </CardActionCollectionElement>
+                            </CardActionCollection>
+                        </MudPaper>
+                    }
+                </div>
+                <MudButton Class="w-100 parent-hover-trigger click-translate" Variant=Variant.Filled Color=Color.Primary OnClick="() => AddNew(CharacterType.Monster)">
+                    <div class="parent-hover-jump">
+                        <MudIcon Class="parent-hover-rotate-90 large-icon" Icon=@Icons.Material.Filled.AddCircle />
+                    </div>
+                </MudButton>
+            </div>
         </MudTabPanel>
     </MudTabs>
 </div>

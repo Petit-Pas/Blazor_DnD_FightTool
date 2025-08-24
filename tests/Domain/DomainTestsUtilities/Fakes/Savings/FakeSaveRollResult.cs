@@ -13,7 +13,7 @@ public class FakeSaveRollResult : SaveRollResult
         _isSuccessful = isSuccessful;
     }
 
-    public override bool IsSuccessful(Character targetCharacter, Character casterCharacter)
+    public override bool IsSuccessful(ICharacter targetCharacter, ICharacter casterCharacter)
     {
         return _isSuccessful;
     }

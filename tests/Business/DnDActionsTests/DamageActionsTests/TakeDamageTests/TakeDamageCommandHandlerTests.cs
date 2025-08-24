@@ -10,6 +10,8 @@ using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
 using DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
 using DnDFightTool.Business.DnDActions.HitPointActions.LooseTempHp;
 using System.Threading.Tasks;
+using DnDFightTool.Domain.Fight.Characters;
+using DomainTestsUtilities.Extensions;
 
 namespace DnDActionsTests.DamageActionsTests.TakeDamageTests;
 
@@ -19,7 +21,7 @@ public class TakeDamageCommandHandlerTests
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
 
-    private Character _character = null!;
+    private FightingCharacter _character = null!;
 
     private TakeDamageCommand _command = null!;
     private TakeDamageCommandHandler _commandHandler = null!;
@@ -33,12 +35,12 @@ public class TakeDamageCommandHandlerTests
         _character = new Character
         {
             HitPoints = new HitPoints() { MaxHps = 25, CurrentHps = 12 }
-        };
+        }.AsFighter();
 
         _command = new TakeDamageCommand(Guid.NewGuid(), 10);
         _commandHandler = new TakeDamageCommandHandler(_mediator, _fightContext);
 
-        A.CallTo(() => _fightContext.GetCharacterById(A<Guid>._))
+        A.CallTo(() => _fightContext[A<Guid>._])
             .Returns(_character);
     }
 

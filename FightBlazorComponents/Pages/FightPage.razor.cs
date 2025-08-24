@@ -37,29 +37,29 @@ public partial class FightPage
     // Commands need an access to this instance, and can't inject it since the proper instance is a cascading parameter, so a singleton fixed it.
     //public static IModalService SingletonModalService;
 
-    private Character? _movingCharacter = null;
+    private FightingCharacter? _movingCharacter = null;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         ResetMovingCharacter();
-        FightContext.MovingFighterChanged += FightContext_MovingCharacterChanged;
+        FightContext.ActiveFighterChanged += FightContext_MovingCharacterChanged;
     }
 
-    private void FightContext_MovingCharacterChanged(object? sender, Fighter? e)
+    private void FightContext_MovingCharacterChanged(object? sender, FightingCharacter? e)
     {
         ResetMovingCharacter();
     }
 
     private void ResetMovingCharacter()
     {
-        _movingCharacter = FightContext.GetMovingFighterCharacter();
+        _movingCharacter = FightContext.ActiveFighter;
         StateHasChanged();
     }
 
     public async Task Attack()
     {
-        var character = FightContext.GetMovingFighterCharacter();
+        var character = FightContext.ActiveFighter;
         if (character != null)
         {
             var attackCommand = new ExecuteMartialAttackCommand(character.Id, character.MartialAttacks.Keys.First());

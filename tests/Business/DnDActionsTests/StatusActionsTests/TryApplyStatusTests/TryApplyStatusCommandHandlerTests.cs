@@ -16,6 +16,7 @@ using Memory.Hashes;
 using UndoableMediator.Mediators;
 using UndoableMediator.Queries;
 using UndoableMediator.Requests;
+using DomainTestsUtilities.Extensions;
 
 namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
 {
@@ -40,7 +41,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                 _command = new TryApplyStatusCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
                 _commandHandler = new TryApplyStatusCommandHandler(_mediator, _fightContext);
 
-                A.CallTo(() => _fightContext.GetCharacterById(_command.CasterId))
+                A.CallTo(() => _fightContext[_command.CasterId])
                     .Returns(new Character()
                     {
                         Id = _command.CasterId,
@@ -58,13 +59,13 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                                 }
                             }
                         }
-                    });
+                    }.AsFighter());
 
-                A.CallTo(() => _fightContext.GetCharacterById(_command.TargetId))
+                A.CallTo(() => _fightContext[_command.TargetId])
                     .Returns(new Character()
                     {
                         Id = _command.TargetId
-                    });
+                    }.AsFighter());
             }
 
             private void WhenQueryReturns(IQueryResponse<SaveRollResult> saveRollResult)
@@ -77,7 +78,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
             public async Task Should_Not_Query_SaveRoll_When_Status_Must_Be_Applied_Automatically()
             {
                 // Arrange
-                A.CallTo(() => _fightContext.GetCharacterById(_command.CasterId))
+                A.CallTo(() => _fightContext[_command.CasterId])
                     .Returns(new Character()
                     {
                         Id = _command.CasterId,
@@ -96,7 +97,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                                 }
                             }
                         }
-                    });
+                    }.AsFighter());
 
                 // Act
                 await _commandHandler.Execute(_command);
@@ -151,7 +152,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
             {
                 // Arrange
                 WhenQueryReturns(QueryResponse<SaveRollResult>.Success(SaveRollResultFactory.Build(rolledResult: 1)));
-                A.CallTo(() => _fightContext.GetCharacterById(_command.CasterId))
+                A.CallTo(() => _fightContext[_command.CasterId])
                     .Returns(new Character()
                     {
                         Id = _command.CasterId,
@@ -170,7 +171,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                                 }
                             }
                         }
-                    });
+                    }.AsFighter());
 
                 // Act
                 await _commandHandler.Execute(_command);
@@ -190,7 +191,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     Id = _command.StatusId,
                     IsAppliedAutomatically = true,
                 };
-                A.CallTo(() => _fightContext.GetCharacterById(_command.CasterId))
+                A.CallTo(() => _fightContext[_command.CasterId])
                     .Returns(new Character()
                     {
                         Id = _command.CasterId,
@@ -201,7 +202,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                                 Statuses = new StatusTemplateCollection(false) { status }
                             }
                         }
-                    });
+                    }.AsFighter());
 
                 // Act 
                 await _commandHandler.Execute(_command);
@@ -229,11 +230,11 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                 _command = new TryApplyStatusCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
                 _commandHandler = new TryApplyStatusCommandHandler(_mediator, _fightContext);
 
-                A.CallTo(() => _fightContext.GetCharacterById(_command.TargetId))
+                A.CallTo(() => _fightContext[_command.TargetId])
                     .Returns(new Character()
                     {
                         Id = _command.TargetId
-                    });
+                    }.AsFighter());
             }
 
 
@@ -246,7 +247,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     Name = "TestStatus",
                     Id = _command.StatusId,
                 };
-                A.CallTo(() => _fightContext.GetCharacterById(_command.CasterId))
+                A.CallTo(() => _fightContext[_command.CasterId])
                     .Returns(new Character()
                     {
                         Id = _command.CasterId,
@@ -257,7 +258,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                                 Statuses = new StatusTemplateCollection(false) { status }
                             }
                         }
-                    });
+                    }.AsFighter());
                 _command.StatusHash = status.Hash();
 
                 // Act
@@ -277,7 +278,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     Name = "TestStatus",
                     Id = _command.StatusId,
                 };
-                A.CallTo(() => _fightContext.GetCharacterById(_command.CasterId))
+                A.CallTo(() => _fightContext[_command.CasterId])
                     .Returns(new Character()
                     {
                         Id = _command.CasterId,
@@ -288,7 +289,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                                 Statuses = new StatusTemplateCollection(false) { status }
                             }
                         }
-                    });
+                    }.AsFighter());
 
                 // Act
                 await _commandHandler.Redo(_command);
@@ -308,7 +309,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     Id = _command.StatusId,
                     IsAppliedAutomatically = true,
                 };
-                A.CallTo(() => _fightContext.GetCharacterById(_command.CasterId))
+                A.CallTo(() => _fightContext[_command.CasterId])
                     .Returns(new Character()
                     {
                         Id = _command.CasterId,
@@ -319,7 +320,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                                 Statuses = new StatusTemplateCollection(false) { status }
                             }
                         }
-                    });
+                    }.AsFighter());
 
                 // Act
                 await _commandHandler.Redo(_command);

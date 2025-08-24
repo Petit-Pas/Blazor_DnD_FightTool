@@ -16,6 +16,6 @@ public class HitPointCommandBase : TargetCommandBase
     /// <returns> the affected HitPoints </returns>
     public HitPoints GetHitPoints(IFightContext fightContext)
     {
-        return fightContext.GetCharacterById(TargetId)?.HitPoints ?? throw new InvalidOperationException($"Could not get hitPoints for {GetType()}.");
+        return fightContext[TargetId].HitPoints;
     }
 }

@@ -20,7 +20,7 @@ public partial class CharacterEditorPage
     public required IStateFullNavigation Navigation { get; set; }
 
     [Inject]
-    IGlobalEditContext GlobalEditContext { get; set; } = default!;
+    private IGlobalEditContext GlobalEditContext { get; set; } = default!;
 
     private Character? _character { get; set; }
 

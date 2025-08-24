@@ -1,4 +1,4 @@
-﻿using AspNetCoreExtensions.Navigations;
+﻿using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
 
 namespace DndUi.Components.Pages;
@@ -6,10 +6,5 @@ namespace DndUi.Components.Pages;
 public partial class FightPage
 {
     [Inject]
-    public required IStateFullNavigation Navigation { get; set; }
-    
-    private void GoBack()
-    {
-        Navigation.NavigateBack();
-    }
+    public required IFightContext FightContext { get; set; }
 }

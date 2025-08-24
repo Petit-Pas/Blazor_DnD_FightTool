@@ -19,6 +19,8 @@ using DomainTestsUtilities.Factories.MartialAttacks;
 using System;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 using DomainTestsUtilities.Factories.Damage;
+using DnDFightTool.Domain.Fight.Characters;
+using DomainTestsUtilities.Extensions;
 
 namespace DnDActionsTests.MartialAttackActionsTests.ExecuteMartialAttackTests;
 
@@ -29,8 +31,8 @@ public class ExecuteMartialAttackCommandHandlerTests
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
 
-    private Character _caster = null!;
-    private Character _target = null!;
+    private FightingCharacter _caster = null!;
+    private FightingCharacter _target = null!;
     
     private ExecuteMartialAttackCommand _command = null!;
     private ExecuteMartialAttackCommandHandler _commandHandler = null!;
@@ -41,19 +43,19 @@ public class ExecuteMartialAttackCommandHandlerTests
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
 
-        _caster = new Character(true);
+        _caster = new Character(true).AsFighter();
         _caster.MartialAttacks.Add(MartialAttackTemplateFactory.Build()); ;
         _target = new Character(true)
         {
             DamageAffinities = new DamageAffinitiesCollection(true)
-        };
+        }.AsFighter();
 
         _command = new ExecuteMartialAttackCommand(_caster.Id, _attackTemplate.Id);
         _commandHandler = new ExecuteMartialAttackCommandHandler(_mediator, _fightContext);
 
-        A.CallTo(() => _fightContext.GetCharacterById(_caster.Id))
+        A.CallTo(() => _fightContext[_caster.Id])
             .Returns(_caster);
-        A.CallTo(() => _fightContext.GetCharacterById(_target.Id))
+        A.CallTo(() => _fightContext[_target.Id])
             .Returns(_target);
 
         When_Query_Returns();
@@ -136,7 +138,7 @@ public class ExecuteMartialAttackCommandHandlerTests
             await _commandHandler.Execute(_command);
 
             // Assert
-            A.CallTo(() => _fightContext.GetCharacterById(result.TargetId))
+            A.CallTo(() => _fightContext[result.TargetId])
                 .MustHaveHappenedOnceExactly();
         }
 

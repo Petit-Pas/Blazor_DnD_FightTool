@@ -1,5 +1,6 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
+using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
 
@@ -41,7 +42,7 @@ public class ExecuteMartialAttackCommand : CasterCommandBase
     /// <param name="caster"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    internal MartialAttackTemplate GetAttackTemplate(Character caster)
+    internal MartialAttackTemplate GetAttackTemplate(FightingCharacter caster)
     {
         return caster.MartialAttacks.GetTemplateByIdOrDefault(MartialAttackId) ?? throw new InvalidOperationException($"Could not get a martial attack of id {MartialAttackId} for character {caster.Id}");
     }

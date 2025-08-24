@@ -1,5 +1,6 @@
 ﻿using DnDEntitiesBlazorComponents;
 using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.Fight;
 using Mapping;
 using Microsoft.AspNetCore.Components;
 
@@ -15,6 +16,9 @@ public partial class CharacterListEditorPage
 
     [Inject]
     public required IMapper Mapper { get; set; }
+
+    [Inject]
+    public required IFightContext FightContext { get; set; }
 
     private Character[] _players = [];
     private Character[] _monsters = [];
@@ -37,7 +41,7 @@ public partial class CharacterListEditorPage
 
     private void AddToFight(Character character)
     {
-        throw new NotImplementedException();
+        FightContext.AddToFight(character);
     }
 
     private void Edit(Character character)

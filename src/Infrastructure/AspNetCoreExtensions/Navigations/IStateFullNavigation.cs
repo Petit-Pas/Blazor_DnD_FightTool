@@ -2,6 +2,6 @@
 
 public interface IStateFullNavigation
 {
-    public void NavigateTo(string page);
-    public void NavigateBack();
+    void NavigateTo(string page);
+    void NavigateBack();
 }
