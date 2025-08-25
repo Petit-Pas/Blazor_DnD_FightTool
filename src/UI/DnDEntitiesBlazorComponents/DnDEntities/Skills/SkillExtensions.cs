@@ -1,24 +1,19 @@
-﻿using DnDFightTool.Domain.DnDEntities.Characters;
+﻿using System.ComponentModel;
 using DnDFightTool.Domain.DnDEntities.Skills;
-using Microsoft.AspNetCore.Components;
-using SharedComponents;
 using SharedComponents.Icons;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Skills;
 
-public partial class SkillsEditorComponent : StylableComponentBase
+internal static class SkillExtensions
 {
-    [Parameter, EditorRequired]
-    public Character? Character { get; set; }
-
-    private string GetIconFor(Skill skill)
+    public static string GetIcon(this Skill skill)
     {
         return skill.Mastery switch
         {
             SkillMasteryEnum.Normal => CustomIcons.FontAwesome.StarEmpty,
             SkillMasteryEnum.Mastery => CustomIcons.FontAwesome.StarHalf,
             SkillMasteryEnum.Expertise => CustomIcons.FontAwesome.StarFull,
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new InvalidEnumArgumentException($"{nameof(skill.Mastery)} does not have a proper icon mapped.")
         };
     }
 }

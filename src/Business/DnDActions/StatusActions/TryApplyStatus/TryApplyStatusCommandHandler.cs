@@ -3,6 +3,7 @@ using DnDFightTool.Business.DnDQueries.SaveQueries;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
 using Memory.Hashes;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
@@ -21,8 +22,8 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
 
     public async override Task<ICommandResponse<NoResponse>> Execute(TryApplyStatusCommand command)
     {
-        var caster = command.GetCaster(_fightContext);
-        var target = command.GetTarget(_fightContext);
+        var caster = _fightContext[command.CasterId];
+        var target = _fightContext[command.TargetId];
         // TODO should warn in the console and stop
 #pragma warning disable
         var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");
@@ -41,7 +42,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         return CommandResponse.Success();
     }
 
-    private async Task TryApplyStatus(TryApplyStatusCommand command, StatusTemplate status, ICharacter caster, ICharacter target)
+    private async Task TryApplyStatus(TryApplyStatusCommand command, StatusTemplate status, FightingCharacter caster, FightingCharacter target)
     {
         if (status.ShouldBeApplied(caster, target, command.SaveRollResult))
         {
@@ -66,8 +67,8 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
 
     public async override Task Redo(TryApplyStatusCommand command)
     {
-        var caster = command.GetCaster(_fightContext);
-        var target = command.GetTarget(_fightContext);
+        var caster = _fightContext[command.CasterId];
+        var target = _fightContext[command.TargetId];
         // TODO should warn in the console and stop
 #pragma warning disable
         var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");

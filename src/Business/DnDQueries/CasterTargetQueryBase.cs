@@ -1,5 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.Fight;
+﻿using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using UndoableMediator.Queries;
 

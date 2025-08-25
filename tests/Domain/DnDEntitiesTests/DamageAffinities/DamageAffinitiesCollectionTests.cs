@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using DnDFightTool.Domain.DnDEntities.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.Damage;
 using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using FluentAssertions;
 using NUnit.Framework;

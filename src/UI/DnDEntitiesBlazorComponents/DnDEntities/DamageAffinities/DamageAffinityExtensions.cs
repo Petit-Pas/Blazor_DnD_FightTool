@@ -1,8 +1,12 @@
-﻿using DnDFightTool.Domain.DnDEntities.DamageAffinities;
+﻿using System.ComponentModel;
+using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using SharedComponents.Icons;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities;
 
+/// <summary>
+///     Class to contain UI related extension methods for <see cref="DamageAffinity" />"/>
+/// </summary>
 internal static class DamageAffinityExtensions
 {
     public static string GetIcon(this DamageAffinity damageAffinity)
@@ -14,7 +18,7 @@ internal static class DamageAffinityExtensions
             DamageAffinityEnum.Resistant => CustomIcons.FontAwesome.ShieldHalf,
             DamageAffinityEnum.Immune => CustomIcons.FontAwesome.ShieldFull,
             DamageAffinityEnum.Heal => CustomIcons.FontAwesome.ShieldHeart,
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new InvalidEnumArgumentException($"{nameof(damageAffinity.Affinity)} does not have a proper icon mapped.")
         };
     }
 }

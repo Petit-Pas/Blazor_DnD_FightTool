@@ -1,5 +1,4 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using Extensions;
 using FluentValidation;

@@ -1,10 +1,8 @@
 ﻿using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;
-using DnDFightTool.Domain.DnDEntities.Characters.Validation;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks.Validation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using SharedComponents;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.MartialAttacks.Components;
 

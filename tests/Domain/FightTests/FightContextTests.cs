@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;

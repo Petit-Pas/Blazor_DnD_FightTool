@@ -1,5 +1,4 @@
 ﻿using System;
-using DnDFightTool.Domain.DnDEntities.Statuses;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Events.AppliedStatusUpdated;
 using DomainTestsUtilities.Factories.Status;

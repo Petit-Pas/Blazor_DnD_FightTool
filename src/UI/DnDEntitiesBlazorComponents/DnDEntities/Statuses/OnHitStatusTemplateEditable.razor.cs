@@ -1,5 +1,4 @@
 ﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
-using DnDFightTool.Domain.DnDEntities.Damage;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using Microsoft.AspNetCore.Components;
 using NeoBlazorphic.Components.NeoPopover;

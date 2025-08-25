@@ -1,7 +1,4 @@
-﻿
-using Windows.UI.WebUI;
-
-namespace DnDFightTool;
+﻿namespace DnDFightTool;
 
 public partial class App : Application
 {

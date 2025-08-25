@@ -5,11 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace DnDFightTool.Domain.Fight;
 
+/// <summary>
+///    The context of a single fight
+/// </summary>
 public class FightContext : IFightContext
 {
     private readonly ILogger<FightContext> _log;
     private readonly IMapper _mapper;
-    private readonly Dictionary<Guid, FightingCharacter> _fighters = new();
+    
+    private readonly Dictionary<Guid, FightingCharacter> _fighters = [];
 
     /// <summary>
     ///     Ctor

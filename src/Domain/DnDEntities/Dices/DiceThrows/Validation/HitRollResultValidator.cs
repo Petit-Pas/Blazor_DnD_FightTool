@@ -1,6 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.HitPoint.Validation;
-
-namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;
+﻿namespace DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;
 
 /// <summary>
 ///     Validator for <see cref="HitRollResult" />

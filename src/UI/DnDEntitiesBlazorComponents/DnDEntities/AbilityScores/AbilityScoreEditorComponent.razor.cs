@@ -2,7 +2,6 @@
 using DnDFightTool.Domain.DnDEntities.AbilityScores.Validation;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using Microsoft.AspNetCore.Components;
-using SharedComponents;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.AbilityScores;
 

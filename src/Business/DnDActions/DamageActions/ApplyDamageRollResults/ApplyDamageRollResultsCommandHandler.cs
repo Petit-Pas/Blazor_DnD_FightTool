@@ -3,6 +3,7 @@ using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Damage;
 using DnDFightTool.Domain.DnDEntities.Saves;
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
@@ -19,8 +20,8 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
 
     public async override Task<ICommandResponse<NoResponse>> Execute(ApplyDamageRollResultsCommand command)
     {
-        var target = command.GetTarget(_fightContext);
-        var caster = command.GetCaster(_fightContext);
+        var target = _fightContext[command.TargetId];
+        var caster = _fightContext[command.CasterId];
 
         var totalDamage = 0;
 
@@ -39,7 +40,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         return CommandResponse.Success();
     }
 
-    private static double ApplyAffinity(int damage, DamageTypeEnum damageType, ICharacter target)
+    private static double ApplyAffinity(int damage, DamageTypeEnum damageType, FightingCharacter target)
     {
         var damageFactor = target.DamageAffinities.GetDamageFactorFor(damageType);
 

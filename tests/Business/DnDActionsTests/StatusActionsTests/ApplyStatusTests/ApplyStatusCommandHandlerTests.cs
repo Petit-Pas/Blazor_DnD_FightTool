@@ -8,9 +8,7 @@ using DnDFightTool.Domain.Fight;
 using DomainTestsUtilities.Extensions;
 using DomainTestsUtilities.Factories.Saves;
 using FakeItEasy;
-using FluentAssertions;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using UndoableMediator.Mediators;
 
 namespace DnDActionsTests.StatusActionsTests.ApplyStatusTests;

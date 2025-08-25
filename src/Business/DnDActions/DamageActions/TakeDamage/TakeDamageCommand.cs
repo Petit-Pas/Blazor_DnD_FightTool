@@ -1,6 +1,4 @@
-﻿using UndoableMediator.Commands;
-
-namespace DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+﻿namespace DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
 
 public class TakeDamageCommand : TargetCommandBase
 {

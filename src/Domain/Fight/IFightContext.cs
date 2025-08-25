@@ -34,7 +34,10 @@ public interface IFightContext
     ///     Sets the moving fighter
     /// </summary>
     /// <param name="id"></param>
-    void SetActiveFighter(FightingCharacter character) => SetActiveFighter(character.Id);
+    void SetActiveFighter(FightingCharacter character)
+    {
+        SetActiveFighter(character.Id);
+    }
 
     /// <summary>
     ///     An event that is fired when the moving fighter changes

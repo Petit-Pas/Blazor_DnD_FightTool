@@ -5,6 +5,7 @@
 @using DnDFightTool.Domain.DnDEntities.Skills;
 @using SharedComponents
 @using SharedComponents.Icons;
+@using DnDEntitiesBlazorComponents.DnDEntities.Skills;
 
 @inherits StylableComponentBase
 
@@ -15,7 +16,7 @@
         <MudTable ContainerClass="pt-2" Class="overflow-y-auto" Elevation=0 Items="@Character.Skills.Values" Dense="true" Striped="true" Hover="true">
             <RowTemplate>
                 <MudTd class="w-1">
-                    <MudIconButton Icon="@GetIconFor(context)" OnClick="@context.IncreaseMastery" @oncontextmenu="@context.DecreaseMastery" Color=Color.Primary />
+                    <MudIconButton Icon="@context.GetIcon()" OnClick="@context.IncreaseMastery" @oncontextmenu="@context.DecreaseMastery" Color=Color.Primary />
                 </MudTd>
                 <MudTd class="w-1">
                     <MudMenu>

@@ -1,6 +1,4 @@
-﻿using UndoableMediator.Commands;
-
-namespace DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
+﻿namespace DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
 
 public class LooseHpCommand : HitPointCommandBase
 {

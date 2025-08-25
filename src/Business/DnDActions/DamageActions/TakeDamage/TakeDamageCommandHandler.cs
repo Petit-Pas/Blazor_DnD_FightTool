@@ -17,7 +17,7 @@ public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
 
     public override Task<ICommandResponse<NoResponse>> Execute(TakeDamageCommand command)
     {
-        var target = command.GetTarget(_fightContext);
+        var target = _fightContext[command.TargetId];
         
         var remainingDamage = command.Damage;
 

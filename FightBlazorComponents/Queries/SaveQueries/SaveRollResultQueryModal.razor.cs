@@ -1,5 +1,4 @@
-﻿using Blazored.Modal;
-using DnDFightTool.Domain.DnDEntities.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Saves;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;

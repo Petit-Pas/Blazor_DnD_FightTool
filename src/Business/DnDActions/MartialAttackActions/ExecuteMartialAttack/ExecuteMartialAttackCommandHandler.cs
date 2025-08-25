@@ -1,7 +1,6 @@
 ﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
-using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
@@ -34,8 +33,8 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 
     public async override Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
     {
-        var caster = command.GetCaster(_fightContext);
-        var attackTemplate = command.GetAttackTemplate(caster) ?? throw new InvalidOperationException($"Could not get attack template.");
+        var caster = _fightContext[command.CasterId];
+        var attackTemplate = command.GetAttackTemplate(caster);
 
         command.AttackTemplateHash = attackTemplate.Hash();
 
@@ -58,8 +57,8 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 
     public async override Task Redo(ExecuteMartialAttackCommand command)
     {
-        var caster = command.GetCaster(_fightContext);
-        var attackTemplate = command.GetAttackTemplate(caster) ?? throw new InvalidOperationException($"Could not get attack template.");
+        var caster = _fightContext[command.CasterId];
+        var attackTemplate = command.GetAttackTemplate(caster);
 
         // if the attack template has changed, we need to recompute everything
         var newAttackTemplateHash = attackTemplate.Hash();

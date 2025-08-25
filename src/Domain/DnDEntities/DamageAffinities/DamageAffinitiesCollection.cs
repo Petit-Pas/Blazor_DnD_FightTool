@@ -1,5 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
-using DnDFightTool.Domain.DnDEntities.Damage;
+﻿using DnDFightTool.Domain.DnDEntities.Damage;
 
 namespace DnDFightTool.Domain.DnDEntities.DamageAffinities;
 
