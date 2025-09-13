@@ -1,0 +1,47 @@
+﻿@using Extensions
+@using MudBlazor
+
+@inherits StylableComponentBase
+
+@if (Size is Size.Large)
+{
+    <MudButton Class=@("parent-hover-trigger click-translate" + Class) 
+               Style=@("width: 12em;" + Style)
+               Variant=Variant
+               Color=Color
+               Disabled=Disabled
+               OnClick=OnClick>
+        <div class="parent-hover-jump">
+            <MudIcon Class="@("parent-hover-rotate-90".When(RotateIcon))" Size=Size.Large Icon=@Icon />
+        </div>
+    </MudButton>
+}
+else if (Size is Size.Medium)
+{
+    <MudIconButton Class=@("parent-hover-trigger click-translate rounded-circle" + Class)
+                   Style=@(Style)
+                   Variant=Variant
+                   Color=Color
+                   OnClick=OnClick>
+        <div class="parent-hover-jump">
+            <MudIcon Class="@("parent-hover-rotate-90".When(RotateIcon))" Size=Size.Large Icon=@Icon />
+        </div>
+    </MudIconButton>
+}
+else if (Size is Size.Small)
+{
+    <MudIconButton Class=@("parent-hover-trigger click-translate rounded-circle" + Class)
+                   Style=@(Style)
+                   Variant=Variant
+                   Color=Color
+                   OnClick=OnClick>
+        <div class="parent-hover-jump">
+            <MudIcon Class="@("parent-hover-rotate-90".When(RotateIcon))" Size=Size.Medium Icon=@Icon />
+        </div>
+    </MudIconButton>
+}
+else
+{
+    <div> @typeof(ButtonBase): Out of range </div>
+}
+

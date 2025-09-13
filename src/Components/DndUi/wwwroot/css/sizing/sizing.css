@@ -6,6 +6,13 @@
     width: 100% !important;
 }
 
+.hw-50 {
+    height: 50% !important;
+    width: 50% !important;
+    max-height: 50% !important;
+    max-width: 50% !important;
+}
+
 .w-1 {
     width: 1%;
 }

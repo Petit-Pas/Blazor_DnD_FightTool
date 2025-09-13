@@ -7,5 +7,5 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities.Components;
 public partial class ResistancesEditorComponent : StylableComponentBase
 {
     [Parameter, EditorRequired]
-    public Character? Character { get; set; } = default!;
+    public ICharacter? Character { get; set; } = default!;
 }

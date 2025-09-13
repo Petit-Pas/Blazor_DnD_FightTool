@@ -39,14 +39,18 @@ public class FightContext : IFightContext
     /// <inheritdoc/>
     public FightingCharacter? ActiveFighter { get; private set; }
     /// <inheritdoc/>
-    public event EventHandler<FightingCharacter?>? ActiveFighterChanged;
+    public event EventHandler<FightingCharacter?>? OnActiveFighterChanged;
 
     /// <inheritdoc/>
-    public void AddToFight(Character character)
+    public event EventHandler<FightingCharacter>? OnFighterRemoved;
+
+    /// <inheritdoc/>
+    public void Add(Character character)
     {
         FightingCharacter fighter;
         switch (character.Type)
         {
+            // TODO updating the player mid fight might be creating a new instance of it, not what we want!
             case CharacterType.Player:
                 fighter = new FightingCharacter(character);
                 break;
@@ -59,7 +63,38 @@ public class FightContext : IFightContext
                 _log.LogWarning("Cannot add to fight a character of type {characterType}", character.Type);
                 return;
         }
+        
+        if (_fighters.ContainsKey(fighter.Id))
+        {
+            return;
+        }
         _fighters[fighter.Id] = fighter;
+    }
+
+    /// <inheritdoc/>
+    public void Remove(FightingCharacter fightingCharacter)
+    {
+        if (_fighters.ContainsKey(fightingCharacter.Id))
+        {
+            _fighters.Remove(fightingCharacter.Id);
+            OnFighterRemoved?.Invoke(this, fightingCharacter);
+        }
+        else
+        {
+            // TODO warn?
+        }
+    }
+
+    public void Update(FightingCharacter fightingCharacter)
+    {
+        if (_fighters.ContainsKey(fightingCharacter.Id))
+        {
+            _fighters[fightingCharacter.Id] = fightingCharacter;
+        }
+        else
+        {
+            // TODO warn?
+        }
     }
 
     /// <inheritdoc/>
@@ -73,7 +108,7 @@ public class FightContext : IFightContext
         if (_fighters.TryGetValue(id, out var fighter))
         {
             ActiveFighter = fighter;
-            ActiveFighterChanged?.Invoke(this, ActiveFighter);
+            OnActiveFighterChanged?.Invoke(this, ActiveFighter);
         }
         else
         {

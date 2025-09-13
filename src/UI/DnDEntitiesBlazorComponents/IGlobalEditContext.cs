@@ -16,12 +16,12 @@ public interface ICharacterEditContext
     ///     The character that is currently being edited.
     ///     That one cannot come from the repository, it needs to be a copy to allow for canceling.
     /// </summary>
-    Character? Character { get; }
+    ICharacter? Character { get; }
     /// <summary>
     ///     Navigates to the character edit page
     /// </summary>
     /// <param name="character"></param>
-    void EditCharacter(Character character);
+    void EditCharacter(ICharacter character);
     /// <summary>
     ///     Saves the edited character, then navigates back
     /// </summary>

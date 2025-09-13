@@ -1,6 +1,8 @@
 ﻿using AspNetCoreExtensions.Navigations;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
+using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDEntitiesBlazorComponents;
 
@@ -11,27 +13,33 @@ internal class GlobalEditContext : IGlobalEditContext
     /// NavigationManager wrapper
     private readonly IStateFullNavigation _stateFullNavigation;
     private readonly ICharacterRepository _characterRepository;
+    private readonly IFightContext _fightContext;
 
     /// <summary>
     ///     Ctor
     /// </summary>
     /// <param name="stateFullNavigation"></param>
     /// <param name="characterRepository"></param>
+    /// <param name="fightContext"></param>
     /// <exception cref="ArgumentNullException"></exception>
-    public GlobalEditContext(IStateFullNavigation stateFullNavigation, ICharacterRepository characterRepository)
+    public GlobalEditContext(
+        IStateFullNavigation stateFullNavigation, 
+        ICharacterRepository characterRepository,
+        IFightContext fightContext)
     {
         _stateFullNavigation = stateFullNavigation ?? throw new ArgumentNullException(nameof(stateFullNavigation));
         _characterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
+        _fightContext = fightContext ?? throw new ArgumentNullException(nameof(fightContext));
     }
 
 
     #region Character 
     
     /// <inheritdoc />
-    public Character? Character { get; private set; }
+    public ICharacter? Character { get; private set; }
 
     /// <inheritdoc />
-    public void EditCharacter(Character character)
+    public void EditCharacter(ICharacter character)
     {
         Character = character;
         _stateFullNavigation.NavigateTo("Characters/Edit");
@@ -49,8 +57,16 @@ internal class GlobalEditContext : IGlobalEditContext
     {
         if (Character != null)
         {
-            _characterRepository.Save(Character);
+            if (Character is FightingCharacter fighter)
+            {
+                _fightContext.Update(fighter);
+            }
+            else if (Character is Character character)
+            {
+                _characterRepository.Save(character);
+            }
         }
+
         Character = null;
         _stateFullNavigation.NavigateBack();
     }

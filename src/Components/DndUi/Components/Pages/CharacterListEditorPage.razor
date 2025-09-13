@@ -5,10 +5,13 @@
 @using DnDEntitiesBlazorComponents.DnDEntities.DamageAffinities
 @using DnDEntitiesBlazorComponents.DnDEntities.Skills
 @using DnDFightTool.Domain.DnDEntities.Characters
+@using FightBlazorComponents.Shared.Buttons.AtomicButtonsPreset
 @using MudBlazor
 @using DnDEntitiesBlazorComponents.DnDEntities.Characters.Components
+@using SharedComponents.Buttons.AtomicButtonsPreset
+@using SharedComponents.Buttons.ButtonContainers
+@using SharedComponents.Containers
 @using SharedComponents.Icons
-@using SharedComponents.Inputs.Buttons.Actions
 
 <div class="h-100 py-2">
     <MudTabs Elevation=2 Rounded=true ApplyEffectsToContainer=true PanelClass="flex-fill-shrink" Class="h-100 p-2">
@@ -21,24 +24,12 @@
                             <MudText>
                                 @player.Name
                             </MudText>
-                            <CardActionCollection>
-                                <CardActionCollectionElement>
-                                    <MudIconButton Icon=@CustomIcons.SvgRepo.Swords Color=Color.Secondary Variant="Variant.Filled"
-                                                   Class="rounded-circle" OnClick="() => AddToFight(player)" />
-                                </CardActionCollectionElement>
-                                <CardActionCollectionElement>
-                                    <MudIconButton Icon=@Icons.Material.Filled.Edit Color=Color.Primary Variant="Variant.Filled"
-                                                   Class="rounded-circle" OnClick="() => Edit(player)" />
-                                </CardActionCollectionElement>
-                                <CardActionCollectionElement>
-                                    <MudIconButton Icon=@Icons.Material.Filled.ContentCopy Color=Color.Primary Variant="Variant.Filled"
-                                                   Class="rounded-circle" OnClick="() => Duplicate(player)" />
-                                </CardActionCollectionElement>
-                                <CardActionCollectionElement>
-                                    <MudIconButton Icon=@Icons.Material.Filled.Delete Color=Color.Error Variant="Variant.Filled"
-                                                   Class="rounded-circle" OnClick="() => Delete(player)" />
-                                </CardActionCollectionElement>
-                            </CardActionCollection>
+                            <HoverableVanishingRow>
+                                <AddToFightButton OnClick="() => AddToFight(player)" Size=Size.Small />
+                                <EditButton OnClick="() => Edit(player)" Size=Size.Small />
+                                <DuplicateButton OnClick="() => Duplicate(player)" Size=Size.Small />
+                                <DeleteButton OnClick="() => Delete(player)" Size=Size.Small />
+                            </HoverableVanishingRow>
                         </MudPaper>
                     }
                 </div>
@@ -58,24 +49,12 @@
                             <MudText>
                                 @monster.Name
                             </MudText>
-                            <CardActionCollection>
-                                <CardActionCollectionElement>
-                                    <MudIconButton Icon=@CustomIcons.SvgRepo.Swords Color=Color.Secondary Variant="Variant.Filled"
-                                                   Class="rounded-circle" OnClick="() => AddToFight(monster)" />
-                                </CardActionCollectionElement>
-                                <CardActionCollectionElement>
-                                    <MudIconButton Icon=@Icons.Material.Filled.Edit Color=Color.Primary Variant="Variant.Filled"
-                                                   Class="rounded-circle" OnClick="() => Edit(monster)" />
-                                </CardActionCollectionElement>
-                                <CardActionCollectionElement>
-                                    <MudIconButton Icon=@Icons.Material.Filled.ContentCopy Color=Color.Primary Variant="Variant.Filled"
-                                                   Class="rounded-circle" OnClick="() => Duplicate(monster)" />
-                                </CardActionCollectionElement>
-                                <CardActionCollectionElement>
-                                    <MudIconButton Icon=@Icons.Material.Filled.Delete Color=Color.Error Variant="Variant.Filled"
-                                                   Class="rounded-circle" OnClick="() => Delete(monster)" />
-                                </CardActionCollectionElement>
-                            </CardActionCollection>
+                            <HoverableVanishingRow>
+                                <AddToFightButton OnClick="() => AddToFight(monster)" Size=Size.Small />
+                                <EditButton OnClick="() => Edit(monster)" Size=Size.Small />
+                                <DuplicateButton OnClick="() => Duplicate(monster)" Size=Size.Small />
+                                <DeleteButton OnClick="() => Delete(monster)" Size=Size.Small />
+                            </HoverableVanishingRow>
                         </MudPaper>
                     }
                 </div>

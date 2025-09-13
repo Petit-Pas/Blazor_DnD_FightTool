@@ -43,7 +43,7 @@ namespace FightTests
                     .Returns(clonedMonster);
 
                 // Act
-                _fightContext.AddToFight(monster);
+                _fightContext.Add(monster);
 
                 // Assert
                 _fightContext[clonedMonster.Id].Id.Should().Be(clonedMonster.Id);
@@ -56,7 +56,7 @@ namespace FightTests
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
 
                 // Act
-                _fightContext.AddToFight(player);
+                _fightContext.Add(player);
 
                 // Assert
                 var fighters = _fightContext.Fighters.ToArray();
@@ -73,7 +73,7 @@ namespace FightTests
             {
                 // Arrange
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
-                _fightContext.AddToFight(player);
+                _fightContext.Add(player);
 
                 // Act
                 _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
@@ -89,10 +89,10 @@ namespace FightTests
                 // Arrange
                 FightingCharacter? fighter = default;
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
-                _fightContext.AddToFight(player);
+                _fightContext.Add(player);
 
                 // Act
-                _fightContext.ActiveFighterChanged += (sender, args) => fighter = args;
+                _fightContext.OnActiveFighterChanged += (sender, args) => fighter = args;
                 _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
 
                 // Assert
@@ -104,11 +104,11 @@ namespace FightTests
             {
                 // Arrange
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
-                _fightContext.AddToFight(player);
+                _fightContext.Add(player);
                 _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
 
                 // Act
-                _fightContext.ActiveFighterChanged += (sender, args) => Assert.Fail("Should not raise event");
+                _fightContext.OnActiveFighterChanged += (sender, args) => Assert.Fail("Should not raise event");
                 _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
 
                 // Assert
@@ -124,7 +124,7 @@ namespace FightTests
             {
                 // Arrange
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
-                _fightContext.AddToFight(player);
+                _fightContext.Add(player);
 
                 // Act
                 var character = _fightContext.ActiveFighter;
@@ -138,7 +138,7 @@ namespace FightTests
             {
                 // Arrange
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
-                _fightContext.AddToFight(player);
+                _fightContext.Add(player);
                 _fightContext.SetActiveFighter(_fightContext.Fighters.First().Id);
                 A.CallTo(() => _characterRepository.GetCharacterById(player.Id))
                     .Returns(player);
@@ -160,7 +160,7 @@ namespace FightTests
             {
                 // Arrange
                 var player = CharacterFactory.BuildPlayer(name: "Omesmo");
-                _fightContext.AddToFight(player);
+                _fightContext.Add(player);
 
                 // Act
                 var fighters = _fightContext.Fighters;

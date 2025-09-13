@@ -1,82 +1,83 @@
-﻿using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.Fight;
+﻿using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components.Web;
-using NeoBlazorphic.StyleParameters;
-using DnDFightTool.Domain.Fight.Events.AppliedStatusUpdated;
+using DnDEntitiesBlazorComponents;
+using Mapping;
+using FastDeepCloner;
+using MudBlazor;
+using DnDFightTool.Domain.Fight.DomainExtensions.HitPoint;
 
 namespace FightBlazorComponents.Entities.FightingCharacters.Components;
 
 public partial class FightingCharacterTile : ComponentBase, IDisposable
 {
     [Inject]
-    public required ICharacterRepository CharacterRepository { get; set; }
-
-    [Inject]
     public required IFightContext FightContext { get; set; }
 
     [Inject]
-    public required IAppliedStatusRepository AppliedStatusCollection { get; set; }
+    public required IGlobalEditContext GlobalEditContext { get; set; }
+
+    [Inject]
+    public required IMapper Mapper { get; set; }
 
     [Parameter]
     public required FightingCharacter Fighter { get; set; }
 
-    private FightingCharacter? _character = null;
-
-    private readonly static BorderRadius _borderRadius = new(2, "em");
+    private bool _isSelected = false;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        InitCharacter();
 
-        FightContext.ActiveFighterChanged += OnMovingCharacterChanged;
-        AppliedStatusCollection.AppliedStatusUpdated += AppliedStatusCollection_AppliedStatusUpdated;
+        FightContext.OnActiveFighterChanged += OnActiveFighterChanged;
     }
 
-    private void AppliedStatusCollection_AppliedStatusUpdated(object _, AppliedStatusUpdatedEventArgs e)
+    public void Dispose()
     {
-        if (e.AffectedCharacterId == _character?.Id)
-        {
-            // TODO the refresh works without that, but I think its because the whole state is recomputed when the HPs change, to try with an attack that has no damage 
-            StateHasChanged();
-        }
-    }
-
-    private void OnMovingCharacterChanged(object? sender, FightingCharacter? fightingCharacter)
-    {
-        StateHasChanged();
+        GC.SuppressFinalize(this);
+        FightContext.OnActiveFighterChanged -= OnActiveFighterChanged;
     }
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        InitCharacter();
-    }
 
-    private void InitCharacter()
-    {
-        if (_character == null || _character.Id != Fighter.Id)
+        if (Fighter == FightContext.ActiveFighter)
         {
-            _character = FightContext[Fighter.Id];
+            _isSelected = true;
         }
     }
 
-    public void Dispose()
+    private void OnActiveFighterChanged(object? sender, FightingCharacter? e)
     {
-        FightContext.ActiveFighterChanged -= OnMovingCharacterChanged;
-        AppliedStatusCollection.AppliedStatusUpdated -= AppliedStatusCollection_AppliedStatusUpdated;
-        GC.SuppressFinalize(this);
+        _isSelected = e == Fighter;
+        StateHasChanged();
     }
 
-    private void TileClicked(MouseEventArgs _)
+    private void CardClicked(MouseEventArgs _)
     {
         FightContext.SetActiveFighter(Fighter);
     }
 
-    // UI Methods
-    private ThemeColor CardTheme => FightContext.ActiveFighter == Fighter
-        ? ThemeColor.Primary 
-        : ThemeColor.Base;
+    private void Edit()
+    {
+        GlobalEditContext.EditCharacter(Fighter.Copy(Mapper));
+    }
+
+    private void Delete()
+    {
+        FightContext.Remove(Fighter);
+    }
+
+    private Color GetHealthBarColor()
+    {
+        return Fighter.HitPoints.GetHealthRatio() switch
+        {
+            >= 50 => Color.Success,
+            >= 25 => Color.Warning,
+            _ => Color.Error
+        };
+    }
+
 }

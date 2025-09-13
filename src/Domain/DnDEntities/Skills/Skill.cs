@@ -76,7 +76,7 @@ public class Skill
     /// </summary>
     /// <param name="character"></param>
     /// <returns></returns>
-    public ScoreModifier GetModifier(Character character)
+    public ScoreModifier GetModifier(ICharacter character)
     {
         return GetModifier(character.AbilityScores);
     }

@@ -7,5 +7,5 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.Skills.Components;
 public partial class SkillsEditorComponent : StylableComponentBase
 {
     [Parameter, EditorRequired]
-    public Character? Character { get; set; }
+    public ICharacter? Character { get; set; }
 }

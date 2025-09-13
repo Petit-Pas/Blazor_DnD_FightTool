@@ -78,7 +78,7 @@ public static class MauiProgram
 
         foreach (var x in types)
         {
-            services.AddTransient(x.Base, x.Type);
+            services.AddTransient(x.Base!, x.Type);
         }
 
         return services;

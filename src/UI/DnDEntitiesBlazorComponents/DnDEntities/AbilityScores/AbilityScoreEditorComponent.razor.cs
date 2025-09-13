@@ -13,7 +13,7 @@ public partial class AbilityScoreEditorComponent
 #pragma warning restore 8618
 
     [Parameter, EditorRequired]
-    public Character? Character { get; set; }
+    public ICharacter? Character { get; set; }
 
     [Parameter, EditorRequired]
     public AbilityScore? AbilityScore { get; set; }

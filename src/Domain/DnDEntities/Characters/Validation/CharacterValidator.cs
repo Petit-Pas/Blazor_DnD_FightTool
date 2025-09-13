@@ -9,7 +9,7 @@ namespace DnDFightTool.Domain.DnDEntities.Characters.Validation;
 /// <summary>
 ///     Validator for <see cref="Character"/>
 /// </summary>
-public class CharacterValidator : PropertyTargetedValidator<Character>
+public class CharacterValidator : PropertyTargetedValidator<ICharacter>
 {
     /// <summary>
     ///     Ctor

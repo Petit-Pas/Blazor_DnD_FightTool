@@ -14,7 +14,7 @@ public partial class CharacterMainInfoEditorComponent : StylableComponentBase
 #pragma warning restore 8618
     
     [Parameter, EditorRequired]
-    public Character? Character { get; set; }
+    public ICharacter? Character { get; set; }
 
     private MudForm? _form;
 

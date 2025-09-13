@@ -14,7 +14,6 @@
   <ItemGroup>
     <PackageReference Include="Morris.Blazor.FluentValidation" Version="3.1.5" />
     <PackageReference Include="Morris.Blazor.Validation" Version="3.1.5" />
-    <PackageReference Include="NeoBlazorphic" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -8,6 +8,7 @@ using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.Saves;
 using DnDFightTool.Domain.DnDEntities.Skills;
 using DnDFightTool.Domain.DnDEntities.Statuses;
+using Mapping;
 
 namespace DnDFightTool.Domain.Fight.Characters;
 
@@ -18,14 +19,7 @@ public class FightingCharacter : ICharacter
 {
     private readonly Character _character;
 
-    /// <summary>
-    ///     Ctor
-    /// </summary>
-    /// <param name="character"></param>
-	public FightingCharacter(Character character)
-	{
-        _character = character ?? throw new ArgumentNullException(nameof(character));
-	}
+    #region character mirroring
 
     public Guid Id => _character.Id;
 
@@ -41,17 +35,53 @@ public class FightingCharacter : ICharacter
 
     public MartialAttackTemplateCollection MartialAttacks => _character.MartialAttacks;
 
-    public string Name => _character.Name;
+    public string Name { get => _character.Name; set => _character.Name = value; }
 
     public SkillCollection Skills => _character.Skills;
 
     public CharacterType Type => _character.Type;
 
-    // TODO this should maybe only be exposed on the fighter.
-    // But that would required to switch every existing command to use fighters instead of the character
-    // So it's a task by itself.
+    #endregion character mirroring
+
+    /// <summary>
+    ///     Ctor
+    /// </summary>
+    /// <param name="character"></param>
+	public FightingCharacter(Character character)
+	{
+        _character = character ?? throw new ArgumentNullException(nameof(character));
+	}
+
+    /// <summary>
+    ///     Creates a deep copy of this FightingCharacter, including the underlying character.
+    ///     For this entity, I could not use FastDeepCloner as wwon't be able to do the private character properly.
+    /// </summary>
+    /// <param name="mapper"></param>
+    /// <returns></returns>
+    public FightingCharacter Copy(IMapper mapper)
+    {
+        return new FightingCharacter(mapper.Copy(_character));
+    }
+
+    /// <summary>
+    ///     Holds the initiative roll
+    /// </summary>
+    public int InitiativeRoll { get; set; } = 0;
+
+    /// <summary>
+    ///     Gets the actual initiave, including the dexterity modifier
+    /// </summary>
+    /// <returns></returns>
+    public int GetInitiativeTotal()
+    {
+        return InitiativeRoll + ((ICharacter)this).GetInitiativeModifier();
+    }
+
     public StatusTemplate? GetPossiblyAppliedStatus(Guid statusId)
     {
         return _character.GetPossiblyAppliedStatus(statusId);
     }
+
+    public static Func<FightingCharacter, (int, int)> InitiativeSortKey =>
+        fc => (-fc.GetInitiativeTotal(), -((ICharacter)fc).GetInitiativeModifier());
 }

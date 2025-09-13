@@ -8,7 +8,8 @@
 @using DnDEntitiesBlazorComponents.DnDEntities.Skills
 @using DnDEntitiesBlazorComponents.DnDEntities.Skills.Components
 @using MudBlazor
-@using SharedComponents.Inputs.Buttons
+@using SharedComponents.Buttons.AtomicButtonsPreset
+@using SharedComponents.Buttons.ButtonContainers
 
 @if (_character is not null)
 {
@@ -22,9 +23,10 @@
                             @ref=_mainInfoComponent
                             Style="min-height: 0;"
                             Character=@_character />
-                        <CancelSaveButtonRow 
-                            Style="grid-row: 2"
-                            SaveClicked=Save CancelClicked=Cancel />
+                        <ButtonRow Style="grid-row: 2">
+                            <CancelButton OnClick="Cancel" />
+                            <SaveButton OnClick="Save" />
+                        </ButtonRow>
                     </div>
                 </MudTabPanel>
                 <MudTabPanel Class="hw-100" Text="Abilities & Skills">
@@ -36,9 +38,10 @@
                         <SkillsEditorComponent 
                             Style="grid-column: 2; min-height: 0;"
                             Character=@_character />
-                        <CancelSaveButtonRow 
-                            Style="grid-row: 2; grid-column: 1 / span 2;"
-                            SaveClicked=Save CancelClicked=Cancel />
+                        <ButtonRow Style="grid-row: 2; grid-column: 1 / span 2;">
+                            <CancelButton OnClick="Cancel" />
+                            <SaveButton OnClick="Save" />
+                        </ButtonRow>
                     </div>
                 </MudTabPanel>
                 <MudTabPanel Class="hw-100 test" Text=Resistances>
@@ -46,9 +49,10 @@
                         <ResistancesEditorComponent 
                             Style="min-height: 0;"
                             Character=@_character />
-                        <CancelSaveButtonRow 
-                            Style="grid-row: 2"
-                            SaveClicked=Save CancelClicked=Cancel />
+                        <ButtonRow Style="grid-row: 2;">
+                            <CancelButton OnClick="Cancel" />
+                            <SaveButton OnClick="Save" />
+                        </ButtonRow>
                     </div>
                 </MudTabPanel>
                 <MudTabPanel Class="hw-100 test" Text=Attacks>
@@ -56,9 +60,10 @@
                         <AttackListEditorComponent 
                             Style="min-height: 0;"
                             Character=@_character />
-                        <CancelSaveButtonRow 
-                            Style="grid-row: 2"
-                            SaveClicked=Save CancelClicked=Cancel />
+                        <ButtonRow Style="grid-row: 2;">
+                            <CancelButton OnClick="Cancel" />
+                            <SaveButton OnClick="Save" />
+                        </ButtonRow>
                     </div>
                 </MudTabPanel>
             </MudTabs>

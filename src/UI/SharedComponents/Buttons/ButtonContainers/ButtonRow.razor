@@ -1,0 +1,8 @@
+﻿@inherits StylableComponentBase
+
+@if (ChildContent is not null)
+{
+    <div class="f-row gap-2 justify-content-end @Class" style="@Style">
+        @ChildContent
+    </div>
+}

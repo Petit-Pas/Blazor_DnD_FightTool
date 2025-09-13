@@ -1,9 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31611.283
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11010.61 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DnDFightTool", "DnDFightTool\DnDFightTool.csproj", "{E7371A50-BEA9-4421-8116-F00A7F75BA4A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{BD09E90F-6B05-45E9-A5D5-EA0E525A31EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{E6243CDB-C1F9-4783-B3B9-346DF8C6A385}"
@@ -68,12 +66,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E7371A50-BEA9-4421-8116-F00A7F75BA4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7371A50-BEA9-4421-8116-F00A7F75BA4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7371A50-BEA9-4421-8116-F00A7F75BA4A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{E7371A50-BEA9-4421-8116-F00A7F75BA4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7371A50-BEA9-4421-8116-F00A7F75BA4A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7371A50-BEA9-4421-8116-F00A7F75BA4A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{07D23133-68C0-411A-9E8D-807A57AF9653}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{07D23133-68C0-411A-9E8D-807A57AF9653}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07D23133-68C0-411A-9E8D-807A57AF9653}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -185,7 +177,7 @@ Global
 		{C85691FC-7B64-4394-BBED-FC6481ACBD7C} = {4A095976-38E6-41B5-9F88-C24D62702B81}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4F0A421B-176D-4E26-BD1F-6466C90520DF}
 		        SolutionGuid = {61F7FB11-1E47-470C-91E2-47F8143E1572}
+		SolutionGuid = {4F0A421B-176D-4E26-BD1F-6466C90520DF}
 	EndGlobalSection
 EndGlobal

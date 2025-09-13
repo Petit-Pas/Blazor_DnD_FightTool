@@ -8,7 +8,7 @@ namespace DnDEntitiesBlazorComponents.DnDEntities.MartialAttacks.Components;
 public partial class AttackListEditorComponent
 {
     [Parameter]
-    public Character? Character { get; set; }
+    public ICharacter? Character { get; set; }
 
     [Inject]
     public required IAttackEditContext AttackEditContext { get; set; } = default!;

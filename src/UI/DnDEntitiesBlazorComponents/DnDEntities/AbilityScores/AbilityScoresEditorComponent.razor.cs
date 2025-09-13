@@ -14,7 +14,7 @@ public partial class AbilityScoresEditorComponent : StylableComponentBase
 #pragma warning restore 8618
 
     [Parameter, EditorRequired]
-    public Character? Character { get; set; }
+    public ICharacter? Character { get; set; }
 
     [Parameter]
     public EventCallback OnChanged { get; set; }

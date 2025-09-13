@@ -1,8 +1,0 @@
-﻿@using DnDFightTool.Domain.DnDEntities.AbilityScores;
-
-<InputSelect TValue="AbilityEnum" ValueExpression="@(() => Ability)" Value="Ability" ValueChanged="(value) => OnValueChanged(value)">
-    @foreach (var ability in Enum.GetValues(typeof(AbilityEnum)))
-    {
-        <option value="@ability">@ability</option>
-    }
-</InputSelect>

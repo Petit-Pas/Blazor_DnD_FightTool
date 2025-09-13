@@ -22,7 +22,7 @@ public partial class CharacterEditorPage
     [Inject]
     private IGlobalEditContext GlobalEditContext { get; set; } = default!;
 
-    private Character? _character { get; set; }
+    private ICharacter? _character { get; set; }
 
     protected override void OnInitialized()
     {

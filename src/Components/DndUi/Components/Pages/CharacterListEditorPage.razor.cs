@@ -41,7 +41,7 @@ public partial class CharacterListEditorPage
 
     private void AddToFight(Character character)
     {
-        FightContext.AddToFight(character);
+        FightContext.Add(character);
     }
 
     private void Edit(Character character)

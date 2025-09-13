@@ -32,15 +32,5 @@ public enum SkillEnum
 /// </summary>
 public static class SkillEnumExtensions
 {
-    /// <summary>
-    ///     Makes skills with underscores more readable
-    /// </summary>
-    /// <param name="skill"></param>
-    /// <returns></returns>
-    public static string ToReadableString(this SkillEnum skill)
-    {
-        return skill.ToString().Replace("_", " ");
-    }
-
     public readonly static SkillEnum[] All = Enum.GetValues<SkillEnum>();
 }

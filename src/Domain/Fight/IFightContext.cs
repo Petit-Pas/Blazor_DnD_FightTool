@@ -12,7 +12,19 @@ public interface IFightContext
     ///     Generic method to add a player or a monster to a fight
     /// </summary>
     /// <param name="character"></param>
-    void AddToFight(Character character);
+    void Add(Character character);
+
+    /// <summary>
+    ///     Remove a character from the fight
+    /// </summary>
+    /// <param name="character"></param>
+    void Remove(FightingCharacter character);
+
+    /// <summary>
+    ///     Updates a character already in fight
+    /// </summary>
+    /// <param name="character"></param>
+    void Update(FightingCharacter character);
 
     /// <summary>
     ///     All Fighters
@@ -42,10 +54,15 @@ public interface IFightContext
     /// <summary>
     ///     An event that is fired when the moving fighter changes
     /// </summary>
-    event EventHandler<FightingCharacter?> ActiveFighterChanged;
+    event EventHandler<FightingCharacter?> OnActiveFighterChanged;
+
+    /// <summary>
+    ///     An event that is fired when a fighter is removed from the fight.
+    /// </summary>
+    event EventHandler<FightingCharacter> OnFighterRemoved;
 
     /// <summary>
     ///     Indexer to access fighters by Guid
     /// </summary>
-    FightingCharacter this[Guid id] { get; set; }
+    FightingCharacter this[Guid id] { get; }
 }

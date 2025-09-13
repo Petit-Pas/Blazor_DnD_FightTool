@@ -1,0 +1,43 @@
+﻿/*
+    If more parents than mud-paper need to be configured, this class needs to be copied
+    The rest of the fule can remain untouched
+*/
+.mud-paper:hover > .hoverable-button-row > ::deep * {
+    opacity: 1;
+    transform: translateY(0);
+    transition-property: opacity, transform;
+    transition-duration: 0.3s;
+}
+
+.hoverable-button-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 10px;
+    gap: 4px;
+    position: absolute;
+    top: 7px;
+    right: 5px;
+}
+
+.hoverable-button-row > ::deep * {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.hoverable-button-row > ::deep * {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.hoverable-button-row > ::deep :nth-child(1) { transition-delay: 0.00s; }
+.hoverable-button-row > ::deep :nth-child(2) { transition-delay: 0.05s; }
+.hoverable-button-row > ::deep :nth-child(3) { transition-delay: 0.10s; }
+.hoverable-button-row > ::deep :nth-child(4) { transition-delay: 0.15s; }
+.hoverable-button-row > ::deep :nth-child(5) { transition-delay: 0.20s; }
+.hoverable-button-row > ::deep :nth-child(6) { transition-delay: 0.25s; }
+.hoverable-button-row > ::deep :nth-child(7) { transition-delay: 0.30s; }
+.hoverable-button-row > ::deep :nth-child(8) { transition-delay: 0.35s; }
+.hoverable-button-row > ::deep :nth-child(9) { transition-delay: 0.40s; }

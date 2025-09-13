@@ -1,6 +1,7 @@
 ﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
 using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses;
 using DnDFightTool.Domain.DnDEntities.DamageAffinities;
+using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
 using DnDFightTool.Domain.DnDEntities.HitPoint;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.Saves;
@@ -55,7 +56,7 @@ public interface ICharacter
     /// <summary>
     ///     A meaningful name for this character
     /// </summary>
-    string Name { get; }
+    string Name { get; set; }
 
     /// <summary>
     ///     The skills of the character
@@ -66,6 +67,17 @@ public interface ICharacter
     ///     The type of the character, can be either a player or a monster
     /// </summary>
     CharacterType Type { get; }
+
+    /// Helper methods
+
+
+    /// <summary>
+    ///     Basically fetches the dexterity modifier
+    /// </summary>
+    ScoreModifier GetInitiativeModifier()
+    {
+        return AbilityScores.GetModifier(AbilityEnum.Dexterity);
+    }
 
     /// <summary>
     ///     This method is made to fetch a possibly applied status by it GUID.

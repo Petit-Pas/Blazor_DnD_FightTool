@@ -1,6 +1,12 @@
 @page "/fight"
 
-@foreach (var fighter in FightContext.Fighters)
-{
-    <div>@fighter.Name</div>
-}
+@using DnDFightTool.Domain.Fight.Characters
+@using FightBlazorComponents.Entities.FightingCharacters.Components;
+
+
+<div class="f-row w-100 flex-wrap justify-content-center align-items-start gap-3 p-3" style="">
+    @foreach (var fighter in FightContext.Fighters.OrderBy(FightingCharacter.InitiativeSortKey))
+    {
+        <FightingCharacterTile Fighter=fighter />
+    }
+</div>

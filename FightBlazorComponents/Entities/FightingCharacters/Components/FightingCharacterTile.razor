@@ -1,28 +1,33 @@
-﻿@using DnDFightTool.Domain.Fight;
+﻿@using Extensions
+@using MudBlazor
+@using SharedComponents.Buttons.AtomicButtonsPreset
+@using SharedComponents.Containers
+@using SharedComponents.Icons
+@using DnDFightTool.Domain.Fight.DomainExtensions.HitPoint;
 
-<div class="character-tile-wrap" @onclick="TileClicked">
-    <Card Color="@CardTheme" BorderRadius="@_borderRadius">
-        <div class="character-tile">
-            @if (_character == null)
-            {
-                <p> Character not found </p>
-            }
-            else
-            {
-                <div class="character-tile-header">
-                    @_character.Name
-                </div>
-                <div class="character-tile-hps">
-                    @_character.HitPoints.HpRatioString
-                </div>
-
-                <div class="applied-statuses">
-                @foreach (var appliedStatus in AppliedStatusCollection.GetStatusAppliedTo(_character.Id))
-                {
-                    <div> @appliedStatus.Name </div>
-                }
-                </div>
-            }
-        </div>
-    </Card>
-</div>
+@if (Fighter is not null)
+{
+    <!-- This div is required because if the parent of the component has a custom class with ::deep, it will not work otherwise. It needs a local div to anchor the css isolation identifier -->
+    <div>
+        <MudCard id="@("fighter-" + Fighter.Id)" Class="@("fighter-card p-3 position-relative" + " active".When(_isSelected))" Style=""
+                 @onclick=CardClicked Elevation=2>
+            <HoverableVanishingRow> 
+                <EditButton OnClick=Edit Size=Size.Small />
+				<DeleteButton OnClick=Delete Size=Size.Small />
+            </HoverableVanishingRow>
+            <MudText Typo="Typo.h4"> @Fighter.Name</MudText>
+            <div class="f-row">
+                <MudText> Initiative @Fighter.GetInitiativeTotal() </MudText>
+                <MudText Style="margin-left: auto;"> @Fighter.HitPoints.CurrentHps / @Fighter.HitPoints.MaxHps </MudText>
+            </div>
+            <MudProgressLinear Color=GetHealthBarColor() Size="Size.Large" Value="Fighter.HitPoints.GetHealthRatio()" Rounded="true" />
+            <MudDivider class="my-2" />
+            <div class="f-row">
+                <!-- TODO adapt when we know what we do with the statuses -->
+                <MudChip T="string">Blessed</MudChip>
+                <MudChip T="string">Exhausted</MudChip>
+                <MudChip T="string">Prone</MudChip>
+            </div>
+        </MudCard>
+    </div>
+}
