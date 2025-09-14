@@ -41,7 +41,7 @@ public static class EnumExtensions
 
         var attributes = field.GetCustomAttributes(false)
             .OfType<TAttribute>().ToArray();
-        if (attributes.None())
+        if (attributes.IsEmpty())
         {
             Console.WriteLine($"WARNING: Could not find an attribute of type {typeof(TAttribute).Name} in enum {type}.");
             return default;
