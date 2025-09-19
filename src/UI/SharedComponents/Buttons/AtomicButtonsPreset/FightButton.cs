@@ -4,9 +4,9 @@ using SharedComponents.Icons;
 
 namespace FightBlazorComponents.Shared.Buttons.AtomicButtonsPreset;
 
-public class AddToFightButton : ButtonBase
+public class FightButton : ButtonBase
 {
-    public AddToFightButton() : base(Color.Secondary, CustomIcons.SvgRepo.Swords, false)
+    public FightButton() : base(Color.Secondary, CustomIcons.SvgRepo.Swords, false)
     {
     }
 }

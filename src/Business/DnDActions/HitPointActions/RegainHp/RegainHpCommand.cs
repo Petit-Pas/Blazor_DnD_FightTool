@@ -1,6 +1,6 @@
 ﻿namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainHp;
 
-public class RegainHpCommand : HitPointCommandBase
+public class RegainHpCommand : TargetCommandBase
 {
     /// <summary>
     ///     This is the expected amount of hp gained, could be lowered in reality if the amount of Hp is too high

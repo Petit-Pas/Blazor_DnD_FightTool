@@ -22,12 +22,11 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
 
     public async override Task<ICommandResponse<NoResponse>> Execute(TryApplyStatusCommand command)
     {
-        var caster = _fightContext[command.CasterId];
-        var target = _fightContext[command.TargetId];
+        var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find caster with id {command.CasterId}");
+        var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find target with id {command.TargetId}");
+        
         // TODO should warn in the console and stop
-#pragma warning disable
-        var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");
-#pragma warning restore
+        var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find status to apply with id {command.StatusId}");
 
         command.StatusHash = status.Hash();
 
@@ -67,12 +66,9 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
 
     public async override Task Redo(TryApplyStatusCommand command)
     {
-        var caster = _fightContext[command.CasterId];
-        var target = _fightContext[command.TargetId];
-        // TODO should warn in the console and stop
-#pragma warning disable
-        var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException("Could not get status to try to apply");
-#pragma warning restore
+        var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find caster with id {command.CasterId}");
+        var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find target with id {command.TargetId}");
+        var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find status to apply with id {command.StatusId}");
 
         var statusHash = status.Hash();
         if (statusHash != command.StatusHash)

@@ -2,11 +2,33 @@
 
 @using DnDFightTool.Domain.Fight.Characters
 @using FightBlazorComponents.Entities.FightingCharacters.Components;
+@using FightBlazorComponents.Entities.MartialAttacks
+@using MudBlazor
 
 
-<div class="f-row w-100 flex-wrap justify-content-center align-items-start gap-3 p-3" style="">
-    @foreach (var fighter in FightContext.Fighters.OrderBy(FightingCharacter.InitiativeSortKey))
-    {
-        <FightingCharacterTile Fighter=fighter />
-    }
+<div class="d-grid hw-100 pa-2" style="grid-template-columns: 1fr 350px; grid-template-rows: 1fr 250px">
+    <div class="f-row w-100 flex-wrap justify-content-center align-items-start gap-3 p-3" style="grid-row:1; grid-column:1;">
+        @foreach (var fighter in FightContext.Fighters.OrderBy(FightingCharacter.InitiativeSortKey))
+        {
+            <FightingCharacterTile Fighter=fighter />
+        }
+    </div>
+
+    <div style="grid-row:1; grid-column:2;">
+        fight log placeholder
+    </div>
+
+    <MudTabs Border=true Position=Position.Left ApplyEffectsToContainer="true" PanelClass="pa-2" Style="grid-row:2; grid-column:1;" Elevation=3>
+        <MudTabPanel Text="Attacks">
+            <MartialAttackSelectorComponent />
+        </MudTabPanel>
+    </MudTabs>
+
+    
+
+    <div style="grid-row:2; grid-column:2;">
+        general fight infos
+    </div>
+
 </div>
+

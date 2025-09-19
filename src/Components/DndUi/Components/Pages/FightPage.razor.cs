@@ -1,6 +1,6 @@
 ﻿using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
-using FightBlazorComponents.Entities.FightingCharacters.Components;
+using FightBlazorComponents.Entities.FightingCharacters.Dialog;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -36,9 +36,7 @@ public partial class FightPage : IDisposable
             var options = new DialogOptions { BackdropClick = false };
             var parameters = new DialogParameters<InitiativeInputDialog>
             {
-                {
-                    x => x.Fighters, FightContext.Fighters.ToArray()
-                }
+                { x => x.Fighters, FightContext.Fighters.ToArray() }
             };
 
             var dialog = await DialogService.ShowAsync<InitiativeInputDialog>("Roll for Initiative!", parameters, options);

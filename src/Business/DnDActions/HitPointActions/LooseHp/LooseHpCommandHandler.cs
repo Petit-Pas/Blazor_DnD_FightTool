@@ -15,7 +15,7 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
 
     public override Task<ICommandResponse<NoResponse>> Execute(LooseHpCommand command)
     {
-        var hitPoints = command.GetHitPoints(_fightContext);
+        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseHpCommandHandler)} could not find target with id {command.TargetId}");
 
         command.CorrectedAmount = command.Amount;
         
@@ -31,7 +31,7 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
 
     public override void Undo(LooseHpCommand command)
     {
-        var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
+        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseHpCommandHandler)} could not find target with id {command.TargetId}");
 
         if (command.CorrectedAmount == null)
         {

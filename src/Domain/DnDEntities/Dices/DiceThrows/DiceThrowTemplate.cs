@@ -186,7 +186,7 @@ public partial class DiceThrowTemplate : IHashable, IRegexValidated
     /// </summary>
     /// <param name="caster"> The character for which the wildcards needs to be resolved </param>
     /// <returns></returns>
-    public ScoreModifier GetScoreModifier(Character caster)
+    public ScoreModifier GetScoreModifier(ICharacter caster)
     {
         return new ScoreModifier(_staticModifier + _wildcards.Sum(x => x.Resolve(caster).Modifier));
     }
@@ -214,7 +214,7 @@ public partial class DiceThrowTemplate : IHashable, IRegexValidated
     /// </summary>
     /// <param name="character"></param>
     /// <returns></returns>
-    public int MinimumResult(Character character)
+    public int MinimumResult(ICharacter character)
     {
         return MinimumRoll() + GetScoreModifier(character).Modifier;
     }
@@ -233,7 +233,7 @@ public partial class DiceThrowTemplate : IHashable, IRegexValidated
     /// </summary>
     /// <param name="character"></param>
     /// <returns></returns>
-    public int MaximumResult(Character character)
+    public int MaximumResult(ICharacter character)
     {
         return MaximumRoll() + GetScoreModifier(character);
     }

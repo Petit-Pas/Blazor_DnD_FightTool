@@ -6,13 +6,19 @@
 @if (Size is Size.Large)
 {
     <MudButton Class=@("parent-hover-trigger click-translate" + Class) 
-               Style=@("width: 12em;" + Style)
+               Style=@("width: 12em; border-radius: 6em;" + Style)
                Variant=Variant
                Color=Color
                Disabled=Disabled
                OnClick=OnClick>
-        <div class="parent-hover-jump">
-            <MudIcon Class="@("parent-hover-rotate-90".When(RotateIcon))" Size=Size.Large Icon=@Icon />
+        <div class="f-row align-center">
+            @if (!string.IsNullOrWhiteSpace(Label))
+            {
+                <MudText Typo="Typo.h5"> @Label </MudText>
+            }
+            <div class="parent-hover-jump">
+                <MudIcon Class="@("parent-hover-rotate-90".When(RotateIcon))" Size=Size.Large Icon=@Icon />
+            </div>
         </div>
     </MudButton>
 }

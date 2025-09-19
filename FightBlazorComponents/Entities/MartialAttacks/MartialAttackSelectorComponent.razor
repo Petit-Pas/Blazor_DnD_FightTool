@@ -1,0 +1,42 @@
+@using DnDEntitiesBlazorComponents.DnDEntities.Damage.Components
+@using DnDEntitiesBlazorComponents.DnDEntities.Dices
+@using DnDFightTool.Domain.DnDEntities.Damage
+@using DnDFightTool.Domain.DnDEntities.MartialAttacks
+@using FightBlazorComponents.Shared.Buttons.AtomicButtonsPreset
+@using MudBlazor
+@using SharedComponents
+@using SharedComponents.Icons
+
+@inherits StylableComponentBase
+
+@if (Character is not null)
+{
+	<div class="@($"f-row h-100 gap-2 overflow-y-auto {Class}")" style="@($"{Style}")">
+		<div class="h-100 p-2" style="min-width: 250px;">
+			<MudTable T=MartialAttackTemplate Items="@Character.MartialAttacks.Values"
+					  Class="@($"h-100 overflow-y-auto")"
+					  Dense="true" Striped="true" Hover="true" Elevation=0 Outlined=true
+					  OnRowClick=OnAttackClicked RowClassFunc=SelectedRowClassFunc RowClass="cursor-pointer">
+				<RowTemplate>
+					<MudTd> @context.Name </MudTd>
+				</RowTemplate>
+			</MudTable>
+		</div>
+
+		@if (SelectedAttack != null)
+		{
+			<div class="hw-100 p-2 f-column">
+				<MudText GutterBottom=true Typo=Typo.h5> @SelectedAttack.Name </MudText>
+
+				<div class="d-grid flex-fill-shrink gap-2" style="grid-template-columns: auto 1fr; grid-template-rows: 1fr auto">
+					<div>
+						<MudText GutterBottom=true> @SelectedAttack.ToHitModifiers.Expression (@SelectedAttack.ToHitModifiers.GetScoreModifier(Character)) </MudText>
+						<DamageRollTemplateCollectionComponent Character=Character DamageRolls=SelectedAttack.Damages />
+					</div>
+					<FightButton OnClick=AttackAsync Label="Attack" Color=Color.Primary Style="grid-row: 2" />
+
+				</div>
+			</div>
+		}
+	</div>
+}

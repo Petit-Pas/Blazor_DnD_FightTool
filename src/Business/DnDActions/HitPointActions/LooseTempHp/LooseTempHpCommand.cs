@@ -1,6 +1,6 @@
 ﻿namespace DnDFightTool.Business.DnDActions.HitPointActions.LooseTempHp;
 
-public class LooseTempHpCommand : HitPointCommandBase
+public class LooseTempHpCommand : TargetCommandBase
 {
     /// <summary>
     ///     This is the expected amount of temp hp lost, could be lowered in reality if the amount of temp Hp is lower

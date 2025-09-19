@@ -18,14 +18,11 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
 
     public override Task<ICommandResponse<NoResponse>> Execute(ApplyStatusCommand command)
     {
-        // TODO should warn in the console and stop
-#pragma warning disable
-        var caster = _fightContext[command.CasterId];
-        var target = _fightContext[command.TargetId];
-        var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new ArgumentNullException(nameof(command.StatusId));
-#pragma warning restore
-        var appliedStatus = new AppliedStatus(caster.Id, target.Id, status.Name);
+        var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ApplyStatusCommandHandler)} could not find caster with id {command.CasterId}");
+        var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(ApplyStatusCommandHandler)} could not find target with id {command.TargetId}");
+        var status = caster.GetPossiblyAppliedStatus(command.StatusId) ?? throw new NullReferenceException($"{typeof(ApplyStatusCommandHandler)} could not find status to apply with id {command.StatusId}");
 
+        var appliedStatus = new AppliedStatus(caster.Id, target.Id, status.Name);
         command.AppliedStatusId = appliedStatus.Id;
 
         _appliedStatusCollection.Add(appliedStatus);

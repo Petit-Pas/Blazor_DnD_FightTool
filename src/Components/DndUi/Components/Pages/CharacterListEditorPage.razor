@@ -25,7 +25,7 @@
                                 @player.Name
                             </MudText>
                             <HoverableVanishingRow>
-                                <AddToFightButton OnClick="() => AddToFight(player)" Size=Size.Small />
+                                <FightButton OnClick="() => AddToFight(player)" Size=Size.Small />
                                 <EditButton OnClick="() => Edit(player)" Size=Size.Small />
                                 <DuplicateButton OnClick="() => Duplicate(player)" Size=Size.Small />
                                 <DeleteButton OnClick="() => Delete(player)" Size=Size.Small />
@@ -50,7 +50,7 @@
                                 @monster.Name
                             </MudText>
                             <HoverableVanishingRow>
-                                <AddToFightButton OnClick="() => AddToFight(monster)" Size=Size.Small />
+                                <FightButton OnClick="() => AddToFight(monster)" Size=Size.Small />
                                 <EditButton OnClick="() => Edit(monster)" Size=Size.Small />
                                 <DuplicateButton OnClick="() => Duplicate(monster)" Size=Size.Small />
                                 <DeleteButton OnClick="() => Delete(monster)" Size=Size.Small />

@@ -12,7 +12,7 @@ public class FightContext : IFightContext
 {
     private readonly ILogger<FightContext> _log;
     private readonly IMapper _mapper;
-    
+
     private readonly Dictionary<Guid, FightingCharacter> _fighters = [];
 
     /// <summary>
@@ -27,10 +27,29 @@ public class FightContext : IFightContext
     }
 
     /// <inheritdoc/>
-    public FightingCharacter this[Guid id]
+    public FightingCharacter? this[Guid id]
     {
-        get => _fighters[id];
-        set => _fighters[id] = value;
+        get 
+        { 
+            try 
+            { 
+                return _fighters[id]; 
+            } 
+            catch (KeyNotFoundException) 
+            { 
+                return null;
+            } 
+        }
+        set {
+            if (value is not null)
+            {
+                _fighters[id] = value;
+            }
+            else
+            {
+                _fighters.Remove(id);
+            }
+        }
     }
 
     /// <inheritdoc/>

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace FightBlazorComponents.Entities.FightingCharacters.Components;
+namespace FightBlazorComponents.Entities.FightingCharacters.Dialog;
 
 public partial class InitiativeInputDialog
 {

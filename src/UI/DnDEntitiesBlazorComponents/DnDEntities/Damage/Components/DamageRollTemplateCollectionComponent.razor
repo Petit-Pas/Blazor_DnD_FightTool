@@ -1,0 +1,16 @@
+@using DnDEntitiesBlazorComponents.DnDEntities.Dices
+@using DnDFightTool.Domain.DnDEntities.Damage;
+@using MudBlazor
+@using SharedComponents.Icons
+
+@if (DamageRolls is not null)
+{
+	@foreach (var damageTemplate in DamageRolls)
+	{
+		<MudTooltip Text=@damageTemplate.Type.ToReadableString() Placement=Placement.Top>
+			<MudIcon Icon=@CustomIcons.TwDnd.GetDamageIcon(damageTemplate.Type) />
+		</MudTooltip>
+		<MudText Inline=true> @damageTemplate.Dices.Expression @damageTemplate.Dices.GetRangeDescription(Character) </MudText>
+		<br />
+	}
+}

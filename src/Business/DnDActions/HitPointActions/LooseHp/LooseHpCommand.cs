@@ -1,6 +1,6 @@
 ﻿namespace DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
 
-public class LooseHpCommand : HitPointCommandBase
+public class LooseHpCommand : TargetCommandBase
 {
     /// <summary>
     ///     This is the expected amount of hp removed, could be lowered in reality if the amount of Hp is not sufficient

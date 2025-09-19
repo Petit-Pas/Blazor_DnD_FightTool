@@ -20,8 +20,8 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
 
     public async override Task<ICommandResponse<NoResponse>> Execute(ApplyDamageRollResultsCommand command)
     {
-        var target = _fightContext[command.TargetId];
-        var caster = _fightContext[command.CasterId];
+        var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(ApplyDamageRollResultsCommandHandler)} could not find target with id {command.TargetId}");
+        var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ApplyDamageRollResultsCommandHandler)} could not find caster with id {command.CasterId}");
 
         var totalDamage = 0;
 

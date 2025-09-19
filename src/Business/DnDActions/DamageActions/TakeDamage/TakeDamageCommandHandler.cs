@@ -17,8 +17,8 @@ public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
 
     public override Task<ICommandResponse<NoResponse>> Execute(TakeDamageCommand command)
     {
-        var target = _fightContext[command.TargetId];
-        
+        var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(TakeDamageCommandHandler)} could not find target with id {command.TargetId}");
+
         var remainingDamage = command.Damage;
 
         if (target.HitPoints.CurrentTempHps != 0)

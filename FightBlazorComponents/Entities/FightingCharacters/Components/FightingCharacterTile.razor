@@ -20,8 +20,8 @@
                 <MudText> Initiative @Fighter.GetInitiativeTotal() </MudText>
                 <MudText Style="margin-left: auto;"> @Fighter.HitPoints.CurrentHps / @Fighter.HitPoints.MaxHps </MudText>
             </div>
-            <MudProgressLinear Color=GetHealthBarColor() Size="Size.Large" Value="Fighter.HitPoints.GetHealthRatio()" Rounded="true" />
-            <MudDivider class="my-2" />
+            <MudProgressLinear Class="my-2"
+                Color=GetHealthBarColor() Size="Size.Large" Value="Fighter.HitPoints.GetHealthRatio()" Rounded="true" />
             <div class="f-row">
                 <!-- TODO adapt when we know what we do with the statuses -->
                 <MudChip T="string">Blessed</MudChip>

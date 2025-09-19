@@ -1,0 +1,7 @@
+﻿::deep .selected-attack {
+    background-color: var(--mud-palette-primary) !important;
+}
+
+::deep .selected-attack > ::deep td {
+    color: var(--mud-palette-primary-text) !important;
+}

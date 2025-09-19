@@ -23,15 +23,4 @@ public class CasterQueryBase<T> : QueryBase<T>
     ///     Id of the caster
     /// </summary>
     public Guid CasterId { get; }
-
-    /// <summary>
-    ///     Helper method for the handlers to get the caster easily
-    /// </summary>
-    /// <param name="fightContext"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    public FightingCharacter GetCaster(IFightContext fightContext)
-    {
-        return fightContext[CasterId];
-    }
 }

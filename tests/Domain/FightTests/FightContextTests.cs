@@ -46,7 +46,7 @@ namespace FightTests
                 _fightContext.Add(monster);
 
                 // Assert
-                _fightContext[clonedMonster.Id].Id.Should().Be(clonedMonster.Id);
+                _fightContext[clonedMonster.Id]!.Id.Should().Be(clonedMonster.Id);
             }
 
             [Test]

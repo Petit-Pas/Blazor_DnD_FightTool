@@ -64,5 +64,5 @@ public interface IFightContext
     /// <summary>
     ///     Indexer to access fighters by Guid
     /// </summary>
-    FightingCharacter this[Guid id] { get; }
+    FightingCharacter? this[Guid id] { get; }
 }

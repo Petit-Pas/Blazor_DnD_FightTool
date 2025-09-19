@@ -1,19 +1,20 @@
 ﻿using DnDFightTool.Business.DnDQueries.SaveQueries;
 using DnDFightTool.Domain.DnDEntities.Saves;
 using DnDFightTool.Domain.Fight;
+using MudBlazor;
 using UndoableMediator.Queries;
 
 namespace FightBlazorComponents.Queries.SaveQueries;
 
 public class SaveRollResultQueryHandler : QueryHandlerBase<SaveRollResultQuery, SaveRollResult>
 {
-    private readonly IModalServiceProvider _modalServiceProvider;
     private readonly IFightContext _fightContext;
+    private readonly IDialogService _dialogService;
 
-    public SaveRollResultQueryHandler(IFightContext fightContext, IModalServiceProvider modalServiceProvider)
+    public SaveRollResultQueryHandler(IFightContext fightContext, IDialogService dialogService)
     {
-        _modalServiceProvider = modalServiceProvider;
         _fightContext = fightContext;
+        _dialogService = dialogService;
     }
 
     public override Task<IQueryResponse<SaveRollResult>> Execute(SaveRollResultQuery query)

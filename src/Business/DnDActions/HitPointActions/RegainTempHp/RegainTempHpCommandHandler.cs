@@ -15,7 +15,7 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
 
     public override Task<ICommandResponse<NoResponse>> Execute(RegainTempHpCommand command)
     {
-        var hitPoints = command.GetHitPoints(_fightContext);
+        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainTempHpCommandHandler)} could not find target with id {command.TargetId}");
 
         var expectedTotalCurrentHps = Math.Max(command.Amount, hitPoints.CurrentTempHps);
         command.CorrectedAmount = expectedTotalCurrentHps - hitPoints.CurrentTempHps;
@@ -29,7 +29,7 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
     {
         base.Undo(command);
 
-        var hitPoints = command.GetHitPoints(_fightContext);
+        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainTempHpCommandHandler)} could not find target with id {command.TargetId}");
         
         if (command.CorrectedAmount == null)
         {

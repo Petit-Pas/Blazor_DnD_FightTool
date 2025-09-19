@@ -1,7 +1,7 @@
 ﻿
 namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
 
-public class RegainTempHpCommand : HitPointCommandBase
+public class RegainTempHpCommand : TargetCommandBase
 { 
     /// <summary>
     ///     The amount of Temporay hit points to provide

@@ -29,7 +29,14 @@ public partial class ButtonBase
     [Parameter]
     public virtual Size Size { get; set; } = Size.Large;
 
-    internal virtual Color Color { get; init; } = Color.Primary;
+    [Parameter]
+    public virtual Color Color { get; init; } = Color.Primary;
+
+    /// <summary>
+    ///     Will only be used with Size Large
+    /// </summary>
+    [Parameter]
+    public virtual string? Label { get; set; }
 
     internal virtual string Icon { get; init; } = MudBlazor.Icons.Material.Filled.QuestionMark;
 

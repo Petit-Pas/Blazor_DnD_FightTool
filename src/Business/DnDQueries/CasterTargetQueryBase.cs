@@ -30,26 +30,4 @@ public class CasterTargetQueryBase<T> : QueryBase<T>
     ///     Id of the target
     /// </summary>
     public Guid TargetId { get; }
-
-    /// <summary>
-    ///     Helper method for the handlers to get the caster
-    /// </summary>
-    /// <param name="fightContext"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    public FightingCharacter GetCaster(IFightContext fightContext)
-    {
-        return fightContext[CasterId];
-    }
-
-    /// <summary>
-    ///     Helper method for the handlers to get the target
-    /// </summary>
-    /// <param name="fightContext"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidOperationException"></exception>
-    public FightingCharacter GetTarget(IFightContext fightContext)
-    {
-        return fightContext[TargetId];
-    }
 }

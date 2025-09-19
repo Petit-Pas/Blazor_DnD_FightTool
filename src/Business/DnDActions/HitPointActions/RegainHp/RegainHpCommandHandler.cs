@@ -15,7 +15,7 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
 
     public override Task<ICommandResponse<NoResponse>> Execute(RegainHpCommand command)
     {
-        var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
+        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainHpCommandHandler)} could not find target with id {command.TargetId}");
 
         command.CorrectedAmount = command.Amount;
 
@@ -31,7 +31,7 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
 
     public override void Undo(RegainHpCommand command)
     {
-        var hitPoints = command.GetHitPoints(_fightContext);
+        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainHpCommandHandler)} could not find target with id {command.TargetId}");
 
         if (command.CorrectedAmount == null)
         {

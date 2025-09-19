@@ -33,7 +33,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 
     public async override Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
     {
-        var caster = _fightContext[command.CasterId];
+        var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find caster with id {command.CasterId}");
         var attackTemplate = command.GetAttackTemplate(caster);
 
         command.AttackTemplateHash = attackTemplate.Hash();
@@ -45,7 +45,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
             return new CommandResponse(queryStatus);
         }
 
-        var target = _fightContext[command.MartialAttackRollResult!.TargetId];
+        var target = _fightContext[command.MartialAttackRollResult!.TargetId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find target with id {command.MartialAttackRollResult!.TargetId}");
         if (AttackHits(caster, target, command))
         {
             await ApplyDamage(caster, target, command);
@@ -57,7 +57,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 
     public async override Task Redo(ExecuteMartialAttackCommand command)
     {
-        var caster = _fightContext[command.CasterId];
+        var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find caster with id {command.CasterId}");
         var attackTemplate = command.GetAttackTemplate(caster);
 
         // if the attack template has changed, we need to recompute everything
@@ -74,7 +74,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
             }
         }
 
-        var target = _fightContext[command.MartialAttackRollResult!.TargetId];
+        var target = _fightContext[command.MartialAttackRollResult!.TargetId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find target with id {command.MartialAttackRollResult!.TargetId}");
         if (AttackHits(caster, target, command))
         {
             // attack was already executed and had effect, so we can reuse the same commands

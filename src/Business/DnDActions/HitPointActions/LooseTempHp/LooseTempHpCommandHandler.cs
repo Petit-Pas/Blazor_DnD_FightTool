@@ -1,4 +1,5 @@
-﻿using DnDFightTool.Domain.Fight;
+﻿using DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
@@ -16,7 +17,7 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
 
     public override Task<ICommandResponse<NoResponse>> Execute(LooseTempHpCommand command)
     {
-        var hitPoints = command.GetHitPoints(_fightContext) ?? throw new ArgumentException($"Could not get hitpoints for this {command.GetType()}");
+        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseTempHpCommandHandler)} could not find target with id {command.TargetId}");
 
         command.CorrectedAmount = command.Amount;
 
@@ -32,7 +33,7 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
 
     public override void Undo(LooseTempHpCommand command)
     {
-        var hitPoints = command.GetHitPoints(_fightContext);
+        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseTempHpCommandHandler)} could not find target with id {command.TargetId}");
 
         if (command.CorrectedAmount == null)
         {

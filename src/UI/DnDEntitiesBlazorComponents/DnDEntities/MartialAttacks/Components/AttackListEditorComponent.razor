@@ -12,7 +12,7 @@
         <div class="f-row align-top">
             <MudText Class="" Typo="Typo.h5"> Attacks </MudText>
             <MudSpacer />
-            <AddButton Size="Size.Medium" Style="margin-top: -10px;" />
+            <AddButton OnClick=AddNew Size="Size.Medium" Style="margin-top: -10px;" />
         </div>
         <div class="h-100 f-column overflow-y-auto gap-2 attack-list">
             @foreach (var attack in Character.MartialAttacks.Values)
