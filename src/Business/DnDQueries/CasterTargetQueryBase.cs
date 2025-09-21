@@ -1,6 +1,4 @@
-﻿using DnDFightTool.Domain.Fight;
-using DnDFightTool.Domain.Fight.Characters;
-using UndoableMediator.Queries;
+﻿using UndoableMediator.Queries;
 
 namespace DnDFightTool.Business.DnDQueries;
 

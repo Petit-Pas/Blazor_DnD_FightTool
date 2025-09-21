@@ -5,7 +5,6 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<RootNamespace>DnDFightTool.Business.DnDQueries</RootNamespace>
-
 	</PropertyGroup>
 
 	<ItemGroup>

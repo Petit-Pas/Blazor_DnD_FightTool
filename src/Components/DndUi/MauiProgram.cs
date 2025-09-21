@@ -2,12 +2,12 @@
 using AspNetCoreExtensions.IoC;
 using DnDEntitiesBlazorComponents.IoC;
 using DnDFightTool.Business.DnDActions;
+using DnDFightTool.Business.DnDUserInteraction.IoC;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Characters.Validation;
 using DnDFightTool.Domain.DnDEntities.IoC;
 using DnDFightTool.Domain.Fight;
 using Extensions;
-using FightBlazorComponents.Queries.MartialAttackQueries.MartialAttackRollResultQueries;
 using FluentValidation;
 using IO.Files;
 using IO.Serialization;
@@ -15,6 +15,7 @@ using Mapping;
 using Microsoft.Extensions.Logging;
 using MudBlazor.Services;
 using UndoableMediator.DependencyInjection;
+
 
 namespace DndUi;
 
@@ -58,7 +59,6 @@ public static class MauiProgram
             options.AssembliesToScan =
             [
                 typeof(CasterCommandBase).Assembly,
-                typeof(MartialAttackRollResultQueryHandler).Assembly
             ];
         });
 
@@ -66,7 +66,8 @@ public static class MauiProgram
             .RegisterDnDEntitiesMappingConfigurations()
             .RegisterAspNetCoreExtensions()
             .RegisterDnDEntitiesBlazorComponentsServices()
-            .RegisterPropertyTargetedValidators(typeof(Character).Assembly);
+            .RegisterPropertyTargetedValidators(typeof(Character).Assembly)
+            .RegisterDnDUserInteractionServices();
 
         var app = builder.Build();
 

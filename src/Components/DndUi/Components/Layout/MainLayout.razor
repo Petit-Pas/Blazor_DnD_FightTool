@@ -1,6 +1,14 @@
 ﻿@inherits LayoutComponentBase
+@using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack
+@using DnDFightTool.Business.DnDUserInteraction
+@using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions
+@using DnDFightTool.Domain.Fight
+@using DnDFightTool.Domain.Fight.DomainExtensions.Damage;
+@using DnDFightTool.Domain.Fight.DomainExtensions.MartialAttacks;
 @using DndUi.Components.Shared
+@using Extensions
 @using MudBlazor
+@using Microsoft.Extensions.DependencyInjection
 
 <MudDialogProvider />
 <MudSnackbarProvider />
@@ -27,6 +35,33 @@
     private bool _open = false;
     private MudThemeProvider? _mudThemeProvider;
     private bool _isDarkMode = true;
+
+    [Inject] 
+    IDialogService Dialogs { get; set; } = default!;
+
+    [Inject]
+    public IUserInteractionService UserInteractionService { get; set; } = null!;
+
+    [Inject]
+    public IFightContext _fightContext { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        UserInteractionService.InteractionRaised += OnInteraction;
+    }
+
+    private async Task OnInteraction(IUserInteraction interaction)
+    {
+        switch (interaction)
+        {
+            case MartialAttackRollResultRequestInteraction castedInteraction:
+				await HandleInteractionAsync(castedInteraction);
+				break;
+            default:
+				throw new NotImplementedException($"Cannot interact with user for {interaction.GetType()}");
+        }
+        StateHasChanged();
+    }
 
     private void OnIsDarkModeChanged(bool value)
     {

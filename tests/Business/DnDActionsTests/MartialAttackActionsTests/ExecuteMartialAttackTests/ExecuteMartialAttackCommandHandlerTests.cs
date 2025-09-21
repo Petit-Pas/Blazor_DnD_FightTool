@@ -11,7 +11,6 @@ using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using FakeItEasy;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using System.Linq;
-using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 using UndoableMediator.Queries;
 using FluentAssertions;
 using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
@@ -21,6 +20,8 @@ using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 using DomainTestsUtilities.Factories.Damage;
 using DnDFightTool.Domain.Fight.Characters;
 using DomainTestsUtilities.Extensions;
+using DnDFightTool.Business.DnDUserInteraction;
+using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions;
 
 namespace DnDActionsTests.MartialAttackActionsTests.ExecuteMartialAttackTests;
 
@@ -30,6 +31,7 @@ public class ExecuteMartialAttackCommandHandlerTests
 
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
+    private IUserInteractionService _userInteractionService = null!;
 
     private FightingCharacter _caster = null!;
     private FightingCharacter _target = null!;
@@ -42,6 +44,7 @@ public class ExecuteMartialAttackCommandHandlerTests
     {
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
+        _userInteractionService = A.Fake<IUserInteractionService>();
 
         _caster = new Character(true).AsFighter();
         _caster.MartialAttacks.Add(MartialAttackTemplateFactory.Build()); ;
@@ -51,7 +54,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         }.AsFighter();
 
         _command = new ExecuteMartialAttackCommand(_caster.Id, _attackTemplate.Id);
-        _commandHandler = new ExecuteMartialAttackCommandHandler(_mediator, _fightContext);
+        _commandHandler = new ExecuteMartialAttackCommandHandler(_mediator, _fightContext, _userInteractionService);
 
         A.CallTo(() => _fightContext[_caster.Id])
             .Returns(_caster);
@@ -82,7 +85,7 @@ public class ExecuteMartialAttackCommandHandlerTests
             _ => throw new System.NotImplementedException(),
         };
 
-        A.CallTo(() => _mediator.Execute(A<MartialAttackRollResultQuery>._))
+        A.CallTo(() => _userInteractionService.RequestAsync(A<MartialAttackRollResultRequestInteraction>._))
             .Returns(queryResponse);
     }
 
@@ -244,7 +247,7 @@ public class ExecuteMartialAttackCommandHandlerTests
             await _commandHandler.Redo(_command);
 
             // Assert
-            A.CallTo(() => _mediator.Execute(A<MartialAttackRollResultQuery>._))
+            A.CallTo(() => _userInteractionService.RequestAsync(A<MartialAttackRollResultRequestInteraction>._))
                 .MustHaveHappenedOnceExactly();
         }
 
@@ -256,13 +259,13 @@ public class ExecuteMartialAttackCommandHandlerTests
             await _commandHandler.Execute(_command);
             _commandHandler.Undo(_command);
             _attackTemplate.Name = "New name to change hash value";
-            A.CallTo(() => _mediator.Execute(A<MartialAttackRollResultQuery>._))
+            A.CallTo(() => _userInteractionService.RequestAsync(A<MartialAttackRollResultRequestInteraction>._))
                 .MustHaveHappenedOnceExactly();
             // Act
             await _commandHandler.Redo(_command);
 
             // Assert
-            A.CallTo(() => _mediator.Execute(A<MartialAttackRollResultQuery>._))
+            A.CallTo(() => _userInteractionService.RequestAsync(A<MartialAttackRollResultRequestInteraction>._))
                 .MustHaveHappenedTwiceExactly();
         }
 

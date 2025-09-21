@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace FightBlazorComponents;
+namespace SharedComponents.Dialogs;
 
 public partial class RollableDialogBase
 {

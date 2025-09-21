@@ -1,13 +1,15 @@
 ﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
-using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
+using DnDFightTool.Business.DnDUserInteraction;
+using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions;
+using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
+using Extensions;
+using Memory.Hashes;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
-using Memory.Hashes;
-using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
 
@@ -20,19 +22,23 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     ///     Fight context dependency.
     /// </summary>
     private readonly IFightContext _fightContext;
+    private readonly IUserInteractionService _userInteractionService;
 
     /// <summary>
     ///     Ctor
     /// </summary>
     /// <param name="mediator"></param>
     /// <param name="fightContext"></param>
-    public ExecuteMartialAttackCommandHandler(IUndoableMediator mediator, IFightContext fightContext) : base(mediator)
+    public ExecuteMartialAttackCommandHandler(IUndoableMediator mediator, IFightContext fightContext, IUserInteractionService userInteractionService) : base(mediator)
     {
-        _fightContext = fightContext;
+        _fightContext = fightContext ?? throw new ArgumentNullException(nameof(fightContext));
+        _userInteractionService = userInteractionService ?? throw new ArgumentNullException(nameof(userInteractionService));
     }
 
     public async override Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
     {
+        ArgumentNullException.ThrowIfNull(command);
+        
         var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find caster with id {command.CasterId}");
         var attackTemplate = command.GetAttackTemplate(caster);
 
@@ -105,10 +111,10 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <returns></returns>
     private async Task<RequestStatus> QueryAttackRollResult(ExecuteMartialAttackCommand command)
     {
-        var attackRollResultQuery = new MartialAttackRollResultQuery(command.MartialAttackId, command.CasterId);
-        var attackRollResponse = await _mediator.Execute(attackRollResultQuery);
-        command.MartialAttackRollResult = attackRollResponse.Response;
-        return attackRollResponse.Status;
+        var requestResult = await _userInteractionService.RequestAsync(new MartialAttackRollResultRequestInteraction(command.CasterId, command.MartialAttackId));
+
+        command.MartialAttackRollResult = requestResult.Response;
+        return requestResult.Status;
     }
 
     /// <summary>

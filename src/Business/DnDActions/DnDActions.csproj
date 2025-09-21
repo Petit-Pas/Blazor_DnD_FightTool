@@ -15,6 +15,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
 		<ProjectReference Include="..\DnDQueries\DnDQueries.csproj" />
+		<ProjectReference Include="..\DnDUserInterations\DnDUserInterations.csproj" />
 	</ItemGroup>
 
 </Project>

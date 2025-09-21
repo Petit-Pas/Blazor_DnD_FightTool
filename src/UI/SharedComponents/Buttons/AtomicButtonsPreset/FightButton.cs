@@ -1,8 +1,7 @@
 ﻿using MudBlazor;
-using SharedComponents.Buttons.AtomicButtonsPreset;
 using SharedComponents.Icons;
 
-namespace FightBlazorComponents.Shared.Buttons.AtomicButtonsPreset;
+namespace SharedComponents.Buttons.AtomicButtonsPreset;
 
 public class FightButton : ButtonBase
 {

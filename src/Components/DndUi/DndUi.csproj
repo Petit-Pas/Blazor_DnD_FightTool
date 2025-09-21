@@ -67,6 +67,7 @@
       <ProjectReference Include="..\..\..\FightBlazorComponents\FightBlazorComponents.csproj" />
       <ProjectReference Include="..\..\Infrastructure\AspNetCoreExtensions\AspNetCoreExtensions.csproj" />
       <ProjectReference Include="..\..\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
+      <ProjectReference Include="..\..\UI\DnDUserInteractionsComponents\DnDUserInteractionsComponents.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,13 +1,10 @@
-﻿using Blazored.Modal.Services;
-using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
+﻿using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
-using FightBlazorComponents.Queries.MartialAttackQueries.MartialAttackRollResultQueries;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using UndoableMediator.Mediators;
-using UndoableMediator.Queries;
 
 namespace FightBlazorComponents.Entities.MartialAttacks;
 
