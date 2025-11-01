@@ -1,7 +1,12 @@
-﻿@using SharedComponents.Dialogs
+﻿@using FightBlazorComponents.Entities.FightingCharacters.Components
+@using MudBlazor
+@using SharedComponents.Dialogs
+
+
 @if (MartialAttackRollResult is not null)
 {
 	<RollableDialogBase>
-		<div> hello </div>
+		<FightingCharacterSelectorComponent Max="1" />
+
 	</RollableDialogBase>
 }

@@ -5,7 +5,6 @@ using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
-using Extensions;
 using Memory.Hashes;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;

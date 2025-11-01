@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\FightBlazorComponents\FightBlazorComponents.csproj" />
     <ProjectReference Include="..\..\Business\DnDUserInterations\DnDUserInterations.csproj" />
     <ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
     <ProjectReference Include="..\SharedComponents\SharedComponents.csproj" />

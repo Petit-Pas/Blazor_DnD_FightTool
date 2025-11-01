@@ -1,0 +1,20 @@
+@using MudBlazor
+@using SharedComponents
+
+@inherits StylableComponentBase
+
+@if (Max == 1)
+{
+	<MudTextField T=string ValueChanged="FilterChanged" />
+
+	@foreach (var fighter in _fighters)
+	{
+		<MudCard Class="my-2 p-1" Elevation=2>
+			<MudText> @fighter.Name </MudText>
+		</MudCard>
+	}	
+}
+else
+{
+	throw new NotImplementedException("Multi-select not implemented yet");
+}
