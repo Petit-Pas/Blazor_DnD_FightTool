@@ -42,7 +42,8 @@ public partial class FightPage : IDisposable
             var dialog = await DialogService.ShowAsync<InitiativeInputDialog>("Roll for Initiative!", parameters, options);
             await dialog.Result;
 
-            StateHasChanged();
+            // TODO in async method, StateHasChanged should always be called via InvokeAsync
+            await InvokeAsync(StateHasChanged);
         }
     }
 

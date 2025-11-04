@@ -60,7 +60,7 @@
             default:
 				throw new NotImplementedException($"Cannot interact with user for {interaction.GetType()}");
         }
-        StateHasChanged();
+        await InvokeAsync(StateHasChanged);
     }
 
     private void OnIsDarkModeChanged(bool value)
