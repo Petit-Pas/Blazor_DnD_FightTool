@@ -8,6 +8,7 @@ using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using Memory.Hashes;
+using MudBlazor;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
@@ -27,6 +28,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     private readonly ITestTransient _testTransient;
     private readonly ITestScoped _testScoped;
     private readonly ITestSingleton _testSingleton;
+    private readonly IDialogService _dialogs;
 
     /// <summary>
     ///     Ctor
@@ -34,18 +36,21 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <param name="mediator"></param>
     /// <param name="fightContext"></param>
     public ExecuteMartialAttackCommandHandler(IUndoableMediator mediator, IFightContext fightContext, IUserInteractionService userInteractionService,
-        ITestTransient testTransient, ITestScoped testScoped, ITestSingleton testSingleton) : base(mediator)
+        ITestTransient testTransient, ITestScoped testScoped, ITestSingleton testSingleton, IDialogService Dialogs) : base(mediator)
     {
         _fightContext = fightContext ?? throw new ArgumentNullException(nameof(fightContext));
         _userInteractionService = userInteractionService ?? throw new ArgumentNullException(nameof(userInteractionService));
         _testTransient = testTransient;
         _testScoped = testScoped;
         _testSingleton = testSingleton;
+        _dialogs = Dialogs ?? throw new ArgumentNullException(nameof(Dialogs));
     }
 
     public async override Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
     {
         ArgumentNullException.ThrowIfNull(command);
+
+        var test = _dialogs == Singleton.SingletonDialogService;
 
         await _testTransient.TestAsync();
         await _testScoped.TestAsync();

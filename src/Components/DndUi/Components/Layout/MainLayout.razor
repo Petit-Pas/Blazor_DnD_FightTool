@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@using DnDFightTool.Business.DnDActions
 @using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack
 @using DnDFightTool.Business.DnDUserInteraction
 @using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions
@@ -48,6 +49,8 @@
     protected override void OnInitialized()
     {
         UserInteractionService.InteractionRaised += OnInteraction;
+
+        Singleton.SingletonDialogService = Dialogs;
     }
 
     private async Task OnInteraction(IUserInteraction interaction)
