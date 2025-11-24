@@ -1,5 +1,4 @@
 ﻿using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.Fight.DomainExtensions.MartialAttacks;
 using DnDUserInteractionsComponents.Interactions.MartialAttackUserInteractions;
 using MudBlazor;

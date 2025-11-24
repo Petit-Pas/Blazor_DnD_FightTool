@@ -1,5 +1,7 @@
 ﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
+using DnDFightTool.Business.DnDQueries;
+using DnDFightTool.Business.DnDQueries.SaveQueries;
 using DnDFightTool.Business.DnDUserInteraction;
 using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
@@ -22,22 +24,33 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// </summary>
     private readonly IFightContext _fightContext;
     private readonly IUserInteractionService _userInteractionService;
+    private readonly ITestTransient _testTransient;
+    private readonly ITestScoped _testScoped;
+    private readonly ITestSingleton _testSingleton;
 
     /// <summary>
     ///     Ctor
     /// </summary>
     /// <param name="mediator"></param>
     /// <param name="fightContext"></param>
-    public ExecuteMartialAttackCommandHandler(IUndoableMediator mediator, IFightContext fightContext, IUserInteractionService userInteractionService) : base(mediator)
+    public ExecuteMartialAttackCommandHandler(IUndoableMediator mediator, IFightContext fightContext, IUserInteractionService userInteractionService,
+        ITestTransient testTransient, ITestScoped testScoped, ITestSingleton testSingleton) : base(mediator)
     {
         _fightContext = fightContext ?? throw new ArgumentNullException(nameof(fightContext));
         _userInteractionService = userInteractionService ?? throw new ArgumentNullException(nameof(userInteractionService));
+        _testTransient = testTransient;
+        _testScoped = testScoped;
+        _testSingleton = testSingleton;
     }
 
     public async override Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
     {
         ArgumentNullException.ThrowIfNull(command);
-        
+
+        await _testTransient.TestAsync();
+        await _testScoped.TestAsync();
+        await _testSingleton.TestAsync();
+
         var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find caster with id {command.CasterId}");
         var attackTemplate = command.GetAttackTemplate(caster);
 
@@ -110,9 +123,11 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <returns></returns>
     private async Task<RequestStatus> QueryAttackRollResult(ExecuteMartialAttackCommand command)
     {
-        var requestResult = await _userInteractionService.RequestAsync(new MartialAttackRollResultRequestInteraction(command.CasterId, command.MartialAttackId));
-
-        command.MartialAttackRollResult = requestResult.Response;
+        var requestResult = await _mediator.Execute(new SaveRollResultQuery(command.CasterId, command.MartialAttackId, null));
+        
+        //var requestResult = await _userInteractionService.RequestAsync(new MartialAttackRollResultRequestInteraction(command.CasterId, command.MartialAttackId));
+        //command.MartialAttackRollResult = requestResult.Response;
+    
         return requestResult.Status;
     }
 

@@ -59,7 +59,6 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
         <!--<PackageReference Include="Morris.Blazor.FluentValidation" Version="3.1.5" />
         <PackageReference Include="Morris.Blazor.Validation" Version="3.1.5" />-->
-        <PackageReference Include="MudBlazor" Version="8.11.0" />
         <PackageReference Include="UndoableMediator" Version="1.0.0" />
     </ItemGroup>
 

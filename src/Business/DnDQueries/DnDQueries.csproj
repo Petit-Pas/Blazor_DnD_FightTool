@@ -8,6 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="MudBlazor" Version="8.13.0" />
 		<PackageReference Include="UndoableMediator" Version="1.0.0" />
 	</ItemGroup>
 

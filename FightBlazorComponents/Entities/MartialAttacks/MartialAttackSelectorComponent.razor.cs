@@ -11,6 +11,9 @@ namespace FightBlazorComponents.Entities.MartialAttacks;
 public partial class MartialAttackSelectorComponent : IDisposable
 {
     [Inject]
+    public required IDialogService _dialogs { get; set; }
+
+    [Inject]
     public required IFightContext FightContext { get; set; }
 
     [Inject]
@@ -31,6 +34,8 @@ public partial class MartialAttackSelectorComponent : IDisposable
         Character = FightContext.ActiveFighter;
 
         FightContext.OnActiveFighterChanged += FightContext_OnActiveFighterChanged;
+
+        SingletonDialogService = _dialogs;
     }
 
     private async Task OnAttackClicked(TableRowClickEventArgs<MartialAttackTemplate> tableRowClickEventArgs)
@@ -38,7 +43,7 @@ public partial class MartialAttackSelectorComponent : IDisposable
         SelectedAttack = tableRowClickEventArgs.Item;
         if (tableRowClickEventArgs.MouseEventArgs.Detail > 1)
         {
-            await AttackAsync();
+            await InvokeAsync(AttackAsync);
         }
     }
 
@@ -60,7 +65,19 @@ public partial class MartialAttackSelectorComponent : IDisposable
         {
             return;
         }
-        
-        await Mediator.Execute(new ExecuteMartialAttackCommand(Character.Id, SelectedAttack.Id));
+
+        // await InvokeAsync(AttackFromHereTestAsync); => Works
+        // await InvokeAsync(() => Mediator.Execute(new ExecuteMartialAttackCommand(Character.Id, SelectedAttack.Id))); with usual IoC => does not work
+        await InvokeAsync(() => Mediator.Execute(new ExecuteMartialAttackCommand(Character.Id, SelectedAttack.Id))); // using singletoned' instance of the present IoC
+    }
+
+    public static IDialogService SingletonDialogService;
+
+    private async Task AttackFromHereTestAsync()
+    {
+        // TODO when cleaning this up, you might be able to remove the reference from DnDUserInteractionsComponents to this project
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        await InvokeAsync(() => _dialogs.ShowAsync<Dialog>("Simple Dialog", options));
     }
 }
