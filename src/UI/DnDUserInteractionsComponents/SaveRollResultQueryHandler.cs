@@ -1,4 +1,5 @@
-﻿using DnDFightTool.Business.DnDQueries.SaveQueries;
+﻿using DnDFightTool.Business.DnDQueries;
+using DnDFightTool.Business.DnDQueries.SaveQueries;
 using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.Saves;
@@ -11,24 +12,21 @@ namespace DnDUserInteractionsComponents;
 
 public class SaveRollResultQueryHandler : QueryHandlerBase<SaveRollResultQuery, SaveRollResult>
 {
-    private readonly IDialogService _dialogs;
+    private readonly IDialogServiceProvider _dialogServiceProvider;
 
     // TODO considering the dependency, this class should not be here and we should remove the dependency to MudBlazor
-    public SaveRollResultQueryHandler(IDialogService dialogs)
+    public SaveRollResultQueryHandler(IDialogServiceProvider dialogServiceProvider)
     {
-        _dialogs = dialogs ?? throw new ArgumentNullException(nameof(dialogs));
+        _dialogServiceProvider = dialogServiceProvider ?? throw new ArgumentNullException(nameof(dialogServiceProvider));
     }
 
     public override async Task<IQueryResponse<SaveRollResult>> Execute(SaveRollResultQuery query)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
 
-        var areTheSame = _dialogs == MartialAttackSelectorComponent.SingletonDialogService;
-
-        var dialog = await _dialogs.ShowAsync<Dialog>("Simple Dialog", options);
-        //var dialog = await MartialAttackSelectorComponent.SingletonDialogService.ShowAsync<Dialog>("Simple Dialog", options);
+        var dialog = await _dialogServiceProvider.GetDialogService().ShowAsync<Dialog>("Simple Dialog", options);
         var result = await dialog.Result;
 
-        return default;
+        return QueryResponse<SaveRollResult>.Success(result.Data as SaveRollResult);
     }
 }

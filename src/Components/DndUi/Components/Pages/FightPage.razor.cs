@@ -1,4 +1,5 @@
-﻿using DnDFightTool.Domain.Fight;
+﻿using DnDFightTool.Business.DnDQueries;
+using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using FightBlazorComponents.Entities.FightingCharacters.Dialog;
 using Microsoft.AspNetCore.Components;
@@ -9,6 +10,9 @@ namespace DndUi.Components.Pages;
 public partial class FightPage : IDisposable
 {
     [Inject]
+    public required IDialogServiceProvider DialogServiceProvider { get; set; }
+
+    [Inject]
     public required IDialogService DialogService { get; set; }
 
     [Inject]
@@ -17,6 +21,8 @@ public partial class FightPage : IDisposable
     protected async override Task OnInitializedAsync()
     {
         FightContext.OnFighterRemoved += FighterRemoved;
+
+        DialogServiceProvider.SetDialogService(DialogService);
 
         await CheckForFightersWithoutInitiative();
     }

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
-        <MauiVersion>9.0.0</MauiVersion>
+        <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+        <MauiVersion>10.0.0</MauiVersion>
         <OutputType>Exe</OutputType>
         <RootNamespace>DndUi</RootNamespace>
         <UseMaui>true</UseMaui>
@@ -53,10 +53,10 @@
 
     <ItemGroup>
         <PackageReference Include="Blazored.FluentValidation" Version="2.2.0" />
-        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
-        <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.90" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="9.0.90" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+        <PackageReference Include="Microsoft.Maui.Controls" Version="10.0.51" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="10.0.51" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.5" />
         <!--<PackageReference Include="Morris.Blazor.FluentValidation" Version="3.1.5" />
         <PackageReference Include="Morris.Blazor.Validation" Version="3.1.5" />-->
         <PackageReference Include="UndoableMediator" Version="1.0.0" />

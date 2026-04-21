@@ -31,5 +31,5 @@ public class HitPoints
     /// <summary>
     ///     A fraction like string to display the current hit points of a character as text.
     /// </summary>
-    public string HpRatioString => $"{CurrentHps}{(CurrentTempHps != 0 ? $"(+ {CurrentHps})" : "")} / {MaxHps}";
+    public string HpRatioString => $"{CurrentHps}{(CurrentTempHps != 0 ? $"(+ {CurrentTempHps})" : "")} / {MaxHps}";
 }

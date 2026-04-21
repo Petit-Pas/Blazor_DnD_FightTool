@@ -27,6 +27,7 @@ public partial class MainLayout
         if (result?.Canceled ?? true)
         {
             UserInteractionService.CompleteCanceled(interaction.InteractionId);
+            return;
         }
         UserInteractionService.CompleteSuccess(interaction.InteractionId, rollableResult);
     }

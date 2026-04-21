@@ -42,11 +42,6 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddValidatorsFromAssemblyContaining<CharacterValidator>();
-        //builder.Services.AddFormValidation(config =>
-        //{
-        //    config.AddFluentValidation(
-        //        typeof(Character).Assembly);
-        //});
 
         builder.Services.AddSingleton<ICharacterRepository, LocalFileCharacterRepository>();
         builder.Services.AddSingleton<IFightContext, FightContext>();
@@ -72,9 +67,7 @@ public static class MauiProgram
             .RegisterPropertyTargetedValidators(typeof(Character).Assembly)
             .RegisterDnDUserInteractionServices();
 
-        builder.Services.AddTransient<ITestTransient, TestTransient>();
-        builder.Services.AddTransient<ITestScoped, TestScoped>();
-        builder.Services.AddTransient<ITestSingleton, TestSingleton>();
+        builder.Services.AddSingleton<IDialogServiceProvider, DialogServiceProvider>();
 
         
 

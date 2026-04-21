@@ -1,6 +1,5 @@
 ﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
-using DnDFightTool.Business.DnDQueries;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
 using DnDFightTool.Business.DnDUserInteraction;
 using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions;
@@ -8,7 +7,6 @@ using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using Memory.Hashes;
-using MudBlazor;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
@@ -24,37 +22,21 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     ///     Fight context dependency.
     /// </summary>
     private readonly IFightContext _fightContext;
-    private readonly IUserInteractionService _userInteractionService;
-    private readonly ITestTransient _testTransient;
-    private readonly ITestScoped _testScoped;
-    private readonly ITestSingleton _testSingleton;
-    private readonly IDialogService _dialogs;
-
     /// <summary>
     ///     Ctor
     /// </summary>
     /// <param name="mediator"></param>
     /// <param name="fightContext"></param>
-    public ExecuteMartialAttackCommandHandler(IUndoableMediator mediator, IFightContext fightContext, IUserInteractionService userInteractionService,
-        ITestTransient testTransient, ITestScoped testScoped, ITestSingleton testSingleton, IDialogService Dialogs) : base(mediator)
+    public ExecuteMartialAttackCommandHandler(
+        IUndoableMediator mediator,
+        IFightContext fightContext) : base(mediator)
     {
         _fightContext = fightContext ?? throw new ArgumentNullException(nameof(fightContext));
-        _userInteractionService = userInteractionService ?? throw new ArgumentNullException(nameof(userInteractionService));
-        _testTransient = testTransient;
-        _testScoped = testScoped;
-        _testSingleton = testSingleton;
-        _dialogs = Dialogs ?? throw new ArgumentNullException(nameof(Dialogs));
     }
 
     public async override Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
     {
         ArgumentNullException.ThrowIfNull(command);
-
-        var test = _dialogs == Singleton.SingletonDialogService;
-
-        await _testTransient.TestAsync();
-        await _testScoped.TestAsync();
-        await _testSingleton.TestAsync();
 
         var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find caster with id {command.CasterId}");
         var attackTemplate = command.GetAttackTemplate(caster);
@@ -128,11 +110,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <returns></returns>
     private async Task<RequestStatus> QueryAttackRollResult(ExecuteMartialAttackCommand command)
     {
-        var requestResult = await _mediator.Execute(new SaveRollResultQuery(command.CasterId, command.MartialAttackId, null));
-        
-        //var requestResult = await _userInteractionService.RequestAsync(new MartialAttackRollResultRequestInteraction(command.CasterId, command.MartialAttackId));
-        //command.MartialAttackRollResult = requestResult.Response;
-    
+        var requestResult = await _mediator.Execute(new SaveRollResultQuery(command.CasterId, command.MartialAttackId, null));    
         return requestResult.Status;
     }
 
