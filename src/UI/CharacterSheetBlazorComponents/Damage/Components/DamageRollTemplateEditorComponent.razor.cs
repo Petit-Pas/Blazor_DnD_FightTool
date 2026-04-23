@@ -1,8 +1,8 @@
-using CharacterSheetBlazorComponents.Dices.DiceRolls.Components;
+﻿using DnDFightTool.UI.CharacterSheetBlazorComponents.Dices.DiceRolls.Components;
 using DnDFightTool.Domain.CharacterSheet.Damage;
 using Microsoft.AspNetCore.Components;
 
-namespace CharacterSheetBlazorComponents.Damage.Components;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.Damage.Components;
 
 public partial class DamageRollTemplateEditorComponent
 {

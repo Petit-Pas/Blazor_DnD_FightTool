@@ -1,6 +1,6 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using DnDFightTool.Domain.CharacterSheet.Dices;
-using Memory.Hashes;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.Damage;
 

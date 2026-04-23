@@ -1,20 +1,20 @@
-using System.Reflection;
-using AspNetCoreExtensions.IoC;
-using CharacterSheetBlazorComponents.IoC;
+﻿using DnDFightTool.Infrastructure.AspNetCoreExtensions.IoC;
+using DnDFightTool.UI.CharacterSheetBlazorComponents.IoC;
 using DnDFightTool.Business.DnDActions;
 using DnDFightTool.Business.DnDQueries;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Characters.Validation;
 using DnDFightTool.Domain.CharacterSheet.IoC;
 using DnDFightTool.Domain.Fight;
-using DnDQueryPrompter;
-using DnDQueryPrompter.SaveQueries;
+using DnDFightTool.UI.DnDQueryPrompter;
+using DnDFightTool.UI.DnDQueryPrompter.SaveQueries;
 using Extensions;
-using FightBlazorComponents.IoC;
+using Extensions.IoC;
+using DnDFightTool.UI.FightBlazorComponents.IoC;
 using FluentValidation;
-using IO.Files;
-using IO.Serialization;
-using Mapping;
+using DnDFightTool.Infrastructure.IO.Files;
+using DnDFightTool.Infrastructure.IO.Serialization;
+using DnDFightTool.Infrastructure.Mapping;
 using Microsoft.Extensions.Logging;
 using MudBlazor.Services;
 using UndoableMediator.DependencyInjection;
@@ -77,28 +77,4 @@ public static class MauiProgram
 
         return app;
 	}
-
-    public static IServiceCollection RegisterPropertyTargetedValidators(this IServiceCollection services, Assembly assembly)
-    {
-        var openGenericType = typeof(PropertyTargetedValidator<>);
-
-        var types = assembly.GetTypes()
-            .Where(t => !t.IsAbstract && !t.IsInterface)
-            .Select(t => new
-            {
-                Type = t,
-                Base = t.BaseType
-            })
-            .Where(x => x.Base != null
-                && x.Base.IsGenericType
-                && x.Base.GetGenericTypeDefinition() == openGenericType)
-            .ToList();
-
-        foreach (var x in types)
-        {
-            services.AddTransient(x.Base!, x.Type);
-        }
-
-        return services;
-    }
 }

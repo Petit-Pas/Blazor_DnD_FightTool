@@ -1,10 +1,10 @@
-using DnDFightTool.Business.DnDQueries;
+﻿using DnDFightTool.Business.DnDQueries;
 using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 using DnDFightTool.Domain.Rolls;
 using MudBlazor;
 using UndoableMediator.Queries;
 
-namespace DnDQueryPrompter.MartialAttackQueries;
+namespace DnDFightTool.UI.DnDQueryPrompter.MartialAttackQueries;
 
 /// <summary>
 ///     Query handler for <see cref="MartialAttackRollResultQuery"/>.

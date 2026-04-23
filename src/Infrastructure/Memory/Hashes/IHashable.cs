@@ -1,4 +1,4 @@
-﻿namespace Memory.Hashes;
+﻿namespace DnDFightTool.Infrastructure.Memory.Hashes;
 
 public interface IHashable
 {

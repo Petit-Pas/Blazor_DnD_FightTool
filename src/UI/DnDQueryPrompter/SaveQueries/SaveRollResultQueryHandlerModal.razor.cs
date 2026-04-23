@@ -1,4 +1,4 @@
-using DnDFightTool.Domain.CharacterSheet.AbilityScores;
+﻿using DnDFightTool.Domain.CharacterSheet.AbilityScores;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Dices.Modifiers;
 using DnDFightTool.Domain.CharacterSheet.Saves;
@@ -7,9 +7,9 @@ using DnDFightTool.Domain.Rolls.Extensions;
 using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using SharedComponents.Dices;
+using DnDFightTool.UI.SharedComponents.Dices;
 
-namespace DnDQueryPrompter.SaveQueries;
+namespace DnDFightTool.UI.DnDQueryPrompter.SaveQueries;
 
 /// <summary>
 ///     Modal dialog for entering the result of a saving throw roll.

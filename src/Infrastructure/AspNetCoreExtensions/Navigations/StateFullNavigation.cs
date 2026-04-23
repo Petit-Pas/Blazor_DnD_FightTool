@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 
-namespace AspNetCoreExtensions.Navigations;
+namespace DnDFightTool.Infrastructure.AspNetCoreExtensions.Navigations;
 
 /// <summary>
 ///     Wrapper for <see cref="NavigationManager"/> to be able to track the navigation history 

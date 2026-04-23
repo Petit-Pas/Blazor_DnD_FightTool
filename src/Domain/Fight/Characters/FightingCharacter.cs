@@ -1,4 +1,4 @@
-
+﻿
 using DnDFightTool.Domain.CharacterSheet.AbilityScores;
 using DnDFightTool.Domain.CharacterSheet.ArmorClasses;
 using DnDFightTool.Domain.CharacterSheet.Characters;
@@ -8,7 +8,7 @@ using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 using DnDFightTool.Domain.CharacterSheet.Saves;
 using DnDFightTool.Domain.CharacterSheet.Skills;
 using DnDFightTool.Domain.CharacterSheet.Statuses;
-using Mapping;
+using DnDFightTool.Infrastructure.Mapping;
 
 namespace DnDFightTool.Domain.Fight.Characters;
 

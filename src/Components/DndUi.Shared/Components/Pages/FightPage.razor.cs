@@ -1,7 +1,7 @@
-using DnDFightTool.Business.DnDQueries;
+﻿using DnDFightTool.Business.DnDQueries;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
-using FightBlazorComponents.Entities.FightingCharacters.Dialog;
+using DnDFightTool.UI.FightBlazorComponents.Entities.FightingCharacters.Dialog;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 

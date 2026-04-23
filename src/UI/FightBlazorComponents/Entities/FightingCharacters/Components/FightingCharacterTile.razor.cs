@@ -1,14 +1,14 @@
-using DnDFightTool.Domain.Fight;
+﻿using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Events.AppliedStatusUpdated;
 using Microsoft.AspNetCore.Components;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components.Web;
-using CharacterSheetBlazorComponents;
-using Mapping;
+using DnDFightTool.UI.CharacterSheetBlazorComponents;
+using DnDFightTool.Infrastructure.Mapping;
 using MudBlazor;
 using DnDFightTool.Domain.Fight.DomainExtensions.HitPoint;
 
-namespace FightBlazorComponents.Entities.FightingCharacters.Components;
+namespace DnDFightTool.UI.FightBlazorComponents.Entities.FightingCharacters.Components;
 
 public partial class FightingCharacterTile : ComponentBase, IDisposable
 {

@@ -1,7 +1,7 @@
 ﻿using MudBlazor;
-using SharedComponents.Icons;
+using DnDFightTool.UI.SharedComponents.Icons;
 
-namespace SharedComponents.Buttons.AtomicButtonsPreset;
+namespace DnDFightTool.UI.SharedComponents.Buttons.AtomicButtonsPreset;
 
 public class RollButton : ButtonBase
 {

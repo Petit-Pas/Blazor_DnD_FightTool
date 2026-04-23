@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace SharedComponents.Buttons.AtomicButtonsPreset;
+namespace DnDFightTool.UI.SharedComponents.Buttons.AtomicButtonsPreset;
 
 public partial class ButtonBase
 {

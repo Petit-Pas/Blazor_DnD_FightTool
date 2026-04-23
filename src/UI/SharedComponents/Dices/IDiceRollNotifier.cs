@@ -1,4 +1,4 @@
-namespace SharedComponents.Dices;
+﻿namespace DnDFightTool.UI.SharedComponents.Dices;
 
 /// <summary>
 ///     Coordinates roll orchestration between a parent dialog and its <see cref="IDiceRollSubscriber"/> children.

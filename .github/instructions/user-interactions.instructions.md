@@ -1,90 +1,58 @@
 ---
-applyTo: "src/Business/DnDUserInterations/**/*.cs,src/UI/DnDQueryPrompter/**/*.cs,src/Components/DndUi/UserInteractionHandlers/**/*.cs"
+applyTo: "src/UI/DnDQueryPrompter/**/*.cs"
 ---
 
-# User Interaction & Query Prompting Conventions
+# Query Prompting Conventions (`DnDQueryPrompter`)
 
-Two systems bridge business logic with Blazor UI without coupling them: **User Interactions** (push-based, for commands) and **Query Prompters** (pull-based, for queries via dialogs). The MAUI host wires these together in `MainLayout`.
+Interactive queries bridge business logic with Blazor UI via dialog-based query handlers. The `DnDQueryPrompter` project (`src/UI/DnDQueryPrompter/`) is the UI-layer project that implements these handlers.
 
-## 1. User Interactions (`src/Business/DnDUserInterations/`)
+## 1. Dialog Service
 
-Business-layer contracts for requesting information from the user during command execution.
+- `IDialogServiceProvider` — interface defined in `DnDQueries`. Exposes `SetDialogService(IDialogService)` / `GetDialogService()`.
+- `DialogServiceProvider` — singleton implementation in `DnDQueryPrompter`. Registered via `RegisterDnDQueryPrompterServices()` (or equivalent IoC method).
+- The host page (e.g., `FightPage`) must call `DialogServiceProvider.SetDialogService(DialogService)` in `OnInitializedAsync` before any query handler runs.
 
-### Contracts
+## 2. Query Handlers
 
-- `IUserInteraction` / `IUserInteraction<TAnswer>` — marker interfaces. Every interaction has a `Guid InteractionId`.
-- `UserInteractionBase<TAnswer>` — base **record** (not class) with auto-generated `InteractionId`.
-- Concrete interactions (e.g., `MartialAttackRollResultRequestInteraction`) are records inheriting `UserInteractionBase<TAnswer>`.
+- Inherit `QueryHandlerBase<TQuery, TResponse>` (from UndoableMediator).
+- Inject `IDialogServiceProvider` via constructor (no `IUndoableMediator` — queries are read-only).
+- Show dialogs via `_dialogServiceProvider.GetDialogService().ShowAsync<TDialog>(title, parameters, options)`, then `await dialog.Result`.
+- Named `{Action}QueryHandler`. Located in `{Category}/` subfolders.
+- Return `QueryResponse<T>.Success(value)` on confirmation, `.Canceled(value)` when `dialog.Result.Canceled`.
 
-### Service
+## 3. Modal Components
 
-- `IUserInteractionService` — singleton. Exposes:
-  - `event Func<IUserInteraction, Task>? InteractionRaised` — UI subscribes to this.
-  - `Task<IQueryResponse<TResponse>> RequestAsync<TResponse>(IUserInteraction<TResponse> request)` — called by command handlers, blocks until UI responds.
-  - `void CompleteSuccess<TResponse>(Guid id, TResponse response)` — UI calls this on confirmation.
-  - `void CompleteCanceled(Guid id)` — UI calls this on cancel/close.
-- Implementation (`UserInteractionService`) uses `ConcurrentDictionary<Guid, TaskCompletionSource<object>>` for pending interactions.
-- Cancellation is modeled as `OperationCanceledException` set on the `TaskCompletionSource`.
-- Responses are wrapped in `QueryResponse<T>.Success(...)` / `.Canceled(...)`.
+- Razor component + code-behind pairs (e.g., `MartialAttackRollResultQueryHandlerModal`).
+- Receive domain data via `[Parameter]` (set via `DialogParameters<TModal>`).
+- Use MudBlazor + `DnDFightTool.UI.SharedComponents` for rendering.
+- Named `{Action}Modal` or `{Action}QueryHandlerModal`.
 
-## 2. Query Prompters (`src/UI/DnDQueryPrompter/`)
-
-UI-layer project that implements query handlers and dialog modals for interactive queries.
-
-### Dialog Service
-
-- `IDialogServiceProvider` — interface (defined in `DnDQueries` project). Provides `SetDialogService(IDialogService)` / `GetDialogService()` for MudBlazor dialog access.
-- `DialogServiceProvider` — implementation in DnDQueryPrompter. Registered as singleton.
-
-### Query Handlers
-
-- Query handlers that need UI dialogs live here (e.g., `SaveRollResultQueryHandler`).
-- They inherit `QueryHandlerBase<TQuery, TResponse>` and inject `IDialogServiceProvider` to show MudBlazor dialogs.
-- They use `_dialogServiceProvider.GetDialogService().ShowAsync<TDialog>(...)` to display a dialog, then await `dialog.Result`.
-
-### Interaction Modals
-
-- Modal components (e.g., `MartialAttackRollResultRequestInteractionModal`) are Razor components with code-behind.
-- They receive domain data via `[Parameter]` and render using MudBlazor + shared components.
-
-## 3. MAUI Host Handlers (`src/Components/DndUi/UserInteractionHandlers/`)
-
-The MAUI host wires user interactions to modals via **partial class extensions of `MainLayout`**.
-
-### Pattern
-
-- Each handler is a separate file that extends `public partial class MainLayout` (namespace `DndUi.Components.Layout`).
-- The MainLayout subscribes to `IUserInteractionService.InteractionRaised` and dispatches to typed handler methods.
-- Handler methods:
-  1. Resolve the required entities from `IFightContext`.
-  2. Build `DialogParameters<TModal>` with the relevant data.
-  3. Call `Dialogs.ShowAsync<TModal>(title, parameters, options)`.
-  4. Await `dialog.Result`.
-  5. Call `UserInteractionService.CompleteSuccess(...)` or `UserInteractionService.CompleteCanceled(...)`.
-
-### Example
+## Example
 
 ```csharp
-private async Task HandleInteractionAsync(MartialAttackRollResultRequestInteraction interaction)
+// Query handler
+public class SaveRollResultQueryHandler : QueryHandlerBase<SaveRollResultQuery, SaveRollResult>
 {
-    var caster = _fightContext[interaction.CasterId] ?? throw new NullReferenceException(...);
-    var attackTemplate = caster.MartialAttacks.GetTemplateByIdOrDefault(interaction.AttackId) ?? throw ...;
-    var rollableResult = attackTemplate.GetRollableResult();
+    private readonly IDialogServiceProvider _dialogServiceProvider;
 
-    var options = new DialogOptions { BackdropClick = false, CloseButton = true };
-    var parameters = new DialogParameters<MartialAttackRollResultRequestInteractionModal>
+    public SaveRollResultQueryHandler(IDialogServiceProvider dialogServiceProvider)
     {
-        { x => x.MartialAttackRollResult, rollableResult }
-    };
-
-    var dialog = await Dialogs.ShowAsync<MartialAttackRollResultRequestInteractionModal>(..., parameters, options);
-    var result = await dialog.Result;
-
-    if (result?.Canceled ?? true)
-    {
-        UserInteractionService.CompleteCanceled(interaction.InteractionId);
-        return;
+        _dialogServiceProvider = dialogServiceProvider;
     }
-    UserInteractionService.CompleteSuccess(interaction.InteractionId, rollableResult);
+
+    public override async Task<IQueryResponse<SaveRollResult>> ExecuteAsync(SaveRollResultQuery query)
+    {
+        var parameters = new DialogParameters<SaveRollResultQueryHandlerModal>
+        {
+            { x => x.SaveRollResult, query.SaveRollResult }
+        };
+        var dialog = await _dialogServiceProvider.GetDialogService()
+            .ShowAsync<SaveRollResultQueryHandlerModal>("Save Roll", parameters);
+        var result = await dialog.Result;
+
+        return result?.Canceled ?? true
+            ? QueryResponse<SaveRollResult>.Canceled(query.SaveRollResult)
+            : QueryResponse<SaveRollResult>.Success(query.SaveRollResult);
+    }
 }
 ```

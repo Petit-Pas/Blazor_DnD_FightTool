@@ -1,10 +1,10 @@
-using CharacterSheetBlazorComponents.Damage.Components;
-using CharacterSheetBlazorComponents.MartialAttacks.Components;
+﻿using DnDFightTool.UI.CharacterSheetBlazorComponents.Damage.Components;
+using DnDFightTool.UI.CharacterSheetBlazorComponents.MartialAttacks.Components;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace CharacterSheetBlazorComponents.MartialAttacks.Pages;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.MartialAttacks.Pages;
 
 public partial class AttackEditorPage
 {

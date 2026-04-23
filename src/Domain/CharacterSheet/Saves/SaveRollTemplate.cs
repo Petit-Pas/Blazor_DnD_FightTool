@@ -1,5 +1,5 @@
-using DnDFightTool.Domain.CharacterSheet.AbilityScores;
-using Memory.Hashes;
+﻿using DnDFightTool.Domain.CharacterSheet.AbilityScores;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.Saves;
 

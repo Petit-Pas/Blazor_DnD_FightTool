@@ -1,6 +1,6 @@
-using SharedComponents.Dices;
+﻿using DnDFightTool.UI.SharedComponents.Dices;
 
-namespace FightBlazorComponents.Entities.Dices.DiceRolls;
+namespace DnDFightTool.UI.FightBlazorComponents.Entities.Dices.DiceRolls;
 
 /// <summary>
 ///     Default implementation of <see cref="IDiceRollNotifier"/>.

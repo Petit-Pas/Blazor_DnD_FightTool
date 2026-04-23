@@ -1,10 +1,10 @@
-using AspNetCoreExtensions.Navigations;
+﻿using DnDFightTool.Infrastructure.AspNetCoreExtensions.Navigations;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 
-namespace CharacterSheetBlazorComponents;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents;
 
 
 /// <inheritdoc />

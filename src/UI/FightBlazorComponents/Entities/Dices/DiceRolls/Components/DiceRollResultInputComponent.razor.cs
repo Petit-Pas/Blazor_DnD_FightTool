@@ -1,11 +1,11 @@
-using DnDFightTool.Domain.Rolls;
+﻿using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Rolls.Validation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using SharedComponents;
-using SharedComponents.Dices;
+using DnDFightTool.UI.SharedComponents;
+using DnDFightTool.UI.SharedComponents.Dices;
 
-namespace FightBlazorComponents.Entities.Dices.DiceRolls.Components;
+namespace DnDFightTool.UI.FightBlazorComponents.Entities.Dices.DiceRolls.Components;
 
 /// <summary>
 ///     Generic input component for any <see cref="IDiceRollResult"/>.

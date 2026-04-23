@@ -1,17 +1,15 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Characters.Validation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using SharedComponents;
+using DnDFightTool.UI.SharedComponents;
 
-namespace CharacterSheetBlazorComponents.Characters.Components;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.Characters.Components;
 
 public partial class CharacterMainInfoEditorComponent : StylableComponentBase
 {
     [Inject]
-#pragma warning disable 8618
-    public CharacterValidator CharacterValidator { private get; set; }
-#pragma warning restore 8618
+    private CharacterValidator _characterValidator { get; set; } = null!;
     
     [Parameter, EditorRequired]
     public ICharacter? Character { get; set; }

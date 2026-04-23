@@ -1,7 +1,7 @@
 ﻿using MudBlazor;
 using MudIcons = MudBlazor.Icons;
 
-namespace SharedComponents.Buttons.AtomicButtonsPreset;
+namespace DnDFightTool.UI.SharedComponents.Buttons.AtomicButtonsPreset;
 
 public class EditButton : ButtonBase
 {

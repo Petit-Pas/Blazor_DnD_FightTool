@@ -1,8 +1,8 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using DnDFightTool.Domain.CharacterSheet.DamageAffinities;
-using SharedComponents.Icons;
+using DnDFightTool.UI.SharedComponents.Icons;
 
-namespace CharacterSheetBlazorComponents.DamageAffinities;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.DamageAffinities;
 
 /// <summary>
 ///     Class to contain UI related extension methods for <see cref="DamageAffinity" />"/>

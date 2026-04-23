@@ -1,4 +1,4 @@
-﻿namespace IO.Serialization;
+﻿namespace DnDFightTool.Infrastructure.IO.Serialization;
 
 /// <summary>
 ///     Wrapper around System.Text.Json.JsonSerializer

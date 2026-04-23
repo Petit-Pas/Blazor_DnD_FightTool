@@ -1,4 +1,4 @@
-using Memory.Hashes;
+﻿using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.Statuses;
 

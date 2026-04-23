@@ -1,6 +1,6 @@
-using System.Diagnostics;
-using IO.Files;
-using IO.Serialization;
+﻿using System.Diagnostics;
+using DnDFightTool.Infrastructure.IO.Files;
+using DnDFightTool.Infrastructure.IO.Serialization;
 
 namespace DnDFightTool.Domain.CharacterSheet.Characters;
 

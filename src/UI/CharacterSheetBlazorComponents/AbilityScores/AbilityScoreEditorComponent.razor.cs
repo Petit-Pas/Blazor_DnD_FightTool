@@ -1,16 +1,14 @@
-using DnDFightTool.Domain.CharacterSheet.AbilityScores;
+﻿using DnDFightTool.Domain.CharacterSheet.AbilityScores;
 using DnDFightTool.Domain.CharacterSheet.AbilityScores.Validation;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using Microsoft.AspNetCore.Components;
 
-namespace CharacterSheetBlazorComponents.AbilityScores;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.AbilityScores;
 
 public partial class AbilityScoreEditorComponent
 {
     [Inject]
-#pragma warning disable 8618
-    public AbilityScoreValidator AbilityScoreValidator { private get; set; }
-#pragma warning restore 8618
+    private AbilityScoreValidator _abilityScoreValidator { get; set; } = null!;
 
     [Parameter, EditorRequired]
     public ICharacter? Character { get; set; }

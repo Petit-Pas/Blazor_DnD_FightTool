@@ -1,4 +1,4 @@
-namespace SharedComponents.Dices;
+﻿namespace DnDFightTool.UI.SharedComponents.Dices;
 
 /// <summary>
 ///     Implemented by any UI component that owns a single dice roll result

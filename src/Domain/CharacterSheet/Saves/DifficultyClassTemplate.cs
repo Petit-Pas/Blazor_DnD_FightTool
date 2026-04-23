@@ -1,6 +1,6 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Dices;
-using Memory.Hashes;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.Saves;
 

@@ -1,8 +1,8 @@
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using DnDFightTool.Domain.CharacterSheet.Skills;
-using SharedComponents.Icons;
+using DnDFightTool.UI.SharedComponents.Icons;
 
-namespace CharacterSheetBlazorComponents.Skills;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.Skills;
 
 internal static class SkillExtensions
 {

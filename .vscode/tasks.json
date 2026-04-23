@@ -568,6 +568,21 @@
 			"label": "Stop Vanguard service",
 			"type": "shell",
 			"command": "Stop-Service -Name vgc -Force -ErrorAction SilentlyContinue; Stop-Service -Name vgk -Force -ErrorAction SilentlyContinue; Get-Process -Name vgc -ErrorAction SilentlyContinue | Select-Object Id, Name; Write-Host 'Done'"
+		},
+		{
+			"label": "H1+M1 bulk namespace rename",
+			"type": "shell",
+			"command": "$files = @('d:\\Code\\Perso\\DnDFightTool\\src','d:\\Code\\Perso\\DnDFightTool\\tests') | ForEach-Object { Get-ChildItem -Path $_ -Recurse -Include '*.cs','*.razor' -File } | Where-Object { $_.FullName -notmatch '\\\\obj\\\\' -and $_.FullName -notmatch '\\\\bin\\\\' }; $r = @(@('(namespace|using|@using) CharacterSheetBlazorComponents\\b','$1 DnDFightTool.UI.CharacterSheetBlazorComponents'),@('(namespace|using|@using) FightBlazorComponents\\b','$1 DnDFightTool.UI.FightBlazorComponents'),@('(namespace|using|@using) JavascriptInteropExtensions\\b','$1 DnDFightTool.UI.JavascriptInteropExtensions'),@('(namespace|using|@using) DnDQueryPrompter\\b','$1 DnDFightTool.UI.DnDQueryPrompter'),@('(namespace|using|@using) SharedComponents\\b','$1 DnDFightTool.UI.SharedComponents'),@('(namespace|using) Memory\\b','$1 DnDFightTool.Infrastructure.Memory'),@('(namespace|using) Mapping\\b','$1 DnDFightTool.Infrastructure.Mapping'),@('(namespace|using) IO\\b','$1 DnDFightTool.Infrastructure.IO'),@('(namespace|using) AspNetCoreExtensions\\b','$1 DnDFightTool.Infrastructure.AspNetCoreExtensions')); $n=0; foreach ($f in $files){ $c = [System.IO.File]::ReadAllText($f.FullName); $o=$c; foreach ($x in $r){ $c = $c -replace $x[0],$x[1] }; if($c -ne $o){ [System.IO.File]::WriteAllText($f.FullName,$c,[System.Text.Encoding]::UTF8); Write-Host \"Updated: $($f.Name)\"; $n++ } }; Write-Host \"Done. $n files updated.\""
+		},
+		{
+			"label": "L2: Delete dead Dialog.razor",
+			"type": "shell",
+			"command": "Remove-Item -Force 'src\\UI\\FightBlazorComponents\\Entities\\MartialAttacks\\Dialog.razor'; Write-Host 'Deleted Dialog.razor'"
+		},
+		{
+			"label": "Build after audit fixes",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --no-incremental --verbosity quiet 2>&1 | Select-Object -Last 40"
 		}
 	]
 }

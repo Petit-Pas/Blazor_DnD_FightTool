@@ -1,7 +1,7 @@
-using DnDFightTool.Domain.CharacterSheet.Damage;
+﻿using DnDFightTool.Domain.CharacterSheet.Damage;
 using DnDFightTool.Domain.CharacterSheet.Dices;
 using DnDFightTool.Domain.CharacterSheet.Statuses;
-using Memory.Hashes;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 

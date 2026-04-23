@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace IO.Serialization;
+namespace DnDFightTool.Infrastructure.IO.Serialization;
 
 /// <summary>
 ///     Implementation of IJsonSerializer

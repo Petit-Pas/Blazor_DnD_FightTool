@@ -1,5 +1,8 @@
 namespace DnDFightTool.Domain.CharacterSheet.AbilityScores;
 
+/// <summary>
+///     The six core ability scores of a D&amp;D character.
+/// </summary>
 public enum AbilityEnum
 {
     Strength,

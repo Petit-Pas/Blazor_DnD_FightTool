@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections;
 using System.Reflection;
 
-namespace Memory.Hashes;
+namespace DnDFightTool.Infrastructure.Memory.Hashes;
 
 public static class HashableExtensions
 {

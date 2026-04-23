@@ -1,9 +1,9 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 using Microsoft.AspNetCore.Components;
-using Mapping;
+using DnDFightTool.Infrastructure.Mapping;
 
-namespace CharacterSheetBlazorComponents.MartialAttacks.Components;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.MartialAttacks.Components;
 
 public partial class AttackListEditorComponent
 {

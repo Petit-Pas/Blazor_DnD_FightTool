@@ -1,12 +1,12 @@
-@using MudBlazor
+﻿@using MudBlazor
 @using DnDFightTool.Domain.CharacterSheet.AbilityScores
-@using SharedComponents
+@using DnDFightTool.UI.SharedComponents
 
 @inherits StylableComponentBase;
 
 @if (Character is not null && AbilityScore is not null)
 {
-    <MudForm Model=AbilityScore Validation="@(AbilityScoreValidator.ValidateValue)" FieldChanged="NotifyChangedAsync"
+    <MudForm Model=AbilityScore Validation="@(_abilityScoreValidator.ValidateValue)" FieldChanged="NotifyChangedAsync"
         Class=@Class Style=@Style>
         <div class="d-flex gap-3 align-items-center">
             <AbilityChip 

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
-using SharedComponents.Dices;
+using DnDFightTool.UI.SharedComponents.Dices;
 
-namespace SharedComponents.Dialogs;
+namespace DnDFightTool.UI.SharedComponents.Dialogs;
 
 public partial class RollableDialogBase : IDisposable
 {

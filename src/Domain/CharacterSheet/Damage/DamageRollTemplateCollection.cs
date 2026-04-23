@@ -1,5 +1,5 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
-using Memory.Hashes;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.Damage;
 

@@ -1,7 +1,7 @@
-using CharacterSheetBlazorComponents;
+﻿using DnDFightTool.UI.CharacterSheetBlazorComponents;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.Fight;
-using Mapping;
+using DnDFightTool.Infrastructure.Mapping;
 using Microsoft.AspNetCore.Components;
 
 namespace DndUi.Shared.Components.Pages;

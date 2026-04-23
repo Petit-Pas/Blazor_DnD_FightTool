@@ -1,8 +1,8 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using Microsoft.AspNetCore.Components;
-using SharedComponents;
+using DnDFightTool.UI.SharedComponents;
 
-namespace CharacterSheetBlazorComponents.DamageAffinities.Components;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.DamageAffinities.Components;
 
 public partial class ResistancesEditorComponent : StylableComponentBase
 {

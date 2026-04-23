@@ -1,6 +1,6 @@
-using DnDFightTool.Domain.CharacterSheet.Damage;
+﻿using DnDFightTool.Domain.CharacterSheet.Damage;
 
-namespace SharedComponents.Icons;
+namespace DnDFightTool.UI.SharedComponents.Icons;
 
 public static class CustomIcons
 {

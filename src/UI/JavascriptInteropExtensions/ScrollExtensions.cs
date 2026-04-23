@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 
-namespace JavascriptInteropExtensions;
+namespace DnDFightTool.UI.JavascriptInteropExtensions;
 
 public static class ScrollExtensions
 {

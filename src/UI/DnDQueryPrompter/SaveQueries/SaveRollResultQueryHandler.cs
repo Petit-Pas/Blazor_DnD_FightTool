@@ -1,10 +1,10 @@
-using DnDFightTool.Business.DnDQueries;
+﻿using DnDFightTool.Business.DnDQueries;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
 using DnDFightTool.Domain.Rolls;
 using MudBlazor;
 using UndoableMediator.Queries;
 
-namespace DnDQueryPrompter.SaveQueries;
+namespace DnDFightTool.UI.DnDQueryPrompter.SaveQueries;
 
 public class SaveRollResultQueryHandler : QueryHandlerBase<SaveRollResultQuery, SaveRollResult>
 {

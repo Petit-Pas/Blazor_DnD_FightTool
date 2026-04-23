@@ -1,7 +1,7 @@
 ﻿using DnDFightTool.Business.DnDQueries;
 using MudBlazor;
 
-namespace DnDQueryPrompter;
+namespace DnDFightTool.UI.DnDQueryPrompter;
 
 public class DialogServiceProvider : IDialogServiceProvider
 {

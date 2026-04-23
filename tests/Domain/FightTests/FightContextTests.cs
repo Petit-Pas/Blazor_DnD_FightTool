@@ -1,11 +1,11 @@
-using System.Linq;
+﻿using System.Linq;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using DomainTestsUtilities.Factories.Characters;
 using FakeItEasy;
 using FluentAssertions;
-using Mapping;
+using DnDFightTool.Infrastructure.Mapping;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 

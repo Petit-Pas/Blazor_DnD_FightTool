@@ -1,6 +1,6 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.Fight.Characters;
-using Mapping;
+using DnDFightTool.Infrastructure.Mapping;
 using Microsoft.Extensions.Logging;
 
 namespace DnDFightTool.Domain.Fight;

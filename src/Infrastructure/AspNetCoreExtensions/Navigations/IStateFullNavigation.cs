@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreExtensions.Navigations;
+﻿namespace DnDFightTool.Infrastructure.AspNetCoreExtensions.Navigations;
 
 public interface IStateFullNavigation
 {

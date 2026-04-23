@@ -1,7 +1,7 @@
-﻿using AspNetCoreExtensions.Navigations;
+﻿using DnDFightTool.Infrastructure.AspNetCoreExtensions.Navigations;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AspNetCoreExtensions.IoC;
+namespace DnDFightTool.Infrastructure.AspNetCoreExtensions.IoC;
 
 public static class ServiceCollectionExtensions
 {

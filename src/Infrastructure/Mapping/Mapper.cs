@@ -1,6 +1,6 @@
 ﻿using Mapster;
 
-namespace Mapping;
+namespace DnDFightTool.Infrastructure.Mapping;
 
 public class Mapper : IMapper
 {

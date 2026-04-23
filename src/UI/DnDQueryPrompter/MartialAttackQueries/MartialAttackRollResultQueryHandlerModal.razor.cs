@@ -1,4 +1,4 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Dices;
 using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Rolls.Extensions;
@@ -7,9 +7,9 @@ using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using SharedComponents.Dices;
+using DnDFightTool.UI.SharedComponents.Dices;
 
-namespace DnDQueryPrompter.MartialAttackQueries;
+namespace DnDFightTool.UI.DnDQueryPrompter.MartialAttackQueries;
 
 /// <summary>
 ///     Modal dialog for entering the result of a martial attack roll.

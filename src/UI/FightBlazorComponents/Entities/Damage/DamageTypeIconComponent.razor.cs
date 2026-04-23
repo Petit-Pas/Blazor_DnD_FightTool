@@ -1,7 +1,7 @@
-using DnDFightTool.Domain.CharacterSheet.Damage;
+﻿using DnDFightTool.Domain.CharacterSheet.Damage;
 using Microsoft.AspNetCore.Components;
 
-namespace FightBlazorComponents.Entities.Damage;
+namespace DnDFightTool.UI.FightBlazorComponents.Entities.Damage;
 
 /// <summary>
 ///     Renders a damage type icon with a tooltip showing the damage type name.

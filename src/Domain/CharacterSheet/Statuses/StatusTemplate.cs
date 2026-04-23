@@ -1,5 +1,5 @@
-using DnDFightTool.Domain.CharacterSheet.Saves;
-using Memory.Hashes;
+﻿using DnDFightTool.Domain.CharacterSheet.Saves;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.Statuses;
 

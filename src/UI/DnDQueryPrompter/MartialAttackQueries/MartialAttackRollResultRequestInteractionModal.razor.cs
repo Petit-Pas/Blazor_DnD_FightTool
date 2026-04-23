@@ -1,10 +1,10 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
 
-namespace DnDQueryPrompter.MartialAttackQueries;
+namespace DnDFightTool.UI.DnDQueryPrompter.MartialAttackQueries;
 
 public partial class MartialAttackRollResultRequestInteractionModal
 {

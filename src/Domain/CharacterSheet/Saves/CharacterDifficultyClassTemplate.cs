@@ -1,9 +1,9 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Dices;
 using DnDFightTool.Domain.CharacterSheet.Dices.Modifiers;
-using Memory.Hashes;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.Saves;
 

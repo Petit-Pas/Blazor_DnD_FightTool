@@ -1,6 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace CharacterSheetBlazorComponents.IoC;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.IoC;
 
 public static class ServiceCollectionExtensions
 {

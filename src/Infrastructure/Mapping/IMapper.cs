@@ -1,4 +1,4 @@
-﻿namespace Mapping;
+﻿namespace DnDFightTool.Infrastructure.Mapping;
 
 public interface IMapper
 {

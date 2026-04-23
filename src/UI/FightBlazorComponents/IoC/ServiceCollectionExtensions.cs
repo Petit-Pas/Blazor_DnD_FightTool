@@ -1,9 +1,9 @@
-using DnDFightTool.Domain.Rolls.Validation;
-using FightBlazorComponents.Entities.Dices.DiceRolls;
+﻿using DnDFightTool.Domain.Rolls.Validation;
+using DnDFightTool.UI.FightBlazorComponents.Entities.Dices.DiceRolls;
 using Microsoft.Extensions.DependencyInjection;
-using SharedComponents.Dices;
+using DnDFightTool.UI.SharedComponents.Dices;
 
-namespace FightBlazorComponents.IoC;
+namespace DnDFightTool.UI.FightBlazorComponents.IoC;
 
 public static class ServiceCollectionExtensions
 {

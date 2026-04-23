@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace SharedComponents;
+namespace DnDFightTool.UI.SharedComponents;
 
 public class StylableComponentBase: ComponentBase
 {

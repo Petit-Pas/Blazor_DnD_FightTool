@@ -1,12 +1,12 @@
-using AspNetCoreExtensions.Navigations;
-using CharacterSheetBlazorComponents.AbilityScores;
-using CharacterSheetBlazorComponents.Characters.Components;
+﻿using DnDFightTool.Infrastructure.AspNetCoreExtensions.Navigations;
+using DnDFightTool.UI.CharacterSheetBlazorComponents.AbilityScores;
+using DnDFightTool.UI.CharacterSheetBlazorComponents.Characters.Components;
 using DnDFightTool.Domain.CharacterSheet.Characters;
-using Mapping;
+using DnDFightTool.Infrastructure.Mapping;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace CharacterSheetBlazorComponents.Characters.Pages;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.Characters.Pages;
 
 public partial class CharacterEditorPage
 {

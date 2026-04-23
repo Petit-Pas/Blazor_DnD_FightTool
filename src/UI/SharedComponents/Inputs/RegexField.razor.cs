@@ -1,8 +1,8 @@
-using DnDFightTool.Domain.CharacterSheet.Dices.Validation;
+﻿using DnDFightTool.Domain.CharacterSheet.Dices.Validation;
 using Extensions;
 using Microsoft.AspNetCore.Components;
 
-namespace SharedComponents.Inputs;
+namespace DnDFightTool.UI.SharedComponents.Inputs;
 
 public partial class RegexField<T>
     where T : IRegexValidated

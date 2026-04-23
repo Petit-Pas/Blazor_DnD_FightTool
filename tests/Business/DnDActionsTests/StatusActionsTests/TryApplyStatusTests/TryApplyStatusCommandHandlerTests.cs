@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
@@ -12,7 +12,7 @@ using DomainTestsUtilities.Factories.Saves;
 using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
-using Memory.Hashes;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 using UndoableMediator.Mediators;
 using UndoableMediator.Queries;
 using UndoableMediator.Requests;

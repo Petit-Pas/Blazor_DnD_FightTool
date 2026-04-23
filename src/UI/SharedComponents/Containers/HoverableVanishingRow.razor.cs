@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace SharedComponents.Containers;
+namespace DnDFightTool.UI.SharedComponents.Containers;
 
 /// <summary>
 ///     Will keep content invisible until the parent is hovered. Parent must be configured in the isolated css here

@@ -1,17 +1,15 @@
-using CharacterSheetBlazorComponents.Dices.DiceRolls.Components;
+﻿using DnDFightTool.UI.CharacterSheetBlazorComponents.Dices.DiceRolls.Components;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks.Validation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace CharacterSheetBlazorComponents.MartialAttacks.Components;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.MartialAttacks.Components;
 
 public partial class MartialAttackTemplateMainInfoEditorComponent
 {
     [Inject]
-#pragma warning disable 8618
-    public MartialAttackTemplateValidator AttackTemplateValidator { private get; set; }
-#pragma warning restore 8618
+    private MartialAttackTemplateValidator _attackTemplateValidator { get; set; } = null!;
 
     private MudForm? _form;
 

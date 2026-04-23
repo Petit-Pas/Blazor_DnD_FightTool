@@ -1,8 +1,8 @@
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Dices.Modifiers;
 using Extensions;
-using Memory.Hashes;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.Dices;
 

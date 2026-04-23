@@ -1,7 +1,7 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Dices;
 
-namespace CharacterSheetBlazorComponents.Dices;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.Dices;
 
 /// <summary>
 ///     Class to contain UI related extension methods for <see cref="DiceRollTemplate" />"/>

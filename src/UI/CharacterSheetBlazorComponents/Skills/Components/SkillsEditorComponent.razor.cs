@@ -1,8 +1,8 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using Microsoft.AspNetCore.Components;
-using SharedComponents;
+using DnDFightTool.UI.SharedComponents;
 
-namespace CharacterSheetBlazorComponents.Skills.Components;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.Skills.Components;
 
 public partial class SkillsEditorComponent : StylableComponentBase
 {

@@ -1,10 +1,10 @@
-using DnDFightTool.Domain.Rolls;
+﻿using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using SharedComponents.Dices;
+using DnDFightTool.UI.SharedComponents.Dices;
 
-namespace FightBlazorComponents.Entities.FightingCharacters.Dialog;
+namespace DnDFightTool.UI.FightBlazorComponents.Entities.FightingCharacters.Dialog;
 
 public partial class InitiativeInputDialog : IDisposable
 {

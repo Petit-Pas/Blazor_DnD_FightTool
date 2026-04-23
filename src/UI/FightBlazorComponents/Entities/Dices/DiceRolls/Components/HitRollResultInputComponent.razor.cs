@@ -1,8 +1,8 @@
-using DnDFightTool.Domain.Rolls;
+﻿using DnDFightTool.Domain.Rolls;
 using Microsoft.AspNetCore.Components;
-using SharedComponents;
+using DnDFightTool.UI.SharedComponents;
 
-namespace FightBlazorComponents.Entities.Dices.DiceRolls.Components;
+namespace DnDFightTool.UI.FightBlazorComponents.Entities.Dices.DiceRolls.Components;
 
 /// <summary>
 ///     Input component for a roll result.

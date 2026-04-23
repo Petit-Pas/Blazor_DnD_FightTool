@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Memory.Hashes;
+using DnDFightTool.Infrastructure.Memory.Hashes;
 using NUnit.Framework;
 
 namespace MemoryTests;

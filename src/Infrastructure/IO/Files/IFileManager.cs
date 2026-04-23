@@ -1,4 +1,4 @@
-﻿namespace IO.Files;
+﻿namespace DnDFightTool.Infrastructure.IO.Files;
 
 /// <summary>
 ///     Interface for a local file manager

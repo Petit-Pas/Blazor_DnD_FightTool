@@ -1,7 +1,7 @@
-using DnDFightTool.Domain.CharacterSheet.Characters;
+﻿using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 
-namespace CharacterSheetBlazorComponents;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents;
 
 /// <summary>
 ///     When registered as a singleton, it allows views to pass context easily when navigating from page to page.

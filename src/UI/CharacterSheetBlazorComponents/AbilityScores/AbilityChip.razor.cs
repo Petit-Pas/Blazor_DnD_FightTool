@@ -1,8 +1,8 @@
-using DnDFightTool.Domain.CharacterSheet.AbilityScores;
+﻿using DnDFightTool.Domain.CharacterSheet.AbilityScores;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace CharacterSheetBlazorComponents.AbilityScores;
+namespace DnDFightTool.UI.CharacterSheetBlazorComponents.AbilityScores;
 
 public partial class AbilityChip
 {

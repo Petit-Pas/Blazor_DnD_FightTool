@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Mapster;
 
-namespace Mapping;
+namespace DnDFightTool.Infrastructure.Mapping;
 
 public static class MapContextExtensions
 {

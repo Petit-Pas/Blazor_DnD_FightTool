@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 
-namespace SharedComponents.Buttons.ButtonContainers;
+namespace DnDFightTool.UI.SharedComponents.Buttons.ButtonContainers;
 
 public partial class ButtonRow
 {
