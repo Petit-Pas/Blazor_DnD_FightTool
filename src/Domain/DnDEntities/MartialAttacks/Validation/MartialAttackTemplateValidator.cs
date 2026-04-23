@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using Extensions;
 using FluentValidation;
@@ -16,7 +16,7 @@ public class MartialAttackTemplateValidator : PropertyTargetedValidator<MartialA
     /// <param name="statusTemplateValidator"></param>
     public MartialAttackTemplateValidator(
         IValidator<StatusTemplate> statusTemplateValidator,
-        IValidator<DiceThrowModifiersTemplate> diceThrowModifierTemplate)
+        IValidator<DiceRollModifiersTemplate> diceThrowModifierTemplate)
     {
         RuleFor(template => template.Name)
             .NotEmpty();

@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
+using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Damage;
 using DnDFightTool.Domain.Fight;
@@ -13,15 +13,14 @@ using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using System.Linq;
 using UndoableMediator.Queries;
 using FluentAssertions;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using DomainTestsUtilities.Factories.MartialAttacks;
 using System;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 using DomainTestsUtilities.Factories.Damage;
 using DnDFightTool.Domain.Fight.Characters;
 using DomainTestsUtilities.Extensions;
-using DnDFightTool.Business.DnDUserInteraction;
-using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions;
+using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 
 namespace DnDActionsTests.MartialAttackActionsTests.ExecuteMartialAttackTests;
 
@@ -31,7 +30,6 @@ public class ExecuteMartialAttackCommandHandlerTests
 
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
-    private IUserInteractionService _userInteractionService = null!;
 
     private FightingCharacter _caster = null!;
     private FightingCharacter _target = null!;
@@ -44,7 +42,6 @@ public class ExecuteMartialAttackCommandHandlerTests
     {
         _mediator = A.Fake<IUndoableMediator>();
         _fightContext = A.Fake<IFightContext>();
-        _userInteractionService = A.Fake<IUserInteractionService>();
 
         _caster = new Character(true).AsFighter();
         _caster.MartialAttacks.Add(MartialAttackTemplateFactory.Build()); ;
@@ -54,7 +51,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         }.AsFighter();
 
         _command = new ExecuteMartialAttackCommand(_caster.Id, _attackTemplate.Id);
-        _commandHandler = new ExecuteMartialAttackCommandHandler(_mediator, _fightContext, _userInteractionService);
+        _commandHandler = new ExecuteMartialAttackCommandHandler(_mediator, _fightContext);
 
         A.CallTo(() => _fightContext[_caster.Id])
             .Returns(_caster);
@@ -85,7 +82,7 @@ public class ExecuteMartialAttackCommandHandlerTests
             _ => throw new System.NotImplementedException(),
         };
 
-        A.CallTo(() => _userInteractionService.RequestAsync(A<MartialAttackRollResultRequestInteraction>._))
+        A.CallTo(() => _mediator.QueryAsync(A<MartialAttackRollResultQuery>._))
             .Returns(queryResponse);
     }
 
@@ -101,7 +98,7 @@ public class ExecuteMartialAttackCommandHandlerTests
             When_Query_Returns(status: queryStatus);
             
             // Act
-            var result = await _commandHandler.Execute(_command);
+            var result = await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             result.Status.Should().Be(queryStatus);
@@ -111,7 +108,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Return_Success_When_Everything_Went_Smooth()
         {
             // Act
-            var result = await _commandHandler.Execute(_command);
+            var result = await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             result.Status.Should().Be(RequestStatus.Success);
@@ -125,7 +122,7 @@ public class ExecuteMartialAttackCommandHandlerTests
             When_Query_Returns(result);
 
             // Act
-            await _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             _command.MartialAttackRollResult.Should().Be(result);
@@ -138,7 +135,7 @@ public class ExecuteMartialAttackCommandHandlerTests
             var result = MartialAttackRollResultFactory.Build(targetId: Guid.NewGuid());
             When_Query_Returns(result);
 
-            await _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             A.CallTo(() => _fightContext[result.TargetId])
@@ -153,10 +150,10 @@ public class ExecuteMartialAttackCommandHandlerTests
             When_Query_Returns(result);
 
             // Act
-            await _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // 
-            A.CallTo(() => _mediator.Execute(A<ApplyDamageRollResultsCommand>._, null))
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<ApplyDamageRollResultsCommand>._, A<ExecuteMartialAttackCommand>._))
                 .MustNotHaveHappened();
         }
 
@@ -174,12 +171,12 @@ public class ExecuteMartialAttackCommandHandlerTests
             When_Query_Returns(result);
 
             // Act
-            await _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // 
-            A.CallTo(() => _mediator.Execute(An<ApplyDamageRollResultsCommand>.That.Matches(x => 
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(An<ApplyDamageRollResultsCommand>.That.Matches(x => 
                 x.DamageRolls.Count(d => d.DamageType == DamageTypeEnum.Thunder && d.Damage == 7) == 1
-            ), null))
+            ), A<ExecuteMartialAttackCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
 
@@ -191,10 +188,10 @@ public class ExecuteMartialAttackCommandHandlerTests
             When_Query_Returns(result);
 
             // Act
-            await _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            A.CallTo(() => _mediator.Execute(An<TryApplyStatusCommand>.That.Matches(x => x.StatusId == _attackTemplate.Statuses.First().Value.Id), null))
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(An<TryApplyStatusCommand>.That.Matches(x => x.StatusId == _attackTemplate.Statuses.First().Value.Id), A<ExecuteMartialAttackCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
     }
@@ -218,18 +215,18 @@ public class ExecuteMartialAttackCommandHandlerTests
                             damage: 7) ]);
             When_Query_Returns(result);
 
-            await _commandHandler.Execute(_command);
-            A.CallTo(() => _mediator.Execute(A<ApplyDamageRollResultsCommand>._, null))
+            await _commandHandler.ExecuteAsync(_command);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<ApplyDamageRollResultsCommand>._, A<ExecuteMartialAttackCommand>._))
                 .MustNotHaveHappened();
-            _commandHandler.Undo(_command);
+            await _commandHandler.UndoAsync(_command);
 
             _target.ArmorClass.BaseArmorClass = 1;
 
             // Act
-            await _commandHandler.Redo(_command);
+            await _commandHandler.RedoAsync(_command);
 
             // Assert
-            A.CallTo(() => _mediator.Execute(A<ApplyDamageRollResultsCommand>.That.Matches(x => x.DamageRolls.First().Damage == 7), null))
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<ApplyDamageRollResultsCommand>.That.Matches(x => x.DamageRolls.First().Damage == 7), A<ExecuteMartialAttackCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
 
@@ -240,14 +237,14 @@ public class ExecuteMartialAttackCommandHandlerTests
             var result = MartialAttackRollResultFactory.Build();
             When_Query_Returns(result);
 
-            await _commandHandler.Execute(_command);
-            _commandHandler.Undo(_command);
+            await _commandHandler.ExecuteAsync(_command);
+            await _commandHandler.UndoAsync(_command);
 
             // Act
-            await _commandHandler.Redo(_command);
+            await _commandHandler.RedoAsync(_command);
 
             // Assert
-            A.CallTo(() => _userInteractionService.RequestAsync(A<MartialAttackRollResultRequestInteraction>._))
+            A.CallTo(() => _mediator.QueryAsync(A<MartialAttackRollResultQuery>._))
                 .MustHaveHappenedOnceExactly();
         }
 
@@ -256,16 +253,16 @@ public class ExecuteMartialAttackCommandHandlerTests
         {
             // Arrange
             When_Query_Returns(MartialAttackRollResultFactory.Build());
-            await _commandHandler.Execute(_command);
-            _commandHandler.Undo(_command);
+            await _commandHandler.ExecuteAsync(_command);
+            await _commandHandler.UndoAsync(_command);
             _attackTemplate.Name = "New name to change hash value";
-            A.CallTo(() => _userInteractionService.RequestAsync(A<MartialAttackRollResultRequestInteraction>._))
+            A.CallTo(() => _mediator.QueryAsync(A<MartialAttackRollResultQuery>._))
                 .MustHaveHappenedOnceExactly();
             // Act
-            await _commandHandler.Redo(_command);
+            await _commandHandler.RedoAsync(_command);
 
             // Assert
-            A.CallTo(() => _userInteractionService.RequestAsync(A<MartialAttackRollResultRequestInteraction>._))
+            A.CallTo(() => _mediator.QueryAsync(A<MartialAttackRollResultQuery>._))
                 .MustHaveHappenedTwiceExactly();
         }
 
@@ -274,13 +271,13 @@ public class ExecuteMartialAttackCommandHandlerTests
         {
             // Arrange
             When_Query_Returns(MartialAttackRollResultFactory.Build());
-            await _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
             var firstHash = _command.AttackTemplateHash;
-            _commandHandler.Undo(_command);
+            await _commandHandler.UndoAsync(_command);
             _attackTemplate.Name = "New name to change hash value";
 
             // Act
-            await _commandHandler.Redo(_command);
+            await _commandHandler.RedoAsync(_command);
 
             // Assert
             firstHash.Should().NotBe(_command.AttackTemplateHash);
@@ -294,16 +291,16 @@ public class ExecuteMartialAttackCommandHandlerTests
             var result = MartialAttackRollResultFactory.Build(hitRollResult: new HitRollResult() { Result = 10 }, targetId: _target.Id);
             When_Query_Returns(result);
 
-            await _commandHandler.Execute(_command);
-            _commandHandler.Undo(_command);
+            await _commandHandler.ExecuteAsync(_command);
+            await _commandHandler.UndoAsync(_command);
 
             _target.ArmorClass.BaseArmorClass = 20;
 
             // Act
-            await _commandHandler.Redo(_command);
+            await _commandHandler.RedoAsync(_command);
 
             // Assert
-            _command.SubCommands.Should().BeEmpty();
+            _command.AttackDidHit.Should().BeFalse();
         }
     }
 

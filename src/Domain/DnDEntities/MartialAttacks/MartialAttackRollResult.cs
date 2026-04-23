@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using DnDFightTool.Domain.DnDEntities.Damage;
 
 namespace DnDFightTool.Domain.DnDEntities.MartialAttacks;

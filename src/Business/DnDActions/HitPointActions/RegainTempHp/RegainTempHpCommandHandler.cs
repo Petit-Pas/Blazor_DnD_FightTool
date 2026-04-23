@@ -13,7 +13,7 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
         _fightContext = fightContext;
     }
 
-    public override Task<ICommandResponse<NoResponse>> Execute(RegainTempHpCommand command)
+    public override Task<ICommandResponse<NoResponse>> ExecuteAsync(RegainTempHpCommand command)
     {
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainTempHpCommandHandler)} could not find target with id {command.TargetId}");
 
@@ -22,12 +22,14 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
 
         hitPoints.CurrentTempHps += command.CorrectedAmount.Value;
 
+        _fightContext.NotifyFighterUpdated(command.TargetId);
+
         return Task.FromResult(CommandResponse.Success());
     }
 
-    public override void Undo(RegainTempHpCommand command)
+    public override async Task UndoAsync(RegainTempHpCommand command)
     {
-        base.Undo(command);
+        await base.UndoAsync(command);
 
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainTempHpCommandHandler)} could not find target with id {command.TargetId}");
         
@@ -38,10 +40,11 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
 
         hitPoints.CurrentTempHps -= command.CorrectedAmount.Value;
 
+        _fightContext.NotifyFighterUpdated(command.TargetId);
     }
 
-    public async override Task Redo(RegainTempHpCommand command)
+    public async override Task RedoAsync(RegainTempHpCommand command)
     {
-        await Execute(command);
+        await ExecuteAsync(command);
     }
 }

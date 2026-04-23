@@ -70,7 +70,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
 
             private void WhenQueryReturns(IQueryResponse<SaveRollResult> saveRollResult)
             {
-                A.CallTo(() => _mediator.Execute(A<SaveRollResultQuery>.Ignored))
+                A.CallTo(() => _mediator.QueryAsync(A<SaveRollResultQuery>.Ignored))
                     .Returns(saveRollResult);
             }
 
@@ -100,10 +100,10 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     }.AsFighter());
 
                 // Act
-                await _commandHandler.Execute(_command);
+                await _commandHandler.ExecuteAsync(_command);
 
                 // Assert
-                A.CallTo(() => _mediator.Execute(A<SaveRollResultQuery>._))
+                A.CallTo(() => _mediator.QueryAsync(A<SaveRollResultQuery>._))
                     .MustNotHaveHappened();
             }
 
@@ -114,7 +114,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                 WhenQueryReturns(QueryResponse<SaveRollResult>.Failed(SaveRollResultFactory.Build()));
 
                 // Act
-                var result = await _commandHandler.Execute(_command);
+                var result = await _commandHandler.ExecuteAsync(_command);
 
                 // Assert
                 result.Status.Should().Be(RequestStatus.Failed);
@@ -127,7 +127,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                 WhenQueryReturns(QueryResponse<SaveRollResult>.Canceled(SaveRollResultFactory.Build()));
 
                 // Act
-                var result = await _commandHandler.Execute(_command);
+                var result = await _commandHandler.ExecuteAsync(_command);
 
                 // Assert
                 result.Status.Should().Be(RequestStatus.Canceled);
@@ -140,10 +140,10 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                 WhenQueryReturns(QueryResponse<SaveRollResult>.Success(SaveRollResultFactory.Build(rolledResult: 1)));
 
                 // Act
-                await _commandHandler.Execute(_command);
+                await _commandHandler.ExecuteAsync(_command);
 
                 // Assert
-                A.CallTo(() => _mediator.Execute(A<ApplyStatusCommand>._, null))
+                A.CallTo(() => _mediator.SendAsSubCommandAsync(A<ApplyStatusCommand>._, A<TryApplyStatusCommand>._))
                     .MustNotHaveHappened();
             }
 
@@ -174,10 +174,10 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     }.AsFighter());
 
                 // Act
-                await _commandHandler.Execute(_command);
+                await _commandHandler.ExecuteAsync(_command);
 
                 // Assert
-                A.CallTo(() => _mediator.Execute(A<ApplyStatusCommand>._, null))
+                A.CallTo(() => _mediator.SendAsSubCommandAsync(A<ApplyStatusCommand>._, A<TryApplyStatusCommand>._))
                         .MustHaveHappenedOnceExactly();
             }
 
@@ -205,7 +205,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     }.AsFighter());
 
                 // Act 
-                await _commandHandler.Execute(_command);
+                await _commandHandler.ExecuteAsync(_command);
 
                 // Assert
                 _command.StatusHash.Should().Be(status.Hash());
@@ -262,10 +262,10 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                 _command.StatusHash = status.Hash();
 
                 // Act
-                await _commandHandler.Redo(_command);
+                await _commandHandler.RedoAsync(_command);
 
                 // Assert
-                A.CallTo(() => _mediator.Execute(A<SaveRollResultQuery>._))
+                A.CallTo(() => _mediator.QueryAsync(A<SaveRollResultQuery>._))
                     .MustNotHaveHappened();
             }
 
@@ -292,10 +292,10 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     }.AsFighter());
 
                 // Act
-                await _commandHandler.Redo(_command);
+                await _commandHandler.RedoAsync(_command);
 
                 // Assert
-                A.CallTo(() => _mediator.Execute(A<SaveRollResultQuery>._))
+                A.CallTo(() => _mediator.QueryAsync(A<SaveRollResultQuery>._))
                     .MustHaveHappenedOnceExactly();
             }
 
@@ -323,10 +323,10 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     }.AsFighter());
 
                 // Act
-                await _commandHandler.Redo(_command);
+                await _commandHandler.RedoAsync(_command);
 
                 // Assert
-                A.CallTo(() => _mediator.Execute(A<ApplyStatusCommand>._, null))
+                A.CallTo(() => _mediator.SendAsSubCommandAsync(A<ApplyStatusCommand>._, A<TryApplyStatusCommand>._))
                     .MustHaveHappenedOnceExactly();
             }
         }

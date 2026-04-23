@@ -67,7 +67,7 @@ public class ApplyStatusCommandHandlerTests
         [SetUp]
         public async Task Setup()
         {
-            await _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
         }
 
         [Test]
@@ -107,10 +107,10 @@ public class ApplyStatusCommandHandlerTests
     public class UndoTests : ApplyStatusCommandHandlerTests
     {
         [Test]
-        public void Should_Remove_Status_From_Collection()
+        public async Task Should_Remove_Status_From_Collection()
         {
             // Act
-            _commandHandler.Undo(_command);
+            await _commandHandler.UndoAsync(_command);
 
             // Assert
             A.CallTo(() => _appliedStatusRepository.RemoveIfExists(_command.AppliedStatusId))

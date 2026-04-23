@@ -13,7 +13,7 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
         _fightContext = fightContext;
     }
 
-    public override Task<ICommandResponse<NoResponse>> Execute(RegainHpCommand command)
+    public override Task<ICommandResponse<NoResponse>> ExecuteAsync(RegainHpCommand command)
     {
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainHpCommandHandler)} could not find target with id {command.TargetId}");
 
@@ -26,10 +26,12 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
             hitPoints.CurrentHps = hitPoints.MaxHps;
         }
 
+        _fightContext.NotifyFighterUpdated(command.TargetId);
+
         return Task.FromResult(CommandResponse.Success());
     }
 
-    public override void Undo(RegainHpCommand command)
+    public override Task UndoAsync(RegainHpCommand command)
     {
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainHpCommandHandler)} could not find target with id {command.TargetId}");
 
@@ -39,10 +41,14 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
         }
 
         hitPoints.CurrentHps -= command.CorrectedAmount.Value;
+
+        _fightContext.NotifyFighterUpdated(command.TargetId);
+
+        return Task.CompletedTask;
     }
 
-    public async override Task Redo(RegainHpCommand command)
+    public async override Task RedoAsync(RegainHpCommand command)
     {
-        await Execute(command);
+        await ExecuteAsync(command);
     }
 }

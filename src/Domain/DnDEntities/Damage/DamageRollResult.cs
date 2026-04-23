@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Dices;
 
 namespace DnDFightTool.Domain.DnDEntities.Damage;
 
@@ -6,9 +6,9 @@ namespace DnDFightTool.Domain.DnDEntities.Damage;
 ///    Represents the result of a damage roll
 ///    // TODO Model is simplified for now, this represents the damage rolled, but we don't have the details of the roll
 /// </summary>
-public class DamageRollResult
+public class DamageRollResult : IDiceRollResult
 {
-    public DamageRollResult(DiceThrowTemplate dices, DamageTypeEnum damageType, SituationalDamageModifierEnum successfulSaveModifier = SituationalDamageModifierEnum.Normal)
+    public DamageRollResult(DiceRollTemplate dices, DamageTypeEnum damageType, SituationalDamageModifierEnum successfulSaveModifier = SituationalDamageModifierEnum.Normal)
     {
         Dices = dices;
         DamageType = damageType;
@@ -20,10 +20,19 @@ public class DamageRollResult
     /// </summary>
     public int Damage { get; set; }
 
+    /// <inheritdoc />
+    public int Result { get => Damage; set => Damage = value; }
+
+    /// <inheritdoc />
+    public int Min => Dices.MinimumRoll();
+
+    /// <inheritdoc />
+    public int Max => Dices.MaximumRoll();
+
     /// <summary>
     ///     Represents the dices that were rolled (not the result of the roll)
     /// </summary>
-    public DiceThrowTemplate Dices { get; set; }
+    public DiceRollTemplate Dices { get; set; }
 
     /// <summary>
     ///     The type of the damage for this specific damage roll.

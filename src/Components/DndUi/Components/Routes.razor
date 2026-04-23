@@ -1,9 +1,10 @@
 ﻿@using DnDEntitiesBlazorComponents.DnDEntities.Characters.Pages
+@using DndUi.Shared.Components
 
 <Router AppAssembly="@typeof(MauiProgram).Assembly"
-        AdditionalAssemblies="new [] { typeof(CharacterEditorPage).Assembly }">
+        AdditionalAssemblies="new [] { typeof(CharacterEditorPage).Assembly, typeof(DndUi.Shared.Components.Routes).Assembly }">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)" />
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(DndUi.Shared.Components.Layout.MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
 </Router>

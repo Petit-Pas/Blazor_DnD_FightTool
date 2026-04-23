@@ -16,7 +16,7 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
         _appliedStatusCollection = appliedStatusCollection ?? throw new ArgumentNullException(nameof(appliedStatusCollection));
     }
 
-    public override Task<ICommandResponse<NoResponse>> Execute(ApplyStatusCommand command)
+    public override Task<ICommandResponse<NoResponse>> ExecuteAsync(ApplyStatusCommand command)
     {
         var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ApplyStatusCommandHandler)} could not find caster with id {command.CasterId}");
         var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(ApplyStatusCommandHandler)} could not find target with id {command.TargetId}");
@@ -30,9 +30,9 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
         return Task.FromResult(CommandResponse.Success());
     }
 
-    public override void Undo(ApplyStatusCommand command)
+    public override async Task UndoAsync(ApplyStatusCommand command)
     {
-        base.Undo(command);
+        await base.UndoAsync(command);
 
         _appliedStatusCollection.RemoveIfExists(command.AppliedStatusId);
     }

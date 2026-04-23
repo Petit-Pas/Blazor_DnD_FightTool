@@ -62,6 +62,17 @@ public interface IFightContext
     event EventHandler<FightingCharacter> OnFighterRemoved;
 
     /// <summary>
+    ///     An event that is fired when a fighter's state is mutated in-place.
+    /// </summary>
+    event EventHandler<Guid> OnFighterUpdated;
+
+    /// <summary>
+    ///     Notifies that a fighter's state has been updated in-place.
+    /// </summary>
+    /// <param name="fighterId"></param>
+    void NotifyFighterUpdated(Guid fighterId);
+
+    /// <summary>
     ///     Indexer to access fighters by Guid
     /// </summary>
     FightingCharacter? this[Guid id] { get; }

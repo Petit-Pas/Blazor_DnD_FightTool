@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Dices;
 
 namespace DomainTestsUtilities.Factories.Damage;
 
@@ -13,9 +13,9 @@ public static class DamageRollResultFactory
         };
     }
 
-    public static DamageRollResult Build(DiceThrowTemplate? template = null, DamageTypeEnum? damageType = null, int? damage = null, SituationalDamageModifierEnum? situationalDamageModifier = null)
+    public static DamageRollResult Build(DiceRollTemplate? template = null, DamageTypeEnum? damageType = null, int? damage = null, SituationalDamageModifierEnum? situationalDamageModifier = null)
     {
-        var result = new DamageRollResult(template ?? new DiceThrowTemplate("2d6"), damageType ?? DamageTypeEnum.Fire, situationalDamageModifier ?? SituationalDamageModifierEnum.Normal);
+        var result = new DamageRollResult(template ?? new DiceRollTemplate("2d6"), damageType ?? DamageTypeEnum.Fire, situationalDamageModifier ?? SituationalDamageModifierEnum.Normal);
 
         result.Damage = damage ?? result.Dices.MinimumRoll();
         return result;

@@ -59,14 +59,15 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.5" />
         <!--<PackageReference Include="Morris.Blazor.FluentValidation" Version="3.1.5" />
         <PackageReference Include="Morris.Blazor.Validation" Version="3.1.5" />-->
-        <PackageReference Include="UndoableMediator" Version="1.0.0" />
+        <PackageReference Include="UndoableMediator" Version="2.0.0-alpha1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\FightBlazorComponents\FightBlazorComponents.csproj" />
+      <ProjectReference Include="..\..\UI\FightBlazorComponents\FightBlazorComponents.csproj" />
       <ProjectReference Include="..\..\Infrastructure\AspNetCoreExtensions\AspNetCoreExtensions.csproj" />
       <ProjectReference Include="..\..\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
-      <ProjectReference Include="..\..\UI\DnDUserInteractionsComponents\DnDUserInteractionsComponents.csproj" />
+      <ProjectReference Include="..\..\UI\DnDQueryPrompter\DnDQueryPrompter.csproj" />
+      <ProjectReference Include="..\DndUi.Shared\DndUi.Shared.csproj" />
     </ItemGroup>
 
 </Project>

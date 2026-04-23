@@ -15,7 +15,7 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
         _fightContext = fightContext;
     }
 
-    public override Task<ICommandResponse<NoResponse>> Execute(LooseTempHpCommand command)
+    public override Task<ICommandResponse<NoResponse>> ExecuteAsync(LooseTempHpCommand command)
     {
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseTempHpCommandHandler)} could not find target with id {command.TargetId}");
 
@@ -28,10 +28,12 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
             hitPoints.CurrentTempHps = 0;
         }
 
+        _fightContext.NotifyFighterUpdated(command.TargetId);
+
         return Task.FromResult(CommandResponse.Success());
     }
 
-    public override void Undo(LooseTempHpCommand command)
+    public override Task UndoAsync(LooseTempHpCommand command)
     {
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseTempHpCommandHandler)} could not find target with id {command.TargetId}");
 
@@ -41,10 +43,14 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
         }
 
         hitPoints.CurrentTempHps += command.CorrectedAmount.Value;
+
+        _fightContext.NotifyFighterUpdated(command.TargetId);
+
+        return Task.CompletedTask;
     }
 
-    public async override Task Redo(LooseTempHpCommand command)
+    public async override Task RedoAsync(LooseTempHpCommand command)
     {
-        await Execute(command);
+        await ExecuteAsync(command);
     }
 }

@@ -1,4 +1,4 @@
-﻿using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;
+using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceRolls.Components;
 using DnDFightTool.Domain.DnDEntities.Damage;
 using Microsoft.AspNetCore.Components;
 
@@ -12,7 +12,7 @@ public partial class DamageRollTemplateEditorComponent
     [Parameter]
     public EventCallback OnDeleted { get; set; }
 
-    private DiceThrowTemplateEditorComponent? _damageField;
+    private DiceRollTemplateEditorComponent? _damageField;
 
     public bool Validate()
     {

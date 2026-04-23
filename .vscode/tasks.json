@@ -1,0 +1,303 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Copy bootstrap CSS",
+			"type": "shell",
+			"command": "copy \"d:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\wwwroot\\css\\bootstrap\\bootstrap.min.css\" \"d:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi.Shared\\wwwroot\\css\\bootstrap\\bootstrap.min.css\""
+		},
+		{
+			"label": "Copy bootstrap CSS",
+			"type": "shell",
+			"command": "New-Item -ItemType Directory -Force -Path 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi.Shared\\wwwroot\\css\\bootstrap'; Copy-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\wwwroot\\css\\bootstrap\\bootstrap.min.css' 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi.Shared\\wwwroot\\css\\bootstrap\\bootstrap.min.css'"
+		},
+		{
+			"label": "Create dir and copy bootstrap",
+			"type": "shell",
+			"command": "New-Item -ItemType Directory -Force -Path 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi.Shared\\wwwroot\\css\\bootstrap'; Copy-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\wwwroot\\css\\bootstrap\\bootstrap.min.css' -Destination 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi.Shared\\wwwroot\\css\\bootstrap\\bootstrap.min.css'"
+		},
+		{
+			"label": "Copy bootstrap map",
+			"type": "shell",
+			"command": "Copy-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map' -Destination 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi.Shared\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map'"
+		},
+		{
+			"label": "Add projects to solution",
+			"type": "shell",
+			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet sln add 'src/Components/DndUi.Shared/DndUi.Shared.csproj' --solution-folder 'src/Components' ; dotnet sln add 'src/Components/DndUi.Web/DndUi.Web.csproj' --solution-folder 'src/Components'"
+		},
+		{
+			"label": "Build DndUi.Web",
+			"type": "shell",
+			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1"
+		},
+		{
+			"label": "Build DndUi.Web v2",
+			"type": "shell",
+			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1"
+		},
+		{
+			"label": "Build DndUi.Web v3",
+			"type": "shell",
+			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1"
+		},
+		{
+			"label": "Build DndUi.Web v4",
+			"type": "shell",
+			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1"
+		},
+		{
+			"label": "Build DndUi.Web v5",
+			"type": "shell",
+			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1"
+		},
+		{
+			"label": "build-test-project",
+			"type": "shell",
+			"command": "dotnet build tests/Business/DnDActionsTests/DnDActionsTests.csproj",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build full solution",
+			"type": "shell",
+			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build DnDFightTool.sln 2>&1"
+		},
+		{
+			"label": "build-test-project",
+			"type": "shell",
+			"command": "dotnet build tests/Business/DnDActionsTests/DnDActionsTests.csproj",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Re-delete orphaned dirs",
+			"type": "shell",
+			"command": "Remove-Item -Recurse -Force 'D:\\Code\\Perso\\DnDFightTool\\FightBlazorComponents', 'D:\\Code\\Perso\\DnDFightTool\\src\\UI\\DnDUserInteractionsComponents', 'D:\\Code\\Perso\\DnDFightTool\\DnDFightTool', 'D:\\Code\\Perso\\DnDFightTool\\src\\Business\\DnDUserInterations'"
+		},
+		{
+			"label": "Quick build check",
+			"type": "shell",
+			"command": "dotnet build 2>&1 | Select-Object -Last 5"
+		},
+		{
+			"label": "Quick build check v2",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-Object -Last 5"
+		},
+		{
+			"label": "Build check after slnx fix",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-Object -Last 5"
+		},
+		{
+			"label": "Delete old domain dirs",
+			"type": "shell",
+			"command": "Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\DnDEntities\\Dices\\DiceThrows' -Recurse -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\DnDEntities\\AttackRolls' -Recurse -Force; Write-Host 'Deleted DiceThrows and AttackRolls directories'"
+		},
+		{
+			"label": "Bulk search replace",
+			"type": "shell",
+			"command": "$root = 'd:\\Code\\Perso\\DnDFightTool'\n$files = Get-ChildItem -Path $root -Include '*.cs','*.razor' -Recurse -File | Where-Object { $_.FullName -notmatch '\\\\(bin|obj)\\\\' -and $_.FullName -notmatch '\\\\Dices\\\\(DiceRollTemplate|DiceRollModifiersTemplate|D20BaseRollResult|RawD20RollResult|ModifiedD20RollResult|HitRollResult|IDiceRollResult|Wildcard)\\.cs$' -and $_.FullName -notmatch '\\\\Dices\\\\Validation\\\\' -and $_.FullName -notmatch '\\\\ArmorClasses\\\\ArmorClass\\.cs$' -and $_.FullName -notmatch '\\\\ArmorClasses\\\\Validation\\\\' }\n$replacements = @(\n  @('using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;', 'using DnDFightTool.Domain.DnDEntities.Dices.Validation;'),\n  @('using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;', 'using DnDFightTool.Domain.DnDEntities.Dices;'),\n  @('using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses.Validation;', 'using DnDFightTool.Domain.DnDEntities.ArmorClasses.Validation;'),\n  @('using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses;', 'using DnDFightTool.Domain.DnDEntities.ArmorClasses;'),\n  @('DiceThrowModifiersTemplate', 'DiceRollModifiersTemplate'),\n  @('DiceThrowTemplate', 'DiceRollTemplate'),\n  @('DiceThrowTemplateValidator', 'DiceRollTemplateValidator'),\n  @('IRollResult', 'IDiceRollResult')\n)\n$count = 0\nforeach ($f in $files) {\n  $content = Get-Content $f.FullName -Raw\n  $original = $content\n  foreach ($r in $replacements) {\n    $content = $content.Replace($r[0], $r[1])\n  }\n  if ($content -ne $original) {\n    Set-Content $f.FullName -Value $content -NoNewline\n    $count++\n    Write-Host \"Updated: $($f.FullName)\"\n  }\n}\nWrite-Host \"Total files updated: $count\""
+		},
+		{
+			"label": "Delete old UI dirs",
+			"type": "shell",
+			"command": "Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\UI\\DnDEntitiesBlazorComponents\\DnDEntities\\Dices\\DiceThrows' -Recurse -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\UI\\FightBlazorComponents\\Dices' -Recurse -Force; Write-Host 'Deleted old UI component dirs'"
+		},
+		{
+			"label": "Delete old extensions",
+			"type": "shell",
+			"command": "Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\UI\\DnDEntitiesBlazorComponents\\DnDEntities\\Dices\\DiceThrowTemplateExtensions.cs' -Force; Write-Host 'Deleted old extensions file'"
+		},
+		{
+			"label": "Delete old test dirs",
+			"type": "shell",
+			"command": "Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\tests\\Domain\\DnDEntitiesTests\\Dices\\DiceThrows' -Recurse -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\tests\\Domain\\DnDEntitiesTests\\AttackRolls' -Recurse -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\tests\\Domain\\DomainTestsUtilities\\Factories\\Dices\\DiceThrows' -Recurse -Force; Write-Host 'Deleted old test dirs'"
+		},
+		{
+			"label": "Build after refactor",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-Object -Last 15"
+		},
+		{
+			"label": "Build v2",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-Object -Last 15"
+		},
+		{
+			"label": "Build domain and tests",
+			"type": "shell",
+			"command": "dotnet build src/Domain/DnDEntities/DnDEntities.csproj 2>&1 | Select-Object -Last 10; dotnet build src/Domain/Fight/Fight.csproj 2>&1 | Select-Object -Last 10; dotnet build tests/Domain/DnDEntitiesTests/DnDEntitiesTests.csproj 2>&1 | Select-Object -Last 10; dotnet build tests/Domain/FightTests/FightTests.csproj 2>&1 | Select-Object -Last 10"
+		},
+		{
+			"label": "Build UI and action tests",
+			"type": "shell",
+			"command": "dotnet build src/UI/DnDEntitiesBlazorComponents/DnDEntitiesBlazorComponents.csproj 2>&1 | Select-Object -Last 10; dotnet build src/UI/FightBlazorComponents/FightBlazorComponents.csproj 2>&1 | Select-Object -Last 10; dotnet build tests/Business/DnDActionsTests/DnDActionsTests.csproj 2>&1 | Select-Object -Last 10"
+		},
+		{
+			"label": "Run all tests",
+			"type": "shell",
+			"command": "dotnet test tests/Domain/DnDEntitiesTests/DnDEntitiesTests.csproj --no-build 2>&1 | Select-Object -Last 10; dotnet test tests/Domain/FightTests/FightTests.csproj --no-build 2>&1 | Select-Object -Last 10; dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build 2>&1 | Select-Object -Last 10; dotnet test tests/Infrastructure/MemoryTests/MemoryTests.csproj --no-build 2>&1 | Select-Object -Last 10"
+		},
+		{
+			"label": "Show failed tests",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build -v n 2>&1 | Select-String -Pattern 'Failed|Error|FAIL' | Select-Object -First 20"
+		},
+		{
+			"label": "Show failures v2",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build --filter 'TestCategory!=Passed' -v d 2>&1 | Select-String '├®chou├®|Failed ' | Select-Object -First 15"
+		},
+		{
+			"label": "Show failures v3",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build -l 'console;verbosity=detailed' 2>&1 | Select-String 'chou' | Select-Object -First 20"
+		},
+		{
+			"label": "Show failure detail",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build -v d --filter 'Should_Not_Redo_Query_When_Template_Is_The_Same' 2>&1 | Select-Object -Last 30"
+		},
+		{
+			"label": "Check original handler",
+			"type": "shell",
+			"command": "git show HEAD:src/Business/DnDActions/MartialAttackActions/ExecuteMartialAttack/ExecuteMartialAttackCommandHandler.cs 2>&1 | Select-Object -First 100"
+		},
+		{
+			"label": "Diff handler",
+			"type": "shell",
+			"command": "git diff src/Business/DnDActions/MartialAttackActions/ExecuteMartialAttack/ExecuteMartialAttackCommandHandler.cs 2>&1 | Select-Object -First 120"
+		},
+		{
+			"label": "Diff test",
+			"type": "shell",
+			"command": "git diff tests/Business/DnDActionsTests/MartialAttackActionsTests/ExecuteMartialAttackTests/ExecuteMartialAttackCommandHandlerTests.cs 2>&1 | Select-Object -First 150"
+		},
+		{
+			"label": "Diff test part 2",
+			"type": "shell",
+			"command": "git diff tests/Business/DnDActionsTests/MartialAttackActionsTests/ExecuteMartialAttackTests/ExecuteMartialAttackCommandHandlerTests.cs 2>&1 | Select-Object -Skip 150 -First 80"
+		},
+		{
+			"label": "Test error detail",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build --filter 'Should_Not_Redo_Query_When_Template_Is_The_Same' -l 'console;verbosity=detailed' 2>&1 | Select-Object -Skip 5 -First 50"
+		},
+		{
+			"label": "Build after rollresult refactor",
+			"type": "shell",
+			"command": "dotnet build src/Domain/DnDEntities/DnDEntities.csproj 2>&1 | Select-Object -Last 10; dotnet build src/UI/FightBlazorComponents/FightBlazorComponents.csproj 2>&1 | Select-Object -Last 10"
+		},
+		{
+			"label": "Build rollresult projects",
+			"type": "shell",
+			"command": "dotnet build src/Domain/DnDEntities/DnDEntities.csproj 2>&1 | Select-Object -Last 5; dotnet build src/Domain/Fight/Fight.csproj 2>&1 | Select-Object -Last 5; dotnet build src/UI/DnDEntitiesBlazorComponents/DnDEntitiesBlazorComponents.csproj 2>&1 | Select-Object -Last 5"
+		},
+		{
+			"label": "Delete duplicate components",
+			"type": "shell",
+			"command": "Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Layout\\MainLayout.razor' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Layout\\MainLayout.razor.css' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Layout\\NavMenu.razor' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Layout\\NavMenu.razor.css' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Pages\\CharacterListEditorPage.razor' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Pages\\CharacterListEditorPage.razor.cs' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Pages\\FightPage.razor' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Pages\\FightPage.razor.cs' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Shared\\ThemeToggle.razor' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Shared\\ThemeToggle.razor.cs' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Components\\DndUi\\Components\\Shared\\ScreenSizeBadge.razor' -Force; Write-Host 'Deleted 11 duplicate files'"
+		},
+		{
+			"label": "Build DndUi.Web",
+			"type": "shell",
+			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1 | Select-Object -Last 15"
+		},
+		{
+			"label": "Build DndUi MAUI",
+			"type": "shell",
+			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build src/Components/DndUi/DndUi.csproj 2>&1 | Select-Object -Last 15"
+		},
+		{
+			"label": "Run DndUi.Web",
+			"type": "shell",
+			"command": "dotnet run --project src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run DndUi.Web",
+			"type": "shell",
+			"command": "dotnet run --project src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run DndUi.Web",
+			"type": "shell",
+			"command": "dotnet run --project src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Rebuild and Run DndUi.Web",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj && dotnet run --project src/Components/DndUi.Web/DndUi.Web.csproj --no-build",
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build check",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1 | Select-String -Pattern 'error|Error|échoué' | Select-Object -First 20",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build DnDEntities",
+			"type": "shell",
+			"command": "dotnet build src/Domain/DnDEntities/DnDEntities.csproj 2>&1 | Select-String -Pattern 'error|succeeded|failed' | Select-Object -First 10",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Build DnDEntities v2",
+			"type": "shell",
+			"command": "dotnet build src/Domain/DnDEntities/DnDEntities.csproj",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Full build",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Full build 2",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build after fix",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1 | Select-String -Pattern 'error|succeeded|failed'",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build after explicit fix",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		}
+	]
+}

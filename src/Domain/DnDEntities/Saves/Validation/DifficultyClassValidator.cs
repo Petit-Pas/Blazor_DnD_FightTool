@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;
+using DnDFightTool.Domain.DnDEntities.Dices.Validation;
 using FluentValidation;
 
 namespace DnDFightTool.Domain.DnDEntities.Saves.Validation;
@@ -14,6 +14,6 @@ public class DifficultyClassValidator : AbstractValidator<DifficultyClassTemplat
     public DifficultyClassValidator()
     {
         RuleFor(x => x.DifficultyClassExpression)
-            .SetValidator(new ModifiersTemplateValidator());
+            .SetValidator(new DiceRollModifiersTemplateValidator());
     }
 }

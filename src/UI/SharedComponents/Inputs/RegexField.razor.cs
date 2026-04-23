@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows.Validation;
+using DnDFightTool.Domain.DnDEntities.Dices.Validation;
 using Extensions;
 using Microsoft.AspNetCore.Components;
 
@@ -42,7 +42,7 @@ public partial class RegexField<T>
         {
             return "Cannot be empty";
         }
-        return DiceThrowTemplateValidator.MatchRegex(value)
+        return DiceRollTemplateValidator.MatchRegex(value)
             ? null
             : ErrorMessage;
     }

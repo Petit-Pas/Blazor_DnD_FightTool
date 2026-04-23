@@ -1,0 +1,31 @@
+@using Microsoft.AspNetCore.Components.Web
+@using DndUi.Shared.Components
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link href="_content/DndUi.Shared/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="_content/DndUi.Shared/css/app.css" rel="stylesheet" />
+    <link href="_content/DndUi.Shared/css/custom.css" rel="stylesheet" />
+    <link href="_content/DndUi.Shared/css/layout/grids.css" rel="stylesheet" />
+    <link href="_content/DndUi.Shared/css/layout/flex.css" rel="stylesheet" />
+    <link href="_content/DndUi.Shared/css/layout/spacing.css" rel="stylesheet" />
+    <link href="_content/DndUi.Shared/css/sizing/sizing.css" rel="stylesheet" />
+    <link href="_content/DndUi.Shared/css/animation/animations.css" rel="stylesheet" />
+    <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
+    <link href="DndUi.Web.styles.css" rel="stylesheet" />
+    <link href="DndUi.Shared.styles.css" rel="stylesheet" />
+    <HeadOutlet @rendermode="RenderMode.InteractiveServer" />
+</head>
+
+<body>
+    <Routes @rendermode="RenderMode.InteractiveServer" />
+    <script src="_framework/blazor.web.js"></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+</body>
+
+</html>

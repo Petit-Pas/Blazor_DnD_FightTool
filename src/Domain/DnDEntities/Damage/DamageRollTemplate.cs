@@ -1,5 +1,5 @@
-﻿using System.Diagnostics;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using System.Diagnostics;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Damage;
@@ -15,7 +15,7 @@ public class DamageRollTemplate : IHashable
     /// <summary>
     ///     The dices to throw
     /// </summary>
-    public DiceThrowTemplate Dices { get; set; } = new DiceThrowTemplate("1d6+STR");
+    public DiceRollTemplate Dices { get; set; } = new DiceRollTemplate("1d6+STR");
 
     /// <summary>
     ///     The type of the damage for this specific damage roll.

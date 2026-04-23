@@ -20,7 +20,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         _fightContext = fightContext;
     }
 
-    public async override Task<ICommandResponse<NoResponse>> Execute(TryApplyStatusCommand command)
+    public async override Task<ICommandResponse<NoResponse>> ExecuteAsync(TryApplyStatusCommand command)
     {
         var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find caster with id {command.CasterId}");
         var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find target with id {command.TargetId}");
@@ -45,9 +45,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
     {
         if (status.ShouldBeApplied(caster, target, command.SaveRollResult))
         {
-            var applyStatusCommand = new ApplyStatusCommand(caster.Id, target.Id, status.Id, command.SaveRollResult);
-            await _mediator.Execute(applyStatusCommand);
-            command.AddToSubCommands(applyStatusCommand);
+            await _mediator.SendAsSubCommandAsync(new ApplyStatusCommand(caster.Id, target.Id, status.Id, command.SaveRollResult), parentCommand: command);
         }
     }
 
@@ -59,12 +57,12 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         }
 
         var saveQuery = new SaveRollResultQuery(command.CasterId, command.TargetId, status.Save);
-        var saveQueryResponse = await _mediator.Execute(saveQuery);
+        var saveQueryResponse = await _mediator.QueryAsync(saveQuery);
         command.SaveRollResult = saveQueryResponse.Response;
         return saveQueryResponse.Status;
     }
 
-    public async override Task Redo(TryApplyStatusCommand command)
+    public async override Task RedoAsync(TryApplyStatusCommand command)
     {
         var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find caster with id {command.CasterId}");
         var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(TryApplyStatusCommandHandler)} could not find target with id {command.TargetId}");
@@ -84,7 +82,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
             }
         }
 
-        command.SubCommands.Clear();
+        ClearSubCommands(command);
 
         await TryApplyStatus(command, status, caster, target);
     }

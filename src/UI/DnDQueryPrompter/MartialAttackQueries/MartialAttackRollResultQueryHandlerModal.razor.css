@@ -1,0 +1,23 @@
+.damage-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.damage-expression {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+::deep .damage-input {
+    width: 80px;
+    flex-shrink: 0;
+}
+
+.damage-total {
+    font-weight: bold;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: auto;
+}

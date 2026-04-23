@@ -66,12 +66,11 @@ public class ApplyDamageRollResultsCommandHandlerTests
         public async Task Should_Execute_Take_Damage_Command_With_Rolled_Damage()
         {
             // Act
-            await _commandHandler.Execute(_command);
-            var takeDamageCommand = _command.SubCommands.OfType<TakeDamageCommand>().SingleOrDefault();
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            takeDamageCommand.Should().NotBeNull();
-            takeDamageCommand!.Damage.Should().Be(10);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<TakeDamageCommand>.That.Matches(x => x.Damage == 10), A<ApplyDamageRollResultsCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -82,11 +81,11 @@ public class ApplyDamageRollResultsCommandHandlerTests
             _command = new ApplyDamageRollResultsCommand(Guid.NewGuid(), Guid.NewGuid(), _damageRollResults);
 
             // Act
-            await _commandHandler.Execute(_command);
-            var takeDamageCommand = _command.SubCommands.OfType<TakeDamageCommand>().SingleOrDefault();
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            takeDamageCommand!.Damage.Should().Be(20);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<TakeDamageCommand>.That.Matches(x => x.Damage == 20), A<ApplyDamageRollResultsCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
 
 
@@ -97,11 +96,11 @@ public class ApplyDamageRollResultsCommandHandlerTests
             _affinities[DamageTypeEnum.Fire].Affinity = DamageAffinityEnum.Weak;
 
             // Act
-            await _commandHandler.Execute(_command);
-            var takeDamageCommand = _command.SubCommands.OfType<TakeDamageCommand>().SingleOrDefault();
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            takeDamageCommand!.Damage.Should().Be(20);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<TakeDamageCommand>.That.Matches(x => x.Damage == 20), A<ApplyDamageRollResultsCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -114,10 +113,11 @@ public class ApplyDamageRollResultsCommandHandlerTests
             _command.DamageRolls.First().SuccessfulSaveModifier = modifier;
 
             // Act
-            await _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            _command.SubCommands.OfType<TakeDamageCommand>().First().Damage.Should().Be(expectedDamage);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<TakeDamageCommand>.That.Matches(x => x.Damage == expectedDamage), A<ApplyDamageRollResultsCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
 
     }
@@ -130,25 +130,22 @@ public class ApplyDamageRollResultsCommandHandlerTests
         public async Task Should_Execute_Take_Damage_Command_With_Rolled_Damage()
         {
             // Act
-            await _commandHandler.Execute(_command);
-            var takeDamageCommand = _command.SubCommands.OfType<TakeDamageCommand>().SingleOrDefault();
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            takeDamageCommand.Should().NotBeNull();
-            takeDamageCommand!.Damage.Should().Be(10);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<TakeDamageCommand>.That.Matches(x => x.Damage == 10), A<ApplyDamageRollResultsCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public async Task Should_Clear_SubCommands_To_Avoid_Multiplying_Them()
+        public async Task Should_Reexecute_On_Redo()
         {
-            // Arrange
-            _command.AddToSubCommands(_command);
-
             // Act
-            await _commandHandler.Redo(_command);
+            await _commandHandler.RedoAsync(_command);
 
             // Assert
-            _command.SubCommands.Should().NotContain(_command);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<TakeDamageCommand>._, A<ApplyDamageRollResultsCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
     }
 }

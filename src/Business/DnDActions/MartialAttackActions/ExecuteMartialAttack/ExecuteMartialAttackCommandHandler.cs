@@ -1,8 +1,6 @@
 ﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
-using DnDFightTool.Business.DnDQueries.SaveQueries;
-using DnDFightTool.Business.DnDUserInteraction;
-using DnDFightTool.Business.DnDUserInteraction.MartialAttackUserInteractions;
+using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
@@ -34,7 +32,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
         _fightContext = fightContext ?? throw new ArgumentNullException(nameof(fightContext));
     }
 
-    public async override Task<ICommandResponse<NoResponse>> Execute(ExecuteMartialAttackCommand command)
+    public async override Task<ICommandResponse<NoResponse>> ExecuteAsync(ExecuteMartialAttackCommand command)
     {
         ArgumentNullException.ThrowIfNull(command);
 
@@ -43,15 +41,19 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 
         command.AttackTemplateHash = attackTemplate.Hash();
 
-        // Query attack roll, as well as target
-        var queryStatus = await QueryAttackRollResult(command);
-        if (queryStatus != RequestStatus.Success)
+        // Queries attack roll, as well as targetId
+        if (command.MartialAttackRollResult == null)
         {
-            return new CommandResponse(queryStatus);
+            var queryStatus = await QueryAttackRollResult(command);
+            if (queryStatus != RequestStatus.Success)
+            {
+                return new CommandResponse(queryStatus);
+            }
         }
 
         var target = _fightContext[command.MartialAttackRollResult!.TargetId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find target with id {command.MartialAttackRollResult!.TargetId}");
-        if (AttackHits(caster, target, command))
+        command.AttackDidHit = AttackHits(caster, target, command);
+        if (command.AttackDidHit)
         {
             await ApplyDamage(caster, target, command);
             await ApplyStatuses(caster, target, command, attackTemplate);
@@ -60,46 +62,40 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
         return CommandResponse.Success();
     }
 
-    public async override Task Redo(ExecuteMartialAttackCommand command)
+    public async override Task RedoAsync(ExecuteMartialAttackCommand command)
     {
-        var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find caster with id {command.CasterId}");
+        var caster = _fightContext[command.CasterId];
+        if (caster == null)
+        {
+            // TODO should warn in the console and stop
+            throw new NotImplementedException($"Cannot redo a {command.GetType()} when the caster with id {command.CasterId} cannot be found.");
+        }
+        var target = _fightContext[command.MartialAttackRollResult!.TargetId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find target with id {command.MartialAttackRollResult!.TargetId}");
+        if (target == null)
+        {
+            // TODO should warn in the console and stop
+            throw new NotImplementedException($"Cannot redo a {command.GetType()} when the target with id {command.MartialAttackRollResult!.TargetId} cannot be found.");
+        }
         var attackTemplate = command.GetAttackTemplate(caster);
+        if (attackTemplate == null)
+        {
+            // TODO should warn in the console and stop
+            throw new NotImplementedException($"Cannot redo a {command.GetType()} when the attack template with id {command.MartialAttackId} cannot be found.");
+        }
 
         // if the attack template has changed, we need to recompute everything
+        // if the the attack did hit the first time, but does not hit anymore, or the opposite, we also need to recompute everything, since the subCommands will be different
         var newAttackTemplateHash = attackTemplate.Hash();
-        if (newAttackTemplateHash != command.AttackTemplateHash)
+        if (newAttackTemplateHash != command.AttackTemplateHash || command.AttackDidHit != AttackHits(caster, target, command))
         {
-            command.AttackTemplateHash = newAttackTemplateHash;
-            command.SubCommands.Clear();
-            var result = await QueryAttackRollResult(command);
-            if (result != RequestStatus.Success)
-            {
-                // Canceled
-                return;
-            }
+            // This will retrigger query
+            command.ClearCachedState();
+            ClearSubCommands(command);
+            await ExecuteAsync(command);
         }
-
-        var target = _fightContext[command.MartialAttackRollResult!.TargetId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find target with id {command.MartialAttackRollResult!.TargetId}");
-        if (AttackHits(caster, target, command))
-        {
-            // attack was already executed and had effect, so we can reuse the same commands
-            if (command.SubCommands.Count != 0)
-            {
-                await base.Redo(command);
-            }
-            // attack has had no effect before (or we cleared it because the template changed), we need to re-compute everything
-            else
-            {
-                await ApplyDamage(caster, target, command);
-                await ApplyStatuses(caster, target, command, attackTemplate);
-            }
-        }
-        // attack does not hit, and since the Undo button could be clicked again, we need to make sure that no subCommands remains.
-        // it also means that after that, we lose the potential dice throws in the subCommands,
-        //      as next time this is re-executed and the attack hits, we will call ApplyDamage & ApplyStatus again.
-        else
-        {
-            command.SubCommands.Clear();
+        // Otherwise, entities have not changes, characters are still hit, we can safely redo the same subCommands without re-querying the attack roll or re-evaluating the hit, since the result should be the same, and we want to preserve the potential dice rolls in the subCommands.
+        else {
+            await base.RedoAsync(command);
         }
     }
 
@@ -110,7 +106,8 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <returns></returns>
     private async Task<RequestStatus> QueryAttackRollResult(ExecuteMartialAttackCommand command)
     {
-        var requestResult = await _mediator.Execute(new SaveRollResultQuery(command.CasterId, command.MartialAttackId, null));    
+        var requestResult = await _mediator.QueryAsync(new MartialAttackRollResultQuery(command.CasterId, command.MartialAttackId));
+        command.MartialAttackRollResult = requestResult.Response;
         return requestResult.Status;
     }
 
@@ -126,9 +123,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     {
         foreach (var onHitStatus in attackTemplate.Statuses.Values)
         {
-            var tryApplyStatusCommand = new TryApplyStatusCommand(caster.Id, target.Id, onHitStatus.Id);
-            await _mediator.Execute(tryApplyStatusCommand);
-            command.AddToSubCommands(tryApplyStatusCommand);
+            await _mediator.SendAsSubCommandAsync(new TryApplyStatusCommand(caster.Id, target.Id, onHitStatus.Id), parentCommand: command);
         }
     }
 
@@ -150,9 +145,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 #pragma warning restore
         }
 
-            var applyDamageRollResultCommand = new ApplyDamageRollResultsCommand(caster.Id, target.Id, command.MartialAttackRollResult.DamageRolls);
-        command.AddToSubCommands(applyDamageRollResultCommand);
-        await _mediator.Execute(applyDamageRollResultCommand);
+        await _mediator.SendAsSubCommandAsync(new ApplyDamageRollResultsCommand(caster.Id, target.Id, command.MartialAttackRollResult.DamageRolls), parentCommand: command);
     }
 
     /// <summary>

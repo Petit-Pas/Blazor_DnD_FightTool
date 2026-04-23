@@ -1,0 +1,16 @@
+.save-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.save-roll {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.save-total {
+    font-weight: bold;
+    white-space: nowrap;
+}

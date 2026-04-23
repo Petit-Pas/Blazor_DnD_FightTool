@@ -57,33 +57,33 @@ internal class RegainHpCommandHandlerTests
         public async Task Should_Return_Success()
         {
             // Act 
-            var response = await _commandHandler.Execute(_command);
+            var response = await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             response.Status.Should().Be(RequestStatus.Success);
         }
 
         [Test]
-        public void Should_Update_Hps()
+        public async Task Should_Update_Hps()
         {
             // Arrange
             var startingHps = _hps;
 
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             _hps.Should().Be(startingHps + _command.Amount);
         }
 
         [Test]
-        public void Should_Not_Go_Higher_Than_Max_Hps()
+        public async Task Should_Not_Go_Higher_Than_Max_Hps()
         {
             // Arrange
             _hps = _character.HitPoints.MaxHps - 5;
 
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             _hps.Should().Be(_character.HitPoints.MaxHps);
@@ -92,13 +92,13 @@ internal class RegainHpCommandHandlerTests
         [Test]
         [TestCase(20, 5)]
         [TestCase(5, 10)]
-        public void Should_Set_CorrectAmount(int hps, int correctedAmountExpected)
+        public async Task Should_Set_CorrectAmount(int hps, int correctedAmountExpected)
         {
             // Arrange
             _hps = hps;
 
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             _command.CorrectedAmount.Should().Be(correctedAmountExpected);
@@ -109,29 +109,29 @@ internal class RegainHpCommandHandlerTests
     private class UndoTests : RegainHpCommandHandlerTests
     {
         [Test]
-        public void Should_Throw_InvalidOperationException_When_CorrectedAmount_Is_Null()
+        public async Task Should_Throw_InvalidOperationException_When_CorrectedAmount_Is_Null()
         {
             // Arrange
             _command.CorrectedAmount = null;
 
             // Act
-            var undoing = () => _commandHandler.Undo(_command);
+            var undoing = async () => await _commandHandler.UndoAsync(_command);
 
             // Assert
-            undoing.Should().Throw<InvalidOperationException>();
+            await undoing.Should().ThrowAsync<InvalidOperationException>();
         }
 
         [Test]
         [TestCase(3)]
         [TestCase(10)]
-        public void Should_Update_Hps_With_CorrectedAmount(int correctedAmount)
+        public async Task Should_Update_Hps_With_CorrectedAmount(int correctedAmount)
         {
             // Arrange
             var startingHps = _hps;
             _command.CorrectedAmount = correctedAmount;
 
             // Act
-            _commandHandler.Undo(_command);
+            await _commandHandler.UndoAsync(_command);
 
             // Assert
             _hps.Should().Be(startingHps - correctedAmount);
@@ -142,13 +142,13 @@ internal class RegainHpCommandHandlerTests
     private class RedoTests : RegainHpCommandHandlerTests
     {
         [Test]
-        public void Should_Update_Hps()
+        public async Task Should_Update_Hps()
         {
             // Arrange
             var startingHps = _hps;
 
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             _hps.Should().Be(startingHps + _command.Amount);

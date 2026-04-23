@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Dices;
 
 namespace DomainTestsUtilities.Factories.Damage;
 
@@ -9,7 +9,7 @@ public static class DamageRollTemplateFactory
     {
         return new DamageRollTemplate()
         {
-            Dices = new DiceThrowTemplate(dicesToRoll ?? "2d8"),
+            Dices = new DiceRollTemplate(dicesToRoll ?? "2d8"),
             Type = damageType ?? DamageTypeEnum.Thunder,
         };
     }

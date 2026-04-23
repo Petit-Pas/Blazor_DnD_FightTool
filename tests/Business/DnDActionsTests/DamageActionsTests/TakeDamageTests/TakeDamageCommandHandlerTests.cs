@@ -50,40 +50,40 @@ public class TakeDamageCommandHandlerTests
     public class ExecuteTests : TakeDamageCommandHandlerTests
     {
         [Test]
-        public void Should_Execute_A_Command_To_Reduce_Hps()
+        public async Task Should_Execute_A_Command_To_Reduce_Hps()
         {
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            A.CallTo(() => _mediator.Execute(A<LooseHpCommand>.That.Matches(x => x.Amount == 10), null!))
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseHpCommand>.That.Matches(x => x.Amount == 10), A<TakeDamageCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
 
         [Test]
-        public void Should_Not_Execute_A_Command_To_Remove_Temp_Hps_When_There_Is_None()
+        public async Task Should_Not_Execute_A_Command_To_Remove_Temp_Hps_When_There_Is_None()
         {
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            A.CallTo(() => _mediator.Execute(A<LooseTempHpCommand>._, null!))
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseTempHpCommand>._, A<TakeDamageCommand>._))
                 .MustNotHaveHappened();
         }
 
         [Test]
-        public void Should_Execute_A_Command_To_Remove_Temp_Hps_When_There_Are_Some()
+        public async Task Should_Execute_A_Command_To_Remove_Temp_Hps_When_There_Are_Some()
         {
             // Arrange
             _hps.CurrentTempHps = 2;
 
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            A.CallTo(() => _mediator.Execute(A<LooseHpCommand>.That.Matches(x => x.Amount == 8), null!))
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseHpCommand>.That.Matches(x => x.Amount == 8), A<TakeDamageCommand>._))
                 .MustHaveHappenedOnceExactly();
-            A.CallTo(() => _mediator.Execute(A<LooseTempHpCommand>.That.Matches(x => x.Amount == 2), null!))
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseTempHpCommand>.That.Matches(x => x.Amount == 2), A<TakeDamageCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
     }
@@ -93,27 +93,25 @@ public class TakeDamageCommandHandlerTests
     {
         // Smoke test to double check that it executes the command well, most basic Execute test.
         [Test]
-        public void Should_Execute_A_Command_To_Reduce_Hps()
+        public async Task Should_Execute_A_Command_To_Reduce_Hps()
         {
             // Act
-            _commandHandler.Execute(_command);
+            await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            A.CallTo(() => _mediator.Execute(A<LooseHpCommand>.That.Matches(x => x.Amount == 10), null!))
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseHpCommand>.That.Matches(x => x.Amount == 10), A<TakeDamageCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public async Task Should_Clear_SubCommands_To_Avoid_Multiplying_Them()
         {
-            // Arrange
-            _command.AddToSubCommands(_command);
-
             // Act
-            await _commandHandler.Redo(_command);
+            await _commandHandler.RedoAsync(_command);
 
             // Assert
-            _command.SubCommands.Should().NotContain(_command);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseHpCommand>._, A<TakeDamageCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
     }
 }

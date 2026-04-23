@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
-    <PackageReference Include="UndoableMediator" Version="1.0.0" />
+    <PackageReference Include="UndoableMediator" Version="2.0.0-alpha1" />
   </ItemGroup>
 
 </Project>

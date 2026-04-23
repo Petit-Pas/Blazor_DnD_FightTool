@@ -64,6 +64,15 @@ public class FightContext : IFightContext
     public event EventHandler<FightingCharacter>? OnFighterRemoved;
 
     /// <inheritdoc/>
+    public event EventHandler<Guid>? OnFighterUpdated;
+
+    /// <inheritdoc/>
+    public void NotifyFighterUpdated(Guid fighterId)
+    {
+        OnFighterUpdated?.Invoke(this, fighterId);
+    }
+
+    /// <inheritdoc/>
     public void Add(Character character)
     {
         FightingCharacter fighter;

@@ -1,0 +1,12 @@
+@using DnDFightTool.Domain.DnDEntities.Dices
+@using SharedComponents.Inputs
+
+@inherits RegexField<DiceRollTemplate>;
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+    protected override string ErrorMessage => "Invalid dice throw template, should match something like 2d8+1d4+2+STR.";
+}

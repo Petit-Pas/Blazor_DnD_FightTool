@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Saves;
@@ -7,7 +7,7 @@ namespace DnDFightTool.Domain.DnDEntities.Saves;
 /// <summary>
 ///     Difficulty class
 ///     Meant to be used as a target for a <see cref="SaveRollResult"/>
-///     Is described by a <see cref="DiceThrowModifiersTemplate"/> so it can be numbers & wildcards
+///     Is described by a <see cref="DiceRollModifiersTemplate"/> so it can be numbers & wildcards
 /// </summary>
 public class DifficultyClassTemplate : IHashable
 {
@@ -24,13 +24,13 @@ public class DifficultyClassTemplate : IHashable
     /// <param name="expression"></param>
     public DifficultyClassTemplate(string expression)
     {
-        DifficultyClassExpression = new DiceThrowModifiersTemplate(expression);
+        DifficultyClassExpression = new DiceRollModifiersTemplate(expression);
     }
 
     /// <summary>
     ///     The expression describing the difficulty class
     /// </summary>
-    public DiceThrowModifiersTemplate DifficultyClassExpression { get; set; } = new DiceThrowModifiersTemplate("DC");
+    public DiceRollModifiersTemplate DifficultyClassExpression { get; set; } = new DiceRollModifiersTemplate("DC");
 
     /// <summary>
     ///    Get the actual value of the difficulty class by evaluating the wildcards in the expression

@@ -18,7 +18,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         _fightContext = fightContext;
     }
 
-    public async override Task<ICommandResponse<NoResponse>> Execute(ApplyDamageRollResultsCommand command)
+    public async override Task<ICommandResponse<NoResponse>> ExecuteAsync(ApplyDamageRollResultsCommand command)
     {
         var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(ApplyDamageRollResultsCommandHandler)} could not find target with id {command.TargetId}");
         var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ApplyDamageRollResultsCommandHandler)} could not find caster with id {command.CasterId}");
@@ -33,9 +33,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
             totalDamage += (int)Math.Floor(actualDamage);
         }
 
-        var takeDamageCommand = new TakeDamageCommand(target.Id, totalDamage);
-        command.AddToSubCommands(takeDamageCommand);
-        await _mediator.Execute(takeDamageCommand);
+        await _mediator.SendAsSubCommandAsync(new TakeDamageCommand(target.Id, totalDamage), parentCommand: command);
 
         return CommandResponse.Success();
     }
@@ -49,7 +47,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
 
     private static double ApplySaveModifier(double actualDamage, SituationalDamageModifierEnum modifier, SaveRollResult? save, ICharacter target, ICharacter caster)
     {
-        if (save != null && save.IsSuccessful(target, caster))
+        if (save != null && save.IsSuccessful(caster, target))
         {
             var factor = modifier.GetFactor();
             return factor.ApplyOn(actualDamage);
@@ -57,11 +55,11 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         return actualDamage;
     }
 
-    public async override Task Redo(ApplyDamageRollResultsCommand command)
+    public async override Task RedoAsync(ApplyDamageRollResultsCommand command)
     {
         // The subcommands of this one are applying damages that were computed with resistance.
         // Since resistance might have changed, we clear the subcommands and re execute the command fully
-        command.SubCommands.Clear();
-        await Execute(command);
+        ClearSubCommands(command);
+        await ExecuteAsync(command);
     }
 }

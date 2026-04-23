@@ -1,0 +1,16 @@
+@using DnDEntitiesBlazorComponents.DnDEntities.AbilityScores
+@using MudBlazor
+@using SharedComponents.Dialogs
+
+<RollableDialogBase CanValidate=CanValidate OnValidateClick=ConfirmAsync>
+    <div class="save-header">
+        <AbilityChip Ability=_ability Variant=Variant.Outlined Color=Color.Default />
+        <MudText Typo=Typo.body1>DC: @_resolvedDc</MudText>
+    </div>
+    <MudDivider Class="my-2" />
+    <div class="save-roll">
+        <MudNumericField HideSpinButtons="true" Margin=Margin.Dense @bind-Value=_diceResult Label="d20" />
+        <MudText Typo=Typo.body1>@_savingModifier.ModifierString</MudText>
+        <MudText Typo=Typo.body1 Class="save-total">= @Total</MudText>
+    </div>
+</RollableDialogBase>

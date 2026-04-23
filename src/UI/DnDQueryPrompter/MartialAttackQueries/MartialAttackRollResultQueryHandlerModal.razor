@@ -1,0 +1,40 @@
+@using DnDFightTool.Domain.DnDEntities.Damage
+@using FightBlazorComponents.Entities.Dices.DiceRolls.Components
+@using MudBlazor
+@using SharedComponents.Dialogs
+@using SharedComponents.Icons
+
+@if (_rollResult is not null)
+{
+    <RollableDialogBase CanValidate=CanValidate OnValidateClick=ConfirmAsync>
+        <MudSelect T=DnDFightTool.Domain.Fight.Characters.FightingCharacter
+                   Label="Target"
+                   @bind-Value=SelectedTarget
+                   ToStringFunc="@(f => f?.Name ?? string.Empty)">
+            @foreach (var fighter in AvailableTargets)
+            {
+                <MudSelectItem Value=fighter>@fighter.Name</MudSelectItem>
+            }
+        </MudSelect>
+
+        <MudDivider Class="my-2" />
+
+        <MudText Typo=Typo.subtitle2 Class="mb-1">Hit Roll</MudText>
+        <HitRollResultInputComponent RollResult=_rollResult.HitRoll />
+
+        <MudDivider Class="my-2" />
+
+        <MudText Typo=Typo.subtitle2 Class="mb-1">Damage Rolls</MudText>
+        @foreach (var damageRoll in _rollResult.DamageRolls)
+        {
+            <div class="damage-row">
+                <MudTooltip Text=@damageRoll.DamageType.ToReadableString() Placement=Placement.Top>
+                    <MudIcon Icon=@CustomIcons.TwDnd.GetDamageIcon(damageRoll.DamageType) Color=Color.Default />
+                </MudTooltip>
+                <MudText Typo=Typo.body2 Class="damage-expression">@damageRoll.Dices.Expression</MudText>
+                <DiceRollResultInputComponent RollResult=damageRoll Class="damage-input" ValueChanged="@(_ => StateHasChanged())" />
+                <MudText Typo=Typo.body1 Class="damage-total">= @GetDamageTotal(damageRoll)</MudText>
+            </div>
+        }
+    </RollableDialogBase>
+}

@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 
 namespace DnDFightTool.Domain.DnDEntities.MartialAttacks;
@@ -31,12 +31,12 @@ public class MartialAttackTemplateCollection : Dictionary<Guid, MartialAttackTem
                 [
                     new DamageRollTemplate()
                     {
-                        Dices = new DiceThrowTemplate("2d12"),
+                        Dices = new DiceRollTemplate("2d12"),
                         Type = DamageTypeEnum.Cold
                     },
                     new DamageRollTemplate()
                     {
-                        Dices = new DiceThrowTemplate("1d4+3"),
+                        Dices = new DiceRollTemplate("1d4+3"),
                         Type = DamageTypeEnum.Thunder
                     }
                 ],

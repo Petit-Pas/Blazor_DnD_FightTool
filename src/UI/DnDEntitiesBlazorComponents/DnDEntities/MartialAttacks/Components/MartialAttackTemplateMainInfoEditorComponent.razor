@@ -1,4 +1,4 @@
-@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components
+@using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceRolls.Components
 @using MudBlazor
 @using SharedComponents
 
@@ -10,7 +10,7 @@
         <MudText Typo="Typo.h5" Class=""> Main Informations </MudText>
         <MudForm @ref=_form Model="AttackTemplate" Validation="@(AttackTemplateValidator.ValidateValue)" Class="f-column gap-3">
             <MudTextField Label="Name" @bind-Value="AttackTemplate.Name" For="@(() => AttackTemplate.Name)" Typo="Typo.h5" />
-            <DiceThrowModifiersTemplateEditorComponent @ref=_diceThrowEditor @bind-Value="AttackTemplate.ToHitModifiers" Label="To Hit Modifiers" />
+            <DiceRollModifiersTemplateEditorComponent @ref=_diceThrowEditor @bind-Value="AttackTemplate.ToHitModifiers" Label="To Hit Modifiers" />
         </MudForm>
     </MudPaper>
 }

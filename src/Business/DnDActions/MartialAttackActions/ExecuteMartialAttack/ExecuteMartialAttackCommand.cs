@@ -29,11 +29,27 @@ public class ExecuteMartialAttackCommand : CasterCommandBase
     /// </summary>
     public MartialAttackRollResult? MartialAttackRollResult { get; set; }
 
+
     /// <summary>
     ///     Calculated during the execution of the command
     ///     If it changes between the execution and the redo, the attack will not be redone but rather re-queried.
     /// </summary>
     public string AttackTemplateHash { get; internal set; } = "";
+
+    /// <summary>
+    ///     Remember if the attack hit or not
+    /// </summary>
+    public bool AttackDidHit { get; internal set; }
+
+    /// <summary>
+    ///     Clears the cached state of the command, to force a re-query on the next execution.
+    /// </summary>
+    internal void ClearCachedState()
+    {
+        MartialAttackRollResult = null;
+        AttackTemplateHash = "";
+        AttackDidHit = false;
+    }
 
     /// <summary>
     ///     Helper method to get the attack template from the caster's martial attacks

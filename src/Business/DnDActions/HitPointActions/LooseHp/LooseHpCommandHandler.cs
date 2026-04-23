@@ -13,7 +13,7 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
         _fightContext = fightContext;
     }
 
-    public override Task<ICommandResponse<NoResponse>> Execute(LooseHpCommand command)
+    public override Task<ICommandResponse<NoResponse>> ExecuteAsync(LooseHpCommand command)
     {
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseHpCommandHandler)} could not find target with id {command.TargetId}");
 
@@ -26,10 +26,12 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
             hitPoints.CurrentHps = 0;
         }
 
+        _fightContext.NotifyFighterUpdated(command.TargetId);
+
         return Task.FromResult(CommandResponse.Success());
     }
 
-    public override void Undo(LooseHpCommand command)
+    public override Task UndoAsync(LooseHpCommand command)
     {
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseHpCommandHandler)} could not find target with id {command.TargetId}");
 
@@ -39,10 +41,14 @@ public class LooseHpCommandHandler : CommandHandlerBase<LooseHpCommand>
         }
 
         hitPoints.CurrentHps += command.CorrectedAmount.Value;
+
+        _fightContext.NotifyFighterUpdated(command.TargetId);
+
+        return Task.CompletedTask;
     }
 
-    public async override Task Redo(LooseHpCommand command)
+    public async override Task RedoAsync(LooseHpCommand command)
     {
-        await Execute(command);
+        await ExecuteAsync(command);
     }
 }

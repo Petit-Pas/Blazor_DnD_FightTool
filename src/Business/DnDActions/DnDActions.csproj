@@ -9,13 +9,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="UndoableMediator" Version="1.0.0" />
+		<PackageReference Include="UndoableMediator" Version="2.0.0-alpha1" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
 		<ProjectReference Include="..\DnDQueries\DnDQueries.csproj" />
-		<ProjectReference Include="..\DnDUserInterations\DnDUserInterations.csproj" />
 	</ItemGroup>
 
 </Project>

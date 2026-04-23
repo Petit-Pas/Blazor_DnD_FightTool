@@ -15,7 +15,7 @@ public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
         _fightContext = fightContext;
     }
 
-    public override Task<ICommandResponse<NoResponse>> Execute(TakeDamageCommand command)
+    public override async Task<ICommandResponse<NoResponse>> ExecuteAsync(TakeDamageCommand command)
     {
         var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(TakeDamageCommandHandler)} could not find target with id {command.TargetId}");
 
@@ -24,29 +24,24 @@ public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
         if (target.HitPoints.CurrentTempHps != 0)
         {
             var tempHpToRemove = Math.Min(command.Damage, target.HitPoints.CurrentTempHps);
-
-            var looseTempHpCommand = new LooseTempHpCommand(target.Id, tempHpToRemove);
             remainingDamage -= tempHpToRemove;
 
-            command.AddToSubCommands(looseTempHpCommand);
-            _mediator.Execute(looseTempHpCommand);
+            await _mediator.SendAsSubCommandAsync(new LooseTempHpCommand(target.Id, tempHpToRemove), parentCommand: command);
         }
 
         if (remainingDamage > 0)
         {
-            var looseHpCommand = new LooseHpCommand(target.Id, remainingDamage);
-            command.AddToSubCommands(looseHpCommand);
-            _mediator.Execute(looseHpCommand);
+            await _mediator.SendAsSubCommandAsync(new LooseHpCommand(target.Id, remainingDamage), parentCommand: command);
         }
 
-        return Task.FromResult(CommandResponse.Success());
+        return CommandResponse.Success();
     }
 
-    public async override Task Redo(TakeDamageCommand command)
+    public async override Task RedoAsync(TakeDamageCommand command)
     {
         // The subcommands of this one are applying damages based on the current hp/temp hps of the target
         // Since hitPoints might have changed, we clear the subcommands and re execute the command fully
-        command.SubCommands.Clear();
-        await Execute(command);
+        ClearSubCommands(command);
+        await ExecuteAsync(command);
     }
 }

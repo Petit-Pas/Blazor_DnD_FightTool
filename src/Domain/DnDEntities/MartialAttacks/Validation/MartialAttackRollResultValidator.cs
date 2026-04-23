@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using FluentValidation;
 
 namespace DnDFightTool.Domain.DnDEntities.MartialAttacks.Validation;

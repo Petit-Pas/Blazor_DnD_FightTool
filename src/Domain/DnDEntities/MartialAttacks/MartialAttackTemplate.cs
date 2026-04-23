@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using Memory.Hashes;
 
@@ -26,7 +26,7 @@ public class MartialAttackTemplate : IHashable
     /// <summary>
     ///     Modifiers to apply to the attack roll, supports wildcards and static modifiers
     /// </summary>
-    public DiceThrowModifiersTemplate ToHitModifiers { get; set; } = new DiceThrowModifiersTemplate();
+    public DiceRollModifiersTemplate ToHitModifiers { get; set; } = new DiceRollModifiersTemplate();
 
     /// <summary>
     ///     The damage to apply to the target if the attack hits

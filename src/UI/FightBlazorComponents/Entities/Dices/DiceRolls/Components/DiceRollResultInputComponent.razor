@@ -1,0 +1,19 @@
+@using MudBlazor
+@using SharedComponents
+
+@inherits StylableComponentBase
+
+@if (RollResult is not null)
+{
+    <MudForm Model=RollResult Validation="@(Validator.ValidateValue)">
+        <MudNumericField HideSpinButtons="true"
+                         Margin=Margin.Dense
+                         Value=RollResult.Result
+                         ValueChanged="@(async (int v) => await OnValueChanged(v))"
+                         Label=@Label
+                         Class=@Class
+                         Style=@Style
+                         Immediate="true"
+                         For="@(() => RollResult.Result)" />
+    </MudForm>
+}

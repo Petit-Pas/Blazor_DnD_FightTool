@@ -1,0 +1,15 @@
+@using MudBlazor
+@using SharedComponents
+
+@inherits StylableComponentBase
+
+@if (RollResult is not null)
+{
+    <div class="hit-roll-row">
+        <DiceRollResultInputComponent RollResult=RollResult Label="d20" Class="hit-roll-input" />
+        @if (!string.IsNullOrEmpty(RollResult.Modifiers.Expression))
+        {
+            <MudText Typo=Typo.body1 Class="hit-roll-modifier">@RollResult.Modifiers.Expression</MudText>
+        }
+    </div>
+}

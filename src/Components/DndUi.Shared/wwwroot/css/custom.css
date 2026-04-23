@@ -1,0 +1,31 @@
+/* MudBlazor extensions */
+
+.mud-appbar-text {
+    color: var(--mud-palette-appbar-text) !important;
+}
+
+/* The way MudBlazor handles this for tabs makes no sense, the whole content is shifted away and then brought back, which makes some padding make no sense afterward */
+.mud-tabs-panels > .mud-grid-spacing-xs-6 {
+    margin: 0 !important;
+    width: auto !important;
+}
+.mud-tabs-panels > .mud-grid-spacing-xs-6 > .mud-grid-item {
+    padding: 12px !important;
+}
+
+/* 
+ * 
+ *  Custom styles for the DnD UI  
+ *  
+*/
+
+
+html, body, #app, .mud-main-content {
+    height: 100%;
+}
+
+/* meant to be used instead of flex-fill to define what happens when the content is too big */
+.flex-fill-shrink {
+    flex: 1 1 auto !important;
+    min-height: 0;
+}

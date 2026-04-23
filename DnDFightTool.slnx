@@ -1,0 +1,49 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Business/">
+    <Project Path="src/Business/DnDActions/DnDActions.csproj" />
+    <Project Path="src/Business/DnDQueries/DnDQueries.csproj" />
+  </Folder>
+  <Folder Name="/src/Components/">
+    <Project Path="src/Components/DndUi.Shared/DndUi.Shared.csproj" />
+    <Project Path="src/Components/DndUi.Web/DndUi.Web.csproj" />
+    <Project Path="src/Components/DndUi/DndUi.csproj">
+      <Deploy Solution="Debug|Any CPU" />
+    </Project>
+  </Folder>
+  <Folder Name="/src/Domain/">
+    <Project Path="src/Domain/DnDEntities/DnDEntities.csproj" />
+    <Project Path="src/Domain/Fight/Fight.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="src/Infrastructure/AspNetCoreExtensions/AspNetCoreExtensions.csproj" />
+    <Project Path="src/Infrastructure/Extensions/Extensions.csproj" />
+    <Project Path="src/Infrastructure/IO/IO.csproj" />
+    <Project Path="src/Infrastructure/Mapping/Mapping.csproj" />
+    <Project Path="src/Infrastructure/Memory/Memory.csproj" />
+  </Folder>
+  <Folder Name="/src/UI/">
+    <Project Path="src/UI/DnDEntitiesBlazorComponents/DnDEntitiesBlazorComponents.csproj" />
+    <Project Path="src/UI/DnDQueryPrompter/DnDQueryPrompter.csproj" />
+    <Project Path="src/UI/FightBlazorComponents/FightBlazorComponents.csproj" />
+    <Project Path="src/UI/JavascriptInteropExtensions/JavascriptInteropExtensions.csproj" />
+    <Project Path="src/UI/SharedComponents/SharedComponents.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/Business/">
+    <Project Path="tests/Business/DnDActionsTests/DnDActionsTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Domain/">
+    <Project Path="tests/Domain/DnDEntitiesTests/DnDEntitiesTests.csproj" />
+    <Project Path="tests/Domain/DomainTestsUtilities/DomainTestsUtilities.csproj" />
+    <Project Path="tests/Domain/FightTests/FightTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Infrastructure/">
+    <Project Path="tests/Infrastructure/MemoryTests/MemoryTests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Blazored.FluentValidation" Version="2.2.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+        <PackageReference Include="MudBlazor" Version="8.11.0" />
+        <PackageReference Include="UndoableMediator" Version="2.0.0-alpha1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\DndUi.Shared\DndUi.Shared.csproj" />
+        <ProjectReference Include="..\..\Infrastructure\AspNetCoreExtensions\AspNetCoreExtensions.csproj" />
+        <ProjectReference Include="..\..\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
+        <ProjectReference Include="..\..\UI\DnDQueryPrompter\DnDQueryPrompter.csproj" />
+        <ProjectReference Include="..\..\UI\FightBlazorComponents\FightBlazorComponents.csproj" />
+    </ItemGroup>
+
+</Project>

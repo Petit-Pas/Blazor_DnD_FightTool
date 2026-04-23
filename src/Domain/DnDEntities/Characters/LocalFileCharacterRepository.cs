@@ -10,16 +10,23 @@ namespace DnDFightTool.Domain.DnDEntities.Characters;
 public class LocalFileCharacterRepository : ICharacterRepository
 {
     // Note that this path will be transformed on windows on C/user/*username*/appdata/local/package/*app_uid*_suffix/localappdata... 
-    private readonly static string _mainFolder = Environment.GetEnvironmentVariable("LocalAppData") + @"\DnDFightTool";
+    private readonly static string _defaultFolder = Environment.GetEnvironmentVariable("LocalAppData") + @"\DnDFightTool";
 
+    private readonly string _mainFolder;
     private readonly Dictionary<Guid, Character> _characters;
     private readonly IFileManager _fileManager;
     private readonly IJsonSerializer _jsonSerializer;
 
     public LocalFileCharacterRepository(IFileManager fileManager, IJsonSerializer jsonSerializer)
+        : this(fileManager, jsonSerializer, _defaultFolder)
+    {
+    }
+
+    public LocalFileCharacterRepository(IFileManager fileManager, IJsonSerializer jsonSerializer, string dataFolder)
     {
         _fileManager = fileManager ?? throw new ArgumentNullException(nameof(fileManager));
         _jsonSerializer = jsonSerializer ?? throw new ArgumentNullException(nameof(jsonSerializer));
+        _mainFolder = dataFolder ?? throw new ArgumentNullException(nameof(dataFolder));
         _characters = LoadCharacters();
     }
 

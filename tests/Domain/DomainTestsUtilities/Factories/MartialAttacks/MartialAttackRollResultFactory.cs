@@ -1,8 +1,8 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DomainTestsUtilities.Factories.Damage;
-using DomainTestsUtilities.Factories.Dices.DiceThrows;
+using DomainTestsUtilities.Factories.Dices;
 
 namespace DomainTestsUtilities.Factories.MartialAttacks;
 

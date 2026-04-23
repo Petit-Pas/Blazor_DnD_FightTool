@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
-using DnDFightTool.Domain.DnDEntities.AttackRolls.ArmorClasses;
+using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.DnDEntities.ArmorClasses;
 using DnDFightTool.Domain.DnDEntities.DamageAffinities;
 using DnDFightTool.Domain.DnDEntities.HitPoint;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;

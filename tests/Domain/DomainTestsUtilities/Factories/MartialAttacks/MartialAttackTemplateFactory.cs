@@ -1,9 +1,9 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices.DiceThrows;
+using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.DnDEntities.Dices;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.Statuses;
 using DomainTestsUtilities.Factories.Damage;
-using DomainTestsUtilities.Factories.Dices.DiceThrows;
+using DomainTestsUtilities.Factories.Dices;
 using DomainTestsUtilities.Factories.Status;
 
 namespace DomainTestsUtilities.Factories.MartialAttacks;
@@ -12,7 +12,7 @@ public static class MartialAttackTemplateFactory
 {
     public static MartialAttackTemplate Build(
         string? name = null,
-        DiceThrowModifiersTemplate? modifiers = null,
+        DiceRollModifiersTemplate? modifiers = null,
         DamageRollTemplateCollection? damages = null,
         StatusTemplateCollection? statuses = null,
         Guid? id = null

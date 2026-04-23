@@ -3,12 +3,12 @@ using AspNetCoreExtensions.IoC;
 using DnDEntitiesBlazorComponents.IoC;
 using DnDFightTool.Business.DnDActions;
 using DnDFightTool.Business.DnDQueries;
-using DnDFightTool.Business.DnDUserInteraction.IoC;
 using DnDFightTool.Domain.DnDEntities.Characters;
 using DnDFightTool.Domain.DnDEntities.Characters.Validation;
 using DnDFightTool.Domain.DnDEntities.IoC;
 using DnDFightTool.Domain.Fight;
-using DnDUserInteractionsComponents;
+using DnDQueryPrompter;
+using DnDQueryPrompter.SaveQueries;
 using Extensions;
 using FluentValidation;
 using IO.Files;
@@ -64,8 +64,7 @@ public static class MauiProgram
             .RegisterDnDEntitiesMappingConfigurations()
             .RegisterAspNetCoreExtensions()
             .RegisterDnDEntitiesBlazorComponentsServices()
-            .RegisterPropertyTargetedValidators(typeof(Character).Assembly)
-            .RegisterDnDUserInteractionServices();
+            .RegisterPropertyTargetedValidators(typeof(Character).Assembly);
 
         builder.Services.AddSingleton<IDialogServiceProvider, DialogServiceProvider>();
 

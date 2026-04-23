@@ -1,4 +1,4 @@
-﻿using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceThrows.Components;
+using DnDEntitiesBlazorComponents.DnDEntities.Dices.DiceRolls.Components;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks;
 using DnDFightTool.Domain.DnDEntities.MartialAttacks.Validation;
 using Microsoft.AspNetCore.Components;
@@ -18,7 +18,7 @@ public partial class MartialAttackTemplateMainInfoEditorComponent
     [Parameter]
     public MartialAttackTemplate? AttackTemplate { get; set; }
 
-    private DiceThrowModifiersTemplateEditorComponent? _diceThrowEditor;
+    private DiceRollModifiersTemplateEditorComponent? _diceThrowEditor;
 
     public async Task<bool> ValidateAsync()
     {

@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Morris.Blazor.FluentValidation" Version="3.2.0" />
+    <PackageReference Include="Morris.Blazor.Validation" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Business\DnDActions\DnDActions.csproj" />
+    <ProjectReference Include="..\..\Business\DnDQueries\DnDQueries.csproj" />
+    <ProjectReference Include="..\..\Domain\DnDEntities\DnDEntities.csproj" />
+    <ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
+    <ProjectReference Include="..\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
+    <ProjectReference Include="..\SharedComponents\SharedComponents.csproj" />
+  </ItemGroup>
+</Project>
