@@ -6,6 +6,7 @@ using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using SharedComponents.Dices;
 
 namespace DnDQueryPrompter.MartialAttackQueries;
 
@@ -13,13 +14,16 @@ namespace DnDQueryPrompter.MartialAttackQueries;
 ///     Modal dialog for entering the result of a martial attack roll.
 ///     The user selects a target, then fills in the hit roll and damage rolls.
 /// </summary>
-public partial class MartialAttackRollResultQueryHandlerModal
+public partial class MartialAttackRollResultQueryHandlerModal : IDisposable
 {
     [CascadingParameter]
     public required IMudDialogInstance MudDialog { get; set; }
 
     [Inject]
     public IFightContext FightContext { get; set; } = null!;
+
+    [Inject]
+    public IDiceRollNotifier DiceRollNotifier { get; set; } = null!;
 
     /// <summary>
     ///     The id of the character performing the attack.
@@ -39,13 +43,15 @@ public partial class MartialAttackRollResultQueryHandlerModal
     private MartialAttackTemplate? _attackTemplate;
     private ICharacter? _caster;
 
-    internal bool CanValidate => _selectedTargetId is not null
-        && _rollResult is not null
-        && _rollResult.HitRoll.Result > 0;
+    /// <summary>
+    ///     The confirm button is enabled once a target is selected and all dice have been rolled.
+    /// </summary>
+    internal bool CanValidate => _selectedTargetId is not null && !DiceRollNotifier.CanRoll;
 
     /// <inheritdoc />
     protected override void OnInitialized()
     {
+        DiceRollNotifier.StateChanged += OnDiceRollStateChanged;
         _excludedFighterIds = [CasterId];
 
         var caster = FightContext[CasterId];
@@ -65,6 +71,38 @@ public partial class MartialAttackRollResultQueryHandlerModal
         var hitRoll = new HitRollResult(_attackTemplate.ToHitModifiers);
         var damageRolls = _attackTemplate.Damages.Select(d => d.GetEmptyRollResult()).ToArray();
         _rollResult = new MartialAttackRollResult(hitRoll, damageRolls);
+    }
+
+    private void OnDiceRollStateChanged()
+    {
+        SyncCriticalState();
+        InvokeAsync(StateHasChanged);
+    }
+
+    /// <summary>
+    ///     Propagates the critical hit state from the hit roll to all damage rolls
+    ///     so their <see cref="DamageRollResult.Max"/> reflects crit range.
+    /// </summary>
+    private void SyncCriticalState()
+    {
+        if (_rollResult is null)
+        {
+            return;
+        }
+
+        var isCritical = _rollResult.HitRoll.IsACriticalHit();
+
+        foreach (var damageRoll in _rollResult.DamageRolls)
+        {
+            damageRoll.IsCritical = isCritical;
+        }
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        DiceRollNotifier.StateChanged -= OnDiceRollStateChanged;
     }
 
     private Task ConfirmAsync()

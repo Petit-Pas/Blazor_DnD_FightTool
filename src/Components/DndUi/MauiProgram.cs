@@ -10,6 +10,7 @@ using DnDFightTool.Domain.Fight;
 using DnDQueryPrompter;
 using DnDQueryPrompter.SaveQueries;
 using Extensions;
+using FightBlazorComponents.IoC;
 using FluentValidation;
 using IO.Files;
 using IO.Serialization;
@@ -64,6 +65,7 @@ public static class MauiProgram
             .RegisterDnDEntitiesMappingConfigurations()
             .RegisterAspNetCoreExtensions()
             .RegisterDnDEntitiesBlazorComponentsServices()
+            .RegisterFightBlazorComponentsServices()
             .RegisterPropertyTargetedValidators(typeof(Character).Assembly);
 
         builder.Services.AddSingleton<IDialogServiceProvider, DialogServiceProvider>();

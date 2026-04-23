@@ -5,6 +5,7 @@ using DnDFightTool.Domain.DnDEntities.Saves;
 using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using SharedComponents.Dices;
 
 namespace DnDQueryPrompter.SaveQueries;
 
@@ -12,13 +13,16 @@ namespace DnDQueryPrompter.SaveQueries;
 ///     Modal dialog for entering the result of a saving throw roll.
 ///     Displays the ability being saved, the resolved DC, saving modifier and total.
 /// </summary>
-public partial class SaveRollResultQueryHandlerModal
+public partial class SaveRollResultQueryHandlerModal : IDisposable
 {
     [CascadingParameter]
     public required IMudDialogInstance MudDialog { get; set; }
 
     [Inject]
     public IFightContext FightContext { get; set; } = null!;
+
+    [Inject]
+    public IDiceRollNotifier DiceRollNotifier { get; set; } = null!;
 
     /// <summary>
     ///     The save roll template describing the save to roll.
@@ -41,16 +45,18 @@ public partial class SaveRollResultQueryHandlerModal
     private AbilityEnum _ability;
     private int? _resolvedDc;
     private ScoreModifier _savingModifier = ScoreModifier.Empty;
-    private int _diceResult;
+    private SaveRollResult? _saveResult;
 
-    internal bool CanValidate => _diceResult > 0;
+    internal bool CanValidate => !DiceRollNotifier.CanRoll;
 
-    internal int Total => _diceResult + _savingModifier.Modifier;
+    internal int Total => (_saveResult?.Result ?? 0) + _savingModifier.Modifier;
 
     /// <inheritdoc />
     protected override void OnInitialized()
     {
+        DiceRollNotifier.StateChanged += OnDiceRollStateChanged;
         _ability = Save.TargetAbility;
+        _saveResult = Save.GetEmptyRollResult();
 
         var caster = FightContext[CasterId];
         if (caster is not null)
@@ -65,12 +71,23 @@ public partial class SaveRollResultQueryHandlerModal
         }
     }
 
+    private void OnDiceRollStateChanged() => InvokeAsync(StateHasChanged);
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        DiceRollNotifier.StateChanged -= OnDiceRollStateChanged;
+    }
+
     private Task ConfirmAsync()
     {
-        var result = Save.GetEmptyRollResult();
-        result.RolledResult = _diceResult;
+        if (_saveResult is null)
+        {
+            return Task.CompletedTask;
+        }
 
-        MudDialog.Close(DialogResult.Ok(result));
+        MudDialog.Close(DialogResult.Ok(_saveResult));
 
         return Task.CompletedTask;
     }

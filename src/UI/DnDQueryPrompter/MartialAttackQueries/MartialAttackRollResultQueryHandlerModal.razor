@@ -4,6 +4,8 @@
 @using SharedComponents.Dialogs
 @using SharedComponents.Icons
 
+@implements IDisposable
+
 @if (_rollResult is not null)
 {
     <RollableDialogBase CanValidate=CanValidate OnValidateClick=ConfirmAsync>
@@ -32,7 +34,7 @@
                     <MudIcon Icon=@CustomIcons.TwDnd.GetDamageIcon(damageRoll.DamageType) Color=Color.Default />
                 </MudTooltip>
                 <MudText Typo=Typo.body2 Class="damage-expression">@damageRoll.Dices.Expression</MudText>
-                <DiceRollResultInputComponent RollResult=damageRoll Class="damage-input" ValueChanged="@(_ => StateHasChanged())" />
+                <DiceRollResultInputComponent RollResult=damageRoll Class="damage-input" />
                 <MudText Typo=Typo.body1 Class="damage-total">= @GetDamageTotal(damageRoll)</MudText>
             </div>
         }

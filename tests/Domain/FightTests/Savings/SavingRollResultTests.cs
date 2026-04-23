@@ -29,7 +29,7 @@ public class SavingRollResultTests
 
             _saveRoll = new SaveRollResult(new DifficultyClassTemplate("10"), AbilityEnum.Intelligence)
             {
-                RolledResult = 10,
+                Result = 10,
             };
         }
 
@@ -40,7 +40,7 @@ public class SavingRollResultTests
         public void Should_Be_Succesfull_When_Target_Is_Lower_Than_RolledResult(int rolledResult, bool expectedResult)
         {
             // Arrange
-            _saveRoll.RolledResult = rolledResult;
+            _saveRoll.Result = rolledResult;
 
             // Act
             var result = _saveRoll.IsSuccessful(_caster, _target);
@@ -56,7 +56,7 @@ public class SavingRollResultTests
         public void Should_Use_Caster_Saving_Throw_When_Target_Is_DC(int rolledResult, bool expectedResult)
         {
             // Arrange
-            _saveRoll.RolledResult = rolledResult;
+            _saveRoll.Result = rolledResult;
             _saveRoll.Target = new DifficultyClassTemplate("DC");
 
             // Act
@@ -72,7 +72,7 @@ public class SavingRollResultTests
         public void Should_Use_Modifier_Of_The_Proper_Ability(AbilityEnum ability, bool expectedResult)
         {
             // Arrange
-            _saveRoll.RolledResult = 8;
+            _saveRoll.Result = 8;
             _saveRoll.Ability = ability;
 
             // Act
@@ -95,7 +95,7 @@ public class SavingRollResultTests
             var ability = _target.AbilityScores.First(x => x.Ability == AbilityEnum.Intelligence);
             ability.HasMastery = mastery;
             ability.Score = abilityScore;
-            _saveRoll.RolledResult = rolledResult;
+            _saveRoll.Result = rolledResult;
 
             // Act
             var result = _saveRoll.IsSuccessful(_caster, _target);

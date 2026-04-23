@@ -6,7 +6,7 @@ namespace DnDFightTool.Domain.DnDEntities.Damage;
 ///    Represents the result of a damage roll
 ///    // TODO Model is simplified for now, this represents the damage rolled, but we don't have the details of the roll
 /// </summary>
-public class DamageRollResult : IDiceRollResult
+public class DamageRollResult : IDiceRollResult, IRollRangeChangedNotifier
 {
     public DamageRollResult(DiceRollTemplate dices, DamageTypeEnum damageType, SituationalDamageModifierEnum successfulSaveModifier = SituationalDamageModifierEnum.Normal)
     {
@@ -24,10 +24,32 @@ public class DamageRollResult : IDiceRollResult
     public int Result { get => Damage; set => Damage = value; }
 
     /// <inheritdoc />
-    public int Min => Dices.MinimumRoll();
+    public int Min => IsCritical ? Dices.MinimumRoll() * 2 : Dices.MinimumRoll();
 
     /// <inheritdoc />
-    public int Max => Dices.MaximumRoll();
+    public int Max => IsCritical ? Dices.MaximumRoll() * 2 : Dices.MaximumRoll();
+
+    /// <summary>
+    ///     Whether this damage roll is part of a critical hit, doubling the minimum and maximum allowed values.
+    ///     Fires <see cref="RangeChanged"/> when the value changes.
+    /// </summary>
+    public bool IsCritical
+    {
+        get => _isCritical;
+        set
+        {
+            if (_isCritical != value)
+            {
+                _isCritical = value;
+                RangeChanged?.Invoke();
+            }
+        }
+    }
+
+    private bool _isCritical;
+
+    /// <inheritdoc />
+    public event Action? RangeChanged;
 
     /// <summary>
     ///     Represents the dices that were rolled (not the result of the roll)

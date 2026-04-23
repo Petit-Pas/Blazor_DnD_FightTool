@@ -298,6 +298,125 @@
 			"problemMatcher": [
 				"$msCompile"
 			]
+		},
+		{
+			"label": "Build after roll wiring",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build after notifier refactor",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build after injection refactor",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build after roll fix",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build after CanRoll removal",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build after streamlined roll inputs",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj",
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Delete D20RollResult.cs",
+			"type": "shell",
+			"command": "Remove-Item -Path 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\DnDEntities\\Dices\\D20RollResult.cs' -Force"
+		},
+		{
+			"label": "Build after refactor",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1 | Select-String -Pattern 'error|succeeded|failed' | Select-Object -First 30"
+		},
+		{
+			"label": "Run all tests",
+			"type": "shell",
+			"command": "dotnet test DnDFightTool.slnx --verbosity normal 2>&1 | Select-Object -Last 30"
+		},
+		{
+			"label": "Check test failures",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity normal 2>&1 | Select-String -Pattern 'Failed|Error|error' | Select-Object -First 20"
+		},
+		{
+			"label": "Get failed test names",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build 2>&1 | Select-String -Pattern '\\bFailed\\b|\\bÉchoué\\b|échoué' | Select-Object -First 20"
+		},
+		{
+			"label": "Get failed test names v2",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build 2>&1 | Select-String -Pattern 'chou' | Select-Object -First 20"
+		},
+		{
+			"label": "Git changed files",
+			"type": "shell",
+			"command": "git diff --name-only"
+		},
+		{
+			"label": "Git changed files tail",
+			"type": "shell",
+			"command": "git diff --name-only | Select-Object -Last 10"
+		},
+		{
+			"label": "Build after IDiceRollResult.Roll",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1 | Select-String -Pattern 'error|succeeded|failed' | Select-Object -First 15"
+		},
+		{
+			"label": "Build result",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1 | Select-Object -Last 10"
+		},
+		{
+			"label": "Build after range notifier",
+			"type": "shell",
+			"command": "dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1 | Select-Object -Last 8"
+		},
+		{
+			"label": "Build check",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool; dotnet restore DnDFightTool.slnx 2>&1 | Select-Object -Last 5; dotnet build DnDFightTool.slnx --no-restore 2>&1 | Select-Object -Last 40"
+		},
+		{
+			"label": "Build slnx check",
+			"type": "shell",
+			"command": "dotnet restore d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 5; dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --no-restore 2>&1 | Select-Object -Last 40"
 		}
 	]
 }

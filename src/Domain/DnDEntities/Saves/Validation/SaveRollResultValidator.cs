@@ -12,7 +12,7 @@ public class SaveRollResultValidator : AbstractValidator<SaveRollResult>
     /// </summary>
     public SaveRollResultValidator()
     {
-        RuleFor(x => x.RolledResult)
+        RuleFor(x => x.Result)
             .InclusiveBetween(1, 20);
     }
 }

@@ -1,23 +1,22 @@
 ﻿@using DnDFightTool.Domain.DnDEntities.AbilityScores
+@using FightBlazorComponents.Entities.Dices.DiceRolls.Components
 @using MudBlazor
-@using SharedComponents.Buttons.AtomicButtonsPreset
-@using SharedComponents.Buttons.ButtonContainers
 @using SharedComponents.Dialogs
 @using SharedComponents.Icons
 
-<RollableDialogBase 
-    CanRoll=CanRoll OnRollClick=RollAsync 
-    CanValidate=CanValidate OnValidateClick=CloseAsync>
-    <MudTable ContainerClass="pt-2" Class="overflow-y-auto" Elevation=2 Items="@Fighters" Dense="true" Striped="true" Hover="true">
+@implements IDisposable
+
+<RollableDialogBase CanValidate=CanValidate OnValidateClick=CloseAsync>
+    <MudTable ContainerClass="pt-2" Class="overflow-y-auto" Elevation=2 Items=_rows Dense="true" Striped="true" Hover="true">
         <RowTemplate>
             <MudTd Class="w-1" style="text-wrap: nowrap;">
-                <MudText> @context.Name </MudText>
+                <MudText> @context.Fighter.Name </MudText>
             </MudTd>
             <MudTd Style="width: 80px;">
-                <MudInput @bind-Value=context.InitiativeRoll />
+                <DiceRollResultInputComponent RollResult=context.Roll />
             </MudTd>
             <MudTd>
-                <MudText> @context.AbilityScores.GetModifier(AbilityEnum.Dexterity) </MudText>
+                <MudText> @context.Fighter.AbilityScores.GetModifier(AbilityEnum.Dexterity) </MudText>
             </MudTd>
         </RowTemplate>
     </MudTable>

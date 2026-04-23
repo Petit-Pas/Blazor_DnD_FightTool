@@ -14,6 +14,7 @@ using DnDFightTool.Domain.DnDEntities.IoC;
 using DnDFightTool.Domain.Fight;
 using DnDQueryPrompter;
 using Extensions;
+using FightBlazorComponents.IoC;
 using FluentValidation;
 using IO.Files;
 using IO.Serialization;
@@ -56,6 +57,7 @@ builder.Services
     .RegisterDnDEntitiesMappingConfigurations()
     .RegisterAspNetCoreExtensions()
     .RegisterDnDEntitiesBlazorComponentsServices()
+    .RegisterFightBlazorComponentsServices()
     .RegisterPropertyTargetedValidators(typeof(Character).Assembly);
 
 builder.Services.AddSingleton<IDialogServiceProvider, DialogServiceProvider>();

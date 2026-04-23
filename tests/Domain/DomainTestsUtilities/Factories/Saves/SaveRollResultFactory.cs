@@ -13,7 +13,7 @@ public static class SaveRollResultFactory
     {
         return new SaveRollResult(difficultyClass ?? DifficultyClassFactory.Build(), ability ?? AbilityEnum.Wisdom)
         {
-            RolledResult = rolledResult ?? 0
+            Result = rolledResult ?? 0
         };
     }
 }

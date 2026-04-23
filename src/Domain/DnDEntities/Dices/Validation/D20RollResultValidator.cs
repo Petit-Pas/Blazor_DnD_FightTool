@@ -3,11 +3,10 @@ using FluentValidation;
 namespace DnDFightTool.Domain.DnDEntities.Dices.Validation;
 
 /// <summary>
-///     Validator for <see cref="D20BaseRollResult" />
+///     Validator for any <see cref="D20BaseRollResult" />.
+///     Validates that the result is between 1 and 20.
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public abstract class D20RollResultValidator<T> : AbstractValidator<T>
-    where T : D20BaseRollResult
+public class D20RollResultValidator : AbstractValidator<D20BaseRollResult>
 {
     /// <summary>
     ///    Ctor

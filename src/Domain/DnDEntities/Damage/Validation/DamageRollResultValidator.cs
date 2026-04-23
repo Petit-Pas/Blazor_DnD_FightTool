@@ -13,8 +13,8 @@ public class DamageRollResultValidator : AbstractValidator<DamageRollResult>
     public DamageRollResultValidator()
     {
         RuleFor(x => x.Damage)
-            .GreaterThanOrEqualTo(x => x.Dices.MinimumRoll())
-            .LessThanOrEqualTo(x => x.Dices.MaximumRoll() * 2);
+            .GreaterThanOrEqualTo(x => x.Min)
+            .LessThanOrEqualTo(x => x.Max);
     }
 }
 

@@ -1,38 +1,51 @@
-﻿using DnDFightTool.Domain.Fight.Characters;
+﻿using DnDFightTool.Domain.DnDEntities.Dices;
+using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using SharedComponents.Dices;
 
 namespace FightBlazorComponents.Entities.FightingCharacters.Dialog;
 
-public partial class InitiativeInputDialog
+public partial class InitiativeInputDialog : IDisposable
 {
     [CascadingParameter]
     public required IMudDialogInstance MudDialog { get; set; }
 
+    [Inject]
+    public IDiceRollNotifier DiceRollNotifier { get; set; } = null!;
+
     [Parameter]
     public FightingCharacter[] Fighters { get; set; } = [];
 
-    private bool CanValidate => !Fighters.Any(x => x.InitiativeRoll == 0);
+    private (FightingCharacter Fighter, RawD20RollResult Roll)[] _rows = [];
 
-    private bool CanRoll => !CanValidate;
+    private bool CanValidate => !DiceRollNotifier.CanRoll;
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        DiceRollNotifier.StateChanged += OnDiceRollStateChanged;
+        _rows = Fighters.Select(f => (f, new RawD20RollResult())).ToArray();
+    }
+
+    private void OnDiceRollStateChanged() => InvokeAsync(StateHasChanged);
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+        DiceRollNotifier.StateChanged -= OnDiceRollStateChanged;
+    }
 
     private Task CloseAsync()
     {
+        foreach (var (fighter, roll) in _rows)
+        {
+            fighter.InitiativeRoll = roll.Result;
+        }
+
         MudDialog.Close(DialogResult.Ok(true));
 
         return Task.CompletedTask;
     }
-
-    private Task RollAsync()
-    {
-        // TODO clean this up
-        var random = new Random();
-        foreach (var fighter in Fighters.Where(x => x.InitiativeRoll == 0))
-        {
-            fighter.InitiativeRoll = random.Next(1, 20);
-        }
-
-        return Task.CompletedTask;
-    }
-
 }

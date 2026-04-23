@@ -1,14 +1,16 @@
 ﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
 using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.Dices;
 
 namespace DnDFightTool.Domain.DnDEntities.Saves;
 
 // TODO at some point it should allow for temporary modifiers
 
 /// <summary>
-///    Result of a save roll
+///    Result of a save roll. Inherits <see cref="RawD20RollResult"/> so it carries
+///    the d20 value (1–20) through <see cref="IDiceRollResult.Result"/>.
 /// </summary>
-public class SaveRollResult
+public class SaveRollResult : RawD20RollResult
 {
     /// <summary>
     ///     Ctor
@@ -20,11 +22,6 @@ public class SaveRollResult
         Target = target;
         Ability = ability;
     }
-
-    /// <summary>
-    ///     Rolled result, does not contain bonuses
-    /// </summary>
-    public int RolledResult { get; set; }
 
     /// <summary>
     ///     DC of the save, Needs to be evaluated with the caster's ability score & all
@@ -49,6 +46,6 @@ public class SaveRollResult
 
         var modifier = targetCharacter.AbilityScores.GetSavingModifier(Ability);
 
-        return RolledResult + modifier.Modifier >= target;
+        return Result + modifier.Modifier >= target;
     }
 }

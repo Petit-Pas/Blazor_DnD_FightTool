@@ -16,7 +16,7 @@
             }
             
             <ButtonRow Style="grid-row: 2">
-                <RollButton Disabled=@(!CanRoll)
+                <RollButton Disabled=@(!IsRollEnabled)
                             OnCLick=RollAsync />
                 <ConfirmButton Disabled=@(!CanValidate)
                                OnClick=ValidateAsync />

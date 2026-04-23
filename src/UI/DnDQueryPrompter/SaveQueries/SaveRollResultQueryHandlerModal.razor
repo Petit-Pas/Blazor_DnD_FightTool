@@ -1,6 +1,9 @@
 @using DnDEntitiesBlazorComponents.DnDEntities.AbilityScores
+@using FightBlazorComponents.Entities.Dices.DiceRolls.Components
 @using MudBlazor
 @using SharedComponents.Dialogs
+
+@implements IDisposable
 
 <RollableDialogBase CanValidate=CanValidate OnValidateClick=ConfirmAsync>
     <div class="save-header">
@@ -9,7 +12,7 @@
     </div>
     <MudDivider Class="my-2" />
     <div class="save-roll">
-        <MudNumericField HideSpinButtons="true" Margin=Margin.Dense @bind-Value=_diceResult Label="d20" />
+        <DiceRollResultInputComponent RollResult=_saveResult Label="d20" />
         <MudText Typo=Typo.body1>@_savingModifier.ModifierString</MudText>
         <MudText Typo=Typo.body1 Class="save-total">= @Total</MudText>
     </div>

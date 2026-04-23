@@ -1,14 +1,19 @@
+using FluentValidation;
+
 namespace DnDFightTool.Domain.DnDEntities.Dices.Validation;
 
 /// <summary>
-///     Validator for <see cref="HitRollResult" />
+///     Validator for <see cref="HitRollResult" />.
+///     Validates that the d20 result is between 1 and 20.
 /// </summary>
-public class HitRollResultValidator : D20RollResultValidator<HitRollResult>
+public class HitRollResultValidator : AbstractValidator<HitRollResult>
 {
     /// <summary>
-    ///     Ctor that also calls base ctor since rules are defined there already
+    ///     Ctor
     /// </summary>
-    public HitRollResultValidator() : base()
+    public HitRollResultValidator()
     {
+        RuleFor(x => x.Result)
+            .InclusiveBetween(1, 20);
     }
 }

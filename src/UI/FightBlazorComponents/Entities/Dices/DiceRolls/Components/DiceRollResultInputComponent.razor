@@ -3,9 +3,9 @@
 
 @inherits StylableComponentBase
 
-@if (RollResult is not null)
+@if (RollResult is not null && HasDice)
 {
-    <MudForm Model=RollResult Validation="@(Validator.ValidateValue)">
+    <MudForm @ref=_form Model=RollResult Validation="@(Validator.ValidateValue)">
         <MudNumericField HideSpinButtons="true"
                          Margin=Margin.Dense
                          Value=RollResult.Result
