@@ -1,8 +1,8 @@
-﻿using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components.Web;
-using DnDEntitiesBlazorComponents;
+using CharacterSheetBlazorComponents;
 using Mapping;
 using MudBlazor;
 using DnDFightTool.Domain.Fight.DomainExtensions.HitPoint;

@@ -417,6 +417,131 @@
 			"label": "Build slnx check",
 			"type": "shell",
 			"command": "dotnet restore d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 5; dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --no-restore 2>&1 | Select-Object -Last 40"
+		},
+		{
+			"label": "Delete moved files",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool\\src\\Domain\\DnDEntities; Remove-Item -Force Dices\\Dices.cs, Dices\\Wildcard.cs, Dices\\DiceRollTemplate.cs, Dices\\DiceRollModifiersTemplate.cs, Dices\\Modifiers\\ScoreModifier.cs, Dices\\IDiceRollResult.cs, Dices\\IRollRangeChangedNotifier.cs, Dices\\D20BaseRollResult.cs, Dices\\RawD20RollResult.cs, Dices\\ModifiedD20RollResult.cs, Dices\\HitRollResult.cs; Remove-Item -Force Dices\\Validation\\DiceRollTemplateValidator.cs, Dices\\Validation\\DiceRollModifiersTemplateValidator.cs, Dices\\Validation\\DiceRollResultValidator.cs, Dices\\Validation\\D20RollResultValidator.cs, Dices\\Validation\\HitRollResultValidator.cs; Remove-Item -Force Damage\\DamageRollResult.cs, Damage\\SituationalDamageModifierEnum.cs, Damage\\Validation\\DamageRollResultValidator.cs; Remove-Item -Force MartialAttacks\\MartialAttackRollResult.cs, MartialAttacks\\Validation\\MartialAttackRollResultValidator.cs; Remove-Item -Force Saves\\SaveRollResult.cs, Saves\\Validation\\SaveRollResultValidator.cs; Remove-Item -Force Statuses\\AppliedStatus.cs; cd d:\\Code\\Perso\\DnDFightTool\\src\\Domain\\Fight; Remove-Item -Force DomainExtensions\\MartialAttacks\\MartialAttackTemplateExtensions.cs, DomainExtensions\\Damage\\DamageRollTemplateExtensions.cs; Write-Host 'All files deleted'"
+		},
+		{
+			"label": "Bulk search replace",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool; Get-ChildItem -Path 'src\\Domain\\DnDEntities' -Recurse -Filter '*.cs' | ForEach-Object { $content = Get-Content $_.FullName -Raw; $newContent = $content -replace 'using DnDFightTool\\.Domain\\.DnDEntities\\.Dices\\.Validation;', 'using DnDFightTool.Domain.RollTemplate.Validation;' -replace 'using DnDFightTool\\.Domain\\.DnDEntities\\.Dices\\.Modifiers;', 'using DnDFightTool.Domain.RollTemplate.Modifiers;' -replace 'using DnDFightTool\\.Domain\\.DnDEntities\\.Dices;', 'using DnDFightTool.Domain.RollTemplate;'; if ($content -ne $newContent) { Set-Content $_.FullName $newContent -NoNewline; Write-Host \"Updated: $($_.FullName)\" } }; Write-Host 'Done'"
+		},
+		{
+			"label": "Bulk replace dices ns",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool; Get-ChildItem -Path 'src\\Domain\\DnDEntities' -Recurse -Filter '*.cs' | Where-Object { $_.FullName -notmatch '\\\\(bin|obj)\\\\' } | ForEach-Object { $c = Get-Content $_.FullName -Raw; $n = $c -replace 'using DnDFightTool\\.Domain\\.DnDEntities\\.Dices\\.Validation;', 'using DnDFightTool.Domain.RollTemplate.Validation;' -replace 'using DnDFightTool\\.Domain\\.DnDEntities\\.Dices\\.Modifiers;', 'using DnDFightTool.Domain.RollTemplate.Modifiers;' -replace 'using DnDFightTool\\.Domain\\.DnDEntities\\.Dices;', 'using DnDFightTool.Domain.RollTemplate;'; if ($c -ne $n) { Set-Content $_.FullName $n -NoNewline; Write-Host \"Updated: $($_.Name)\" } }; Write-Host 'Bulk done'"
+		},
+		{
+			"label": "Rename DnDEntities folder",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool\\src\\Domain; Rename-Item -Path DnDEntities -NewName CharacterSheet; Rename-Item -Path CharacterSheet\\DnDEntities.csproj -NewName CharacterSheet.csproj; Write-Host 'Folder and csproj renamed'"
+		},
+		{
+			"label": "List domain dirs",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool\\src\\Domain; Get-ChildItem CharacterSheet | Where-Object { $_.Name -notin 'bin','obj' } | ForEach-Object { Write-Host $_.Name }; Write-Host '---'; Get-ChildItem DnDEntities | Where-Object { $_.Name -notin 'bin','obj' } | ForEach-Object { Write-Host $_.Name }"
+		},
+		{
+			"label": "Move DnDEntities to CharacterSheet",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool\\src\\Domain; Remove-Item -Recurse -Force CharacterSheet\\bin, CharacterSheet\\obj -ErrorAction SilentlyContinue; Copy-Item -Path DnDEntities\\* -Destination CharacterSheet -Recurse -Force; Remove-Item -Recurse -Force DnDEntities; Rename-Item -Path CharacterSheet\\DnDEntities.csproj -NewName CharacterSheet.csproj; Write-Host 'Moved and renamed successfully'"
+		},
+		{
+			"label": "Global ns rename",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool; $count=0; Get-ChildItem -Path 'src','tests' -Recurse -Include '*.cs','*.razor' | Where-Object { $_.FullName -notmatch '\\\\(bin|obj)\\\\' } | ForEach-Object { $c = Get-Content $_.FullName -Raw; if ($c -match 'DnDEntities') { $n = $c -replace 'DnDFightTool\\.Domain\\.DnDEntities', 'DnDFightTool.Domain.CharacterSheet'; if ($c -ne $n) { Set-Content $_.FullName $n -NoNewline; $count++; Write-Host \"Updated: $($_.FullName -replace [regex]::Escape($PWD.Path + '\\'), '')\" } } }; Write-Host \"Total files updated: $count\""
+		},
+		{
+			"label": "Update csproj refs",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool; $count=0; Get-ChildItem -Path 'src','tests' -Recurse -Include '*.csproj' | ForEach-Object { $c = Get-Content $_.FullName -Raw; $n = $c -replace 'DnDEntities\\\\DnDEntities\\.csproj', 'CharacterSheet\\CharacterSheet.csproj'; if ($c -ne $n) { Set-Content $_.FullName $n -NoNewline; $count++; Write-Host \"Updated: $($_.Name)\" } }; Write-Host \"Total csproj updated: $count\""
+		},
+		{
+			"label": "Fix Dices ns to RollTemplate",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool; $count=0; Get-ChildItem -Path 'src','tests' -Recurse -Include '*.cs','*.razor' | Where-Object { $_.FullName -notmatch '\\\\(bin|obj)\\\\' } | ForEach-Object { $c = Get-Content $_.FullName -Raw; $n = $c -replace 'using DnDFightTool\\.Domain\\.CharacterSheet\\.Dices\\.Validation;', 'using DnDFightTool.Domain.RollTemplate.Validation;' -replace 'using DnDFightTool\\.Domain\\.CharacterSheet\\.Dices\\.Modifiers;', 'using DnDFightTool.Domain.RollTemplate.Modifiers;' -replace '@using DnDFightTool\\.Domain\\.CharacterSheet\\.Dices', '@using DnDFightTool.Domain.RollTemplate' -replace 'using DnDFightTool\\.Domain\\.CharacterSheet\\.Dices;', 'using DnDFightTool.Domain.RollTemplate;'; if ($c -ne $n) { Set-Content $_.FullName $n -NoNewline; $count++; Write-Host \"Updated: $($_.FullName -replace [regex]::Escape($PWD.Path+'\\'), '')\" } }; Write-Host \"Total: $count\""
+		},
+		{
+			"label": "Build full solution",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 50"
+		},
+		{
+			"label": "Build slnx",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 50"
+		},
+		{
+			"label": "Build slnx v2",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 30"
+		},
+		{
+			"label": "Build slnx v3",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 20"
+		},
+		{
+			"label": "Build slnx v4",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 15"
+		},
+		{
+			"label": "Run all tests",
+			"type": "shell",
+			"command": "dotnet test d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --verbosity normal 2>&1 | Select-Object -Last 30"
+		},
+		{
+			"label": "Show failed tests",
+			"type": "shell",
+			"command": "dotnet test d:\\Code\\Perso\\DnDFightTool\\tests\\Business\\DnDActionsTests\\DnDActionsTests.csproj --no-build --verbosity normal 2>&1 | Select-String -Pattern 'Échoué|Failed' | Select-Object -First 20"
+		},
+		{
+			"label": "Show echoue tests",
+			"type": "shell",
+			"command": "dotnet test d:\\Code\\Perso\\DnDFightTool\\tests\\Business\\DnDActionsTests\\DnDActionsTests.csproj --no-build --verbosity normal 2>&1 | Select-String -Pattern 'chou' | Select-Object -First 20"
+		},
+		{
+			"label": "Build after RollTemplate removal",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 20"
+		},
+		{
+			"label": "Delete RollTemplate files",
+			"type": "shell",
+			"command": "Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\CharacterSheet\\DomainExtensions\\RollTemplate' -Recurse -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate\\Dices.cs' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate\\Wildcard.cs' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate\\DiceRollTemplate.cs' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate\\DiceRollModifiersTemplate.cs' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate\\RollTemplate.csproj' -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate\\Modifiers' -Recurse -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate\\Validation' -Recurse -Force; Write-Host 'Deleted RollTemplate project and DomainExtensions'"
+		},
+		{
+			"label": "Build after delete",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 15"
+		},
+		{
+			"label": "Rename and restructure UI project",
+			"type": "shell",
+			"command": "cd d:\\Code\\Perso\\DnDFightTool\\src\\UI; Rename-Item 'DnDEntitiesBlazorComponents' 'CharacterSheetBlazorComponents'; Write-Host 'Folder renamed'; cd CharacterSheetBlazorComponents; Rename-Item 'DnDEntitiesBlazorComponents.csproj' 'CharacterSheetBlazorComponents.csproj'; Write-Host 'Csproj renamed'; Move-Item 'DnDEntities\\*' '.' -Force; Write-Host 'DnDEntities contents moved up'; Remove-Item 'DnDEntities' -Force; Write-Host 'DnDEntities folder removed'; dir | Select-Object Name"
+		},
+		{
+			"label": "Bulk replace namespaces",
+			"type": "shell",
+			"command": "$root = 'd:\\Code\\Perso\\DnDFightTool'; $files = Get-ChildItem $root -Include '*.cs','*.razor','*.csproj' -Recurse | Where-Object { $_.FullName -notmatch '\\\\(bin|obj)\\\\' }; $count = 0; foreach ($f in $files) { $content = Get-Content $f.FullName -Raw; if ($content -match 'DnDEntitiesBlazorComponents') { $newContent = $content -replace 'DnDEntitiesBlazorComponents\\.DnDEntities\\.', 'CharacterSheetBlazorComponents.'; $newContent = $newContent -replace 'DnDEntitiesBlazorComponents', 'CharacterSheetBlazorComponents'; if ($newContent -ne $content) { Set-Content $f.FullName -Value $newContent -NoNewline; $count++; Write-Host \"Updated: $($f.FullName)\" } } }; Write-Host \"`nTotal files updated: $count\""
+		},
+		{
+			"label": "Build after UI rename",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 20"
+		},
+		{
+			"label": "Cleanup empty dirs",
+			"type": "shell",
+			"command": "if (Test-Path 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\CharacterSheet\\DomainExtensions') { Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\CharacterSheet\\DomainExtensions' -Recurse -Force; Write-Host 'Removed empty DomainExtensions' } else { Write-Host 'DomainExtensions already gone' }; if (Test-Path 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate') { $items = Get-ChildItem 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate' -Recurse | Where-Object { $_.FullName -notmatch '\\\\(bin|obj)\\\\' -and $_.Name -ne 'bin' -and $_.Name -ne 'obj' }; if ($items.Count -eq 0) { Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Domain\\RollTemplate' -Recurse -Force; Write-Host 'Removed RollTemplate (only bin/obj left)' } else { Write-Host 'RollTemplate has non-build files:'; $items | ForEach-Object { Write-Host $_.FullName } } } else { Write-Host 'RollTemplate already gone' }"
+		},
+		{
+			"label": "Run all tests",
+			"type": "shell",
+			"command": "dotnet test d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --verbosity normal 2>&1 | Select-Object -Last 30"
 		}
 	]
 }

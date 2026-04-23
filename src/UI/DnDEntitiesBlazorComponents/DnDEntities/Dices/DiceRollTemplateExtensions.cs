@@ -1,5 +1,5 @@
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Dices;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.Dices;
 
 namespace DnDEntitiesBlazorComponents.DnDEntities.Dices;
 

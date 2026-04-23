@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
+        <ProjectReference Include="..\..\UI\CharacterSheetBlazorComponents\CharacterSheetBlazorComponents.csproj" />
         <ProjectReference Include="..\..\UI\DnDQueryPrompter\DnDQueryPrompter.csproj" />
         <ProjectReference Include="..\..\UI\FightBlazorComponents\FightBlazorComponents.csproj" />
     </ItemGroup>

@@ -21,6 +21,7 @@
 		<ProjectReference Include="..\..\Infrastructure\IO\IO.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Mapping\Mapping.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Memory\Memory.csproj" />
+		<ProjectReference Include="..\RollTemplate\RollTemplate.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

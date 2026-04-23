@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
-using DnDFightTool.Domain.DnDEntities.Saves;
+using DnDFightTool.Domain.CharacterSheet.AbilityScores;
+using DnDFightTool.Domain.CharacterSheet.Saves;
 
 namespace DomainTestsUtilities.Factories.Saves;
 

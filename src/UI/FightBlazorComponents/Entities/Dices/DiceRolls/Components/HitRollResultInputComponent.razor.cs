@@ -1,4 +1,4 @@
-using DnDFightTool.Domain.DnDEntities.Dices;
+using DnDFightTool.Domain.Rolls;
 using Microsoft.AspNetCore.Components;
 using SharedComponents;
 

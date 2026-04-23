@@ -17,13 +17,4 @@ public class SaveRollTemplate : IHashable
     ///     Set to the DC of the caster by default
     /// </summary>
     public DifficultyClassTemplate Difficulty { get; set; } = new DifficultyClassTemplate("DC");
-
-    /// <summary>
-    ///     Creates a SaveRollResult from the template
-    /// </summary>
-    /// <returns></returns>
-    public SaveRollResult GetEmptyRollResult()
-    {
-        return new SaveRollResult(Difficulty, TargetAbility);
-    }
 }

@@ -1,6 +1,6 @@
-using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
+using DnDFightTool.Domain.CharacterSheet.Damage;
+using DnDFightTool.Domain.Rolls;
+using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 using DomainTestsUtilities.Factories.Damage;
 using DomainTestsUtilities.Factories.Dices;
 

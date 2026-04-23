@@ -1,4 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.MartialAttacks;
+using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
+using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;

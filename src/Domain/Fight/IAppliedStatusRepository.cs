@@ -1,5 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Statuses;
-using DnDFightTool.Domain.Fight.Events.AppliedStatusUpdated;
+﻿using DnDFightTool.Domain.Fight.Events.AppliedStatusUpdated;
 
 namespace DnDFightTool.Domain.Fight;
 

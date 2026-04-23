@@ -1,9 +1,10 @@
-﻿using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
+using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Statuses;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.Statuses;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
+using DnDFightTool.Domain.Fight.DomainExtensions.Statuses;
 using Memory.Hashes;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;

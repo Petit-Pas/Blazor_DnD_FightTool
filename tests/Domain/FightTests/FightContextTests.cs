@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using DnDFightTool.Domain.DnDEntities.Characters;
+using System.Linq;
+using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using DomainTestsUtilities.Factories.Characters;

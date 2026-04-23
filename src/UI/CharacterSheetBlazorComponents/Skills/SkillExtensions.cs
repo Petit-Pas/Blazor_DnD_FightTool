@@ -1,0 +1,35 @@
+using System.ComponentModel;
+using DnDFightTool.Domain.CharacterSheet.Skills;
+using SharedComponents.Icons;
+
+namespace CharacterSheetBlazorComponents.Skills;
+
+internal static class SkillExtensions
+{
+    /// <summary>
+    ///     Gets the icon to use to represent the mastery of a skill
+    /// </summary>
+    /// <param name="skill"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidEnumArgumentException"></exception>
+    public static string GetIcon(this Skill skill)
+    {
+        return skill.Mastery switch
+        {
+            SkillMasteryEnum.Normal => CustomIcons.FontAwesome.StarEmpty,
+            SkillMasteryEnum.Mastery => CustomIcons.FontAwesome.StarHalf,
+            SkillMasteryEnum.Expertise => CustomIcons.FontAwesome.StarFull,
+            _ => throw new InvalidEnumArgumentException($"{nameof(skill.Mastery)} does not have a proper icon mapped.")
+        };
+    }
+
+    /// <summary>
+    ///     Makes skills with underscores more readable
+    /// </summary>
+    /// <param name="skill"></param>
+    /// <returns></returns>
+    public static string ToReadableString(this SkillEnum skill)
+    {
+        return skill.ToString().Replace("_", " ");
+    }
+}

@@ -1,8 +1,9 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Dices;
-using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
+using DnDFightTool.Domain.DnDEntities.DomainExtensions.RollTemplate;
+using DnDFightTool.Domain.RollTemplate;
+using DnDFightTool.Domain.RollTemplate.Modifiers;
 using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Saves;

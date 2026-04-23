@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.HitPoint;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.HitPoint;
 using FakeItEasy;
 using DnDFightTool.Domain.Fight;
 using FluentAssertions;

@@ -8,10 +8,6 @@ internal static class MappingConfigurations
 {
     internal static IServiceCollection RegisterStatusMappingConfigurations(this IServiceCollection services)
     {
-        TypeAdapterConfig<AppliedStatus, AppliedStatus>
-            .NewConfig()
-            .IgnoreWhenDuplicating(x => x.Id);
-
         TypeAdapterConfig<StatusTemplate, StatusTemplate>
             .NewConfig()
             .IgnoreWhenDuplicating(x => x.Id);

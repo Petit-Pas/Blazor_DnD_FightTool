@@ -1,8 +1,8 @@
 using System.Linq;
-using DnDFightTool.Domain.DnDEntities.AbilityScores;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Dices;
-using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
+using DnDFightTool.Domain.CharacterSheet.AbilityScores;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.Dices;
+using DnDFightTool.Domain.CharacterSheet.Dices.Modifiers;
 using FluentAssertions;
 using NUnit.Framework;
 

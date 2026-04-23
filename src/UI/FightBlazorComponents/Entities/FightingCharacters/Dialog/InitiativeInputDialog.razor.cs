@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Dices;
+using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;

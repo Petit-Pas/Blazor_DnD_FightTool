@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
         <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
@@ -65,7 +65,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\UI\FightBlazorComponents\FightBlazorComponents.csproj" />
       <ProjectReference Include="..\..\Infrastructure\AspNetCoreExtensions\AspNetCoreExtensions.csproj" />
-      <ProjectReference Include="..\..\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj" />
+      <ProjectReference Include="..\..\UI\CharacterSheetBlazorComponents\CharacterSheetBlazorComponents.csproj" />
       <ProjectReference Include="..\..\UI\DnDQueryPrompter\DnDQueryPrompter.csproj" />
       <ProjectReference Include="..\DndUi.Shared\DndUi.Shared.csproj" />
     </ItemGroup>

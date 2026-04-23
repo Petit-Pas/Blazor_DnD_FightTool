@@ -1,5 +1,6 @@
 using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Dices;
+using DnDFightTool.Domain.DnDEntities.DomainExtensions.RollTemplate;
+using DnDFightTool.Domain.RollTemplate;
 using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Saves;

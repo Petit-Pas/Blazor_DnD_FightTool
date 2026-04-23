@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DnDEntities", "src\Domain\D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions", "src\Infrastructure\Extensions\Extensions.csproj", "{3DFE4133-6F23-4EE1-ABE0-A05E0A68424A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DnDEntitiesBlazorComponents", "src\UI\DnDEntitiesBlazorComponents\DnDEntitiesBlazorComponents.csproj", "{48C424D8-CE60-433E-BB5F-D1B8D4C5021A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CharacterSheetBlazorComponents", "src\UI\CharacterSheetBlazorComponents\CharacterSheetBlazorComponents.csproj", "{48C424D8-CE60-433E-BB5F-D1B8D4C5021A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fight", "src\Domain\Fight\Fight.csproj", "{8BCD4882-6227-4A12-AB15-FC64E2DDAB3D}"
 EndProject

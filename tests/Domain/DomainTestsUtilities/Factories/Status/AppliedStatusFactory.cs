@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Statuses;
+using DnDFightTool.Domain.Fight;
 
 namespace DomainTestsUtilities.Factories.Status;
 

@@ -1,5 +1,5 @@
-using DnDFightTool.Domain.DnDEntities.Dices;
-using DnDFightTool.Domain.DnDEntities.Dices.Validation;
+using DnDFightTool.Domain.Rolls;
+using DnDFightTool.Domain.Rolls.Validation;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using SharedComponents;
@@ -10,7 +10,7 @@ namespace FightBlazorComponents.Entities.Dices.DiceRolls.Components;
 /// <summary>
 ///     Generic input component for any <see cref="IDiceRollResult"/>.
 ///     Renders a numeric field validated through a <see cref="DiceRollResultValidator"/>.
-///     Self-registers with an <see cref="IDiceRollNotifier"/> cascading parameter when present,
+///     Self-registers with an <see cref="IDiceRollNotifier"/>
 ///     allowing a parent dialog to trigger auto-rolling via the Roll button.
 /// </summary>
 public partial class DiceRollResultInputComponent : StylableComponentBase, IDiceRollSubscriber, IDisposable

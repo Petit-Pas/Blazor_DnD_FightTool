@@ -1,11 +1,11 @@
-﻿using System.Reflection;
+using System.Reflection;
 using AspNetCoreExtensions.IoC;
-using DnDEntitiesBlazorComponents.IoC;
+using CharacterSheetBlazorComponents.IoC;
 using DnDFightTool.Business.DnDActions;
 using DnDFightTool.Business.DnDQueries;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Characters.Validation;
-using DnDFightTool.Domain.DnDEntities.IoC;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.Characters.Validation;
+using DnDFightTool.Domain.CharacterSheet.IoC;
 using DnDFightTool.Domain.Fight;
 using DnDQueryPrompter;
 using DnDQueryPrompter.SaveQueries;
@@ -44,6 +44,7 @@ public static class MauiProgram
 
         builder.Services.AddValidatorsFromAssemblyContaining<CharacterValidator>();
 
+        builder.Services.AddSingleton<IAppliedStatusRepository, AppliedStatusRepository>();
         builder.Services.AddSingleton<ICharacterRepository, LocalFileCharacterRepository>();
         builder.Services.AddSingleton<IFightContext, FightContext>();
         builder.Services.AddSingleton<IFileManager, LocalFileManager>();
@@ -62,9 +63,9 @@ public static class MauiProgram
         });
 
         builder.Services
-            .RegisterDnDEntitiesMappingConfigurations()
+            .RegisterCharacterSheetMappingConfigurations()
             .RegisterAspNetCoreExtensions()
-            .RegisterDnDEntitiesBlazorComponentsServices()
+            .RegisterCharacterSheetBlazorComponentsServices()
             .RegisterFightBlazorComponentsServices()
             .RegisterPropertyTargetedValidators(typeof(Character).Assembly);
 

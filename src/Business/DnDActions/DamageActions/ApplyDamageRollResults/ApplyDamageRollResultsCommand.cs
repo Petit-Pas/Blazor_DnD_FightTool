@@ -1,5 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Saves;
+using DnDFightTool.Domain.Rolls;
 
 namespace DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 

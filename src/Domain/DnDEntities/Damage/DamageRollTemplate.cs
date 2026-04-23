@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using DnDFightTool.Domain.DnDEntities.Dices;
+using DnDFightTool.Domain.RollTemplate;
 using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Damage;
@@ -21,13 +21,4 @@ public class DamageRollTemplate : IHashable
     ///     The type of the damage for this specific damage roll.
     /// </summary>
     public DamageTypeEnum Type { get; set; }
-
-    /// <summary>
-    ///     Creates an empty <see cref="DamageRollResult"/> with the same dices and type as this template.
-    /// </summary>
-    /// <returns></returns>
-    public DamageRollResult GetEmptyRollResult()
-    {
-        return new DamageRollResult(Dices, Type);
-    }
 }

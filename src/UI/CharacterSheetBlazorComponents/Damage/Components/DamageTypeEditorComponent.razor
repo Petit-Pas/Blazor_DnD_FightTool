@@ -1,0 +1,21 @@
+@using DnDFightTool.Domain.CharacterSheet.Damage
+@using MudBlazor
+@using SharedComponents.Icons
+
+<MudMenu>
+    <ActivatorContent>
+        <MudTooltip Text=@DamageType.ToReadableString() Placement=Placement.Top>
+            <MudIconButton Class="" Size=Size.Large Variant=Variant.Filled Color=Color.Primary Icon=@CustomIcons.TwDnd.GetDamageIcon(DamageType) />
+        </MudTooltip>
+    </ActivatorContent>
+    <ChildContent>
+        @foreach (var damageType in Enum.GetValues<DamageTypeEnum>())
+        {
+            <MudMenuItem 
+                Icon=@CustomIcons.TwDnd.GetDamageIcon(damageType)
+                Label=@damageType.ToReadableString()
+                OnClick="() => OnDamageTypeChanged(damageType)">
+            </MudMenuItem>
+        }
+    </ChildContent>
+</MudMenu>

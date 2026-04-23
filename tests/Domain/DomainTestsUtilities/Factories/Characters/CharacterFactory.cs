@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.CharacterSheet.Characters;
 
 namespace DomainTestsUtilities.Factories.Characters;
 

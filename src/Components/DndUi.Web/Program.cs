@@ -1,16 +1,14 @@
 using System.Reflection;
 using AspNetCoreExtensions.IoC;
-using DnDEntitiesBlazorComponents.IoC;
+using CharacterSheetBlazorComponents.IoC;
 using DnDFightTool.Business.DnDActions;
 using DnDFightTool.Business.DnDQueries;
 using DnDQueryPrompter.SaveQueries;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Characters.Validation;
-using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Damage.Validation;
-using DnDFightTool.Domain.DnDEntities.Dices;
-using DnDFightTool.Domain.DnDEntities.Dices.Validation;
-using DnDFightTool.Domain.DnDEntities.IoC;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.Characters.Validation;
+using DnDFightTool.Domain.Rolls;
+using DnDFightTool.Domain.Rolls.Validation;
+using DnDFightTool.Domain.CharacterSheet.IoC;
 using DnDFightTool.Domain.Fight;
 using DnDQueryPrompter;
 using Extensions;
@@ -54,9 +52,9 @@ builder.Services.ConfigureMediator(options =>
 });
 
 builder.Services
-    .RegisterDnDEntitiesMappingConfigurations()
+    .RegisterCharacterSheetMappingConfigurations()
     .RegisterAspNetCoreExtensions()
-    .RegisterDnDEntitiesBlazorComponentsServices()
+    .RegisterCharacterSheetBlazorComponentsServices()
     .RegisterFightBlazorComponentsServices()
     .RegisterPropertyTargetedValidators(typeof(Character).Assembly);
 

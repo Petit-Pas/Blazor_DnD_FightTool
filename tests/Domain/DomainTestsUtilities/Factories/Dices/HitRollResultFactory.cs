@@ -1,4 +1,5 @@
-using DnDFightTool.Domain.DnDEntities.Dices;
+using DnDFightTool.Domain.Rolls;
+using DnDFightTool.Domain.CharacterSheet.Dices;
 
 namespace DomainTestsUtilities.Factories.Dices;
 

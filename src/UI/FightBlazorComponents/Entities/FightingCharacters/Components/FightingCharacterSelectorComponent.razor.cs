@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.MartialAttacks;
+using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;

@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Statuses;
+using DnDFightTool.Domain.CharacterSheet.Statuses;
 using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;

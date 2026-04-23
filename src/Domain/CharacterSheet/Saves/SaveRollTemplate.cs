@@ -1,0 +1,20 @@
+using DnDFightTool.Domain.CharacterSheet.AbilityScores;
+using Memory.Hashes;
+
+namespace DnDFightTool.Domain.CharacterSheet.Saves;
+
+/// <summary>
+///     Template for a save roll
+/// </summary>
+public class SaveRollTemplate : IHashable
+{
+    /// <summary>
+    ///     The ability of the target to use for the check.
+    /// </summary>
+    public AbilityEnum TargetAbility { get; set; } = AbilityEnum.Wisdom;
+
+    /// <summary>
+    ///     Set to the DC of the caster by default
+    /// </summary>
+    public DifficultyClassTemplate Difficulty { get; set; } = new DifficultyClassTemplate("DC");
+}

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
-using DnDFightTool.Domain.DnDEntities.Statuses;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
+using DnDFightTool.Domain.CharacterSheet.Statuses;
 using DnDFightTool.Domain.Fight;
 using DomainTestsUtilities.Extensions;
 using DomainTestsUtilities.Factories.Saves;

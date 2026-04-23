@@ -1,0 +1,13 @@
+@using CharacterSheetBlazorComponents.Dices.DiceRolls.Components
+@using MudBlazor
+@using SharedComponents.Inputs
+
+@if (Template is not null)
+{
+    <div class="f-row align-items-center gap-3">
+        <DamageTypeEditorComponent @bind-DamageType=@Template.Type />
+        <DiceRollTemplateEditorComponent @ref=_damageField @bind-Value=@Template.Dices />
+        <MudIconButton Icon=@Icons.Material.Filled.Delete Color=Color.Error Variant="Variant.Filled" Size=Size.Large
+                       Class="rounded-circle" OnClick=Delete />
+    </div>
+}

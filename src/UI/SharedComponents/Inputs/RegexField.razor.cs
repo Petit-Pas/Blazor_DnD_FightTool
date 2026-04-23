@@ -1,4 +1,4 @@
-using DnDFightTool.Domain.DnDEntities.Dices.Validation;
+using DnDFightTool.Domain.CharacterSheet.Dices.Validation;
 using Extensions;
 using Microsoft.AspNetCore.Components;
 

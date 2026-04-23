@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Saves;
+using DnDFightTool.Domain.Rolls;
 
 namespace DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 

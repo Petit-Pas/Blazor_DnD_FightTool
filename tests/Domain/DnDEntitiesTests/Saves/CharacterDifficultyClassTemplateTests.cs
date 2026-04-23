@@ -1,6 +1,6 @@
-﻿using System;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Saves;
+using System;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.Saves;
 using FluentAssertions;
 using NUnit.Framework;
 

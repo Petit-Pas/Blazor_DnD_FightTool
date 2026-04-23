@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.AbilityScores;
+using DnDFightTool.Domain.CharacterSheet.AbilityScores;
 using FluentAssertions;
 using NUnit.Framework;
 using System.Linq;

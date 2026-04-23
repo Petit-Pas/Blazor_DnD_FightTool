@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.DamageAffinities;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.Damage;
+using DnDFightTool.Domain.CharacterSheet.DamageAffinities;
+using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using DomainTestsUtilities.Factories.Damage;

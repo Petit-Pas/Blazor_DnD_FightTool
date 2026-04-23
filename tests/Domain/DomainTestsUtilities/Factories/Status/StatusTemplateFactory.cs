@@ -1,5 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Saves;
-using DnDFightTool.Domain.DnDEntities.Statuses;
+using DnDFightTool.Domain.CharacterSheet.Saves;
+using DnDFightTool.Domain.CharacterSheet.Statuses;
 using DomainTestsUtilities.Factories.Saves;
 
 namespace DomainTestsUtilities.Factories.Status;

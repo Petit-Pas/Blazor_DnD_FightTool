@@ -17,8 +17,9 @@
     </Project>
   </Folder>
   <Folder Name="/src/Domain/">
-    <Project Path="src/Domain/DnDEntities/DnDEntities.csproj" />
+    <Project Path="src/Domain/CharacterSheet/CharacterSheet.csproj" />
     <Project Path="src/Domain/Fight/Fight.csproj" />
+    <Project Path="src/Domain/Rolls/Rolls.csproj" />
   </Folder>
   <Folder Name="/src/Infrastructure/">
     <Project Path="src/Infrastructure/AspNetCoreExtensions/AspNetCoreExtensions.csproj" />
@@ -28,7 +29,7 @@
     <Project Path="src/Infrastructure/Memory/Memory.csproj" />
   </Folder>
   <Folder Name="/src/UI/">
-    <Project Path="src/UI/DnDEntitiesBlazorComponents/DnDEntitiesBlazorComponents.csproj" />
+    <Project Path="src/UI/CharacterSheetBlazorComponents/CharacterSheetBlazorComponents.csproj" />
     <Project Path="src/UI/DnDQueryPrompter/DnDQueryPrompter.csproj" />
     <Project Path="src/UI/FightBlazorComponents/FightBlazorComponents.csproj" />
     <Project Path="src/UI/JavascriptInteropExtensions/JavascriptInteropExtensions.csproj" />

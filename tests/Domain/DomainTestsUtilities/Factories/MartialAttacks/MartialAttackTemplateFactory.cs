@@ -1,7 +1,7 @@
-using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
-using DnDFightTool.Domain.DnDEntities.Statuses;
+using DnDFightTool.Domain.CharacterSheet.Damage;
+using DnDFightTool.Domain.CharacterSheet.Dices;
+using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
+using DnDFightTool.Domain.CharacterSheet.Statuses;
 using DomainTestsUtilities.Factories.Damage;
 using DomainTestsUtilities.Factories.Dices;
 using DomainTestsUtilities.Factories.Status;

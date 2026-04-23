@@ -1,6 +1,6 @@
 using DnDFightTool.Business.DnDQueries;
 using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
+using DnDFightTool.Domain.Rolls;
 using MudBlazor;
 using UndoableMediator.Queries;
 

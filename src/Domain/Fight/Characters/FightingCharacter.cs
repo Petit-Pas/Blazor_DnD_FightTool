@@ -1,13 +1,13 @@
 
-using DnDFightTool.Domain.DnDEntities.AbilityScores;
-using DnDFightTool.Domain.DnDEntities.ArmorClasses;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.DamageAffinities;
-using DnDFightTool.Domain.DnDEntities.HitPoint;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
-using DnDFightTool.Domain.DnDEntities.Saves;
-using DnDFightTool.Domain.DnDEntities.Skills;
-using DnDFightTool.Domain.DnDEntities.Statuses;
+using DnDFightTool.Domain.CharacterSheet.AbilityScores;
+using DnDFightTool.Domain.CharacterSheet.ArmorClasses;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.DamageAffinities;
+using DnDFightTool.Domain.CharacterSheet.HitPoint;
+using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
+using DnDFightTool.Domain.CharacterSheet.Saves;
+using DnDFightTool.Domain.CharacterSheet.Skills;
+using DnDFightTool.Domain.CharacterSheet.Statuses;
 using Mapping;
 
 namespace DnDFightTool.Domain.Fight.Characters;

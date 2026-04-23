@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDFightTool.Domain.Fight;

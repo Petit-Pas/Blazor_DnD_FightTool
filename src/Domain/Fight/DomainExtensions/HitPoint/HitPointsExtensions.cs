@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.HitPoint;
+using DnDFightTool.Domain.CharacterSheet.HitPoint;
 
 namespace DnDFightTool.Domain.Fight.DomainExtensions.HitPoint;
 

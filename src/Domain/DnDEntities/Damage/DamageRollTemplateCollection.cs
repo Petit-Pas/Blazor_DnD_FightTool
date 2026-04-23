@@ -1,4 +1,5 @@
 ﻿using DnDFightTool.Domain.DnDEntities.Characters;
+using DnDFightTool.Domain.DnDEntities.DomainExtensions.RollTemplate;
 using Memory.Hashes;
 
 namespace DnDFightTool.Domain.DnDEntities.Damage;

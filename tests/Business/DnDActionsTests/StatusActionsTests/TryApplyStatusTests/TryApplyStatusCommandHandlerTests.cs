@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
-using DnDFightTool.Domain.DnDEntities.Saves;
-using DnDFightTool.Domain.DnDEntities.Statuses;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
+using DnDFightTool.Domain.Rolls;
+using DnDFightTool.Domain.CharacterSheet.Statuses;
 using DnDFightTool.Domain.Fight;
 using DomainTestsUtilities.Factories.Saves;
 using FakeItEasy;

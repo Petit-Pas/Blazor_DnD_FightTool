@@ -1,6 +1,6 @@
-﻿using DnDFightTool.Business.DnDQueries;
+using DnDFightTool.Business.DnDQueries;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
-using DnDFightTool.Domain.DnDEntities.Saves;
+using DnDFightTool.Domain.Rolls;
 using MudBlazor;
 using UndoableMediator.Queries;
 

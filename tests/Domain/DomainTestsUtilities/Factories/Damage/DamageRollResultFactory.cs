@@ -1,5 +1,6 @@
-using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Dices;
+using DnDFightTool.Domain.CharacterSheet.Damage;
+using DnDFightTool.Domain.Rolls;
+using DnDFightTool.Domain.CharacterSheet.Dices;
 
 namespace DomainTestsUtilities.Factories.Damage;
 

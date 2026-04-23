@@ -1,4 +1,5 @@
-﻿using DnDFightTool.Domain.DnDEntities.Saves;
+using DnDFightTool.Domain.CharacterSheet.Saves;
+using DnDFightTool.Domain.Rolls;
 
 namespace DnDFightTool.Business.DnDQueries.SaveQueries;
 

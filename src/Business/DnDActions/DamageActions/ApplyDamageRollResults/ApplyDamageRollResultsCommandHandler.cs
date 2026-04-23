@@ -1,7 +1,7 @@
-﻿using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Damage;
-using DnDFightTool.Domain.DnDEntities.Saves;
+using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.Damage;
+using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using UndoableMediator.Commands;

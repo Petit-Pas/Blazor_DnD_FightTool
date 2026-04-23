@@ -1,7 +1,8 @@
-﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
+using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
-using DnDFightTool.Domain.DnDEntities.MartialAttacks;
+using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
+using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using Memory.Hashes;

@@ -1,5 +1,5 @@
-using DnDEntitiesBlazorComponents;
-using DnDFightTool.Domain.DnDEntities.Characters;
+using CharacterSheetBlazorComponents;
+using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.Fight;
 using Mapping;
 using Microsoft.AspNetCore.Components;

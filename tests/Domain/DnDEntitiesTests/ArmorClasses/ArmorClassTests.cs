@@ -1,4 +1,4 @@
-using DnDFightTool.Domain.DnDEntities.ArmorClasses;
+using DnDFightTool.Domain.CharacterSheet.ArmorClasses;
 using FluentAssertions;
 using NUnit.Framework;
 

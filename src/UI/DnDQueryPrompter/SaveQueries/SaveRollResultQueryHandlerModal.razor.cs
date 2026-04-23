@@ -1,7 +1,9 @@
-using DnDFightTool.Domain.DnDEntities.AbilityScores;
-using DnDFightTool.Domain.DnDEntities.Characters;
-using DnDFightTool.Domain.DnDEntities.Dices.Modifiers;
-using DnDFightTool.Domain.DnDEntities.Saves;
+using DnDFightTool.Domain.CharacterSheet.AbilityScores;
+using DnDFightTool.Domain.CharacterSheet.Characters;
+using DnDFightTool.Domain.CharacterSheet.Dices.Modifiers;
+using DnDFightTool.Domain.CharacterSheet.Saves;
+using DnDFightTool.Domain.Rolls;
+using DnDFightTool.Domain.Rolls.Extensions;
 using DnDFightTool.Domain.Fight;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -14,7 +14,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Infrastructure\Mapping\Mapping.csproj" />
-		<ProjectReference Include="..\DnDEntities\DnDEntities.csproj" />
+		<ProjectReference Include="..\CharacterSheet\CharacterSheet.csproj" />
+		<ProjectReference Include="..\Rolls\Rolls.csproj" />
 	</ItemGroup>
 
 </Project>

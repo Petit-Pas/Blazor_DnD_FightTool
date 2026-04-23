@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Domain\DnDEntities\DnDEntities.csproj" />
+    <ProjectReference Include="..\..\..\src\Domain\CharacterSheet\CharacterSheet.csproj" />
   </ItemGroup>
 
 </Project>

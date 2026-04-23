@@ -1,4 +1,4 @@
-﻿using DnDFightTool.Domain.DnDEntities.Damage;
+using DnDFightTool.Domain.CharacterSheet.Damage;
 
 namespace SharedComponents.Icons;
 
