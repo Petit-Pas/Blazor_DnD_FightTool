@@ -1,6 +1,6 @@
 using DnDFightTool.Domain.CharacterSheet.Dices;
 using DnDFightTool.Domain.CharacterSheet.Statuses;
-using Extensions;
+using DnDFightTool.Infrastructure.Extensions;
 using FluentValidation;
 
 namespace DnDFightTool.Domain.CharacterSheet.MartialAttacks.Validation;

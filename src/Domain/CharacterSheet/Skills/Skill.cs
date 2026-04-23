@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using DnDFightTool.Domain.CharacterSheet.AbilityScores;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Dices.Modifiers;
-using Extensions;
+using DnDFightTool.Infrastructure.Extensions;
 
 namespace DnDFightTool.Domain.CharacterSheet.Skills;
 

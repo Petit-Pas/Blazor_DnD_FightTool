@@ -25,10 +25,13 @@ public partial class InitiativeInputDialog : IDisposable
     protected override void OnInitialized()
     {
         DiceRollNotifier.StateChanged += OnDiceRollStateChanged;
-        _rows = Fighters.Select(f => (f, new RawD20RollResult())).ToArray();
+        _rows = [.. Fighters.Select(f => (f, new RawD20RollResult()))];
     }
 
-    private void OnDiceRollStateChanged() => InvokeAsync(StateHasChanged);
+    private void OnDiceRollStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
 
     /// <inheritdoc />
     public void Dispose()

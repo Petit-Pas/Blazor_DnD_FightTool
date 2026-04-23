@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace DndUi.Shared.Components.Shared;
+namespace DnDFightTool.Components.DndUi.Shared.Components.Shared;
 
 public partial class ThemeToggle : ComponentBase
 {

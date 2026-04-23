@@ -10,10 +10,11 @@ applyTo: "**/*.cs"
 - **XML docs**: Use `///` XML doc comments on public and internal types and members. Use `<inheritdoc />` when implementing an interface member documented in the interface or when overriding a virtual member.
 - **Naming**: PascalCase for types, methods, properties. `_camelCase` for private fields. Interfaces use `I` prefix (e.g., `ICharacter`, `IMapper`, `IFightContext`).
 - **Root namespaces**: All projects follow `DnDFightTool.{Layer}.{ProjectName}`.
-  - Domain: `DnDFightTool.Domain.{ProjectName}` (e.g., `DnDFightTool.Domain.DnDEntities`, `DnDFightTool.Domain.Fight`)
+  - Domain: `DnDFightTool.Domain.{ProjectName}` (e.g., `DnDFightTool.Domain.CharacterSheet`, `DnDFightTool.Domain.Fight`, `DnDFightTool.Domain.Rolls`)
   - Business: `DnDFightTool.Business.{ProjectName}` (e.g., `DnDFightTool.Business.DnDActions`, `DnDFightTool.Business.DnDQueries`)
-  - Infrastructure: `DnDFightTool.Infrastructure.{ProjectName}` (e.g., `DnDFightTool.Infrastructure.Extensions`, `DnDFightTool.Infrastructure.Mapping`)
-  - UI: `DnDFightTool.UI.{ProjectName}` (e.g., `DnDFightTool.UI.SharedComponents`, `DnDFightTool.UI.DnDEntitiesBlazorComponents`, `DnDFightTool.UI.DnDQueryPrompter`)
+  - Infrastructure: `DnDFightTool.Infrastructure.{ProjectName}` (e.g., `DnDFightTool.Infrastructure.Extensions`, `DnDFightTool.Infrastructure.Mapping`, `DnDFightTool.Infrastructure.Memory`, `DnDFightTool.Infrastructure.IO`)
+  - UI: `DnDFightTool.UI.{ProjectName}` (e.g., `DnDFightTool.UI.SharedComponents`, `DnDFightTool.UI.CharacterSheetBlazorComponents`, `DnDFightTool.UI.FightBlazorComponents`, `DnDFightTool.UI.DnDQueryPrompter`)
+  - Components: `DnDFightTool.Components.{ProjectName}` (e.g., `DnDFightTool.Components.DndUi`, `DnDFightTool.Components.DndUi.Shared`, `DnDFightTool.Components.DndUi.Web`)
 - **Constructors**: Never use primary constructors. Always use standard constructors.
 - **Collections**: Use collection expressions (`[]`) where appropriate.
 - **Properties**: Auto-properties with initializers (e.g., `public Guid Id { get; set; } = Guid.NewGuid();`).

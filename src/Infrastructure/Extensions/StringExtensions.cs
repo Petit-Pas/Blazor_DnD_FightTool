@@ -1,4 +1,4 @@
-﻿namespace Extensions;
+﻿namespace DnDFightTool.Infrastructure.Extensions;
 
 public static class StringExtensions
 {

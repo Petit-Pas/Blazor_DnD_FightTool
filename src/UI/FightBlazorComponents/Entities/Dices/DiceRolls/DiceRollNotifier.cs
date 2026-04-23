@@ -20,10 +20,16 @@ public class DiceRollNotifier : IDiceRollNotifier
     public bool CanRoll => _subscribers.Count == 0 || !_subscribers.All(s => s.IsRolled);
 
     /// <inheritdoc />
-    public void Subscribe(IDiceRollSubscriber subscriber) => _subscribers.Add(subscriber);
+    public void Subscribe(IDiceRollSubscriber subscriber)
+    {
+        _subscribers.Add(subscriber);
+    }
 
     /// <inheritdoc />
-    public void Unsubscribe(IDiceRollSubscriber subscriber) => _subscribers.Remove(subscriber);
+    public void Unsubscribe(IDiceRollSubscriber subscriber)
+    {
+        _subscribers.Remove(subscriber);
+    }
 
     /// <inheritdoc />
     public async Task NotifyRollAsync()
@@ -37,6 +43,9 @@ public class DiceRollNotifier : IDiceRollNotifier
     }
 
     /// <inheritdoc />
-    public void RaiseStateChanged() => StateChanged?.Invoke();
+    public void RaiseStateChanged()
+    {
+        StateChanged?.Invoke();
+    }
 }
 

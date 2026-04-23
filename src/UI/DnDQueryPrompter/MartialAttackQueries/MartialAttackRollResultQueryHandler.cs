@@ -19,7 +19,7 @@ public class MartialAttackRollResultQueryHandler : QueryHandlerBase<MartialAttac
         _dialogServiceProvider = dialogServiceProvider ?? throw new ArgumentNullException(nameof(dialogServiceProvider));
     }
 
-    public override async Task<IQueryResponse<MartialAttackRollResult>> ExecuteAsync(MartialAttackRollResultQuery query)
+    public async override Task<IQueryResponse<MartialAttackRollResult>> ExecuteAsync(MartialAttackRollResultQuery query)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Small, FullWidth = true };
 

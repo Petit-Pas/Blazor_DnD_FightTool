@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Extensions;
+namespace DnDFightTool.Infrastructure.Extensions;
 
 public class PropertyTargetedValidator<T> : AbstractValidator<T>
 {

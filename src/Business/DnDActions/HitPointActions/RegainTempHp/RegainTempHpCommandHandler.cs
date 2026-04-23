@@ -27,7 +27,7 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
         return Task.FromResult(CommandResponse.Success());
     }
 
-    public override async Task UndoAsync(RegainTempHpCommand command)
+    public async override Task UndoAsync(RegainTempHpCommand command)
     {
         await base.UndoAsync(command);
 

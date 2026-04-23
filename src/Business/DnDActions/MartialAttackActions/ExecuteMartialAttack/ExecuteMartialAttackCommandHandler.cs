@@ -65,24 +65,12 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 
     public async override Task RedoAsync(ExecuteMartialAttackCommand command)
     {
-        var caster = _fightContext[command.CasterId];
-        if (caster == null)
-        {
-            // TODO should warn in the console and stop
-            throw new NotImplementedException($"Cannot redo a {command.GetType()} when the caster with id {command.CasterId} cannot be found.");
-        }
-        var target = _fightContext[command.MartialAttackRollResult!.TargetId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find target with id {command.MartialAttackRollResult!.TargetId}");
-        if (target == null)
-        {
-            // TODO should warn in the console and stop
-            throw new NotImplementedException($"Cannot redo a {command.GetType()} when the target with id {command.MartialAttackRollResult!.TargetId} cannot be found.");
-        }
-        var attackTemplate = command.GetAttackTemplate(caster);
-        if (attackTemplate == null)
-        {
-            // TODO should warn in the console and stop
-            throw new NotImplementedException($"Cannot redo a {command.GetType()} when the attack template with id {command.MartialAttackId} cannot be found.");
-        }
+        // TODO should warn in the console and stop
+        var caster = _fightContext[command.CasterId] ?? throw new NotImplementedException($"Cannot redo a {command.GetType()} when the caster with id {command.CasterId} cannot be found.");
+        // TODO should warn in the console and stop
+        var target = (_fightContext[command.MartialAttackRollResult!.TargetId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find target with id {command.MartialAttackRollResult!.TargetId}")) ?? throw new NotImplementedException($"Cannot redo a {command.GetType()} when the target with id {command.MartialAttackRollResult!.TargetId} cannot be found.");
+        // TODO should warn in the console and stop
+        var attackTemplate = command.GetAttackTemplate(caster) ?? throw new NotImplementedException($"Cannot redo a {command.GetType()} when the attack template with id {command.MartialAttackId} cannot be found.");
 
         // if the attack template has changed, we need to recompute everything
         // if the the attack did hit the first time, but does not hit anymore, or the opposite, we also need to recompute everything, since the subCommands will be different

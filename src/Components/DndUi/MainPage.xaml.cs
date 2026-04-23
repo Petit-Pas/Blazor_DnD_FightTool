@@ -1,4 +1,4 @@
-﻿namespace DndUi;
+﻿namespace DnDFightTool.Components.DndUi;
 
 public partial class MainPage : ContentPage
 {

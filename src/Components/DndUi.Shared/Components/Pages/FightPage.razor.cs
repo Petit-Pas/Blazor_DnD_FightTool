@@ -5,7 +5,7 @@ using DnDFightTool.UI.FightBlazorComponents.Entities.FightingCharacters.Dialog;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace DndUi.Shared.Components.Pages;
+namespace DnDFightTool.Components.DndUi.Shared.Components.Pages;
 
 public partial class FightPage : IDisposable
 {

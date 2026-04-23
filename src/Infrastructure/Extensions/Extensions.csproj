@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>Extensions</RootNamespace>
+    <RootNamespace>DnDFightTool.Infrastructure.Extensions</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -65,13 +65,17 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     private async void OnFighterUpdated(object? sender, Guid fighterId)
     {
         if (fighterId == Fighter.Id)
+        {
             await InvokeAsync(StateHasChanged);
+        }
     }
 
     private async void OnAppliedStatusUpdated(object sender, AppliedStatusUpdatedEventArgs e)
     {
         if (e.AffectedCharacterId == Fighter.Id)
+        {
             await InvokeAsync(StateHasChanged);
+        }
     }
 
     private void CardClicked(MouseEventArgs _)

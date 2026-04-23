@@ -1,5 +1,5 @@
 using DnDFightTool.Domain.CharacterSheet.Damage;
-using Extensions;
+using DnDFightTool.Infrastructure.Extensions;
 
 namespace DnDFightTool.Domain.Rolls;
 

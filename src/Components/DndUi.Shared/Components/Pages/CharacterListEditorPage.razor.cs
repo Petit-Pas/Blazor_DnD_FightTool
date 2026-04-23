@@ -4,7 +4,7 @@ using DnDFightTool.Domain.Fight;
 using DnDFightTool.Infrastructure.Mapping;
 using Microsoft.AspNetCore.Components;
 
-namespace DndUi.Shared.Components.Pages;
+namespace DnDFightTool.Components.DndUi.Shared.Components.Pages;
 
 public partial class CharacterListEditorPage
 {

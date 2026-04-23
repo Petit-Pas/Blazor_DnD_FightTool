@@ -4,7 +4,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>DndUi.Web</RootNamespace>
+        <RootNamespace>DnDFightTool.Components.DndUi.Web</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

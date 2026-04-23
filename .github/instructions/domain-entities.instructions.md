@@ -17,3 +17,8 @@ applyTo: "src/Domain/**/*.cs"
 - **No persistence assumptions**: Domain entities are persistence-agnostic. Repository interfaces (`ICharacterRepository`) live in the domain, implementations elsewhere.
 - **Validation**: Validators are separate classes in a `Validation/` subfolder, not inline in the entity. See the validators instruction file.
 - **Mapping**: Mapster `TypeAdapterConfig` registrations live in `Mapping/MappingConfigurations.cs` per feature area, registered via `IServiceCollection` extension methods.
+
+## `record` vs `class`
+
+- Use `record` for **immutable value types** — small, identity-less types whose equality is structural (e.g., `Wildcard`, `ScoreModifier`, `AppliedStatus`). These are never mutated after construction.
+- Use `class` for **mutable entities** — types that carry identity (`Guid Id`), are mutated over time, or participate in change-tracking via `IHashable` (e.g., `Character`, `AbilityScore`, `HitPoints`).

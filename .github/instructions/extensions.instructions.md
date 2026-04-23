@@ -4,7 +4,7 @@ applyTo: "src/Infrastructure/Extensions/**/*.cs"
 
 # Infrastructure Extensions Conventions
 
-- **Namespace**: `Extensions` (short, no prefix). Imported implicitly across the solution.
+- **Namespace**: `DnDFightTool.Infrastructure.Extensions`. Registered in consuming projects via explicit `using DnDFightTool.Infrastructure.Extensions;`.
 - **Enum helpers**: `EnumExtensions.GetAttribute<TAttribute>(this Enum value)` — retrieves a single custom attribute from an enum field via reflection. Logs warnings (not exceptions) for missing attributes.
 - **Array helpers**: `ArrayExtensions` — includes `.IsEmpty()` and similar utility methods.
 - **String helpers**: `StringExtensions` — includes `.When(bool condition)` for conditional CSS class building.

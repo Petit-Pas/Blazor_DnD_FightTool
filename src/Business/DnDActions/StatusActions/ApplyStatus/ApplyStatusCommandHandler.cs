@@ -30,7 +30,7 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
         return Task.FromResult(CommandResponse.Success());
     }
 
-    public override async Task UndoAsync(ApplyStatusCommand command)
+    public async override Task UndoAsync(ApplyStatusCommand command)
     {
         await base.UndoAsync(command);
 

@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Dices.Modifiers;
-using Extensions;
+using DnDFightTool.Infrastructure.Extensions;
 using DnDFightTool.Infrastructure.Memory.Hashes;
 
 namespace DnDFightTool.Domain.CharacterSheet.Dices;

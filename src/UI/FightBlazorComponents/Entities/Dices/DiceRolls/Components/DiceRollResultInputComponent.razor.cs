@@ -77,7 +77,10 @@ public partial class DiceRollResultInputComponent : StylableComponentBase, IDice
         }
     }
 
-    private void OnRangeChanged() => InvokeAsync(HandleRangeChangedAsync);
+    private void OnRangeChanged()
+    {
+        InvokeAsync(HandleRangeChangedAsync);
+    }
 
     private async Task HandleRangeChangedAsync()
     {
@@ -111,10 +114,7 @@ public partial class DiceRollResultInputComponent : StylableComponentBase, IDice
 
     private async Task OnValueChanged(int value)
     {
-        if (RollResult is not null)
-        {
-            RollResult.Result = value;
-        }
+        RollResult?.Result = value;
 
         await ValueChanged.InvokeAsync(value);
         DiceRollNotifier?.RaiseStateChanged();

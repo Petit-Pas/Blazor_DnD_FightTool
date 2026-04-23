@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Extensions;
+namespace DnDFightTool.Infrastructure.Extensions;
 
 public interface IRegexValidated
 {

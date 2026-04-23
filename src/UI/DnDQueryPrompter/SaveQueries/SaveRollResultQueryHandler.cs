@@ -10,13 +10,12 @@ public class SaveRollResultQueryHandler : QueryHandlerBase<SaveRollResultQuery, 
 {
     private readonly IDialogServiceProvider _dialogServiceProvider;
 
-    // TODO considering the dependency, this class should not be here and we should remove the dependency to MudBlazor
     public SaveRollResultQueryHandler(IDialogServiceProvider dialogServiceProvider)
     {
         _dialogServiceProvider = dialogServiceProvider ?? throw new ArgumentNullException(nameof(dialogServiceProvider));
     }
 
-    public override async Task<IQueryResponse<SaveRollResult>> ExecuteAsync(SaveRollResultQuery query)
+    public async override Task<IQueryResponse<SaveRollResult>> ExecuteAsync(SaveRollResultQuery query)
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
 

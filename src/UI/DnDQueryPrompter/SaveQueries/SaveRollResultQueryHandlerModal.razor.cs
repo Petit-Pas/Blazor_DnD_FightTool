@@ -73,7 +73,10 @@ public partial class SaveRollResultQueryHandlerModal : IDisposable
         }
     }
 
-    private void OnDiceRollStateChanged() => InvokeAsync(StateHasChanged);
+    private void OnDiceRollStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
 
     /// <inheritdoc />
     public void Dispose()

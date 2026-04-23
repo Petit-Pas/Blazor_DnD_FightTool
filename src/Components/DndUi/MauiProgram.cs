@@ -8,8 +8,8 @@ using DnDFightTool.Domain.CharacterSheet.IoC;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.UI.DnDQueryPrompter;
 using DnDFightTool.UI.DnDQueryPrompter.SaveQueries;
-using Extensions;
-using Extensions.IoC;
+using DnDFightTool.Infrastructure.Extensions;
+using DnDFightTool.Infrastructure.Extensions.IoC;
 using DnDFightTool.UI.FightBlazorComponents.IoC;
 using FluentValidation;
 using DnDFightTool.Infrastructure.IO.Files;
@@ -20,7 +20,7 @@ using MudBlazor.Services;
 using UndoableMediator.DependencyInjection;
 
 
-namespace DndUi;
+namespace DnDFightTool.Components.DndUi;
 
 public static class MauiProgram
 {

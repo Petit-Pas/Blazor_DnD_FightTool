@@ -1,4 +1,4 @@
-using Extensions;
+using DnDFightTool.Infrastructure.Extensions;
 using FluentValidation;
 
 namespace DnDFightTool.Domain.CharacterSheet.HitPoint.Validation;

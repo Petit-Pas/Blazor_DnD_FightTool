@@ -33,23 +33,20 @@ public partial class RollableDialogBase : IDisposable
     /// <inheritdoc />
     protected override void OnInitialized()
     {
-        if (DiceRollNotifier is not null)
-        {
-            DiceRollNotifier.StateChanged += OnNotifierStateChanged;
-        }
+        DiceRollNotifier?.StateChanged += OnNotifierStateChanged;
     }
 
     /// <inheritdoc />
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        if (DiceRollNotifier is not null)
-        {
-            DiceRollNotifier.StateChanged -= OnNotifierStateChanged;
-        }
+        DiceRollNotifier?.StateChanged -= OnNotifierStateChanged;
     }
 
-    private void OnNotifierStateChanged() => InvokeAsync(StateHasChanged);
+    private void OnNotifierStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
 
     protected async Task RollAsync()
     {

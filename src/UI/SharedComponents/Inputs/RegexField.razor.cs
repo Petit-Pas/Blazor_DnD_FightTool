@@ -1,5 +1,5 @@
 ﻿using DnDFightTool.Domain.CharacterSheet.Dices.Validation;
-using Extensions;
+using DnDFightTool.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
 
 namespace DnDFightTool.UI.SharedComponents.Inputs;

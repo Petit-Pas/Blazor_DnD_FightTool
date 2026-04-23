@@ -15,7 +15,7 @@ public class TakeDamageCommandHandler : CommandHandlerBase<TakeDamageCommand>
         _fightContext = fightContext;
     }
 
-    public override async Task<ICommandResponse<NoResponse>> ExecuteAsync(TakeDamageCommand command)
+    public async override Task<ICommandResponse<NoResponse>> ExecuteAsync(TakeDamageCommand command)
     {
         var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(TakeDamageCommandHandler)} could not find target with id {command.TargetId}");
 

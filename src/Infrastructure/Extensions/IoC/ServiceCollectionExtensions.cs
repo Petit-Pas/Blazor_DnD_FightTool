@@ -1,7 +1,7 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Extensions.IoC;
+namespace DnDFightTool.Infrastructure.Extensions.IoC;
 
 /// <summary>
 ///     IoC registration helpers for the Extensions infrastructure project.

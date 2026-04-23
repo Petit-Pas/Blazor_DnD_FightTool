@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AttackRolls\**" />
+    <Compile Remove="Saves\**" />
+    <Content Remove="AttackRolls\**" />
+    <Content Remove="Saves\**" />
+    <EmbeddedResource Remove="AttackRolls\**" />
+    <EmbeddedResource Remove="Saves\**" />
+    <None Remove="AttackRolls\**" />
+    <None Remove="Saves\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
@@ -26,11 +37,6 @@
     <ProjectReference Include="..\..\Infrastructure\Mapping\Mapping.csproj" />
     <ProjectReference Include="..\JavascriptInteropExtensions\JavascriptInteropExtensions.csproj" />
     <ProjectReference Include="..\SharedComponents\SharedComponents.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="AttackRolls\" />
-    <Folder Include="Saves\" />
   </ItemGroup>
 
 </Project>
