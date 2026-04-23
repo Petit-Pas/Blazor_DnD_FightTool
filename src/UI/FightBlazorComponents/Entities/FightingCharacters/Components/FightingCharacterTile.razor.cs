@@ -1,4 +1,5 @@
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Events.AppliedStatusUpdated;
 using Microsoft.AspNetCore.Components;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components.Web;
@@ -13,6 +14,9 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
 {
     [Inject]
     public required IFightContext FightContext { get; set; }
+
+    [Inject]
+    public required IAppliedStatusRepository AppliedStatusRepository { get; set; }
 
     [Inject]
     public required IGlobalEditContext GlobalEditContext { get; set; }
@@ -31,6 +35,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
 
         FightContext.OnActiveFighterChanged += OnActiveFighterChanged;
         FightContext.OnFighterUpdated += OnFighterUpdated;
+        AppliedStatusRepository.AppliedStatusUpdated += OnAppliedStatusUpdated;
     }
 
     public void Dispose()
@@ -38,6 +43,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
         GC.SuppressFinalize(this);
         FightContext.OnActiveFighterChanged -= OnActiveFighterChanged;
         FightContext.OnFighterUpdated -= OnFighterUpdated;
+        AppliedStatusRepository.AppliedStatusUpdated -= OnAppliedStatusUpdated;
     }
 
     protected override void OnParametersSet()
@@ -59,6 +65,12 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     private async void OnFighterUpdated(object? sender, Guid fighterId)
     {
         if (fighterId == Fighter.Id)
+            await InvokeAsync(StateHasChanged);
+    }
+
+    private async void OnAppliedStatusUpdated(object sender, AppliedStatusUpdatedEventArgs e)
+    {
+        if (e.AffectedCharacterId == Fighter.Id)
             await InvokeAsync(StateHasChanged);
     }
 

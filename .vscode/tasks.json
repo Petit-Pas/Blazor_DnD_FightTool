@@ -542,6 +542,32 @@
 			"label": "Run all tests",
 			"type": "shell",
 			"command": "dotnet test d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --verbosity normal 2>&1 | Select-Object -Last 30"
+		},
+		{
+			"label": "Delete old DamageTypeIconComponent from Dices",
+			"type": "shell",
+			"command": "Remove-Item -Force 'src\\UI\\FightBlazorComponents\\Entities\\Dices\\DamageTypeIconComponent.razor', 'src\\UI\\FightBlazorComponents\\Entities\\Dices\\DamageTypeIconComponent.razor.cs'"
+		},
+		{
+			"label": "Delete orphan dirs and legacy sln",
+			"type": "shell",
+			"command": "Remove-Item -Recurse -Force 'src\\Domain\\DnDEntities', 'src\\Domain\\RollTemplate', 'src\\UI\\DnDEntitiesBlazorComponents', 'DnDFightTool.sln'; Write-Host 'Done'",
+			"problemMatcher": []
+		},
+		{
+			"label": "Kill DndUi process",
+			"type": "shell",
+			"command": "Stop-Process -Name DndUi -Force -ErrorAction SilentlyContinue; Write-Host 'Done'"
+		},
+		{
+			"label": "Kill vgc 22580",
+			"type": "shell",
+			"command": "Stop-Process -Id 22580 -Force -ErrorAction SilentlyContinue; Write-Host 'Done'"
+		},
+		{
+			"label": "Stop Vanguard service",
+			"type": "shell",
+			"command": "Stop-Service -Name vgc -Force -ErrorAction SilentlyContinue; Stop-Service -Name vgk -Force -ErrorAction SilentlyContinue; Get-Process -Name vgc -ErrorAction SilentlyContinue | Select-Object Id, Name; Write-Host 'Done'"
 		}
 	]
 }

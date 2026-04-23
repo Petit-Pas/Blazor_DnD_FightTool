@@ -19,7 +19,7 @@ public static class StatusTemplateExtensions
     /// <returns></returns>
     public static bool ShouldBeApplied(this StatusTemplate statusTemplate, ICharacter caster, ICharacter target, SaveRollResult? saveRoll)
     {
-        if (statusTemplate.IsAppliedAutomatically || (saveRoll?.IsSuccessful(caster, target) ?? false))
+        if (statusTemplate.IsAppliedAutomatically || !(saveRoll?.IsSuccessful(caster, target) ?? false))
         {
             return true;
         }

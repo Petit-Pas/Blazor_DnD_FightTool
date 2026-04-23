@@ -1,0 +1,7 @@
+@using DnDFightTool.Domain.CharacterSheet.Damage
+@using MudBlazor
+@using SharedComponents.Icons
+
+<MudTooltip Text=@DamageType.ToReadableString() Placement=Placement.Top>
+    <MudIcon Icon=@CustomIcons.TwDnd.GetDamageIcon(DamageType) Color=Color.Default />
+</MudTooltip>

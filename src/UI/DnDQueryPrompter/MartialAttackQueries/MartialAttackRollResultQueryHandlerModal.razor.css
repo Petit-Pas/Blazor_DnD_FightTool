@@ -1,23 +1,21 @@
-.damage-row {
-    display: flex;
+.static-content {
+    flex: 0 0 auto;
+}
+
+.damage-scroll {
+    max-height: 40vh;
+    overflow-y: auto;
+}
+
+.damage-grid {
+    display: grid;
+    grid-template-columns: 28px auto 1fr auto;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-}
-
-.damage-expression {
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-::deep .damage-input {
-    width: 80px;
-    flex-shrink: 0;
+    gap: 6px 8px;
 }
 
 .damage-total {
     font-weight: bold;
     white-space: nowrap;
-    flex-shrink: 0;
-    margin-left: auto;
+    text-align: right;
 }

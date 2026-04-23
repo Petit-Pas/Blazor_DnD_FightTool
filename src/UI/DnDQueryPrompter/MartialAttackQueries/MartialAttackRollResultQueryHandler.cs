@@ -21,7 +21,7 @@ public class MartialAttackRollResultQueryHandler : QueryHandlerBase<MartialAttac
 
     public override async Task<IQueryResponse<MartialAttackRollResult>> ExecuteAsync(MartialAttackRollResultQuery query)
     {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
+        var options = new DialogOptions { CloseOnEscapeKey = true, MaxWidth = MaxWidth.Small, FullWidth = true };
 
         var parameters = new DialogParameters<MartialAttackRollResultQueryHandlerModal>
         {

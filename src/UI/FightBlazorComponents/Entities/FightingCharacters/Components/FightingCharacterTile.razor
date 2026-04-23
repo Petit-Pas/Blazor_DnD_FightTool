@@ -23,10 +23,10 @@
             <MudProgressLinear Class="my-2"
                 Color=GetHealthBarColor() Size="Size.Large" Value="Fighter.HitPoints.GetHealthRatio()" Rounded="true" />
             <div class="f-row">
-                <!-- TODO adapt when we know what we do with the statuses -->
-                <MudChip T="string">Blessed</MudChip>
-                <MudChip T="string">Exhausted</MudChip>
-                <MudChip T="string">Prone</MudChip>
+                @foreach (var status in AppliedStatusRepository.GetStatusAppliedTo(Fighter.Id))
+                {
+                    <MudChip T="string">@status.Name</MudChip>
+                }
             </div>
         </MudCard>
     </div>
