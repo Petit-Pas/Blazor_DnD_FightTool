@@ -13,7 +13,7 @@ public partial class AttackEditorPage
 
     private MartialAttackTemplate? _attackTemplate { get; set; }
     
-    private int _tabActiveIndex;
+    private int _previousTabIndex;
     private MartialAttackTemplateMainInfoEditorComponent? _mainInfoComponent;
     private DamageRollTemplateCollectionEditorComponent? _damageComponent;
 
@@ -26,7 +26,7 @@ public partial class AttackEditorPage
 
     private async Task OnPreviewInteraction(TabInteractionEventArgs arg)
     {
-        switch (_tabActiveIndex)
+        switch (_previousTabIndex)
         {
             case 0:
                 ArgumentNullException.ThrowIfNull(_mainInfoComponent, nameof(_mainInfoComponent));
@@ -38,6 +38,11 @@ public partial class AttackEditorPage
                 break;
             default:
                 break;
+        }
+
+        if (!arg.Cancel)
+        {
+            _previousTabIndex = arg.PanelIndex;
         }
     }
 

@@ -31,14 +31,14 @@ public partial class CharacterEditorPage
         _character = GlobalEditContext.Character;
     }
 
-    private int _tabActiveIndex;
+    private int _previousTabIndex;
 
     private CharacterMainInfoEditorComponent? _mainInfoComponent;
     private AbilityScoresEditorComponent? _abilityScoreComponent;
 
     private async Task OnPreviewInteraction(TabInteractionEventArgs arg)
     {
-        switch (_tabActiveIndex)
+        switch (_previousTabIndex)
         {
             case 0:
                 ArgumentNullException.ThrowIfNull(_mainInfoComponent, nameof(_mainInfoComponent));
@@ -56,6 +56,11 @@ public partial class CharacterEditorPage
                 break;
             default:
                 break;
+        }
+
+        if (!arg.Cancel)
+        {
+            _previousTabIndex = arg.PanelIndex;
         }
     }
 
