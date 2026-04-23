@@ -10,8 +10,8 @@
     <div class="f-column h-100">
         <MudText Typo="Typo.h4" Class="m-2"> @_attackTemplate.Name </MudText>
         <div class="mb-2 d-grid mud-paper-grid flex-fill-shrink" style="grid-template-rows: 1fr auto;">
-            <MudTabs Elevation=2 Rounded=true ApplyEffectsToContainer=true PanelClass="flex-fill-shrink" OnPreviewInteraction="OnPreviewInteraction" Class="h-100">
-                <MudTabPanel Class="hw-100" Text="Basic infos">
+            <MudTabs Elevation=2 Rounded=true ApplyEffectsToContainer=true TabPanelsClass="flex-fill-shrink" OnPreviewInteraction="OnPreviewInteraction" Class="h-100">
+                <MudTabPanel PanelClass="hw-100" Text="Basic infos">
                     <div class="h-100 mud-paper-grid p-2" style="grid-template-rows: 1fr auto; grid-template-columns: 1fr 1fr;">
                         <MartialAttackTemplateMainInfoEditorComponent @ref=_mainInfoComponent
                             AttackTemplate=@_attackTemplate />

@@ -22,7 +22,7 @@ public partial class MartialAttackTemplateMainInfoEditorComponent
     {
         if (_form is not null && (_diceThrowEditor?.Validate() ?? true))
         {
-            await _form.Validate();
+            await _form.ValidateAsync();
             return _form.IsValid;
         }
         return false;

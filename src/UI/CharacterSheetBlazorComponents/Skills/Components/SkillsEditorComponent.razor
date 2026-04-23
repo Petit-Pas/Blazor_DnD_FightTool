@@ -20,11 +20,12 @@
                 </MudTd>
                 <MudTd class="w-1">
                     <MudMenu>
-                        <ActivatorContent>
+                        <ActivatorContent Context="_menuContext">
                             <AbilityChip Ability=@context.Ability
                                          BadgeContent=@context.GetModifier(Character).ToString()
                                          Variant=Variant.Filled
-                                         Color=Color.Primary/>
+                                         Color=Color.Primary
+                                         OnClick="@(() => _menuContext.ToggleAsync())"/>
                         </ActivatorContent>
                         <ChildContent>
                             @foreach (var abilityEnum in Enum.GetValues<AbilityEnum>())

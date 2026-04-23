@@ -88,7 +88,7 @@ public partial class DiceRollResultInputComponent : StylableComponentBase, IDice
         // Untouched fields just need a silent notifier refresh so CanValidate updates.
         if (RollResult is not null && RollResult.Result != 0 && _form is not null)
         {
-            await _form.Validate();
+            await _form.ValidateAsync();
         }
 
         DiceRollNotifier?.RaiseStateChanged();
@@ -106,7 +106,7 @@ public partial class DiceRollResultInputComponent : StylableComponentBase, IDice
 
         if (_form is not null)
         {
-            await _form.Validate();
+            await _form.ValidateAsync();
         }
 
         await ValueChanged.InvokeAsync(RollResult.Result);

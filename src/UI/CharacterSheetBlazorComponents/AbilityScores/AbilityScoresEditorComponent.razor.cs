@@ -34,7 +34,7 @@ public partial class AbilityScoresEditorComponent : StylableComponentBase
         {
             return false;
         }
-        await _mainForm.Validate();
+        await _mainForm.ValidateAsync();
         return _mainForm.IsValid;
     }
 }

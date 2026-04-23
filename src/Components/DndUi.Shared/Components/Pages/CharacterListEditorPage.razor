@@ -13,8 +13,8 @@
 @using DnDFightTool.UI.SharedComponents.Icons
 
 <div class="h-100 py-2">
-    <MudTabs Elevation=2 Rounded=true ApplyEffectsToContainer=true PanelClass="flex-fill-shrink" Class="h-100 p-2">
-        <MudTabPanel Class="hw-100" Text="Players">
+    <MudTabs Elevation=2 Rounded=true ApplyEffectsToContainer=true TabPanelsClass="flex-fill-shrink" Class="h-100 p-2">
+        <MudTabPanel PanelClass="hw-100" Text="Players">
             <div class="h-100 d-flex flex-column gap-2">
                 <div class="h-100 overflow-y-auto">
                     @foreach (var player in _players)
@@ -39,7 +39,7 @@
                 </MudButton>
             </div>
         </MudTabPanel>
-        <MudTabPanel Class="hw-100" Text="Monsters">
+        <MudTabPanel PanelClass="hw-100" Text="Monsters">
             <div class="h-100 d-flex flex-column gap-2">
                 <div class="h-100 overflow-y-auto">
                     @foreach (var monster in _monsters)

@@ -23,7 +23,7 @@ public partial class CharacterMainInfoEditorComponent : StylableComponentBase
     {
         if (_form is not null)
         {
-            await _form.Validate();
+            await _form.ValidateAsync();
             return _form.IsValid;
         }
         

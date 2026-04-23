@@ -583,6 +583,31 @@
 			"label": "Build after audit fixes",
 			"type": "shell",
 			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --no-incremental --verbosity quiet 2>&1 | Select-Object -Last 40"
+		},
+		{
+			"label": "Build after MudBlazor v9 upgrade",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --no-incremental --verbosity quiet 2>&1 | Select-Object -Last 60"
+		},
+		{
+			"label": "Build UI projects",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\src\\UI\\CharacterSheetBlazorComponents\\CharacterSheetBlazorComponents.csproj --no-incremental --verbosity quiet 2>&1 | Select-Object -Last 40"
+		},
+		{
+			"label": "Build SharedComponents",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\src\\UI\\SharedComponents\\SharedComponents.csproj --no-incremental --verbosity quiet 2>&1 | Select-Object -Last 20"
+		},
+		{
+			"label": "Build DnDQueries",
+			"type": "shell",
+			"command": "dotnet build d:\\Code\\Perso\\DnDFightTool\\src\\Business\\DnDQueries\\DnDQueries.csproj --no-incremental --verbosity quiet 2>&1 | Select-Object -Last 20"
+		},
+		{
+			"label": "Restore and build",
+			"type": "shell",
+			"command": "dotnet restore d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 30; dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --no-incremental --verbosity quiet 2>&1 | Select-Object -Last 30"
 		}
 	]
 }
