@@ -28,8 +28,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CharacterValidator>();
-builder.Services.AddScoped<AbstractValidator<HitRollResult>, HitRollResultValidator>();
-builder.Services.AddScoped<AbstractValidator<DamageRollResult>, DamageRollResultValidator>();
+builder.Services.AddScoped<IValidator<HitRollResult>, HitRollResultValidator>();
+builder.Services.AddScoped<IValidator<DamageRollResult>, DamageRollResultValidator>();
 
 var dataFolder = Path.Combine(Path.GetTempPath(), "DnDFightTool.Web");
 builder.Services.AddSingleton<ICharacterRepository>(sp =>
@@ -72,8 +72,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
-app.MapRazorComponents<DndUi.Web.Components.App>()
+app.MapRazorComponents<DnDFightTool.Components.DndUi.Web.Components.App>()
     .AddInteractiveServerRenderMode()
-    .AddAdditionalAssemblies(typeof(DndUi.Shared.Components.Routes).Assembly);
+    .AddAdditionalAssemblies(typeof(DnDFightTool.Components.DndUi.Shared.Components.Routes).Assembly);
 
 app.Run();

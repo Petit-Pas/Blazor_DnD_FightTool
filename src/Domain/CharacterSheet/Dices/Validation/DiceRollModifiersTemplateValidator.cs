@@ -1,3 +1,4 @@
+using DnDFightTool.Infrastructure.Extensions;
 using FluentValidation;
 
 namespace DnDFightTool.Domain.CharacterSheet.Dices.Validation;
@@ -5,7 +6,7 @@ namespace DnDFightTool.Domain.CharacterSheet.Dices.Validation;
 /// <summary>
 ///     Validator for <see cref="DiceRollModifiersTemplate" />
 /// </summary>
-public class DiceRollModifiersTemplateValidator : AbstractValidator<DiceRollModifiersTemplate>
+public class DiceRollModifiersTemplateValidator : PropertyTargetedValidator<DiceRollModifiersTemplate>
 {
     /// <summary>
     ///     Ctor

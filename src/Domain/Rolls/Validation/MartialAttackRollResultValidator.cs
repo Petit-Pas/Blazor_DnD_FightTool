@@ -1,3 +1,4 @@
+using DnDFightTool.Infrastructure.Extensions;
 using FluentValidation;
 
 namespace DnDFightTool.Domain.Rolls.Validation;
@@ -5,14 +6,14 @@ namespace DnDFightTool.Domain.Rolls.Validation;
 /// <summary>
 ///     Validator for <see cref="MartialAttackRollResult" />
 /// </summary>
-public class MartialAttackRollResultValidator : AbstractValidator<MartialAttackRollResult>
+public class MartialAttackRollResultValidator : PropertyTargetedValidator<MartialAttackRollResult>
 {
     /// <summary>
     ///     Ctor
     /// </summary>
     public MartialAttackRollResultValidator(
-        AbstractValidator<HitRollResult> hitRollResultValidator,
-        AbstractValidator<DamageRollResult> damageRollResultValidator)
+        IValidator<HitRollResult> hitRollResultValidator,
+        IValidator<DamageRollResult> damageRollResultValidator)
     {
         RuleFor(x => x.TargetId)
             .NotEmpty();

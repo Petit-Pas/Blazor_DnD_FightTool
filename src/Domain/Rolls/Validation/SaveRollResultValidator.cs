@@ -1,3 +1,4 @@
+using DnDFightTool.Infrastructure.Extensions;
 using FluentValidation;
 
 namespace DnDFightTool.Domain.Rolls.Validation;
@@ -5,7 +6,7 @@ namespace DnDFightTool.Domain.Rolls.Validation;
 /// <summary>
 ///     Validator for <see cref="SaveRollResult" />
 /// </summary>
-public class SaveRollResultValidator : AbstractValidator<SaveRollResult>
+public class SaveRollResultValidator : PropertyTargetedValidator<SaveRollResult>
 {
     /// <summary>
     ///     Ctor

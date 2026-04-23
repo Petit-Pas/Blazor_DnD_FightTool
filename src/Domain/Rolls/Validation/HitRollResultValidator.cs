@@ -1,3 +1,4 @@
+using DnDFightTool.Infrastructure.Extensions;
 using FluentValidation;
 
 namespace DnDFightTool.Domain.Rolls.Validation;
@@ -6,7 +7,7 @@ namespace DnDFightTool.Domain.Rolls.Validation;
 ///     Validator for <see cref="HitRollResult" />.
 ///     Validates that the d20 result is between 1 and 20.
 /// </summary>
-public class HitRollResultValidator : AbstractValidator<HitRollResult>
+public class HitRollResultValidator : PropertyTargetedValidator<HitRollResult>
 {
     /// <summary>
     ///     Ctor
