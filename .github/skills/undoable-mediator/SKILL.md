@@ -13,7 +13,7 @@ Singleton, not thread-safe — designed for desktop / single-user apps.
 - Commands mutate state and are always added to undo history on `RequestStatus.Success`.
 - Queries are read-only — no undo.
 - Sub-commands form a tree: undoing a parent cascades to children automatically.
-- Handlers must call `base.UndoAsync` / `base.RedoAsync` to propagate to sub-commands, or handle them manually.
+- **Only call `base.UndoAsync` / `base.RedoAsync` when the command has sub-commands.** For leaf commands (no sub-commands), the base call is a no-op — omit it and return `Task.CompletedTask` directly.
 - Store old state in the command during `ExecuteAsync` so `UndoAsync` can restore it.
 
 ## Base Classes
@@ -62,16 +62,16 @@ public class ChangeAgeCommandHandler : CommandHandlerBase<ChangeAgeCommand>
         return Task.FromResult(CommandResponse.Success());
     }
 
-    public override async Task UndoAsync(ChangeAgeCommand command)
+    public override Task UndoAsync(ChangeAgeCommand command)
     {
-        await base.UndoAsync(command);
         Model.Age = command.OldAge;
+        return Task.CompletedTask;  // no sub-commands — do NOT call base
     }
 
-    public override async Task RedoAsync(ChangeAgeCommand command)
+    public override Task RedoAsync(ChangeAgeCommand command)
     {
         Model.Age = command.NewAge;
-        await base.RedoAsync(command);
+        return Task.CompletedTask;  // no sub-commands — do NOT call base
     }
 }
 ```
@@ -121,7 +121,8 @@ builder.Services.ConfigureMediator(options =>
 
 | Mistake | Symptom |
 |---------|-----|
-| Not calling `base.UndoAsync` | Sub-commands are not undone |
+| Not calling `base.UndoAsync` on a command that has sub-commands | Sub-commands are not undone |
+| Calling `base.UndoAsync` on a leaf command (no sub-commands) | Unnecessary async overhead; misleads readers into thinking sub-commands exist |
 | Using `SendAsync` instead of `SendAsSubCommandAsync` for child operations. Should almost always be the case inside of the handler of another command | Sub-commands won't cascade undo/redo |
 | Not saving old state in the command during `ExecuteAsync` | Cannot restore in `UndoAsync` |
 | Returning `Failed` / `Canceled` when state was already mutated | Command won't be added to history — undo impossible |

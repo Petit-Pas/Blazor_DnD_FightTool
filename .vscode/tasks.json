@@ -608,6 +608,161 @@
 			"label": "Restore and build",
 			"type": "shell",
 			"command": "dotnet restore d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx 2>&1 | Select-Object -Last 30; dotnet build d:\\Code\\Perso\\DnDFightTool\\DnDFightTool.slnx --no-incremental --verbosity quiet 2>&1 | Select-Object -Last 30"
+		},
+		{
+			"label": "Create feature branch",
+			"type": "shell",
+			"command": "powershell -ExecutionPolicy Bypass -File .specify/extensions/git/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"fight-log-system\" \"fight log system\""
+		},
+		{
+			"label": "check-prerequisites",
+			"type": "shell",
+			"command": "powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/check-prerequisites.ps1 -Json -PathsOnly"
+		},
+		{
+			"label": "setup-plan",
+			"type": "shell",
+			"command": "powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/setup-plan.ps1 -Json"
+		},
+		{
+			"label": "check-prerequisites",
+			"type": "shell",
+			"command": "powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/check-prerequisites.ps1 -Json"
+		},
+		{
+			"label": "check-prerequisites-with-tasks",
+			"type": "shell",
+			"command": "powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks"
+		},
+		{
+			"label": "check-prerequisites",
+			"type": "shell",
+			"command": "powershell -ExecutionPolicy Bypass -File .specify/scripts/powershell/check-prerequisites.ps1 -Json -RequireTasks -IncludeTasks"
+		},
+		{
+			"label": "Build check",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx --verbosity quiet 2>&1 | Select-Object -Last 20"
+		},
+		{
+			"label": "Build core projects",
+			"type": "shell",
+			"command": "dotnet build src/Domain/Logs/Logs.csproj --verbosity quiet && dotnet build tests/Domain/LogsTests/LogsTests.csproj --verbosity quiet && dotnet build src/Business/DnDActions/DnDActions.csproj --verbosity quiet && dotnet build tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity quiet && echo BUILD_OK"
+		},
+		{
+			"label": "Build test projects",
+			"type": "shell",
+			"command": "dotnet build tests/Domain/LogsTests/LogsTests.csproj --verbosity quiet && dotnet build tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity quiet && echo BUILD_OK"
+		},
+		{
+			"label": "Build DnDActionsTests",
+			"type": "shell",
+			"command": "dotnet build tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity quiet && echo BUILD_OK"
+		},
+		{
+			"label": "Build DnDActionsTests v2",
+			"type": "shell",
+			"command": "dotnet build tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity quiet && echo BUILD_OK"
+		},
+		{
+			"label": "Build DnDActionsTests v3",
+			"type": "shell",
+			"command": "dotnet build tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity quiet && echo BUILD_OK"
+		},
+		{
+			"label": "Build FightBlazorComponentsTests",
+			"type": "shell",
+			"command": "dotnet build tests/UI/FightBlazorComponentsTests/FightBlazorComponentsTests.csproj --verbosity quiet && echo BUILD_OK"
+		},
+		{
+			"label": "Build FightBlazorComponentsTests v2",
+			"type": "shell",
+			"command": "dotnet build tests/UI/FightBlazorComponentsTests/FightBlazorComponentsTests.csproj --verbosity quiet && echo BUILD_OK"
+		},
+		{
+			"label": "Run parser tests",
+			"type": "shell",
+			"command": "dotnet test tests/UI/FightBlazorComponentsTests/FightBlazorComponentsTests.csproj --verbosity normal 2>&1 | Select-Object -Last 30"
+		},
+		{
+			"label": "Show test failures",
+			"type": "shell",
+			"command": "dotnet test tests/UI/FightBlazorComponentsTests/FightBlazorComponentsTests.csproj --verbosity normal 2>&1 | Select-String -Pattern 'Non r|chec|Expect|Expected|Count|have' | Select-Object -First 20"
+		},
+		{
+			"label": "Run parser tests v2",
+			"type": "shell",
+			"command": "dotnet test tests/UI/FightBlazorComponentsTests/FightBlazorComponentsTests.csproj --verbosity quiet 2>&1 | Select-Object -Last 10"
+		},
+		{
+			"label": "Build FightBlazorComponents",
+			"type": "shell",
+			"command": "dotnet build src/UI/FightBlazorComponents/FightBlazorComponents.csproj --verbosity quiet && echo BUILD_OK"
+		},
+		{
+			"label": "Build DnDActions after retrofit",
+			"type": "shell",
+			"command": "dotnet build src/Business/DnDActions/DnDActions.csproj --verbosity quiet 2>&1 | Select-Object -Last 15"
+		},
+		{
+			"label": "Build DnDActions after clean retrofit",
+			"type": "shell",
+			"command": "dotnet build src/Business/DnDActions/DnDActions.csproj --verbosity quiet 2>&1 | Select-Object -Last 10"
+		},
+		{
+			"label": "Full build",
+			"type": "shell",
+			"command": "dotnet build --verbosity quiet 2>&1 | Select-Object -Last 10"
+		},
+		{
+			"label": "Run all tests",
+			"type": "shell",
+			"command": "dotnet test --verbosity quiet 2>&1 | Select-Object -Last 20"
+		},
+		{
+			"label": "Show failed tests",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity normal 2>&1 | Select-String '(Echou|Failed|ERREUR|error|Échec)' | Select-Object -First 30"
+		},
+		{
+			"label": "Get failed test names v2",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build --logger \"console;verbosity=detailed\" 2>&1 | Out-File -FilePath test-results.txt -Encoding utf8; Get-Content test-results.txt | Select-String -Pattern '\\bFailed\\b' -Context 0,3"
+		},
+		{
+			"label": "LooseHp undo failure detail",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build --filter \"FullyQualifiedName~LooseHpTests.UndoTests\" --logger \"trx;LogFileName=results.trx\" 2>&1; if (Test-Path TestResults/results.trx) { [xml]$x = Get-Content TestResults/results.trx; $x.TestRun.Results.UnitTestResult | Where-Object { $_.outcome -eq 'Failed' } | ForEach-Object { Write-Host '---'; Write-Host $_.testName; Write-Host $_.Output.ErrorInfo.Message } }"
+		},
+		{
+			"label": "Detailed test output",
+			"type": "shell",
+			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --no-build -v d 2>&1 | Out-File -FilePath D:/Code/Perso/DnDFightTool/test-output.txt -Encoding utf8"
+		},
+		{
+			"label": "Find UndoableMediator DLL",
+			"type": "shell",
+			"command": "Get-ChildItem -Path $env:USERPROFILE\\.nuget\\packages\\undoablemediator -Recurse -Filter '*.dll' | Select-Object -First 5 | ForEach-Object { $_.FullName }"
+		},
+		{
+			"label": "Find alpha DLL",
+			"type": "shell",
+			"command": "Get-ChildItem -Path $env:USERPROFILE\\.nuget\\packages\\undoablemediator -Recurse -Filter '*.dll' | Where-Object { $_.FullName -like '*alpha*' -or $_.FullName -like '*2.0*' } | Select-Object -First 5 | ForEach-Object { $_.FullName }"
+		},
+		{
+			"label": "Build after logService cleanup",
+			"type": "shell",
+			"command": "dotnet build src/Business/DnDActions/DnDActions.csproj tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity quiet 2>&1 | Select-Object -Last 8"
+		},
+		{
+			"label": "Full solution build after logService cleanup",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx --verbosity quiet 2>&1 | Select-Object -Last 8"
+		},
+		{
+			"label": "Build check final",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx --verbosity quiet 2>&1 | Select-Object -Last 6"
 		}
 	]
 }

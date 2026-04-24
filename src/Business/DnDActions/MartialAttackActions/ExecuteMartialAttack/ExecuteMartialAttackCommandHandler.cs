@@ -1,4 +1,9 @@
 ﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
+using DnDFightTool.Business.DnDActions.LogActions.CloseBlock;
+using DnDFightTool.Business.DnDActions.LogActions.CloseScope;
+using DnDFightTool.Business.DnDActions.LogActions.OpenBlock;
+using DnDFightTool.Business.DnDActions.LogActions.OpenScope;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
 using DnDFightTool.Business.DnDQueries.MartialAttackQueries;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
@@ -21,6 +26,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     ///     Fight context dependency.
     /// </summary>
     private readonly IFightContext _fightContext;
+
     /// <summary>
     ///     Ctor
     /// </summary>
@@ -53,11 +59,21 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
         }
 
         var target = _fightContext[command.MartialAttackRollResult!.TargetId] ?? throw new NullReferenceException($"{typeof(ExecuteMartialAttackCommandHandler)} could not find target with id {command.MartialAttackRollResult!.TargetId}");
-        command.AttackDidHit = AttackHits(caster, target, command);
-        if (command.AttackDidHit)
+        await OpenAttackLog(caster, target, command, attackTemplate);
+
+        try
         {
-            await ApplyDamage(caster, target, command);
-            await ApplyStatuses(caster, target, command, attackTemplate);
+            command.AttackDidHit = AttackHits(caster, target, command);
+            await LogHitRoll(command.MartialAttackRollResult.HitRoll, caster, target, command, command.AttackDidHit);
+            if (command.AttackDidHit)
+            {
+                await ApplyDamage(caster, target, command);
+                await ApplyStatuses(caster, target, command, attackTemplate);
+            }
+        }
+        finally
+        {
+            await CloseAttackLog(command);
         }
 
         return CommandResponse.Success();
@@ -155,5 +171,26 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 #pragma warning restore
         }
         return command.MartialAttackRollResult.HitRoll.Hits(target, caster);
+    }
+
+    private async Task OpenAttackLog(FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command, MartialAttackTemplate attackTemplate)
+    {
+        await _mediator.SendAsSubCommandAsync(new OpenBlockCommand("Martial Attack"), parentCommand: command);
+        await _mediator.SendAsSubCommandAsync(new WriteLogCommand($"[b]{caster.Name}[/b] attacks [b]{target.Name}[/b] using [b]{attackTemplate.Name}[/b]"), parentCommand: command);
+        await _mediator.SendAsSubCommandAsync(new OpenScopeCommand(), parentCommand: command);
+    }
+
+    private async Task LogHitRoll(HitRollResult hitRoll, FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command, bool didHit)
+    {
+        var totalAttack = hitRoll.Modifiers.GetScoreModifier(caster).ApplyTo(hitRoll.Result);
+        await _mediator.SendAsSubCommandAsync(
+            new WriteLogCommand($"[hover:d20 = {hitRoll.Result}, modifiers = {hitRoll.Modifiers.Expression}][b]{totalAttack}[/b][/hover] to hit (AC {target.ArmorClass.EffectiveAC}) => [b]{(didHit ? "Hit" : "Miss")}[/b]"),
+            parentCommand: command);
+    }
+
+    private async Task CloseAttackLog(ExecuteMartialAttackCommand command)
+    {
+        await _mediator.SendAsSubCommandAsync(new CloseScopeCommand(), parentCommand: command);
+        await _mediator.SendAsSubCommandAsync(new CloseBlockCommand(), parentCommand: command);
     }
 }

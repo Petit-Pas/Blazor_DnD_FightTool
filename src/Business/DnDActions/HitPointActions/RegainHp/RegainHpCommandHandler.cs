@@ -1,4 +1,5 @@
-﻿using DnDFightTool.Domain.Fight;
+﻿using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
@@ -13,9 +14,10 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
         _fightContext = fightContext;
     }
 
-    public override Task<ICommandResponse<NoResponse>> ExecuteAsync(RegainHpCommand command)
+    public async override Task<ICommandResponse<NoResponse>> ExecuteAsync(RegainHpCommand command)
     {
-        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainHpCommandHandler)} could not find target with id {command.TargetId}");
+        var fighter = _fightContext[command.TargetId] ?? throw new ArgumentException($"{typeof(RegainHpCommandHandler)} could not find target with id {command.TargetId}");
+        var hitPoints = fighter.HitPoints;
 
         command.CorrectedAmount = command.Amount;
 
@@ -28,11 +30,15 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
 
         _fightContext.NotifyFighterUpdated(command.TargetId);
 
-        return Task.FromResult(CommandResponse.Success());
+        await LogHpGain(fighter.Name, command);
+
+        return CommandResponse.Success();
     }
 
-    public override Task UndoAsync(RegainHpCommand command)
+    public async override Task UndoAsync(RegainHpCommand command)
     {
+        await base.UndoAsync(command);
+
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainHpCommandHandler)} could not find target with id {command.TargetId}");
 
         if (command.CorrectedAmount == null)
@@ -43,12 +49,18 @@ public class RegainHpCommandHandler : CommandHandlerBase<RegainHpCommand>
         hitPoints.CurrentHps -= command.CorrectedAmount.Value;
 
         _fightContext.NotifyFighterUpdated(command.TargetId);
-
-        return Task.CompletedTask;
     }
 
     public async override Task RedoAsync(RegainHpCommand command)
     {
         await ExecuteAsync(command);
     }
+
+    private async Task LogHpGain(string fighterName, RegainHpCommand command)
+    {
+        await _mediator.SendAsSubCommandAsync(
+            new WriteLogCommand($"[b]{fighterName}[/b] regains [c:heal][b]{command.CorrectedAmount}[/b] HPs[/c]"),
+            parentCommand: command);
+    }
+        
 }

@@ -11,10 +11,11 @@
         <PackageReference Include="Blazored.FluentValidation" Version="2.2.0" />
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
         <PackageReference Include="MudBlazor" Version="9.4.0" />
-        <PackageReference Include="UndoableMediator" Version="2.0.0-alpha1" />
+        <PackageReference Include="UndoableMediator" Version="2.0.0-alpha2" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\Domain\Logs\Logs.csproj" />
         <ProjectReference Include="..\DndUi.Shared\DndUi.Shared.csproj" />
         <ProjectReference Include="..\..\Infrastructure\AspNetCoreExtensions\AspNetCoreExtensions.csproj" />
         <ProjectReference Include="..\..\UI\CharacterSheetBlazorComponents\CharacterSheetBlazorComponents.csproj" />

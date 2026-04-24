@@ -20,7 +20,7 @@
 */
 
 
-html, body, #app, .mud-main-content {
+html, body, #app, .mud-layout, .mud-main-content {
     height: 100%;
 }
 

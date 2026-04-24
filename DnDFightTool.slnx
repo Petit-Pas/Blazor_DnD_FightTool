@@ -19,6 +19,7 @@
   <Folder Name="/src/Domain/">
     <Project Path="src/Domain/CharacterSheet/CharacterSheet.csproj" />
     <Project Path="src/Domain/Fight/Fight.csproj" />
+    <Project Path="src/Domain/Logs/Logs.csproj" />
     <Project Path="src/Domain/Rolls/Rolls.csproj" />
   </Folder>
   <Folder Name="/src/Infrastructure/">
@@ -43,8 +44,12 @@
     <Project Path="tests/Domain/DnDEntitiesTests/DnDEntitiesTests.csproj" />
     <Project Path="tests/Domain/DomainTestsUtilities/DomainTestsUtilities.csproj" />
     <Project Path="tests/Domain/FightTests/FightTests.csproj" />
+    <Project Path="tests/Domain/LogsTests/LogsTests.csproj" />
   </Folder>
   <Folder Name="/tests/Infrastructure/">
     <Project Path="tests/Infrastructure/MemoryTests/MemoryTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/UI/">
+    <Project Path="tests/UI/FightBlazorComponentsTests/FightBlazorComponentsTests.csproj" />
   </Folder>
 </Solution>

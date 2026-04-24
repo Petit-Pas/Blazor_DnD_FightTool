@@ -1,4 +1,9 @@
 using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
+using DnDFightTool.Business.DnDActions.LogActions.CloseBlock;
+using DnDFightTool.Business.DnDActions.LogActions.CloseScope;
+using DnDFightTool.Business.DnDActions.LogActions.OpenBlock;
+using DnDFightTool.Business.DnDActions.LogActions.OpenScope;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Damage;
 using DnDFightTool.Domain.Fight;
@@ -40,9 +45,8 @@ public class ExecuteMartialAttackCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>()); 
         _fightContext = A.Fake<IFightContext>();
-
         _caster = new Character(true).AsFighter();
         _caster.MartialAttacks.Add(MartialAttackTemplateFactory.Build()); ;
         _target = new Character(true)
@@ -192,6 +196,56 @@ public class ExecuteMartialAttackCommandHandlerTests
 
             // Assert
             A.CallTo(() => _mediator.SendAsSubCommandAsync(An<TryApplyStatusCommand>.That.Matches(x => x.StatusId == _attackTemplate.Statuses.First().Value.Id), A<ExecuteMartialAttackCommand>._))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_Send_OpenBlockCommand()
+        {
+            // Act
+            await _commandHandler.ExecuteAsync(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(
+                A<OpenBlockCommand>.That.Matches(x => x.Name == "Martial Attack"),
+                A<ExecuteMartialAttackCommand>._))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_Send_CloseBlockCommand()
+        {
+            // Act
+            await _commandHandler.ExecuteAsync(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<CloseBlockCommand>._, A<ExecuteMartialAttackCommand>._))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_Send_WriteLogCommand_For_Attack_Line()
+        {
+            // Act
+            await _commandHandler.ExecuteAsync(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(
+                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("attacks")),
+                A<ExecuteMartialAttackCommand>._))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_Send_WriteLogCommand_For_Hit_Roll()
+        {
+            // Act
+            await _commandHandler.ExecuteAsync(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(
+                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("to hit")),
+                A<ExecuteMartialAttackCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
     }

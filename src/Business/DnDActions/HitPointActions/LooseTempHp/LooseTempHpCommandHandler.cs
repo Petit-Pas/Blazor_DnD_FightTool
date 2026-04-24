@@ -1,4 +1,5 @@
 ﻿using DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
@@ -15,9 +16,10 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
         _fightContext = fightContext;
     }
 
-    public override Task<ICommandResponse<NoResponse>> ExecuteAsync(LooseTempHpCommand command)
+    public async override Task<ICommandResponse<NoResponse>> ExecuteAsync(LooseTempHpCommand command)
     {
-        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseTempHpCommandHandler)} could not find target with id {command.TargetId}");
+        var fighter = _fightContext[command.TargetId] ?? throw new ArgumentException($"{typeof(LooseTempHpCommandHandler)} could not find target with id {command.TargetId}");
+        var hitPoints = fighter.HitPoints;
 
         command.CorrectedAmount = command.Amount;
 
@@ -30,11 +32,15 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
 
         _fightContext.NotifyFighterUpdated(command.TargetId);
 
-        return Task.FromResult(CommandResponse.Success());
+        await LogTempHpLoss(fighter.Name, command);
+
+        return CommandResponse.Success();
     }
 
-    public override Task UndoAsync(LooseTempHpCommand command)
+    public async override Task UndoAsync(LooseTempHpCommand command)
     {
+        await base.UndoAsync(command);
+
         var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(LooseTempHpCommandHandler)} could not find target with id {command.TargetId}");
 
         if (command.CorrectedAmount == null)
@@ -45,12 +51,18 @@ public class LooseTempHpCommandHandler : CommandHandlerBase<LooseTempHpCommand>
         hitPoints.CurrentTempHps += command.CorrectedAmount.Value;
 
         _fightContext.NotifyFighterUpdated(command.TargetId);
-
-        return Task.CompletedTask;
     }
 
     public async override Task RedoAsync(LooseTempHpCommand command)
     {
         await ExecuteAsync(command);
     }
+
+    private async Task LogTempHpLoss(string fighterName, LooseTempHpCommand command)
+    {
+        await _mediator.SendAsSubCommandAsync(
+            new WriteLogCommand($"[b]{fighterName}[/b] loses [b]{command.CorrectedAmount}[/b] temp HPs"),
+            parentCommand: command);
+    }
+        
 }

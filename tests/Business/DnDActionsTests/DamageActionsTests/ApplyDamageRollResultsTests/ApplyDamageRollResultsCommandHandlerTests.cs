@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Damage;
 using DnDFightTool.Domain.CharacterSheet.DamageAffinities;
@@ -12,7 +13,6 @@ using DnDFightTool.Domain.Fight.Characters;
 using DomainTestsUtilities.Factories.Damage;
 using DomainTestsUtilities.Fakes.Savings;
 using FakeItEasy;
-using FluentAssertions;
 using NUnit.Framework;
 using UndoableMediator.Mediators;
 
@@ -72,6 +72,25 @@ public class ApplyDamageRollResultsCommandHandlerTests
             // Assert
             A.CallTo(() => _mediator.SendAsSubCommandAsync(A<TakeDamageCommand>.That.Matches(x => x.Damage == 10), A<ApplyDamageRollResultsCommand>._))
                 .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_Send_WriteLogCommand_For_Each_DamageRoll()
+        {
+            var command = new ApplyDamageRollResultsCommand(_caster.Id, _target.Id, new[]
+            {
+                DamageRollResultFactory.BuildRolledDice(DamageTypeEnum.Fire, 10),
+                DamageRollResultFactory.BuildRolledDice(DamageTypeEnum.Cold, 5)
+            });
+
+            // Act
+            await _commandHandler.ExecuteAsync(command);
+
+            // Assert
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(
+                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("damage")),
+                A<ApplyDamageRollResultsCommand>._))
+                .MustHaveHappenedTwiceExactly();
         }
 
         [Test]

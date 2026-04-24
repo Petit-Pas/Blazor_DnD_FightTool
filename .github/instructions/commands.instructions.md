@@ -38,3 +38,20 @@ This project uses the **UndoableMediator** library (v2.0.0-alpha1). Refer to the
 - **Return**: Use `CommandResponse.Success()` for successful execution. Use `new CommandResponse(RequestStatus)` for non-success statuses.
 - **Errors**: Throw exceptions (not `CommandResponse.Failed()`) when a required entity is missing from `IFightContext`.
 - **Fighter state notification**: When a handler mutates fighter state in-place (e.g., HP changes), call `_fightContext.NotifyFighterUpdated(command.TargetId)` in both `ExecuteAsync` and `UndoAsync` so that UI components re-render.
+
+## Logging
+
+Handlers **MUST** produce log entries for user-visible actions via write-log sub-commands. Refer to the `dnd-logging` skill for the full API reference, formatting tags, and color tokens.
+
+- **Dependency**: Do **not** inject `IDnDLogService` in command handlers. Block/scope management is done via `OpenBlockCommand`, `CloseBlockCommand`, `OpenScopeCommand`, `CloseScopeCommand` sub-commands. Log entries are added via `WriteLogCommand` sub-commands. All logging goes through `_mediator`.
+- **Log entries**: Send a `WriteLogCommand` as a sub-command:
+  ```csharp
+  await _mediator.SendAsSubCommandAsync(
+      new WriteLogCommand($"[b]{fighter.Name}[/b] loses [b]{amount}[/b] HPs"),
+      parentCommand: command);
+  ```
+- **Undo/redo**: `WriteLogCommandHandler` hides entries on undo and shows them on redo automatically. No additional handler logic needed.
+- **Blocks**: Top-level orchestrating handlers (e.g., `ExecuteMartialAttackCommandHandler`) open/close blocks via `OpenBlockCommand` / `CloseBlockCommand` sub-commands dispatched through `_mediator`. Do **not** inject `IDnDLogService` for this purpose.
+- **Scopes**: Indent nested detail entries via `OpenScopeCommand` / `CloseScopeCommand` sub-commands dispatched through `_mediator`.
+- **Formatting tags**: `[b]...[/b]` (bold), `[c:token]...[/c]` (color), `[hover:tooltip]...[/hover]` (tooltip). See the `dnd-logging` skill for the full token list.
+- **Leaf vs orchestrator**: Leaf handlers (e.g., `LooseHpCommandHandler`) emit a single log entry. Orchestrators (e.g., `TakeDamageCommandHandler`) that only delegate to sub-commands do NOT need their own log entries — the sub-commands handle it.

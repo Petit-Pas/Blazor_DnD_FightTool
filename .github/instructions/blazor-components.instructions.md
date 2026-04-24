@@ -12,4 +12,4 @@ applyTo: "**/*.razor"
 - **Conditional rendering**: Use `@if` blocks for conditional markup. Avoid ternary in complex attribute expressions.
 - **Event binding**: Use `OnClick=OnClick` (no `@` prefix for component parameters), `ValueChanged="@(async (string value) => { ... })"` for inline async handlers.
 - **CSS classes**: Use MudBlazor utility classes and custom CSS classes. Combine with string concatenation, not interpolation where possible.
-- **Extension methods**: Use existing extensions like `"css-class".When(condition)` from `Extensions` project for conditional CSS classes.
+- **Extension methods**: Use existing extensions like `"css-class".When(condition)` from `Extensions` project for conditional CSS classes. Compose class strings **inline in the `.razor` markup** — do not create computed properties in the code-behind just to concatenate CSS class names.

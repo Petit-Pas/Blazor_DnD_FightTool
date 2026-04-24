@@ -7,6 +7,10 @@
         scrollableArea.scrollTo({ top: scrollPosition, behavior: "smooth" });
     },
 
+    scrollIntoView: function (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "end" });
+    },
+
     lockScroll: function (scrollableAreaElementId) {
         document.getElementById(scrollableAreaElementId).style.overflow = "hidden";
     },

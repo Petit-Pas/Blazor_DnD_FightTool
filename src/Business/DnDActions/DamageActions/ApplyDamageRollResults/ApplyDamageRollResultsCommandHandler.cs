@@ -1,4 +1,9 @@
 using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+using DnDFightTool.Business.DnDActions.LogActions;
+using DnDFightTool.Business.DnDActions.LogActions.CloseScope;
+using DnDFightTool.Business.DnDActions.LogActions.OpenScope;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
+using DnDFightTool.Domain.CharacterSheet.AbilityScores;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Damage;
 using DnDFightTool.Domain.Rolls;
@@ -25,17 +30,49 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
 
         var totalDamage = 0;
 
+        if (command.Save != null)
+        {
+            await LogSaveRoll(command.Save, caster, target, command);
+        }
+
+        await _mediator.SendAsSubCommandAsync(new OpenScopeCommand(), parentCommand: command);
+
         foreach (var damageRoll in command.DamageRolls)
         {
             var actualDamage = ApplyAffinity(damageRoll.Damage, damageRoll.DamageType, target);
             actualDamage = ApplySaveModifier(actualDamage, damageRoll.SuccessfulSaveModifier, command.Save, target, caster);
 
-            totalDamage += (int)Math.Floor(actualDamage);
+            var damageInt = (int)Math.Floor(actualDamage);
+            totalDamage += damageInt;
+
+            await LogDamageRoll(damageRoll, damageInt, command);
         }
+
+        await _mediator.SendAsSubCommandAsync(new CloseScopeCommand(), parentCommand: command);
 
         await _mediator.SendAsSubCommandAsync(new TakeDamageCommand(target.Id, totalDamage), parentCommand: command);
 
         return CommandResponse.Success();
+    }
+
+    private async Task LogSaveRoll(SaveRollResult save, FightingCharacter caster, FightingCharacter target, ApplyDamageRollResultsCommand command)
+    {
+        var dc = save.Target.GetValue(caster);
+        var modifier = target.AbilityScores.GetSavingModifier(save.Ability);
+        var totalSave = save.Result + modifier.Modifier;
+        var successful = save.IsSuccessful(caster, target);
+        var sign = modifier.Modifier >= 0 ? "+" : "";
+        await _mediator.SendAsSubCommandAsync(
+            new WriteLogCommand($"[hover:d20 = {save.Result}, {save.Ability} modifier = {sign}{modifier.Modifier}][b]{totalSave}[/b][/hover] {save.Ability} save (DC {dc}) => [b]{(successful ? "Success" : "Failure")}[/b]"),
+            parentCommand: command);
+    }
+
+    private async Task LogDamageRoll(DamageRollResult damageRoll, int damage, ApplyDamageRollResultsCommand command)
+    {
+        var tokenName = damageRoll.DamageType.ToLogColorToken();
+        await _mediator.SendAsSubCommandAsync(
+            new WriteLogCommand($"[c:{tokenName}][b]{damage}[/b] {damageRoll.DamageType.ToReadableString()} damage[/c]"),
+            parentCommand: command);
     }
 
     private static double ApplyAffinity(int damage, DamageTypeEnum damageType, FightingCharacter target)

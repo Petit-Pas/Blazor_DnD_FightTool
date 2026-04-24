@@ -13,6 +13,7 @@ using DnDFightTool.UI.DnDQueryPrompter;
 using DnDFightTool.Infrastructure.Extensions;
 using DnDFightTool.Infrastructure.Extensions.IoC;
 using DnDFightTool.UI.FightBlazorComponents.IoC;
+using DnDFightTool.Domain.Logs.IoC;
 using FluentValidation;
 using DnDFightTool.Infrastructure.IO.Files;
 using DnDFightTool.Infrastructure.IO.Serialization;
@@ -52,6 +53,7 @@ builder.Services.ConfigureMediator(options =>
 });
 
 builder.Services
+    .RegisterLogsServices()
     .RegisterCharacterSheetMappingConfigurations()
     .RegisterAspNetCoreExtensions()
     .RegisterCharacterSheetBlazorComponentsServices()

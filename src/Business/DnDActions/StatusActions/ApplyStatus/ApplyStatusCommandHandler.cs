@@ -1,3 +1,4 @@
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Domain.CharacterSheet.Statuses;
 using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
@@ -16,7 +17,7 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
         _appliedStatusCollection = appliedStatusCollection ?? throw new ArgumentNullException(nameof(appliedStatusCollection));
     }
 
-    public override Task<ICommandResponse<NoResponse>> ExecuteAsync(ApplyStatusCommand command)
+    public async override Task<ICommandResponse<NoResponse>> ExecuteAsync(ApplyStatusCommand command)
     {
         var caster = _fightContext[command.CasterId] ?? throw new NullReferenceException($"{typeof(ApplyStatusCommandHandler)} could not find caster with id {command.CasterId}");
         var target = _fightContext[command.TargetId] ?? throw new NullReferenceException($"{typeof(ApplyStatusCommandHandler)} could not find target with id {command.TargetId}");
@@ -27,7 +28,9 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
 
         _appliedStatusCollection.Add(appliedStatus);
 
-        return Task.FromResult(CommandResponse.Success());
+        await LogStatusApplied(target.Name, status.Name, command);
+
+        return CommandResponse.Success();
     }
 
     public async override Task UndoAsync(ApplyStatusCommand command)
@@ -38,4 +41,12 @@ public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
     }
 
     // No need to redo, the status should never be applied blindly, so the TryApplyStatus.Redo will never use the history
+
+    private async Task LogStatusApplied(string targetName, string statusName, ApplyStatusCommand command)
+    {
+        await _mediator.SendAsSubCommandAsync(
+            new WriteLogCommand($"[b]{targetName}[/b] is now affected by [b]{statusName}[/b]"),
+            parentCommand: command);
+    }
+        
 }

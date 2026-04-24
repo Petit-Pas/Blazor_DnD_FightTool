@@ -22,3 +22,7 @@ applyTo: "**/*.cs"
 - **Exceptions**: Throw `ArgumentException` / `NullReferenceException` / `InvalidOperationException` with descriptive messages including the handler type name.
 - **IoC pattern**: Each project boundary exposes a `ServiceCollectionExtensions` class in an `IoC` folder with extension methods on `IServiceCollection`.
 - **Obsolete**: Mark deserialisation-only constructors with `[Obsolete("Should not be used, only for deserialization")]`.
+- **Spacing Conventions**
+  - Never use => expression-bodied members, even for single-line methods.
+- **Async**: Use `async`/`await` for all asynchronous operations when possible. Do not simply return the task in a simple method.
+

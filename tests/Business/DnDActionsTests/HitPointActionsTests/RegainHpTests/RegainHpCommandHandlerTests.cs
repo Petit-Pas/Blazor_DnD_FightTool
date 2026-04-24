@@ -1,4 +1,5 @@
 using DnDFightTool.Business.DnDActions.HitPointActions.RegainHp;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.HitPoint;
 using FakeItEasy;
@@ -102,6 +103,19 @@ internal class RegainHpCommandHandlerTests
 
             // Assert
             _command.CorrectedAmount.Should().Be(correctedAmountExpected);
+        }
+
+        [Test]
+        public async Task Should_Send_WriteLogCommand()
+        {
+            // Act
+            await _commandHandler.ExecuteAsync(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(
+                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("regains") && x.Content.Contains("HPs")),
+                A<RegainHpCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
     }
 

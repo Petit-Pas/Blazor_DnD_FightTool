@@ -35,7 +35,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
             [SetUp]
             public void SetUp()
             {
-                _mediator = A.Fake<IUndoableMediator>();
+                _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
                 _fightContext = A.Fake<IFightContext>();
 
                 _command = new TryApplyStatusCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
@@ -137,7 +137,7 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
             public async Task Should_Not_Apply_Status_When_It_Should_Not_Be_Applied()
             {
                 // Arrange
-                WhenQueryReturns(QueryResponse<SaveRollResult>.Success(SaveRollResultFactory.Build(rolledResult: 1)));
+                WhenQueryReturns(QueryResponse<SaveRollResult>.Success(SaveRollResultFactory.Build(rolledResult: 20)));
 
                 // Act
                 await _commandHandler.ExecuteAsync(_command);

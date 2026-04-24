@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\Business\DnDQueries\DnDQueries.csproj" />
     <ProjectReference Include="..\..\Domain\CharacterSheet\CharacterSheet.csproj" />
     <ProjectReference Include="..\..\Domain\Fight\Fight.csproj" />
+    <ProjectReference Include="..\..\Domain\Logs\Logs.csproj" />
     <ProjectReference Include="..\CharacterSheetBlazorComponents\CharacterSheetBlazorComponents.csproj" />
     <ProjectReference Include="..\SharedComponents\SharedComponents.csproj" />
   </ItemGroup>

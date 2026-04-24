@@ -3,6 +3,7 @@
 @using DnDFightTool.Domain.Fight.Characters
 @using DnDFightTool.UI.FightBlazorComponents.Entities.FightingCharacters.Components;
 @using DnDFightTool.UI.FightBlazorComponents.Entities.MartialAttacks
+@using DnDFightTool.UI.FightBlazorComponents.Log
 @using MudBlazor
 
 
@@ -14,8 +15,8 @@
         }
     </div>
 
-    <div style="grid-row:1; grid-column:2;">
-        fight log placeholder
+    <div style="grid-row:1; grid-column:2; min-height:0; display:flex; flex-direction:column; padding:8px;">
+        <DnDLogComponent Style="flex:1; min-height:0;" />
     </div>
 
     <MudTabs Border=true Position=Position.Left ApplyEffectsToContainer="true" TabPanelsClass="pa-2" Style="grid-row:2; grid-column:1;" Elevation=3>

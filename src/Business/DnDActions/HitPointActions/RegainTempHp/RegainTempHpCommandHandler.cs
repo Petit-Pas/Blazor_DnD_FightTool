@@ -1,4 +1,5 @@
-﻿using DnDFightTool.Domain.Fight;
+﻿using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
+using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
@@ -13,9 +14,10 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
         _fightContext = fightContext;
     }
 
-    public override Task<ICommandResponse<NoResponse>> ExecuteAsync(RegainTempHpCommand command)
+    public async override Task<ICommandResponse<NoResponse>> ExecuteAsync(RegainTempHpCommand command)
     {
-        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainTempHpCommandHandler)} could not find target with id {command.TargetId}");
+        var fighter = _fightContext[command.TargetId] ?? throw new ArgumentException($"{typeof(RegainTempHpCommandHandler)} could not find target with id {command.TargetId}");
+        var hitPoints = fighter.HitPoints;
 
         var expectedTotalCurrentHps = Math.Max(command.Amount, hitPoints.CurrentTempHps);
         command.CorrectedAmount = expectedTotalCurrentHps - hitPoints.CurrentTempHps;
@@ -24,7 +26,9 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
 
         _fightContext.NotifyFighterUpdated(command.TargetId);
 
-        return Task.FromResult(CommandResponse.Success());
+        await LogTempHpGain(fighter.Name, command);
+
+        return CommandResponse.Success();
     }
 
     public async override Task UndoAsync(RegainTempHpCommand command)
@@ -47,4 +51,12 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
     {
         await ExecuteAsync(command);
     }
+
+    private async Task LogTempHpGain(string fighterName, RegainTempHpCommand command)
+    {
+        await _mediator.SendAsSubCommandAsync(
+            new WriteLogCommand($"[b]{fighterName}[/b] gains [c:heal][b]{command.CorrectedAmount}[/b] temp HPs[/c]"),
+            parentCommand: command);
+    }
+        
 }

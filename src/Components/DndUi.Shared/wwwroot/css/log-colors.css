@@ -1,0 +1,41 @@
+/* DnD semantic color tokens — light mode (default) */
+:root {
+    --dnd-color-bludgeoning: #8B7355;
+    --dnd-color-piercing: #8B7355;
+    --dnd-color-slashing: #8B7355;
+    --dnd-color-bludgeoning-silver: var(--dnd-color-bludgeoning);
+    --dnd-color-piercing-silver: var(--dnd-color-piercing);
+    --dnd-color-slashing-silver: var(--dnd-color-slashing);
+    --dnd-color-bludgeoning-magic: var(--dnd-color-bludgeoning);
+    --dnd-color-piercing-magic: var(--dnd-color-piercing);
+    --dnd-color-slashing-magic: var(--dnd-color-slashing);
+    --dnd-color-acid: #7FBA00;
+    --dnd-color-cold: #4FC3F7;
+    --dnd-color-fire: #E65100;
+    --dnd-color-force: #9C27B0;
+    --dnd-color-lightning: #1565C0;
+    --dnd-color-necrotic: #4E342E;
+    --dnd-color-poison: #558B2F;
+    --dnd-color-psychic: #AD1457;
+    --dnd-color-radiant: #F9A825;
+    --dnd-color-thunder: #5C6BC0;
+    --dnd-color-heal: #2E7D32;
+}
+
+/* DnD semantic color tokens — dark mode */
+.dnd-dark {
+    --dnd-color-bludgeoning: #D7CCC8;
+    --dnd-color-piercing: #D7CCC8;
+    --dnd-color-slashing: #D7CCC8;
+    --dnd-color-acid: #C5E1A5;
+    --dnd-color-cold: #81D4FA;
+    --dnd-color-fire: #FF8A65;
+    --dnd-color-force: #CE93D8;
+    --dnd-color-lightning: #64B5F6;
+    --dnd-color-necrotic: #A1887F;
+    --dnd-color-poison: #AED581;
+    --dnd-color-psychic: #F48FB1;
+    --dnd-color-radiant: #FFF176;
+    --dnd-color-thunder: #9FA8DA;
+    --dnd-color-heal: #81C784;
+}

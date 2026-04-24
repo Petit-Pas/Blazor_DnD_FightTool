@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
@@ -26,7 +27,7 @@ public class ApplyStatusCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
         _fightContext = A.Fake<IFightContext>();
         _appliedStatusRepository = A.Fake<IAppliedStatusRepository>();
 
@@ -99,6 +100,16 @@ public class ApplyStatusCommandHandlerTests
         public void AppliedStatusId_Should_Be_Stored_In_Command()
         {
             A.CallTo(() => _appliedStatusRepository.Add(An<AppliedStatus>.That.Matches(x => x.Id == _command.AppliedStatusId)))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        [Order(2)]
+        public void Should_Send_WriteLogCommand()
+        {
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(
+                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("is now affected by")),
+                A<ApplyStatusCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
     }

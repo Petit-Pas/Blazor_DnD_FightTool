@@ -1,16 +1,18 @@
+using System;
+using System.Threading.Tasks;
+using DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.HitPoint;
-using FakeItEasy;
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
+using DomainTestsUtilities.Extensions;
+using FakeItEasy;
 using FluentAssertions;
+using MudBlazor.Charts;
 using NUnit.Framework;
-using System;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
-using DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
-using System.Threading.Tasks;
-using DomainTestsUtilities.Extensions;
-using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDActionsTests.HitPointActionsTests.RegainTempHpTests;
 
@@ -28,7 +30,7 @@ internal class RegainTempHpCommandHandlerBase
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
         _fightContext = A.Fake<IFightContext>();
 
         _character = new Character
@@ -87,6 +89,19 @@ internal class RegainTempHpCommandHandlerBase
 
             // Assert
             _command.CorrectedAmount.Should().Be(correctedAmountExpected);
+        }
+
+        [Test]
+        public async Task Should_Send_WriteLogCommand()
+        {
+            // Act
+            await _commandHandler.ExecuteAsync(_command);
+
+            // Assert
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(
+                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("gains") && x.Content.Contains("temp HPs")),
+                A<RegainTempHpCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
     }
 

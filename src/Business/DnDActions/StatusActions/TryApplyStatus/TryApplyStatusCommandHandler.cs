@@ -1,10 +1,13 @@
-﻿using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
+﻿using DnDFightTool.Business.DnDActions.LogActions;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
+using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Statuses;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using DnDFightTool.Domain.Fight.DomainExtensions.Statuses;
+using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Infrastructure.Memory.Hashes;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
@@ -37,6 +40,11 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
             return new CommandResponse(saveQueryResult);
         }
 
+        if (command.SaveRollResult != null)
+        {
+            await LogSaveRoll(command.SaveRollResult, caster, target, command);
+        }
+
         await TryApplyStatus(command, status, caster, target);
 
         return CommandResponse.Success();
@@ -48,6 +56,18 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         {
             await _mediator.SendAsSubCommandAsync(new ApplyStatusCommand(caster.Id, target.Id, status.Id, command.SaveRollResult), parentCommand: command);
         }
+    }
+
+    private async Task LogSaveRoll(SaveRollResult save, FightingCharacter caster, FightingCharacter target, TryApplyStatusCommand command)
+    {
+        var dc = save.Target.GetValue(caster);
+        var modifier = target.AbilityScores.GetSavingModifier(save.Ability);
+        var totalSave = save.Result + modifier.Modifier;
+        var successful = save.IsSuccessful(caster, target);
+        var sign = modifier.Modifier >= 0 ? "+" : "";
+        await _mediator.SendAsSubCommandAsync(
+            new WriteLogCommand($"[hover:d20 = {save.Result}, {save.Ability} modifier = {sign}{modifier.Modifier}][b]{totalSave}[/b][/hover] {save.Ability} save (DC {dc}) => [b]{(successful ? "Success" : "Failure")}[/b]"),
+            parentCommand: command);
     }
 
     private async Task<RequestStatus> QuerySaveRoll(TryApplyStatusCommand command, StatusTemplate status)

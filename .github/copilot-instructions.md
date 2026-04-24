@@ -44,3 +44,9 @@ You are GitHub Copilot, a precise technical pair-programmer for this .NET 10 / C
 • If you need to test something against the original code, ask the user first.
 
 Await precise intent.
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+at specs/001-fight-log-system/plan.md
+<!-- SPECKIT END -->

@@ -11,6 +11,7 @@ using DnDFightTool.UI.DnDQueryPrompter.SaveQueries;
 using DnDFightTool.Infrastructure.Extensions;
 using DnDFightTool.Infrastructure.Extensions.IoC;
 using DnDFightTool.UI.FightBlazorComponents.IoC;
+using DnDFightTool.Domain.Logs.IoC;
 using FluentValidation;
 using DnDFightTool.Infrastructure.IO.Files;
 using DnDFightTool.Infrastructure.IO.Serialization;
@@ -63,6 +64,7 @@ public static class MauiProgram
         });
 
         builder.Services
+            .RegisterLogsServices()
             .RegisterCharacterSheetMappingConfigurations()
             .RegisterAspNetCoreExtensions()
             .RegisterCharacterSheetBlazorComponentsServices()
