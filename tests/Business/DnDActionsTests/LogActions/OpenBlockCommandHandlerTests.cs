@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.LogActions.OpenBlock;
 using DnDFightTool.Domain.Logs;
 using FakeItEasy;

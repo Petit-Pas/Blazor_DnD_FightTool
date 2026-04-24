@@ -29,7 +29,7 @@ internal class RegainHpCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
         _fightContext = A.Fake<IFightContext>();
 
         _character = new Character

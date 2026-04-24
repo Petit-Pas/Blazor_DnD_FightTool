@@ -117,6 +117,13 @@ builder.Services.ConfigureMediator(options =>
 });
 ```
 
+## Tests
+There is a public interface that needs to be implemented by mediators for CommandBaseHandler to be able to Undo/Redo. 
+For that reason, you should fake the mediator as such: 
+```csharp
+_mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
+```
+
 ## Common mistakes
 
 | Mistake | Symptom |
