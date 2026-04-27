@@ -27,13 +27,18 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     [Parameter]
     public required FightingCharacter Fighter { get; set; }
 
+    [Parameter]
+    public EventCallback<FightingCharacter> OnSelected { get; set; }
+
+    [CascadingParameter(Name = "SelectedFighter")]
+    private FightingCharacter? SelectedFighter { get; set; }
+
     private bool _isSelected = false;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        FightContext.OnActiveFighterChanged += OnActiveFighterChanged;
         FightContext.OnFighterUpdated += OnFighterUpdated;
         AppliedStatusRepository.AppliedStatusUpdated += OnAppliedStatusUpdated;
     }
@@ -41,7 +46,6 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     public void Dispose()
     {
         GC.SuppressFinalize(this);
-        FightContext.OnActiveFighterChanged -= OnActiveFighterChanged;
         FightContext.OnFighterUpdated -= OnFighterUpdated;
         AppliedStatusRepository.AppliedStatusUpdated -= OnAppliedStatusUpdated;
     }
@@ -50,16 +54,7 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     {
         base.OnParametersSet();
 
-        if (Fighter == FightContext.ActiveFighter)
-        {
-            _isSelected = true;
-        }
-    }
-
-    private void OnActiveFighterChanged(object? sender, FightingCharacter? e)
-    {
-        _isSelected = e == Fighter;
-        StateHasChanged();
+        _isSelected = SelectedFighter?.Id == Fighter?.Id;
     }
 
     private async void OnFighterUpdated(object? sender, Guid fighterId)
@@ -78,9 +73,9 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
         }
     }
 
-    private void CardClicked(MouseEventArgs _)
+    private async Task CardClicked(MouseEventArgs _)
     {
-        FightContext.SetActiveFighter(Fighter);
+        await OnSelected.InvokeAsync(Fighter);
     }
 
     private void Edit()

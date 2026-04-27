@@ -763,6 +763,90 @@
 			"label": "Build check final",
 			"type": "shell",
 			"command": "dotnet build DnDFightTool.slnx --verbosity quiet 2>&1 | Select-Object -Last 6"
+		},
+		{
+			"label": "Create feature branch: turn-round-tracking",
+			"type": "shell",
+			"command": ".specify/extensions/git/scripts/powershell/create-new-feature.ps1 -Json -ShortName \"turn-round-track\" \"turn-round-tracking\""
+		},
+		{
+			"label": "Build check",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx --no-restore 2>&1 | Select-String -Pattern '(error|warning|Build succeeded|Build FAILED)' | Select-Object -Last 30",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Full build",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-String -Pattern '(error CS|Build succeeded|Build FAILED)' | Select-Object -Last 20",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build check v2",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-String -Pattern '(error CS|error RZ|Build succeeded|Build FAILED|a réussi|a échoué|Générer)' | Select-Object -Last 15",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build check v3",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-String -Pattern '(error CS|error RZ|Générer)' | Select-Object -Last 10",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build check v4",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-String -Pattern '(error CS|error RZ|Générer)' | Select-Object -Last 10",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build check v5",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-String -Pattern '(error|Générer|Build)' | Select-Object -Last 5",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build final check",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-String -Pattern '(error CS|error RZ|Générer a)' | Select-Object -Last 3",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build tail",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Tee-Object -Variable output | Out-Null; $output | Select-Object -Last 5",
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "Build after private methods",
+			"type": "shell",
+			"command": "dotnet build DnDFightTool.slnx 2>&1 | Tee-Object -Variable o | Out-Null; $o | Select-Object -Last 4"
+		},
+		{
+			"label": "shell: Delete SetActiveFighter files",
+			"type": "shell",
+			"command": "Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\src\\Business\\DnDActions\\TurnActions\\SetActiveFighter' -Recurse -Force; Remove-Item 'd:\\Code\\Perso\\DnDFightTool\\tests\\Business\\DnDActionsTests\\TurnActions\\SetActiveFighterCommandHandlerTests.cs' -Force; Write-Host 'Deleted SetActiveFighter command folder and test file'"
+		},
+		{
+			"label": "Delete InitializeTurnOrder folder",
+			"type": "shell",
+			"command": "Remove-Item -Recurse -Force 'src/Business/DnDActions/TurnActions/InitializeTurnOrder'; Remove-Item -Force 'tests/Business/DnDActionsTests/TurnActions/InitializeTurnOrderCommandHandlerTests.cs'; echo DONE"
 		}
 	]
 }

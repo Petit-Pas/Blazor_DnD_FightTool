@@ -194,7 +194,15 @@ At end of report, output a concise Next Actions block:
 
 ### 8. Offer Remediation
 
-Ask the user: "Would you like me to suggest concrete remediation edits for the top N issues?" (Do NOT apply them automatically.)
+Use the `vscode_askQuestions` tool to ask whether the user wants remediation suggestions. If the tool is unavailable, ask in a single Markdown message.
+
+Question to present:
+- **header**: `remediation`
+- **question**: "Would you like me to suggest concrete remediation edits for the top issues?"
+- **options**: `[ { label: "Yes, suggest edits" }, { label: "No, I'll handle it myself" } ]` — mark "No" as `recommended: false`; no default recommendation.
+- **allowFreeformInput**: `true`
+
+Do NOT apply any edits automatically regardless of the answer. If user says yes, output a structured remediation suggestion block only.
 
 ### 9. Check for extension hooks
 

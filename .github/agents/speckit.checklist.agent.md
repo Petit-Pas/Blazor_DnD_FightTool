@@ -101,7 +101,14 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Audience: Reviewer (PR) if code-related; Author otherwise
    - Focus: Top 2 relevance clusters
 
-   Output the questions (label Q1/Q2/Q3). After answers: if ≥2 scenario classes (Alternate / Exception / Recovery / Non-Functional domain) remain unclear, you MAY ask up to TWO more targeted follow‑ups (Q4/Q5) with a one-line justification each (e.g., "Unresolved recovery path risk"). Do not exceed five total questions. Skip escalation if user explicitly declines more.
+   Use the `vscode_askQuestions` tool to present ALL generated questions at once (up to 5) in a single call. If the tool is unavailable, fall back to rendering all questions together in a single Markdown block (do not ask one at a time).
+
+   For each question in the tool call:
+   - For multiple-choice questions: set `options` with up to 5 entries. Mark the best default with `recommended: true`. Set `allowFreeformInput: true`.
+   - For short-answer questions: omit `options`; include your suggested answer and reasoning in the `message` field. Set `allowFreeformInput: true`.
+   - Always add "Do you want to add something else?" as the final question with options "No" and a free-form field.
+
+   After answers are received, if ≥2 scenario classes (Alternate / Exception / Recovery / Non-Functional domain) remain unclear, you MAY ask up to TWO more targeted follow-ups (Q4/Q5) via a second `vscode_askQuestions` call, with a one-line justification each. Do not exceed five total questions. Skip escalation if user explicitly declines more.
 
 3. **Understand user request**: Combine `$ARGUMENTS` + clarifying answers:
    - Derive checklist theme (e.g., security, review, deploy, ux)

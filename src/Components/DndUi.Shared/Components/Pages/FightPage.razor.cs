@@ -1,6 +1,7 @@
 ﻿using DnDFightTool.Business.DnDQueries;
 using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
+using DnDFightTool.Domain.Fight.TurnTracking;
 using DnDFightTool.UI.FightBlazorComponents.Entities.FightingCharacters.Dialog;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -18,9 +19,15 @@ public partial class FightPage : IDisposable
     [Inject]
     public required IFightContext FightContext { get; set; }
 
+    [Inject]
+    public required ICombatTurnService CombatTurnService { get; set; }
+
+    private FightingCharacter? _selectedFighter;
+
     protected async override Task OnInitializedAsync()
     {
         FightContext.OnFighterRemoved += FighterRemoved;
+        CombatTurnService.OnChanged += HandleTurnChanged;
 
         DialogServiceProvider.SetDialogService(DialogService);
 
@@ -55,12 +62,25 @@ public partial class FightPage : IDisposable
 
     public void FighterRemoved(object? _, FightingCharacter __)
     {
-        StateHasChanged();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void HandleTurnChanged()
+    {
+        _selectedFighter = CombatTurnService.CurrentTurnFighter;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void SelectFighter(FightingCharacter fighter)
+    {
+        _selectedFighter = fighter;
+        InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()
     {
         GC.SuppressFinalize(this);
         FightContext.OnFighterRemoved -= FighterRemoved;
+        CombatTurnService.OnChanged -= HandleTurnChanged;
     }
 }

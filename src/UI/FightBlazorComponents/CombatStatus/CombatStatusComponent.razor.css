@@ -1,0 +1,13 @@
+.combat-status-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 8px;
+    gap: 8px;
+}
+
+.combat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

@@ -23,7 +23,14 @@ public class CloseBlockCommandHandler : CommandHandlerBase<CloseBlockCommand>
     /// <inheritdoc />
     public override Task<ICommandResponse<NoResponse>> ExecuteAsync(CloseBlockCommand command)
     {
-        _logService.CloseBlock();
+        command.ClosedBlockId = _logService.CloseBlock();
         return Task.FromResult(CommandResponse.Success());
+    }
+
+    /// <inheritdoc />
+    public override Task UndoAsync(CloseBlockCommand command)
+    {
+        _logService.ReopenBlock(command.ClosedBlockId);
+        return Task.CompletedTask;
     }
 }

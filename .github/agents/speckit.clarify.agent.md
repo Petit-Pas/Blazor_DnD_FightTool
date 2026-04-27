@@ -130,41 +130,28 @@ Execution steps:
     - Favor clarifications that reduce downstream rework risk or prevent misaligned acceptance tests.
     - If more than 5 categories remain unresolved, select the top 5 by (Impact * Uncertainty) heuristic.
 
-4. Sequential questioning loop (interactive):
-    - Present EXACTLY ONE question at a time.
-    - For multiple‑choice questions:
+4. Batch questioning (single round-trip):
+    - Use the `vscode_askQuestions` tool to present ALL queued questions at once (up to 5) in a single call.
+    - If `vscode_askQuestions` is unavailable, fall back to presenting all questions together in a single Markdown message (do not revert to one-at-a-time).
+    - For each question, apply these formatting rules before building the tool call:
        - **Analyze all options** and determine the **most suitable option** based on:
           - Best practices for the project type
           - Common patterns in similar implementations
           - Risk reduction (security, performance, maintainability)
           - Alignment with any explicit project goals or constraints visible in the spec
-       - Present your **recommended option prominently** at the top with clear reasoning (1-2 sentences explaining why this is the best choice).
-       - Format as: `**Recommended:** Option [X] - <reasoning>`
-       - Then render all options as a Markdown table:
-
-       | Option | Description |
-       |--------|-------------|
-       | A | <Option A description> |
-       | B | <Option B description> |
-       | C | <Option C description> (add D/E as needed up to 5) |
-       | Short | Provide a different short answer (<=5 words) (Include only if free-form alternative is appropriate) |
-
-       - After the table, add: `You can reply with the option letter (e.g., "A"), accept the recommendation by saying "yes" or "recommended", or provide your own short answer.`
-    - For short‑answer style (no meaningful discrete options):
-       - Provide your **suggested answer** based on best practices and context.
-       - Format as: `**Suggested:** <your proposed answer> - <brief reasoning>`
-       - Then output: `Format: Short answer (<=5 words). You can accept the suggestion by saying "yes" or "suggested", or provide your own answer.`
-    - After the user answers:
-       - If the user replies with "yes", "recommended", or "suggested", use your previously stated recommendation/suggestion as the answer.
-       - Otherwise, validate the answer maps to one option or fits the <=5 word constraint.
-       - If ambiguous, ask for a quick disambiguation (count still belongs to same question; do not advance).
-       - Once satisfactory, record it in working memory (do not yet write to disk) and move to the next queued question.
-    - Stop asking further questions when:
-       - All critical ambiguities resolved early (remaining queued items become unnecessary), OR
-       - User signals completion ("done", "good", "no more"), OR
-       - You reach 5 asked questions.
-    - Never reveal future queued questions in advance.
-    - If no valid questions exist at start, immediately report no critical ambiguities.
+       - For multiple-choice questions: set `options` with 2–5 distinct, mutually exclusive entries. Mark the recommended option with `recommended: true`. Set `allowFreeformInput: true` to allow a custom short answer.
+       - For short-answer questions (no meaningful discrete options): omit `options`; include your suggested answer and reasoning in the `message` field. Set `allowFreeformInput: true`.
+       - Always add "Do you want to add something else?" as the final question with options "No" and a free-form field, as required by the project instructions.
+    - After the user answers all questions:
+       - If a user selects the option marked `recommended: true` or replies "yes"/"recommended"/"suggested", use the recommended/suggested answer as the final value.
+       - Validate each answer: multiple-choice must map to one option; free-form must be ≤5 words (or the full text of a selected option).
+       - If any answer is ambiguous, output a single targeted follow-up clarification message (does not count as a new question toward the quota).
+       - Record all accepted answers in working memory before writing anything to disk.
+    - Stop if:
+       - All critical ambiguities are resolved by the answers, OR
+       - The user signals completion ("done", "good", "no more"), OR
+       - 5 questions have been asked across all rounds.
+    - If no valid questions exist, immediately report no critical ambiguities.
 
 5. Integration after EACH accepted answer (incremental update approach):
     - Maintain in-memory representation of the spec (loaded once at start) plus the raw file contents.

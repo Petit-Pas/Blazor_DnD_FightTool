@@ -36,13 +36,30 @@ public class DnDLogServiceTests
         }
 
         [Test]
-        public void Should_ThrowInvalidOperationException_When_NoBlockOpen()
+        public void Should_AddEntry_ToAnonymousBlock_When_NoBlockOpen()
         {
             // Act
-            var act = () => _sut.AddEntry("No block");
+            var id = _sut.AddEntry("No block");
 
             // Assert
-            act.Should().Throw<InvalidOperationException>();
+            _sut.Blocks.Should().HaveCount(1);
+            _sut.Blocks[0].Name.Should().BeEmpty();
+            _sut.Blocks[0].Entries.Should().HaveCount(1);
+            _sut.Blocks[0].Entries[0].Id.Should().Be(id);
+        }
+
+        [Test]
+        public void Should_AllowOpenBlock_After_FreeEntry()
+        {
+            // Arrange
+            _sut.AddEntry("Free entry");
+
+            // Act — must not throw
+            var act = () => _sut.OpenBlock("Turn Block");
+
+            // Assert
+            act.Should().NotThrow();
+            _sut.Blocks.Should().HaveCount(2);
         }
 
         [Test]

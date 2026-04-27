@@ -1,6 +1,5 @@
 ﻿using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
-using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -8,29 +7,25 @@ using UndoableMediator.Mediators;
 
 namespace DnDFightTool.UI.FightBlazorComponents.Entities.MartialAttacks;
 
-public partial class MartialAttackSelectorComponent : IDisposable
+public partial class MartialAttackSelectorComponent
 {
     [Inject]
-    public required IFightContext FightContext { get; set; }
-
-    [Inject]
     public required IUndoableMediator Mediator { get; set; }
+
+    [CascadingParameter(Name = "SelectedFighter")]
+    private FightingCharacter? SelectedFighter { get; set; }
 
     private FightingCharacter? Character { get; set; }
 
     private MartialAttackTemplate? SelectedAttack { get; set; }
 
-    public void Dispose()
+    protected override void OnParametersSet()
     {
-        GC.SuppressFinalize(this);
-        FightContext.OnActiveFighterChanged -= FightContext_OnActiveFighterChanged;
-    }
-
-    protected override void OnInitialized()
-    {
-        Character = FightContext.ActiveFighter;
-
-        FightContext.OnActiveFighterChanged += FightContext_OnActiveFighterChanged;
+        if (Character?.Id != SelectedFighter?.Id)
+        {
+            Character = SelectedFighter;
+            SelectedAttack = null;
+        }
     }
 
     private async Task OnAttackClicked(TableRowClickEventArgs<MartialAttackTemplate> tableRowClickEventArgs)
@@ -45,13 +40,6 @@ public partial class MartialAttackSelectorComponent : IDisposable
     private string SelectedRowClassFunc(MartialAttackTemplate attackTemplate, int _)
     {
         return attackTemplate == SelectedAttack ? "selected-attack" : ""; 
-    }
-
-    private void FightContext_OnActiveFighterChanged(object? _, FightingCharacter? e)
-    {
-        SelectedAttack = null;
-        Character = e;
-        StateHasChanged();
     }
 
     private async Task AttackAsync()

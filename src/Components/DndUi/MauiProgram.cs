@@ -6,9 +6,9 @@ using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Characters.Validation;
 using DnDFightTool.Domain.CharacterSheet.IoC;
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.TurnTracking;
 using DnDFightTool.UI.DnDQueryPrompter;
 using DnDFightTool.UI.DnDQueryPrompter.SaveQueries;
-using DnDFightTool.Infrastructure.Extensions;
 using DnDFightTool.Infrastructure.Extensions.IoC;
 using DnDFightTool.UI.FightBlazorComponents.IoC;
 using DnDFightTool.Domain.Logs.IoC;
@@ -48,6 +48,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAppliedStatusRepository, AppliedStatusRepository>();
         builder.Services.AddSingleton<ICharacterRepository, LocalFileCharacterRepository>();
         builder.Services.AddSingleton<IFightContext, FightContext>();
+        builder.Services.AddSingleton<ICombatTurnService, CombatTurnService>();
         builder.Services.AddSingleton<IFileManager, LocalFileManager>();
         builder.Services.AddSingleton<IJsonSerializer, JsonSerializer>();
 

@@ -44,11 +44,16 @@ This project uses the **UndoableMediator** library (v2.0.0-alpha1). Refer to the
 Handlers **MUST** produce log entries for user-visible actions via write-log sub-commands. Refer to the `dnd-logging` skill for the full API reference, formatting tags, and color tokens.
 
 - **Dependency**: Do **not** inject `IDnDLogService` in command handlers. Block/scope management is done via `OpenBlockCommand`, `CloseBlockCommand`, `OpenScopeCommand`, `CloseScopeCommand` sub-commands. Log entries are added via `WriteLogCommand` sub-commands. All logging goes through `_mediator`.
-- **Log entries**: Send a `WriteLogCommand` as a sub-command:
+- **Log entries**: Send a `WriteLogCommand` as a sub-command.
+- **Private methods**: Every `_mediator.SendAsSubCommandAsync` call for a log command (`WriteLogCommand`, `OpenBlockCommand`, `CloseBlockCommand`, `OpenScopeCommand`, `CloseScopeCommand`) MUST be extracted into a dedicated private `async Task` method. Name it after the action it performs: `LogHpLoss`, `OpenTurnLog`, `CloseTurnLog`, `LogRoundHeader`, `OpenAttackLog`, etc. `ExecuteAsync` calls those methods — it never dispatches log sub-commands inline.
   ```csharp
-  await _mediator.SendAsSubCommandAsync(
-      new WriteLogCommand($"[b]{fighter.Name}[/b] loses [b]{amount}[/b] HPs"),
-      parentCommand: command);
+  // ✅ correct
+  private async Task LogHpLoss(string fighterName, LooseHpCommand command)
+  {
+      await _mediator.SendAsSubCommandAsync(
+          new WriteLogCommand($"[b]{fighterName}[/b] loses [b]{command.CorrectedAmount}[/b] HPs"),
+          parentCommand: command);
+  }
   ```
 - **Undo/redo**: `WriteLogCommandHandler` hides entries on undo and shows them on redo automatically. No additional handler logic needed.
 - **Blocks**: Top-level orchestrating handlers (e.g., `ExecuteMartialAttackCommandHandler`) open/close blocks via `OpenBlockCommand` / `CloseBlockCommand` sub-commands dispatched through `_mediator`. Do **not** inject `IDnDLogService` for this purpose.

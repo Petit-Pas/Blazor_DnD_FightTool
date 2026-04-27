@@ -56,11 +56,6 @@ public class FightContext : IFightContext
     public IEnumerable<FightingCharacter> Fighters => _fighters.Values;
 
     /// <inheritdoc/>
-    public FightingCharacter? ActiveFighter { get; private set; }
-    /// <inheritdoc/>
-    public event EventHandler<FightingCharacter?>? OnActiveFighterChanged;
-
-    /// <inheritdoc/>
     public event EventHandler<FightingCharacter>? OnFighterRemoved;
 
     /// <inheritdoc/>
@@ -125,22 +120,4 @@ public class FightContext : IFightContext
         }
     }
 
-    /// <inheritdoc/>
-    public void SetActiveFighter(Guid id)
-    {
-        if (ActiveFighter?.Id == id)
-        {
-            return;
-        }
-
-        if (_fighters.TryGetValue(id, out var fighter))
-        {
-            ActiveFighter = fighter;
-            OnActiveFighterChanged?.Invoke(this, ActiveFighter);
-        }
-        else
-        {
-            // TODO warning
-        }
-    }
 }

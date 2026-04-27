@@ -1,7 +1,5 @@
 using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
-using DnDFightTool.Business.DnDActions.LogActions.CloseBlock;
 using DnDFightTool.Business.DnDActions.LogActions.CloseScope;
-using DnDFightTool.Business.DnDActions.LogActions.OpenBlock;
 using DnDFightTool.Business.DnDActions.LogActions.OpenScope;
 using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Domain.CharacterSheet.Characters;
@@ -200,27 +198,27 @@ public class ExecuteMartialAttackCommandHandlerTests
         }
 
         [Test]
-        public async Task Should_Send_OpenBlockCommand()
+        public async Task Should_Send_OpenScopeCommands()
         {
             // Act
             await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             A.CallTo(() => _mediator.SendAsSubCommandAsync(
-                A<OpenBlockCommand>.That.Matches(x => x.Name == "Martial Attack"),
+                A<OpenScopeCommand>._,
                 A<ExecuteMartialAttackCommand>._))
-                .MustHaveHappenedOnceExactly();
+                .MustHaveHappenedTwiceExactly();
         }
 
         [Test]
-        public async Task Should_Send_CloseBlockCommand()
+        public async Task Should_Send_CloseScopeCommands()
         {
             // Act
             await _commandHandler.ExecuteAsync(_command);
 
             // Assert
-            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<CloseBlockCommand>._, A<ExecuteMartialAttackCommand>._))
-                .MustHaveHappenedOnceExactly();
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<CloseScopeCommand>._, A<ExecuteMartialAttackCommand>._))
+                .MustHaveHappenedTwiceExactly();
         }
 
         [Test]

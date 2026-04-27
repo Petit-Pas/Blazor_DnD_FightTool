@@ -70,10 +70,13 @@ You **MUST** consider the user input before proceeding (if not empty).
 
    - **If any checklist is incomplete**:
      - Display the table with incomplete item counts
-     - **STOP** and ask: "Some checklists are incomplete. Do you want to proceed with implementation anyway? (yes/no)"
-     - Wait for user response before continuing
-     - If user says "no" or "wait" or "stop", halt execution
-     - If user says "yes" or "proceed" or "continue", proceed to step 3
+     - **STOP** and use the `vscode_askQuestions` tool to ask whether to proceed. If the tool is unavailable, ask in a single Markdown message.
+       - **header**: `proceed-with-incomplete`
+       - **question**: "Some checklists are incomplete. Do you want to proceed with implementation anyway?"
+       - **options**: `[ { label: "Yes, proceed" }, { label: "No, stop here", recommended: true } ]`
+       - **allowFreeformInput**: `false`
+     - If user selects "No, stop here" or equivalent, halt execution
+     - If user selects "Yes, proceed" or equivalent, proceed to step 3
 
    - **If all checklists are complete**:
      - Display the table showing all checklists passed

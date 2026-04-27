@@ -194,37 +194,22 @@ Given that feature description, do this:
       - **If [NEEDS CLARIFICATION] markers remain**:
         1. Extract all [NEEDS CLARIFICATION: ...] markers from the spec
         2. **LIMIT CHECK**: If more than 3 markers exist, keep only the 3 most critical (by scope/security/UX impact) and make informed guesses for the rest
-        3. For each clarification needed (max 3), present options to user in this format:
+        3. Use the `vscode_askQuestions` tool to present ALL clarification questions at once (max 3) in a single call. If the tool is unavailable, render all questions together in a single Markdown block (do not ask one at a time).
 
-           ```markdown
-           ## Question [N]: [Topic]
-           
-           **Context**: [Quote relevant spec section]
-           
-           **What we need to know**: [Specific question from NEEDS CLARIFICATION marker]
-           
-           **Suggested Answers**:
-           
-           | Option | Answer | Implications |
-           |--------|--------|--------------|
-           | A      | [First suggested answer] | [What this means for the feature] |
-           | B      | [Second suggested answer] | [What this means for the feature] |
-           | C      | [Third suggested answer] | [What this means for the feature] |
-           | Custom | Provide your own answer | [Explain how to provide custom input] |
-           
-           **Your choice**: _[Wait for user response]_
-           ```
+           For each question in the tool call:
+           - **header**: `Q[N]-[topic-slug]` (e.g., `Q1-auth-method`)
+           - **question**: The specific question from the NEEDS CLARIFICATION marker
+           - **message**: Include a brief quote of the relevant spec context
+           - **options**: 2–4 distinct, mutually exclusive answers derived from the marker's suggested options. Mark the best default with `recommended: true`.
+           - **allowFreeformInput**: `true` (to allow custom short answers)
+           - Final question: always add "Do you want to add something else?" with options "No" and a free-form field.
 
-        4. **CRITICAL - Table Formatting**: Ensure markdown tables are properly formatted:
-           - Use consistent spacing with pipes aligned
-           - Each cell should have spaces around content: `| Content |` not `|Content|`
-           - Header separator must have at least 3 dashes: `|--------|`
-           - Test that the table renders correctly in markdown preview
-        5. Number questions sequentially (Q1, Q2, Q3 - max 3 total)
-        6. Present all questions together before waiting for responses
-        7. Wait for user to respond with their choices for all questions (e.g., "Q1: A, Q2: Custom - [details], Q3: B")
-        8. Update the spec by replacing each [NEEDS CLARIFICATION] marker with the user's selected or provided answer
-        9. Re-run validation after all clarifications are resolved
+        4. After the user answers all questions:
+           - If a user selects the option marked `recommended: true` or replies "yes"/"recommended", use the recommended answer.
+           - If any answer is ambiguous, ask a single targeted follow-up (does not count toward the 3-question quota).
+
+        5. Update the spec by replacing each [NEEDS CLARIFICATION] marker with the user's selected or provided answer.
+        6. Re-run validation after all clarifications are resolved.
 
    d. **Update Checklist**: After each validation iteration, update the checklist file with current pass/fail status
 

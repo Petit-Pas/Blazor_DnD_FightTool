@@ -1,7 +1,5 @@
 ﻿using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
-using DnDFightTool.Business.DnDActions.LogActions.CloseBlock;
 using DnDFightTool.Business.DnDActions.LogActions.CloseScope;
-using DnDFightTool.Business.DnDActions.LogActions.OpenBlock;
 using DnDFightTool.Business.DnDActions.LogActions.OpenScope;
 using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
@@ -175,7 +173,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
 
     private async Task OpenAttackLog(FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command, MartialAttackTemplate attackTemplate)
     {
-        await _mediator.SendAsSubCommandAsync(new OpenBlockCommand("Martial Attack"), parentCommand: command);
+        await _mediator.SendAsSubCommandAsync(new OpenScopeCommand(), parentCommand: command);
         await _mediator.SendAsSubCommandAsync(new WriteLogCommand($"[b]{caster.Name}[/b] attacks [b]{target.Name}[/b] using [b]{attackTemplate.Name}[/b]"), parentCommand: command);
         await _mediator.SendAsSubCommandAsync(new OpenScopeCommand(), parentCommand: command);
     }
@@ -191,6 +189,6 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     private async Task CloseAttackLog(ExecuteMartialAttackCommand command)
     {
         await _mediator.SendAsSubCommandAsync(new CloseScopeCommand(), parentCommand: command);
-        await _mediator.SendAsSubCommandAsync(new CloseBlockCommand(), parentCommand: command);
+        await _mediator.SendAsSubCommandAsync(new CloseScopeCommand(), parentCommand: command);
     }
 }

@@ -44,11 +44,11 @@
 - No explicit "hide" or "show" command is needed — visibility is a side effect of the standard undo/redo flow.
 - The command stores only the `Guid` of the created entry (not the entry object itself). Commands must be serializable — storing domain objects in command state is not allowed.
 - Visibility state is managed by the service (internal `HashSet<Guid>` of hidden IDs), not on the `LogEntry` entity. This keeps `LogEntry` a simple, immutable data record.
-- `OpenBlock` and `CloseBlock` are NOT commands — they're direct calls on `IDnDLogService` because they don't need undo/redo (block visibility is derived from entry visibility).
-- `OpenScope` and `CloseScope` are also direct calls — scopes are transient and affect only the indentation level of subsequently-written entries.
+- `OpenBlock`, `CloseBlock`, `OpenScope`, and `CloseScope` ARE commands dispatched via `SendAsSubCommandAsync`, like `WriteLogCommand`. Block commands carry meaningful undo behaviour: `OpenBlockCommandHandler.UndoAsync` calls `_logService.CloseBlock()` (reverses the opening); `CloseBlockCommandHandler.UndoAsync` calls `_logService.ReopenBlock(command.ClosedBlockId)` (reverses the closing by restoring the closed block as current). To enable this, `IDnDLogService.CloseBlock()` returns the `Guid` of the block it closed, which `CloseBlockCommand` stores as `ClosedBlockId`.
+- `OpenScopeCommandHandler.UndoAsync` and `CloseScopeCommandHandler.UndoAsync` are no-ops — indentation level is entirely positional and reconstructed from scope depth at render time; there is no independent scope state to reverse.
 
 **Alternatives considered**:
-- Make block open/close also sub-commands → rejected: blocks have no independent state to undo; their visibility is derived.
+- Make block open/close direct service calls (not commands) → rejected: then their undo cannot participate in the mediator's sub-command cascade, preventing turn-block re-opening on undo.
 - Store `IsVisible` on the `LogEntry` entity → rejected: commands must be serializable and should only store GUIDs, not domain objects. Visibility is a service-level concern.
 
 ## R-004: CSS theming for semantic color tokens

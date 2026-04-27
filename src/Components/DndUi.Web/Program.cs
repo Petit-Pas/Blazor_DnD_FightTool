@@ -9,6 +9,7 @@ using DnDFightTool.Domain.Rolls;
 using DnDFightTool.Domain.Rolls.Validation;
 using DnDFightTool.Domain.CharacterSheet.IoC;
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.TurnTracking;
 using DnDFightTool.UI.DnDQueryPrompter;
 using DnDFightTool.Infrastructure.Extensions;
 using DnDFightTool.Infrastructure.Extensions.IoC;
@@ -36,6 +37,7 @@ var dataFolder = Path.Combine(Path.GetTempPath(), "DnDFightTool.Web");
 builder.Services.AddSingleton<ICharacterRepository>(sp =>
     new LocalFileCharacterRepository(sp.GetRequiredService<IFileManager>(), sp.GetRequiredService<IJsonSerializer>(), dataFolder));
 builder.Services.AddSingleton<IFightContext, FightContext>();
+builder.Services.AddSingleton<ICombatTurnService, CombatTurnService>();
 builder.Services.AddSingleton<IAppliedStatusRepository, AppliedStatusRepository>();
 builder.Services.AddSingleton<IFileManager, LocalFileManager>();
 builder.Services.AddSingleton<IJsonSerializer, JsonSerializer>();

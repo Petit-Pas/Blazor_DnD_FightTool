@@ -1,0 +1,26 @@
+@using DnDFightTool.UI.SharedComponents
+@using MudBlazor
+
+@inherits StylableComponentBase
+
+<div class="@($"combat-status-panel {Class}")" style="@Style">
+    <div class="combat-info">
+        @if (_combatTurnService.IsStarted)
+        {
+            <MudText Typo="Typo.h6">Round @_combatTurnService.CurrentRound</MudText>
+            <MudText Typo="Typo.body1">@TurnText</MudText>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1" Class="mud-text-secondary">No combat started</MudText>
+        }
+    </div>
+
+    <MudButton Variant="Variant.Filled"
+               Color="Color.Primary"
+               Disabled="@IsDisabled"
+               OnClick="OnButtonClick"
+               FullWidth="true">
+        @ButtonLabel
+    </MudButton>
+</div>
