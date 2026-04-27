@@ -12,6 +12,19 @@ internal static class MappingConfigurations
             .NewConfig()
             .IgnoreWhenDuplicating(x => x.Id);
 
+        // Map each template individually (preserving MapContext for IgnoreWhenDuplicating),
+        // then rebuild the dictionary keyed by the mapped template's Id.
+        TypeAdapterConfig<MartialAttackTemplateCollection, MartialAttackTemplateCollection>
+            .NewConfig()
+            .AfterMapping((src, dest) =>
+            {
+                dest.Clear();
+                foreach (var srcTemplate in src.Values)
+                {
+                    dest.Add(srcTemplate.Adapt<MartialAttackTemplate>());
+                }
+            });
+
         return services;
     }
 }

@@ -12,6 +12,19 @@ internal static class MappingConfigurations
             .NewConfig()
             .IgnoreWhenDuplicating(x => x.Id);
 
+        // Map each template individually so IgnoreWhenDuplicating regenerates the Id,
+        // then rebuild the dictionary keyed by the mapped template's Id.
+        TypeAdapterConfig<StatusTemplateCollection, StatusTemplateCollection>
+            .NewConfig()
+            .AfterMapping((src, dest) =>
+            {
+                dest.Clear();
+                foreach (var srcTemplate in src.Values)
+                {
+                    dest.Add(srcTemplate.Adapt<StatusTemplate>());
+                }
+            });
+
         return services;
     }
 }

@@ -14,6 +14,7 @@ public class FightContext : IFightContext
     private readonly IMapper _mapper;
 
     private readonly Dictionary<Guid, FightingCharacter> _fighters = [];
+    private readonly Dictionary<Guid, int> _monsterCountByOriginalId = [];
 
     /// <summary>
     ///     Ctor
@@ -78,7 +79,10 @@ public class FightContext : IFightContext
                 fighter = new FightingCharacter(character);
                 break;
             case CharacterType.Monster:
+                var count = _monsterCountByOriginalId.GetValueOrDefault(character.Id) + 1;
+                _monsterCountByOriginalId[character.Id] = count;
                 var monsterCopy = _mapper.Clone(character);
+                monsterCopy.Name = $"{character.Name} {count}";
                 fighter = new FightingCharacter(monsterCopy);
                 break;
             case CharacterType.Unknown:

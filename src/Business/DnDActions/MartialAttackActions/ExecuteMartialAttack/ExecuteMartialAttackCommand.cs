@@ -60,7 +60,6 @@ public class ExecuteMartialAttackCommand : CasterCommandBase
     /// <exception cref="InvalidOperationException"></exception>
     internal MartialAttackTemplate GetAttackTemplate(FightingCharacter caster)
     {
-        // TODO This does not work for monsters, probably some issues with the duplication of the attacks when adding them to fight.
         return caster.MartialAttacks.GetTemplateByIdOrDefault(MartialAttackId) ?? throw new InvalidOperationException($"Could not get a martial attack of id {MartialAttackId} for character {caster.Id}");
     }
 }
