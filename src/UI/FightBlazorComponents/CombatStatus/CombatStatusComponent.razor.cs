@@ -3,6 +3,7 @@ using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.TurnTracking;
 using DnDFightTool.UI.SharedComponents;
 using Microsoft.AspNetCore.Components;
+using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
 namespace DnDFightTool.UI.FightBlazorComponents.CombatStatus;
@@ -29,10 +30,17 @@ public partial class CombatStatusComponent : StylableComponentBase, IDisposable
 
     private bool IsDisabled => !_fightContext.Fighters.Any();
 
+    private bool CanUndo => _mediator.HistoryLength > 0;
+
+    private bool CanRedo => _mediator.RedoHistoryLength > 0;
+
     /// <inheritdoc />
     protected override void OnInitialized()
     {
         _combatTurnService.OnChanged += HandleStateChanged;
+        _mediator.OnCommandExecuted += HandleMediatorEvent;
+        _mediator.OnCommandUndone += HandleMediatorEvent;
+        _mediator.OnCommandRedone += HandleMediatorEvent;
     }
 
     private async Task OnButtonClick()
@@ -40,7 +48,22 @@ public partial class CombatStatusComponent : StylableComponentBase, IDisposable
         await _mediator.SendAsync(new StartNextTurnCommand());
     }
 
+    private async Task OnUndoClick()
+    {
+        await _mediator.UndoLastCommandAsync();
+    }
+
+    private async Task OnRedoClick()
+    {
+        await _mediator.RedoLastUndoneCommandAsync();
+    }
+
     private void HandleStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void HandleMediatorEvent(object? sender, ICommand command)
     {
         InvokeAsync(StateHasChanged);
     }
@@ -50,5 +73,8 @@ public partial class CombatStatusComponent : StylableComponentBase, IDisposable
     {
         GC.SuppressFinalize(this);
         _combatTurnService.OnChanged -= HandleStateChanged;
+        _mediator.OnCommandExecuted -= HandleMediatorEvent;
+        _mediator.OnCommandUndone -= HandleMediatorEvent;
+        _mediator.OnCommandRedone -= HandleMediatorEvent;
     }
 }

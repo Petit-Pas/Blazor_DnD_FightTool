@@ -24,7 +24,7 @@ public class OpenBlockCommandHandler : CommandHandlerBase<OpenBlockCommand>
     /// <inheritdoc />
     public override Task<ICommandResponse<NoResponse>> ExecuteAsync(OpenBlockCommand command)
     {
-        _logService.OpenBlock(command.Name);
+        command.OpenedBlockId = _logService.OpenBlock(command.Name);
         return Task.FromResult(CommandResponse.Success());
     }
 
@@ -32,6 +32,13 @@ public class OpenBlockCommandHandler : CommandHandlerBase<OpenBlockCommand>
     public override Task UndoAsync(OpenBlockCommand command)
     {
         _logService.CloseBlock();
+        return Task.CompletedTask;
+    }
+
+    /// <inheritdoc />
+    public override Task RedoAsync(OpenBlockCommand command)
+    {
+        _logService.ReopenBlock(command.OpenedBlockId!.Value);
         return Task.CompletedTask;
     }
 }

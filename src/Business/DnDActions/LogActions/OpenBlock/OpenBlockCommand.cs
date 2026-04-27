@@ -21,4 +21,10 @@ public class OpenBlockCommand : CommandBase
     ///     Display name of the block to open.
     /// </summary>
     public string Name { get; }
+
+    /// <summary>
+    ///     The ID of the block that was opened. Set by the handler during <c>ExecuteAsync</c>.
+    ///     Used by <c>RedoAsync</c> to reopen the same block without creating a duplicate.
+    /// </summary>
+    public Guid? OpenedBlockId { get; set; }
 }

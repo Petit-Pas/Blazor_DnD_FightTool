@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.LogActions.CloseBlock;
 using DnDFightTool.Domain.Logs;
@@ -61,6 +62,35 @@ internal class CloseBlockCommandHandlerTests
             A.CallTo(() => _logService.OpenScope()).MustNotHaveHappened();
             A.CallTo(() => _logService.CloseScope()).MustNotHaveHappened();
             A.CallTo(() => _logService.AddEntry(A<string>._)).MustNotHaveHappened();
+        }
+    }
+
+    [TestFixture]
+    private class RedoTests : CloseBlockCommandHandlerTests
+    {
+        [Test]
+        public async Task Should_CloseBlock()
+        {
+            // Act
+            await _commandHandler.RedoAsync(_command);
+
+            // Assert
+            A.CallTo(() => _logService.CloseBlock())
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_Store_ClosedBlockId()
+        {
+            // Arrange
+            var expectedId = Guid.NewGuid();
+            A.CallTo(() => _logService.CloseBlock()).Returns(expectedId);
+
+            // Act
+            await _commandHandler.RedoAsync(_command);
+
+            // Assert
+            _command.ClosedBlockId.Should().Be(expectedId);
         }
     }
 }

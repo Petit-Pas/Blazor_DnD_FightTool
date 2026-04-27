@@ -1,6 +1,6 @@
 ---
 description: "Orchestrate agent file creation from conversation context. Use when: industrialize a workflow into a reusable agent, create agent from chat session, build agent from context."
-tools: [agent, read, search, todo, vscode/askQuestions]
+tools: [vscode/askQuestions, read/getNotebookSummary, read/problems, read/readFile, read/viewImage, read/terminalSelection, read/terminalLastCommand, read/getTaskOutput, agent/runSubagent, search/changes, search/codebase, search/fileSearch, search/listDirectory, search/textSearch, search/usages, web/fetch, todo, agent]
 agents: [agent-creation-designer, agent-creation-reviewer]
 ---
 

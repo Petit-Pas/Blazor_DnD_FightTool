@@ -33,4 +33,11 @@ public class CloseBlockCommandHandler : CommandHandlerBase<CloseBlockCommand>
         _logService.ReopenBlock(command.ClosedBlockId);
         return Task.CompletedTask;
     }
+
+    /// <inheritdoc />
+    public override Task RedoAsync(CloseBlockCommand command)
+    {
+        command.ClosedBlockId = _logService.CloseBlock();
+        return Task.CompletedTask;
+    }
 }

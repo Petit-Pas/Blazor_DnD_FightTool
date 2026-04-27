@@ -1,9 +1,19 @@
 @using DnDFightTool.UI.SharedComponents
+@using DnDFightTool.UI.SharedComponents.Buttons.AtomicButtonsPreset
 @using MudBlazor
 
 @inherits StylableComponentBase
 
 <div class="@($"combat-status-panel {Class}")" style="@Style">
+    <div class="undo-redo-buttons">
+        <UndoButton Size="Size.Small"
+                    Disabled="@(!CanUndo)"
+                    OnClick="OnUndoClick" />
+        <RedoButton Size="Size.Small"
+                    Disabled="@(!CanRedo)"
+                    OnClick="OnRedoClick" />
+    </div>
+
     <div class="combat-info">
         @if (_combatTurnService.IsStarted)
         {

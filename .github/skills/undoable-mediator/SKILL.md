@@ -37,6 +37,9 @@ Task<bool> UndoLastCommandAsync();
 Task<bool> RedoLastUndoneCommandAsync();
 int HistoryLength { get; }
 int RedoHistoryLength { get; }
+event EventHandler<ICommand>? OnCommandExecuted;   // top-level SendAsync success only
+event EventHandler<ICommand>? OnCommandUndone;     // after UndoLastCommandAsync
+event EventHandler<ICommand>? OnCommandRedone;     // after RedoLastUndoneCommandAsync
 ```
 
 ## Patterns

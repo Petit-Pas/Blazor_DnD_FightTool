@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.LogActions.OpenBlock;
 using DnDFightTool.Domain.Logs;
@@ -51,6 +52,20 @@ internal class OpenBlockCommandHandlerTests
         }
 
         [Test]
+        public async Task Should_Store_OpenedBlockId()
+        {
+            // Arrange
+            var expectedId = Guid.NewGuid();
+            A.CallTo(() => _logService.OpenBlock(A<string>._)).Returns(expectedId);
+
+            // Act
+            await _commandHandler.ExecuteAsync(_command);
+
+            // Assert
+            _command.OpenedBlockId.Should().Be(expectedId);
+        }
+
+        [Test]
         public async Task Should_NotCallAnyOtherServiceMethod()
         {
             // Act
@@ -61,6 +76,53 @@ internal class OpenBlockCommandHandlerTests
             A.CallTo(() => _logService.OpenScope()).MustNotHaveHappened();
             A.CallTo(() => _logService.CloseScope()).MustNotHaveHappened();
             A.CallTo(() => _logService.AddEntry(A<string>._)).MustNotHaveHappened();
+        }
+    }
+
+    [TestFixture]
+    private class UndoTests : OpenBlockCommandHandlerTests
+    {
+        [Test]
+        public async Task Should_CloseBlock()
+        {
+            // Act
+            await _commandHandler.UndoAsync(_command);
+
+            // Assert
+            A.CallTo(() => _logService.CloseBlock())
+                .MustHaveHappenedOnceExactly();
+        }
+    }
+
+    [TestFixture]
+    private class RedoTests : OpenBlockCommandHandlerTests
+    {
+        [Test]
+        public async Task Should_ReopenBlock_WithStoredId()
+        {
+            // Arrange
+            var blockId = Guid.NewGuid();
+            _command.OpenedBlockId = blockId;
+
+            // Act
+            await _commandHandler.RedoAsync(_command);
+
+            // Assert
+            A.CallTo(() => _logService.ReopenBlock(blockId))
+                .MustHaveHappenedOnceExactly();
+        }
+
+        [Test]
+        public async Task Should_NotCallOpenBlock()
+        {
+            // Arrange
+            _command.OpenedBlockId = Guid.NewGuid();
+
+            // Act
+            await _commandHandler.RedoAsync(_command);
+
+            // Assert
+            A.CallTo(() => _logService.OpenBlock(A<string>._)).MustNotHaveHappened();
         }
     }
 }

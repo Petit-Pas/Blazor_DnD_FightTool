@@ -39,6 +39,13 @@ public class StartNextRoundCommandHandler : CommandHandlerBase<StartNextRoundCom
         return base.UndoAsync(command);
     }
 
+    /// <inheritdoc />
+    public override async Task RedoAsync(StartNextRoundCommand command)
+    {
+        _combatTurnService.SetCurrentRound(command.PreviousRound + 1);
+        await base.RedoAsync(command);
+    }
+
     private async Task LogRoundHeader(StartNextRoundCommand command)
     {
         await _mediator.SendAsSubCommandAsync(

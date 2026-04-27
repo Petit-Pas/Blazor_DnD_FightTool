@@ -104,4 +104,22 @@ internal class StartNextRoundCommandHandlerTests
                 .MustHaveHappenedOnceExactly();
         }
     }
+
+    [TestFixture]
+    internal class RedoTests : StartNextRoundCommandHandlerTests
+    {
+        [Test]
+        public async Task Should_Increment_Round_From_PreviousRound()
+        {
+            // Arrange
+            _command.PreviousRound = 2;
+
+            // Act
+            await _handler.RedoAsync(_command);
+
+            // Assert
+            A.CallTo(() => _combatTurnService.SetCurrentRound(3))
+                .MustHaveHappenedOnceExactly();
+        }
+    }
 }
