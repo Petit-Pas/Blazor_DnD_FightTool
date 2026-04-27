@@ -73,6 +73,11 @@ public partial class FightPage : IDisposable
 
     private void SelectFighter(FightingCharacter fighter)
     {
+        if (!CombatTurnService.IsStarted)
+        {
+            return;
+        }
+
         _selectedFighter = fighter;
         InvokeAsync(StateHasChanged);
     }

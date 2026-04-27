@@ -7,6 +7,7 @@ using DnDFightTool.UI.CharacterSheetBlazorComponents;
 using DnDFightTool.Infrastructure.Mapping;
 using MudBlazor;
 using DnDFightTool.Domain.Fight.DomainExtensions.HitPoint;
+using DnDFightTool.Domain.Fight.TurnTracking;
 
 namespace DnDFightTool.UI.FightBlazorComponents.Entities.FightingCharacters.Components;
 
@@ -17,6 +18,9 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
 
     [Inject]
     public required IAppliedStatusRepository AppliedStatusRepository { get; set; }
+
+    [Inject]
+    public required ICombatTurnService CombatTurnService { get; set; }
 
     [Inject]
     public required IGlobalEditContext GlobalEditContext { get; set; }

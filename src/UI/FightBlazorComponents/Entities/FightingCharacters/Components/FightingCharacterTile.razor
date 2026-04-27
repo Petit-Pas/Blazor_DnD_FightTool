@@ -9,7 +9,7 @@
 {
     <!-- This div is required because if the parent of the component has a custom class with ::deep, it will not work otherwise. It needs a local div to anchor the css isolation identifier -->
     <div>
-        <MudCard id="@("fighter-" + Fighter.Id)" Class="@("fighter-card p-3 position-relative" + " active".When(_isSelected))" Style=""
+        <MudCard id="@("fighter-" + Fighter.Id)" Class="@("fighter-card p-3 position-relative" + " active".When(_isSelected))" Style="@(CombatTurnService.IsStarted ? "" : "cursor: default;")"
                  @onclick=CardClicked Elevation=2>
             <HoverableVanishingRow> 
                 <EditButton OnClick=Edit Size=Size.Small />
