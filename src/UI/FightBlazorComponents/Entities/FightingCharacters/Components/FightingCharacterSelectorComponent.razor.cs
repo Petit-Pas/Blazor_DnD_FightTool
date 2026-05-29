@@ -1,5 +1,4 @@
-﻿using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
-using DnDFightTool.Domain.Fight;
+﻿using DnDFightTool.Domain.Fight;
 using DnDFightTool.Domain.Fight.Characters;
 using Microsoft.AspNetCore.Components;
 
@@ -14,7 +13,7 @@ public partial class FightingCharacterSelectorComponent
     public int Max { get; set; } = 1;
 
     private string _filter = string.Empty;
-    private FightingCharacter[] _fighters = [];
+    private IFightingCharacter[] _fighters = [];
 
     protected override void OnInitialized()
     {

@@ -22,8 +22,8 @@ internal class WriteLogCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
-        _logService = A.Fake<IDnDLogService>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict());
+        _logService = A.Fake<IDnDLogService>(options => options.Strict());
 
         _command = new WriteLogCommand("Test log entry");
         _commandHandler = new WriteLogCommandHandler(_mediator, _logService);
@@ -31,6 +31,8 @@ internal class WriteLogCommandHandlerTests
         var fakeEntryId = Guid.NewGuid();
         A.CallTo(() => _logService.AddEntry(A<string>._))
             .Returns(fakeEntryId);
+        A.CallTo(() => _logService.Hide(A<Guid>._)).DoesNothing();
+        A.CallTo(() => _logService.Show(A<Guid>._)).DoesNothing();
     }
 
     [TestFixture]

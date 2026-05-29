@@ -1,17 +1,13 @@
-﻿
-namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
+﻿namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
 
+/// <summary>
+///     Orchestrator command: grants a fighter temporary hit points and logs the gain.
+///     Dispatches <see cref="RegainTempHpAtomicCommand"/> (mutation) and a <see cref="DnDFightTool.Business.DnDActions.LogActions.WriteLog.WriteLogCommand"/> (log) as sub-commands.
+/// </summary>
 public class RegainTempHpCommand : TargetCommandBase
-{ 
-    /// <summary>
-    ///     The amount of Temporay hit points to provide
-    /// </summary>
-    public int Amount { get; set; }
-
-    /// <summary>
-    ///     The actual amount of temporary hit points that were provided
-    /// </summary>
-    public int? CorrectedAmount { get; set; }
+{
+    /// <summary>The requested amount of temporary HP to grant.</summary>
+    public int Amount { get; }
 
     public RegainTempHpCommand(Guid targetId, int amount) : base(targetId)
     {

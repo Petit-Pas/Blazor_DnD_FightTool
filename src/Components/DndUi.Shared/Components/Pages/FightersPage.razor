@@ -1,0 +1,124 @@
+@page "/fighters"
+
+@using DnDFightTool.Domain.CharacterSheet.Characters
+@using DnDFightTool.Domain.Fight.Characters
+@using DnDFightTool.UI.SharedComponents.Buttons.AtomicButtonsPreset
+@using MudBlazor
+
+<div class="fighters-page">
+
+    <div class="fighters-column">
+        <MudPaper Class="pa-3" Elevation="2" Style="flex: 1; min-height: 0; display: flex; flex-direction: column; box-sizing: border-box;">
+            <div class="panel-header">
+                <MudText Typo="Typo.h6">Available</MudText>
+                <MudDivider Class="my-2" />
+            </div>
+            <div class="group-section">
+                <div class="group-section-header">
+                    <MudText Typo="Typo.subtitle2" Class="group-header">Players</MudText>
+                    <MudDivider Class="mb-2" />
+                    <MudTextField @bind-Value="_playerSearch"
+                                  Placeholder="Search players..."
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Search"
+                                  Clearable="true"
+                                  Immediate="true"
+                                  Class="mb-2" />
+                </div>
+                <div class="group-list">
+                    @foreach (var player in FilteredPlayers)
+                    {
+                        <MudPaper @key="player.Id" Class="pa-3 my-2 fighter-row" Elevation="1">
+                            <div class="fighter-row-content">
+                                <MudText>@player.Name</MudText>
+                                <AddButton Size="Size.Small" OnClick="() => OnAddClick(player)" />
+                            </div>
+                        </MudPaper>
+                    }
+                    @if (!FilteredPlayers.Any())
+                    {
+                        <MudText Class="empty-state" Typo="Typo.body2">
+                            @(_addablePlayers.Length == 0 ? "No available players." : "No results.")
+                        </MudText>
+                    }
+                </div>
+            </div>
+            <div class="group-section">
+                <div class="group-section-header">
+                    <MudText Typo="Typo.subtitle2" Class="group-header">Monsters</MudText>
+                    <MudDivider Class="mb-2" />
+                    <MudTextField @bind-Value="_monsterSearch"
+                                  Placeholder="Search monsters..."
+                                  Adornment="Adornment.Start"
+                                  AdornmentIcon="@Icons.Material.Filled.Search"
+                                  Clearable="true"
+                                  Immediate="true"
+                                  Class="mb-2" />
+                </div>
+                <div class="group-list">
+                    @foreach (var monster in FilteredMonsters)
+                    {
+                        <MudPaper @key="monster.Id" Class="pa-3 my-2 fighter-row" Elevation="1">
+                            <div class="fighter-row-content">
+                                <MudText>@monster.Name</MudText>
+                                <AddButton Size="Size.Small" OnClick="() => OnAddClick(monster)" />
+                            </div>
+                        </MudPaper>
+                    }
+                    @if (!FilteredMonsters.Any())
+                    {
+                        <MudText Class="empty-state" Typo="Typo.body2">
+                            @(_addableMonsters.Length == 0 ? "No monster templates." : "No results.")
+                        </MudText>
+                    }
+                </div>
+            </div>
+        </MudPaper>
+    </div>
+
+    <div class="fighters-column">
+        <MudPaper Class="pa-3" Elevation="2" Style="flex: 1; min-height: 0; display: flex; flex-direction: column; box-sizing: border-box;">
+            <div class="panel-header">
+                <MudText Typo="Typo.h6">In Fight</MudText>
+                <MudDivider Class="my-2" />
+            </div>
+            <div class="group-section">
+                <div class="group-list">
+                    @foreach (var entry in _inFightEntries)
+                    {
+                        @if (entry is PlayerEntry pe)
+                        {
+                            <MudPaper @key="pe.Fighter.Id" Class="pa-3 my-2 fighter-row" Elevation="1">
+                                <div class="fighter-row-content">
+                                    <MudText>@pe.Fighter.Name (init @pe.Fighter.InitiativeRoll)</MudText>
+                                    <DeleteButton Size="Size.Small" OnClick="() => OnRemoveClick(pe.Fighter)" />
+                                </div>
+                            </MudPaper>
+                        }
+                        else if (entry is MonsterGroupEntry me)
+                        {
+                            <MudPaper @key="me.Group.OriginalCharacterId" Class="pa-3 my-2 fighter-row" Elevation="1">
+                                <div class="fighter-row-content">
+                                    <MudText>@me.Group.Count × @me.Group.TemplateName (init @me.Group.Representative.InitiativeRoll)</MudText>
+                                    @if (me.Group.Count > 1)
+                                    {
+                                        <SubtractButton Size="Size.Small" OnClick="() => OnRemoveClick(me.Group.Representative)" />
+                                    }
+                                    else
+                                    {
+                                        <DeleteButton Size="Size.Small" OnClick="() => OnRemoveClick(me.Group.Representative)" />
+                                    }
+                                </div>
+                            </MudPaper>
+                        }
+                    }
+                    @if (_inFightEntries.Length == 0)
+                    {
+                        <MudText Class="empty-state" Typo="Typo.body2">No fighters in the fight.</MudText>
+                    }
+                </div>
+            </div>
+        </MudPaper>
+    </div>
+
+</div>

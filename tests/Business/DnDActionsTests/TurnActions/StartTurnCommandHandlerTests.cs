@@ -26,10 +26,12 @@ internal class StartTurnCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-        _fightContext = A.Fake<IFightContext>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _fightContext = A.Fake<IFightContext>(options => options.Strict());
         _command = new StartTurnCommand(Guid.Empty);
         _handler = new StartTurnCommandHandler(_mediator, _fightContext);
+
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<OpenBlockCommand>._, A<ICommand>._)).Returns(CommandResponse.Success());
     }
 
     [TestFixture]

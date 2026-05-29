@@ -1,6 +1,5 @@
 ﻿using DnDFightTool.UI.CharacterSheetBlazorComponents;
 using DnDFightTool.Domain.CharacterSheet.Characters;
-using DnDFightTool.Domain.Fight;
 using DnDFightTool.Infrastructure.Mapping;
 using Microsoft.AspNetCore.Components;
 
@@ -16,9 +15,6 @@ public partial class CharacterListEditorPage
 
     [Inject]
     public required IMapper Mapper { get; set; }
-
-    [Inject]
-    public required IFightContext FightContext { get; set; }
 
     private Character[] _players = [];
     private Character[] _monsters = [];
@@ -37,11 +33,6 @@ public partial class CharacterListEditorPage
         _monsters = [.. characters.Where(x => x.Type is CharacterType.Monster)];
 
         StateHasChanged();
-    }
-
-    private void AddToFight(Character character)
-    {
-        FightContext.Add(character);
     }
 
     private void Edit(Character character)

@@ -5,6 +5,9 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/src/" />
+  <Folder Name="/src/Analyzers/">
+    <Project Path="src/Analyzers/DnDFightTool.Analyzers/DnDFightTool.Analyzers.csproj" />
+  </Folder>
   <Folder Name="/src/Business/">
     <Project Path="src/Business/DnDActions/DnDActions.csproj" />
     <Project Path="src/Business/DnDQueries/DnDQueries.csproj" />

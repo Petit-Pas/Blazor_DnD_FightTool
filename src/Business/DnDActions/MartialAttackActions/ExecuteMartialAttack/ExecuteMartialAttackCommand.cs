@@ -58,7 +58,7 @@ public class ExecuteMartialAttackCommand : CasterCommandBase
     /// <param name="caster"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    internal MartialAttackTemplate GetAttackTemplate(FightingCharacter caster)
+    internal MartialAttackTemplate GetAttackTemplate(IFightingCharacter caster)
     {
         return caster.MartialAttacks.GetTemplateByIdOrDefault(MartialAttackId) ?? throw new InvalidOperationException($"Could not get a martial attack of id {MartialAttackId} for character {caster.Id}");
     }

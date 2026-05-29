@@ -119,10 +119,10 @@ public partial class MartialAttackRollResultQueryHandlerModal : IDisposable
         return Task.CompletedTask;
     }
 
-    private IEnumerable<FightingCharacter> AvailableTargets =>
+    private IEnumerable<IFightingCharacter> AvailableTargets =>
         FightContext.Fighters.Where(f => !_excludedFighterIds.Contains(f.Id));
 
-    private FightingCharacter? SelectedTarget
+    private IFightingCharacter? SelectedTarget
     {
         get => _selectedTargetId is not null ? FightContext[_selectedTargetId.Value] : null;
         set => _selectedTargetId = value?.Id;

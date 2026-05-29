@@ -8,7 +8,7 @@ namespace DnDFightTool.Domain.Fight.TurnTracking;
 /// </summary>
 public class CombatTurnService : ICombatTurnService
 {
-    private readonly List<FightingCharacter> _turnOrder = [];
+    private readonly List<IFightingCharacter> _turnOrder = [];
     private int _currentIndex = -1;
     private int _currentRound;
 
@@ -19,26 +19,26 @@ public class CombatTurnService : ICombatTurnService
     public int CurrentRound => _currentRound;
 
     /// <inheritdoc />
-    public FightingCharacter? CurrentTurnFighter => _currentIndex >= 0 ? _turnOrder[_currentIndex] : null;
+    public IFightingCharacter? CurrentTurnFighter => _currentIndex >= 0 ? _turnOrder[_currentIndex] : null;
 
     /// <inheritdoc />
-    public IReadOnlyList<FightingCharacter> TurnOrder => _turnOrder;
+    public IReadOnlyList<IFightingCharacter> TurnOrder => _turnOrder;
 
     /// <inheritdoc />
     public event Action? OnChanged;
 
     /// <inheritdoc />
-    public void Initialize(IEnumerable<FightingCharacter> fighters)
+    public void Initialize(IEnumerable<IFightingCharacter> fighters)
     {
         _turnOrder.Clear();
-        _turnOrder.AddRange(fighters.OrderBy(FightingCharacter.InitiativeSortKey));
+        _turnOrder.AddRange(fighters.OrderBy(IFightingCharacter.InitiativeSortKey));
         _currentIndex = -1;
         _currentRound = 0;
         OnChanged?.Invoke();
     }
 
     /// <inheritdoc />
-    public FightingCharacter GetNextFighter()
+    public IFightingCharacter GetNextFighter()
     {
         if (_turnOrder.Count == 0)
         {

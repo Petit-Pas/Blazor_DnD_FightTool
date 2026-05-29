@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
 using DnDFightTool.Business.DnDActions.StatusActions.TryApplyStatus;
+using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Business.DnDQueries.SaveQueries;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
@@ -14,6 +15,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using DnDFightTool.Infrastructure.Memory.Hashes;
 using UndoableMediator.Mediators;
+using UndoableMediator.Commands;
 using UndoableMediator.Queries;
 using UndoableMediator.Requests;
 using DomainTestsUtilities.Extensions;
@@ -35,8 +37,8 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
             [SetUp]
             public void SetUp()
             {
-                _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-                _fightContext = A.Fake<IFightContext>();
+                _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+                _fightContext = A.Fake<IFightContext>(options => options.Strict());
 
                 _command = new TryApplyStatusCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
                 _commandHandler = new TryApplyStatusCommandHandler(_mediator, _fightContext);
@@ -66,6 +68,9 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     {
                         Id = _command.TargetId
                     }.AsFighter());
+
+                A.CallTo(() => _mediator.SendAsSubCommandAsync(A<ApplyStatusCommand>._, A<TryApplyStatusCommand>._)).Returns(CommandResponse.Success());
+                A.CallTo(() => _mediator.SendAsSubCommandAsync(A<WriteLogCommand>._, A<TryApplyStatusCommand>._)).Returns(CommandResponse.Success());
             }
 
             private void WhenQueryReturns(IQueryResponse<SaveRollResult> saveRollResult)
@@ -224,8 +229,8 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
             [SetUp]
             public void SetUp()
             {
-                _mediator = A.Fake<IUndoableMediator>();
-                _fightContext = A.Fake<IFightContext>();
+                _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+                _fightContext = A.Fake<IFightContext>(options => options.Strict());
 
                 _command = new TryApplyStatusCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
                 _commandHandler = new TryApplyStatusCommandHandler(_mediator, _fightContext);
@@ -235,6 +240,11 @@ namespace DnDActionsTests.StatusActionsTests.TryApplyStatusTests
                     {
                         Id = _command.TargetId
                     }.AsFighter());
+
+                A.CallTo(() => _mediator.QueryAsync(A<SaveRollResultQuery>.Ignored))
+                    .Returns(QueryResponse<SaveRollResult>.Success(SaveRollResultFactory.Build()));
+                A.CallTo(() => _mediator.SendAsSubCommandAsync(A<ApplyStatusCommand>._, A<TryApplyStatusCommand>._)).Returns(CommandResponse.Success());
+                A.CallTo(() => _mediator.SendAsSubCommandAsync(A<WriteLogCommand>._, A<TryApplyStatusCommand>._)).Returns(CommandResponse.Success());
             }
 
 

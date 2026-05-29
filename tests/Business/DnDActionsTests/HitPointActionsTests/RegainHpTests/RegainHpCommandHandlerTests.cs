@@ -1,17 +1,16 @@
 using DnDFightTool.Business.DnDActions.HitPointActions.RegainHp;
 using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
-using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.HitPoint;
-using FakeItEasy;
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
+using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
-using DomainTestsUtilities.Extensions;
-using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDActionsTests.HitPointActionsTests.RegainHpTests;
 
@@ -21,7 +20,8 @@ internal class RegainHpCommandHandlerTests
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
 
-    private FightingCharacter _character = null!;
+    private IFightingCharacter _character = null!;
+    private HitPoints _hitPoints = null!;
 
     private RegainHpCommand _command = null!;
     private RegainHpCommandHandler _commandHandler = null!;
@@ -29,26 +29,23 @@ internal class RegainHpCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-        _fightContext = A.Fake<IFightContext>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _fightContext = A.Fake<IFightContext>(options => options.Strict());
 
-        _character = new Character
-        {
-            HitPoints = new HitPoints() { CurrentHps = 12, MaxHps = 25 }
-        }.AsFighter();
+        _hitPoints = new HitPoints { MaxHps = 25, CurrentHps = 12 };
+        _character = A.Fake<IFightingCharacter>(options => options.Strict());
+        A.CallTo(() => _character.HitPoints).Returns(_hitPoints);
+        A.CallTo(() => _character.Name).Returns("Goblin");
 
-        _command = new RegainHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
+        _command = new RegainHpCommand(Guid.NewGuid(), 10);
         _commandHandler = new RegainHpCommandHandler(_mediator, _fightContext);
 
-        A.CallTo(() => _fightContext[A<Guid>._])
-            .Returns(_character);
-    }
+        A.CallTo(() => _fightContext[A<Guid>._]).Returns(_character);
 
-
-    private int _hps
-    {
-        get => _character.HitPoints.CurrentHps;
-        set => _character.HitPoints.CurrentHps = value;
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<RegainHpAtomicCommand>._, A<RegainHpCommand>._))
+            .Returns(Task.FromResult<ICommandResponse<int>>(CommandResponse.Success<int>(7)));
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<WriteLogCommand>._, A<RegainHpCommand>._))
+            .Returns(Task.FromResult<ICommandResponse<NoResponse>>(CommandResponse.Success()));
     }
 
     [TestFixture]
@@ -57,98 +54,30 @@ internal class RegainHpCommandHandlerTests
         [Test]
         public async Task Should_Return_Success()
         {
-            // Act 
             var response = await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
             response.Status.Should().Be(RequestStatus.Success);
         }
 
         [Test]
-        public async Task Should_Update_Hps()
+        public async Task Should_Dispatch_RegainHpAtomicCommand()
         {
-            // Arrange
-            var startingHps = _hps;
-
-            // Act
             await _commandHandler.ExecuteAsync(_command);
 
-            // Assert
-            _hps.Should().Be(startingHps + _command.Amount);
-        }
-
-        [Test]
-        public async Task Should_Not_Go_Higher_Than_Max_Hps()
-        {
-            // Arrange
-            _hps = _character.HitPoints.MaxHps - 5;
-
-            // Act
-            await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
-            _hps.Should().Be(_character.HitPoints.MaxHps);
-        }
-
-        [Test]
-        [TestCase(20, 5)]
-        [TestCase(5, 10)]
-        public async Task Should_Set_CorrectAmount(int hps, int correctedAmountExpected)
-        {
-            // Arrange
-            _hps = hps;
-
-            // Act
-            await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
-            _command.CorrectedAmount.Should().Be(correctedAmountExpected);
-        }
-
-        [Test]
-        public async Task Should_Send_WriteLogCommand()
-        {
-            // Act
-            await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
             A.CallTo(() => _mediator.SendAsSubCommandAsync(
-                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("regains") && x.Content.Contains("HPs")),
+                A<RegainHpAtomicCommand>.That.Matches(x => x.Amount == _command.Amount),
                 A<RegainHpCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
-    }
-
-    [TestFixture]
-    private class UndoTests : RegainHpCommandHandlerTests
-    {
-        [Test]
-        public async Task Should_Throw_InvalidOperationException_When_CorrectedAmount_Is_Null()
-        {
-            // Arrange
-            _command.CorrectedAmount = null;
-
-            // Act
-            var undoing = async () => await _commandHandler.UndoAsync(_command);
-
-            // Assert
-            await undoing.Should().ThrowAsync<InvalidOperationException>();
-        }
 
         [Test]
-        [TestCase(3)]
-        [TestCase(10)]
-        public async Task Should_Update_Hps_With_CorrectedAmount(int correctedAmount)
+        public async Task Should_Send_WriteLogCommand_With_HpGain()
         {
-            // Arrange
-            var startingHps = _hps;
-            _command.CorrectedAmount = correctedAmount;
+            await _commandHandler.ExecuteAsync(_command);
 
-            // Act
-            await _commandHandler.UndoAsync(_command);
-
-            // Assert
-            _hps.Should().Be(startingHps - correctedAmount);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(
+                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("regains") && x.Content.Contains("HPs") && x.Content.Contains("7")),
+                A<RegainHpCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
     }
 
@@ -156,16 +85,12 @@ internal class RegainHpCommandHandlerTests
     private class RedoTests : RegainHpCommandHandlerTests
     {
         [Test]
-        public async Task Should_Update_Hps()
+        public async Task Should_Clear_SubCommands_And_Re_Execute()
         {
-            // Arrange
-            var startingHps = _hps;
+            await _commandHandler.RedoAsync(_command);
 
-            // Act
-            await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
-            _hps.Should().Be(startingHps + _command.Amount);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<RegainHpAtomicCommand>._, A<RegainHpCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
     }
 }

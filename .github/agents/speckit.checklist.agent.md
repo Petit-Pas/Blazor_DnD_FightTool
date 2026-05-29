@@ -1,5 +1,8 @@
 ---
-description: Generate a custom checklist for the current feature based on user requirements.
+description: "Use when generating or validating a requirements quality checklist for the current feature. Generate custom checklists based on user focus areas, or apply validation results to check off passing items."
+argument-hint: "Describe the checklist focus area, or pass 'apply-mode' with validation results"
+user-invocable: true
+tools: [read, edit, execute, search, vscode/askQuestions]
 ---
 
 ## Checklist Purpose: "Unit Tests for English"
@@ -366,3 +369,12 @@ Check if `.specify/extensions.yml` exists in the project root.
     EXECUTE_COMMAND: {command}
     ```
 - If no hooks are registered or `.specify/extensions.yml` does not exist, skip silently
+
+## Apply Mode (Re-invocation with validation results)
+
+When `$ARGUMENTS` contains the keyword `apply-mode` followed by validation results (a list of checklist items with PASS/FAIL status from `speckit.analyze`), skip all generation steps and execute only the following:
+
+1. Read the checklist file(s) specified in the validation results.
+2. For each item marked PASS: change `- [ ]` to `- [x]` in the file.
+3. For each item marked FAIL: leave as `- [ ]` (these represent genuine spec/plan gaps that need upstream fixes).
+4. Report the final tally: X items checked off, Y items remaining.

@@ -5,6 +5,10 @@ using UndoableMediator.Mediators;
 
 namespace DnDFightTool.Business.DnDActions.TurnActions.StartNextRound;
 
+// TODO: Violates orchestrator/atomic rule — mixes direct state mutation (_combatTurnService.SetCurrentRound)
+// with sub-commands (WriteLog) and both direct undo and base.UndoAsync. Refactor: extract the mutation
+// into an atomic sub-command and make this handler a pure orchestrator. See commands.instructions.md.
+
 /// <summary>
 ///     Handler for <see cref="StartNextRoundCommand"/>.
 ///     Increments the round counter and logs the round header.

@@ -122,7 +122,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <param name="command"></param>
     /// <param name="attackTemplate"></param>
     /// <returns></returns>
-    private async Task ApplyStatuses(FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command, MartialAttackTemplate attackTemplate)
+    private async Task ApplyStatuses(IFightingCharacter caster, IFightingCharacter target, ExecuteMartialAttackCommand command, MartialAttackTemplate attackTemplate)
     {
         foreach (var onHitStatus in attackTemplate.Statuses.Values)
         {
@@ -138,7 +138,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <param name="command"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    private async Task ApplyDamage(FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command)
+    private async Task ApplyDamage(IFightingCharacter caster, IFightingCharacter target, ExecuteMartialAttackCommand command)
     {
         if (command.MartialAttackRollResult == null)
         {
@@ -159,7 +159,7 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
     /// <param name="command"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    private static bool AttackHits(FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command)
+    private static bool AttackHits(IFightingCharacter caster, IFightingCharacter target, ExecuteMartialAttackCommand command)
     {
         if (command.MartialAttackRollResult == null)
         {
@@ -171,14 +171,14 @@ public class ExecuteMartialAttackCommandHandler : CommandHandlerBase<ExecuteMart
         return command.MartialAttackRollResult.HitRoll.Hits(target, caster);
     }
 
-    private async Task OpenAttackLog(FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command, MartialAttackTemplate attackTemplate)
+    private async Task OpenAttackLog(IFightingCharacter caster, IFightingCharacter target, ExecuteMartialAttackCommand command, MartialAttackTemplate attackTemplate)
     {
         await _mediator.SendAsSubCommandAsync(new OpenScopeCommand(), parentCommand: command);
         await _mediator.SendAsSubCommandAsync(new WriteLogCommand($"[b]{caster.Name}[/b] attacks [b]{target.Name}[/b] using [b]{attackTemplate.Name}[/b]"), parentCommand: command);
         await _mediator.SendAsSubCommandAsync(new OpenScopeCommand(), parentCommand: command);
     }
 
-    private async Task LogHitRoll(HitRollResult hitRoll, FightingCharacter caster, FightingCharacter target, ExecuteMartialAttackCommand command, bool didHit)
+    private async Task LogHitRoll(HitRollResult hitRoll, IFightingCharacter caster, IFightingCharacter target, ExecuteMartialAttackCommand command, bool didHit)
     {
         var totalAttack = hitRoll.Modifiers.GetScoreModifier(caster).ApplyTo(hitRoll.Result);
         await _mediator.SendAsSubCommandAsync(

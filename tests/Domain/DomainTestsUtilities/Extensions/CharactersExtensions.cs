@@ -5,8 +5,8 @@ namespace DomainTestsUtilities.Extensions;
 
 public static class CharactersExtensions
 {
-    public static FightingCharacter AsFighter(this Character character)
+    public static FightingCharacter AsFighter(this Character character, Guid? originalCharacterId = null)
     {
-        return new FightingCharacter(character);
+        return new FightingCharacter(character, originalCharacterId ?? character.Id);
     }
 }

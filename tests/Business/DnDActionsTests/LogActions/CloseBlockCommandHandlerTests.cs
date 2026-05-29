@@ -21,10 +21,13 @@ internal class CloseBlockCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
-        _logService = A.Fake<IDnDLogService>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict());
+        _logService = A.Fake<IDnDLogService>(options => options.Strict());
         _command = new CloseBlockCommand();
         _commandHandler = new CloseBlockCommandHandler(_mediator, _logService);
+
+        A.CallTo(() => _logService.CloseBlock()).Returns(Guid.NewGuid());
+        A.CallTo(() => _logService.ReopenBlock(A<Guid>._)).DoesNothing();
     }
 
     [TestFixture]

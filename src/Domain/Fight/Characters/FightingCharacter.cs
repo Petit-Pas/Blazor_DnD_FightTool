@@ -15,9 +15,9 @@ namespace DnDFightTool.Domain.Fight.Characters;
 /// <summary>
 ///     Wraps a character with additional information required for a fight
 /// </summary>
-public class FightingCharacter : ICharacter
+public class FightingCharacter : IFightingCharacter
 {
-    private readonly Character _character;
+    private readonly ICharacter _character;
 
     #region character mirroring
 
@@ -44,23 +44,31 @@ public class FightingCharacter : ICharacter
     #endregion character mirroring
 
     /// <summary>
+    ///     The id of the originating <see cref="Character"/> template.
+    ///     For players, this equals the wrapped character's <see cref="Character.Id"/>.
+    ///     For monsters, this equals the source template id (NOT the regenerated id of the cloned copy).
+    /// </summary>
+    public Guid OriginalCharacterId { get; }
+
+    /// <summary>
     ///     Ctor
     /// </summary>
     /// <param name="character"></param>
-	public FightingCharacter(Character character)
+    /// <param name="originalCharacterId">The id of the originating template.</param>
+	public FightingCharacter(ICharacter character, Guid originalCharacterId)
 	{
         _character = character ?? throw new ArgumentNullException(nameof(character));
+        OriginalCharacterId = originalCharacterId;
 	}
 
     /// <summary>
     ///     Creates a deep copy of this FightingCharacter, including the underlying character.
-    ///     For this entity, I could not use FastDeepCloner as wwon't be able to do the private character properly.
     /// </summary>
     /// <param name="mapper"></param>
     /// <returns></returns>
-    public FightingCharacter Copy(IMapper mapper)
+    public IFightingCharacter Copy(IMapper mapper)
     {
-        return new FightingCharacter(mapper.Copy(_character));
+        return new FightingCharacter(mapper.Copy(_character), OriginalCharacterId);
     }
 
     /// <summary>
@@ -82,6 +90,4 @@ public class FightingCharacter : ICharacter
         return _character.GetPossiblyAppliedStatus(statusId);
     }
 
-    public static Func<FightingCharacter, (int, int)> InitiativeSortKey =>
-        fc => (-fc.GetInitiativeTotal(), -((ICharacter)fc).GetInitiativeModifier());
 }

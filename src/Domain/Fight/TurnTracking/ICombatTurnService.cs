@@ -21,25 +21,25 @@ public interface ICombatTurnService
     /// <summary>
     ///     The fighter whose turn it currently is. <c>null</c> until started.
     /// </summary>
-    FightingCharacter? CurrentTurnFighter { get; }
+    IFightingCharacter? CurrentTurnFighter { get; }
 
     /// <summary>
     ///     Ordered list of fighters (descending initiative, tie-break by insertion order).
     ///     Computed once during <see cref="Initialize"/>.
     /// </summary>
-    IReadOnlyList<FightingCharacter> TurnOrder { get; }
+    IReadOnlyList<IFightingCharacter> TurnOrder { get; }
 
     /// <summary>
-    ///     Sorts fighters by <see cref="FightingCharacter.InitiativeSortKey"/> into <see cref="TurnOrder"/>. Resets state.
+    ///     Sorts fighters by <see cref="IFightingCharacter.InitiativeSortKey"/> into <see cref="TurnOrder"/>. Resets state.
     /// </summary>
     /// <param name="fighters">The fighters to sort.</param>
-    void Initialize(IEnumerable<FightingCharacter> fighters);
+    void Initialize(IEnumerable<IFightingCharacter> fighters);
 
     /// <summary>
     ///     Returns the next fighter in <see cref="TurnOrder"/> after the current one, wrapping to index 0 at the end.
     ///     If not started, returns the first fighter. Does <b>not</b> mutate state.
     /// </summary>
-    FightingCharacter GetNextFighter();
+    IFightingCharacter GetNextFighter();
 
     /// <summary>
     ///     Returns <c>true</c> if the current fighter is the last in <see cref="TurnOrder"/>.

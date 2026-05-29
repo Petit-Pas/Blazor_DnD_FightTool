@@ -31,9 +31,9 @@ internal class StartCombatCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-        _combatTurnService = A.Fake<ICombatTurnService>();
-        _fightContext = A.Fake<IFightContext>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _combatTurnService = A.Fake<ICombatTurnService>(options => options.Strict());
+        _fightContext = A.Fake<IFightContext>(options => options.Strict());
         _command = new StartCombatCommand();
         _handler = new StartCombatCommandHandler(_mediator, _combatTurnService, _fightContext);
 
@@ -42,6 +42,7 @@ internal class StartCombatCommandHandlerTests
 
         A.CallTo(() => _fightContext.Fighters).Returns([_fighter1, _fighter2]);
         A.CallTo(() => _combatTurnService.IsStarted).Returns(false);
+        A.CallTo(() => _combatTurnService.Initialize(A<IEnumerable<IFightingCharacter>>._)).DoesNothing();
     }
 
     [TestFixture]
@@ -64,7 +65,7 @@ internal class StartCombatCommandHandlerTests
             await _handler.ExecuteAsync(_command);
 
             // Assert
-            A.CallTo(() => _combatTurnService.Initialize(A<IEnumerable<FightingCharacter>>.Ignored))
+            A.CallTo(() => _combatTurnService.Initialize(A<IEnumerable<IFightingCharacter>>.Ignored))
                 .MustHaveHappenedOnceExactly();
         }
 
@@ -89,7 +90,7 @@ internal class StartCombatCommandHandlerTests
             await _handler.UndoAsync(_command);
 
             // Assert
-            A.CallTo(() => _combatTurnService.Initialize(A<IEnumerable<FightingCharacter>>.That.IsEmpty()))
+            A.CallTo(() => _combatTurnService.Initialize(A<IEnumerable<IFightingCharacter>>.That.IsEmpty()))
                 .MustHaveHappenedOnceExactly();
         }
     }
@@ -104,7 +105,7 @@ internal class StartCombatCommandHandlerTests
             await _handler.RedoAsync(_command);
 
             // Assert
-            A.CallTo(() => _combatTurnService.Initialize(A<IEnumerable<FightingCharacter>>.Ignored))
+            A.CallTo(() => _combatTurnService.Initialize(A<IEnumerable<IFightingCharacter>>.Ignored))
                 .MustHaveHappenedOnceExactly();
         }
     }

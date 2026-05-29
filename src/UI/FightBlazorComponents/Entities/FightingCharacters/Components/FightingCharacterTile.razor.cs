@@ -29,13 +29,13 @@ public partial class FightingCharacterTile : ComponentBase, IDisposable
     public required IMapper Mapper { get; set; }
 
     [Parameter]
-    public required FightingCharacter Fighter { get; set; }
+    public required IFightingCharacter Fighter { get; set; }
 
     [Parameter]
-    public EventCallback<FightingCharacter> OnSelected { get; set; }
+    public EventCallback<IFightingCharacter> OnSelected { get; set; }
 
     [CascadingParameter(Name = "SelectedFighter")]
-    private FightingCharacter? SelectedFighter { get; set; }
+    private IFightingCharacter? SelectedFighter { get; set; }
 
     private bool _isSelected = false;
 

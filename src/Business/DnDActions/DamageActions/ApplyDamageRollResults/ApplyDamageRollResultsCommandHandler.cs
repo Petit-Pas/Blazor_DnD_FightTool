@@ -55,7 +55,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
         return CommandResponse.Success();
     }
 
-    private async Task LogSaveRoll(SaveRollResult save, FightingCharacter caster, FightingCharacter target, ApplyDamageRollResultsCommand command)
+    private async Task LogSaveRoll(SaveRollResult save, IFightingCharacter caster, IFightingCharacter target, ApplyDamageRollResultsCommand command)
     {
         var dc = save.Target.GetValue(caster);
         var modifier = target.AbilityScores.GetSavingModifier(save.Ability);
@@ -75,7 +75,7 @@ public class ApplyDamageRollResultsCommandHandler : CommandHandlerBase<ApplyDama
             parentCommand: command);
     }
 
-    private static double ApplyAffinity(int damage, DamageTypeEnum damageType, FightingCharacter target)
+    private static double ApplyAffinity(int damage, DamageTypeEnum damageType, IFightingCharacter target)
     {
         var damageFactor = target.DamageAffinities.GetDamageFactorFor(damageType);
 

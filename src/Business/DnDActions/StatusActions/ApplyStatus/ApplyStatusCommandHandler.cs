@@ -1,10 +1,13 @@
 using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
-using DnDFightTool.Domain.CharacterSheet.Statuses;
 using DnDFightTool.Domain.Fight;
 using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
 namespace DnDFightTool.Business.DnDActions.StatusActions.ApplyStatus;
+
+// TODO: Violates orchestrator/atomic rule — mixes direct state mutation (_appliedStatusCollection.Add)
+// with sub-commands (WriteLog) and custom undo logic. Refactor: extract the mutation into
+// an atomic sub-command and make this handler a pure orchestrator. See commands.instructions.md.
 
 public class ApplyStatusCommandHandler : CommandHandlerBase<ApplyStatusCommand>
 {

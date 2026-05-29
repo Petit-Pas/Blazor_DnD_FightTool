@@ -1,22 +1,16 @@
 ﻿namespace DnDFightTool.Business.DnDActions.HitPointActions.LooseTempHp;
 
+/// <summary>
+///     Orchestrator command: reduces a fighter's temporary hit points and logs the loss.
+///     Dispatches <see cref="LooseTempHpAtomicCommand"/> (mutation) and a <see cref="DnDFightTool.Business.DnDActions.LogActions.WriteLog.WriteLogCommand"/> (log) as sub-commands.
+/// </summary>
 public class LooseTempHpCommand : TargetCommandBase
 {
-    /// <summary>
-    ///     This is the expected amount of temp hp lost, could be lowered in reality if the amount of temp Hp is lower
-    /// </summary>
-    public int Amount { get; set; }
+    /// <summary>The requested amount of temp HP to remove.</summary>
+    public int Amount { get; }
 
-    /// <summary>
-    ///     This is the actual amount of temp HP that were reduced
-    /// </summary>
-    public int? CorrectedAmount { get; set; }
-
-    /// <summary>
-    ///     The guid of the actual target
-    /// </summary>
     public LooseTempHpCommand(Guid targetId, int amount) : base(targetId)
     {
-        Amount = amount; 
+        Amount = amount;
     }
 }

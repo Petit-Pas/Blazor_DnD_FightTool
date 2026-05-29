@@ -21,9 +21,11 @@ internal class EndTurnCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
         _command = new EndTurnCommand(Guid.Empty);
         _handler = new EndTurnCommandHandler(_mediator);
+
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<CloseBlockCommand>._, A<ICommand>._)).Returns(CommandResponse.Success());
     }
 
     [TestFixture]

@@ -9,6 +9,8 @@ applyTo: "tests/**/*.cs"
 - **Test framework**: NUnit (v4.x) — `[TestFixture]`, `[Test]`, `[TestCase]`, `[SetUp]`.
 - **Assertions**: FluentAssertions (v7.x) — `.Should().Be(...)`, `.Should().NotBeNull()`, etc.
 - **Mocking**: FakeItEasy (v9.x) — `A.Fake<T>()`, `A.CallTo(() => ...).Returns(...)`, `A.CallTo(...).MustHaveHappenedOnceExactly()`.
+  - **Always use strict fakes**: every `A.Fake<T>()` MUST use `options => options.Strict()`. This makes any unconfigured call throw immediately, preventing silent test pollution.
+  - When the fake also needs to implement an extra interface, chain: `options => options.Strict().Implements<IExtra>()`.
 
 ## Structure
 

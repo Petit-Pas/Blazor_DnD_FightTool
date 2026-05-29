@@ -34,13 +34,19 @@ internal class StartNextTurnCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-        _combatTurnService = A.Fake<ICombatTurnService>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _combatTurnService = A.Fake<ICombatTurnService>(options => options.Strict());
         _command = new StartNextTurnCommand();
         _handler = new StartNextTurnCommandHandler(_mediator, _combatTurnService);
 
         _fighter1 = CharacterFactory.BuildMonster(name: "Goblin").AsFighter();
         _fighter2 = CharacterFactory.BuildMonster(name: "Orc").AsFighter();
+
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<StartCombatCommand>._, A<ICommand>._)).Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<StartNextRoundCommand>._, A<ICommand>._)).Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<SetCurrentFighterCommand>._, A<ICommand>._)).Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<StartTurnCommand>._, A<ICommand>._)).Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<EndTurnCommand>._, A<ICommand>._)).Returns(CommandResponse.Success());
     }
 
     [TestFixture]

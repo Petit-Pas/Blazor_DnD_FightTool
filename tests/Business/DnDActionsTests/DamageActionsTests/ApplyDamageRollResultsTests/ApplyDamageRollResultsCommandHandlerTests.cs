@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.DamageActions.ApplyDamageRollResults;
 using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
+using DnDFightTool.Business.DnDActions.LogActions.CloseScope;
+using DnDFightTool.Business.DnDActions.LogActions.OpenScope;
 using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.Damage;
@@ -14,6 +16,7 @@ using DomainTestsUtilities.Factories.Damage;
 using DomainTestsUtilities.Fakes.Savings;
 using FakeItEasy;
 using NUnit.Framework;
+using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
 namespace DnDActionsTests.DamageActionsTests.ApplyDamageRollResultsTests;
@@ -34,13 +37,13 @@ public class ApplyDamageRollResultsCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
-        _fightContext = A.Fake<IFightContext>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _fightContext = A.Fake<IFightContext>(options => options.Strict());
 
         var innerCaster = new Character();
         var innerTarget = new Character();
-        _caster = new FightingCharacter(innerCaster);
-        _target = new FightingCharacter(innerTarget);
+        _caster = new FightingCharacter(innerCaster, innerCaster.Id);
+        _target = new FightingCharacter(innerTarget, innerTarget.Id);
 
         _damageRollResults =
         [
@@ -56,6 +59,11 @@ public class ApplyDamageRollResultsCommandHandlerTests
             .Returns(_caster);
         A.CallTo(() => _fightContext[_target.Id])
             .Returns(_target);
+
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<OpenScopeCommand>._, A<ApplyDamageRollResultsCommand>._)).Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<CloseScopeCommand>._, A<ApplyDamageRollResultsCommand>._)).Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<WriteLogCommand>._, A<ApplyDamageRollResultsCommand>._)).Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<TakeDamageCommand>._, A<ApplyDamageRollResultsCommand>._)).Returns(CommandResponse.Success());
     }
 
     private DamageAffinitiesCollection _affinities { get => _target.DamageAffinities; }
@@ -98,7 +106,7 @@ public class ApplyDamageRollResultsCommandHandlerTests
         {
             // Arrange
             _damageRollResults = [_damageRollResults.First(), _damageRollResults.First()];
-            _command = new ApplyDamageRollResultsCommand(Guid.NewGuid(), Guid.NewGuid(), _damageRollResults);
+            _command = new ApplyDamageRollResultsCommand(_caster.Id, _target.Id, _damageRollResults);
 
             // Act
             await _commandHandler.ExecuteAsync(_command);

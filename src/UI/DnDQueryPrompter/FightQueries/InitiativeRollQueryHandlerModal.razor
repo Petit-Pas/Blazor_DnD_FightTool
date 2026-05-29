@@ -1,0 +1,13 @@
+@using DnDFightTool.UI.FightBlazorComponents.Entities.Dices.DiceRolls.Components
+@using MudBlazor
+@using DnDFightTool.UI.SharedComponents.Dialogs
+
+@implements IDisposable
+
+<RollableDialogBase CanValidate=CanValidate OnValidateClick=ConfirmAsync>
+    <div class="initiative-roll">
+        <DiceRollResultInputComponent RollResult=_d20Roll Label="d20" />
+        <MudText Typo=Typo.body1>Dex modifier: @_dexterityModifier.ModifierString</MudText>
+        <MudText Typo=Typo.body1 Class="initiative-total">= @Total</MudText>
+    </div>
+</RollableDialogBase>

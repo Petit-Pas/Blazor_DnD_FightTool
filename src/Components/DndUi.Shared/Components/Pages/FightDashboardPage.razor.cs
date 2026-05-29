@@ -8,7 +8,7 @@ using MudBlazor;
 
 namespace DnDFightTool.Components.DndUi.Shared.Components.Pages;
 
-public partial class FightPage : IDisposable
+public partial class FightDashboardPage : IDisposable
 {
     [Inject]
     public required IDialogServiceProvider DialogServiceProvider { get; set; }
@@ -22,7 +22,7 @@ public partial class FightPage : IDisposable
     [Inject]
     public required ICombatTurnService CombatTurnService { get; set; }
 
-    private FightingCharacter? _selectedFighter;
+    private IFightingCharacter? _selectedFighter;
 
     protected async override Task OnInitializedAsync()
     {
@@ -60,7 +60,7 @@ public partial class FightPage : IDisposable
         }
     }
 
-    public void FighterRemoved(object? _, FightingCharacter __)
+    public void FighterRemoved(object? _, IFightingCharacter __)
     {
         InvokeAsync(StateHasChanged);
     }
@@ -71,7 +71,7 @@ public partial class FightPage : IDisposable
         InvokeAsync(StateHasChanged);
     }
 
-    private void SelectFighter(FightingCharacter fighter)
+    private void SelectFighter(IFightingCharacter fighter)
     {
         if (!CombatTurnService.IsStarted)
         {

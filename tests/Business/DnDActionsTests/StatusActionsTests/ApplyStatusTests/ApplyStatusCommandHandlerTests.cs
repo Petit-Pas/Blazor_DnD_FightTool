@@ -10,6 +10,7 @@ using DomainTestsUtilities.Extensions;
 using DomainTestsUtilities.Factories.Saves;
 using FakeItEasy;
 using NUnit.Framework;
+using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 
 namespace DnDActionsTests.StatusActionsTests.ApplyStatusTests;
@@ -27,9 +28,9 @@ public class ApplyStatusCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-        _fightContext = A.Fake<IFightContext>();
-        _appliedStatusRepository = A.Fake<IAppliedStatusRepository>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _fightContext = A.Fake<IFightContext>(options => options.Strict());
+        _appliedStatusRepository = A.Fake<IAppliedStatusRepository>(options => options.Strict());
 
         _command = new ApplyStatusCommand(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), SaveRollResultFactory.Build());
         _commandHandler = new ApplyStatusCommandHandler(_mediator, _fightContext, _appliedStatusRepository);
@@ -59,6 +60,10 @@ public class ApplyStatusCommandHandlerTests
             {
                 Id = _command.TargetId
             }.AsFighter());
+
+        A.CallTo(() => _appliedStatusRepository.Add(A<AppliedStatus>._)).DoesNothing();
+        A.CallTo(() => _appliedStatusRepository.RemoveIfExists(A<Guid>._)).DoesNothing();
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<WriteLogCommand>._, A<ApplyStatusCommand>._)).Returns(CommandResponse.Success());
     }
 
     [TestFixture]

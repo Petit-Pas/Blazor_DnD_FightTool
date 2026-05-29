@@ -22,10 +22,13 @@ internal class StartNextRoundCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-        _combatTurnService = A.Fake<ICombatTurnService>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _combatTurnService = A.Fake<ICombatTurnService>(options => options.Strict());
         _command = new StartNextRoundCommand();
         _handler = new StartNextRoundCommandHandler(_mediator, _combatTurnService);
+
+        A.CallTo(() => _combatTurnService.SetCurrentRound(A<int>._)).DoesNothing();
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<WriteLogCommand>._, A<StartNextRoundCommand>._)).Returns(CommandResponse.Success());
     }
 
     [TestFixture]

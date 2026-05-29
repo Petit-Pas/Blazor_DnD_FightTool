@@ -1,17 +1,16 @@
 using DnDFightTool.Business.DnDActions.HitPointActions.LooseTempHp;
 using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
-using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.HitPoint;
-using FakeItEasy;
 using DnDFightTool.Domain.Fight;
+using DnDFightTool.Domain.Fight.Characters;
+using FakeItEasy;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using UndoableMediator.Commands;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
-using DomainTestsUtilities.Extensions;
-using DnDFightTool.Domain.Fight.Characters;
 
 namespace DnDActionsTests.HitPointActionsTests.LooseTempHpTests;
 
@@ -21,7 +20,8 @@ internal class LooseTempHpCommandHandlerTests
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
 
-    private FightingCharacter _character = null!;
+    private IFightingCharacter _character = null!;
+    private HitPoints _hitPoints = null!;
 
     private LooseTempHpCommand _command = null!;
     private LooseTempHpCommandHandler _commandHandler = null!;
@@ -29,25 +29,23 @@ internal class LooseTempHpCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-        _fightContext = A.Fake<IFightContext>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _fightContext = A.Fake<IFightContext>(options => options.Strict());
 
-        _character = new Character
-        {
-            HitPoints = new HitPoints() { CurrentTempHps = 12 }
-        }.AsFighter();
+        _hitPoints = new HitPoints { CurrentTempHps = 12 };
+        _character = A.Fake<IFightingCharacter>(options => options.Strict());
+        A.CallTo(() => _character.HitPoints).Returns(_hitPoints);
+        A.CallTo(() => _character.Name).Returns("Goblin");
 
-        _command = new LooseTempHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
+        _command = new LooseTempHpCommand(Guid.NewGuid(), 10);
         _commandHandler = new LooseTempHpCommandHandler(_mediator, _fightContext);
 
-        A.CallTo(() => _fightContext[A<Guid>._])
-            .Returns(_character);
-    }
+        A.CallTo(() => _fightContext[A<Guid>._]).Returns(_character);
 
-    private int _tempHps
-    {
-        get => _character.HitPoints.CurrentTempHps;
-        set => _character.HitPoints.CurrentTempHps = value;
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseTempHpAtomicCommand>._, A<LooseTempHpCommand>._))
+            .Returns(Task.FromResult<ICommandResponse<int>>(CommandResponse.Success<int>(7)));
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<WriteLogCommand>._, A<LooseTempHpCommand>._))
+            .Returns(Task.FromResult<ICommandResponse<NoResponse>>(CommandResponse.Success()));
     }
 
     [TestFixture]
@@ -56,98 +54,30 @@ internal class LooseTempHpCommandHandlerTests
         [Test]
         public async Task Should_Return_Success()
         {
-            // Act 
             var response = await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
             response.Status.Should().Be(RequestStatus.Success);
         }
 
         [Test]
-        public async Task Should_Update_Hps()
+        public async Task Should_Dispatch_LooseTempHpAtomicCommand()
         {
-            // Arrange
-            var startingHps = _tempHps;
-
-            // Act
             await _commandHandler.ExecuteAsync(_command);
 
-            // Assert
-            _tempHps.Should().Be(startingHps - _command.Amount);
-        }
-
-        [Test]
-        public async Task Should_Not_Go_Lower_Than_Zero_Hps()
-        {
-            // Arrange
-            _tempHps = 5;
-
-            // Act
-            await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
-            _tempHps.Should().Be(0);
-        }
-
-        [Test]
-        [TestCase(20, 10)]
-        [TestCase(5, 5)]
-        public async Task Should_Set_CorrectedAmount(int hps, int correctedAmountExpected)
-        {
-            // Arrange
-            _tempHps = hps;
-
-            // Act
-            await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
-            _command.CorrectedAmount.Should().Be(correctedAmountExpected);
-        }
-
-        [Test]
-        public async Task Should_Send_WriteLogCommand()
-        {
-            // Act
-            await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
             A.CallTo(() => _mediator.SendAsSubCommandAsync(
-                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("loses") && x.Content.Contains("temp HPs")),
+                A<LooseTempHpAtomicCommand>.That.Matches(x => x.Amount == _command.Amount),
                 A<LooseTempHpCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
-    }
-
-    [TestFixture]
-    private class UndoTests : LooseTempHpCommandHandlerTests
-    {
-        [Test]
-        public async Task Should_Throw_InvalidOperationException_When_CorrectedAmount_Is_Null()
-        {
-            // Arrange
-            _command.CorrectedAmount = null;
-
-            // Act
-            var undoing = async () => await _commandHandler.UndoAsync(_command);
-
-            // Assert
-            await undoing.Should().ThrowAsync<InvalidOperationException>();
-        }
 
         [Test]
-        [TestCase(3)]
-        [TestCase(10)]
-        public async Task Should_Update_Hps_With_CorrectedAmount(int correctedAmount)
+        public async Task Should_Send_WriteLogCommand_With_TempHpLoss()
         {
-            // Arrange
-            var startingHps = _tempHps;
-            _command.CorrectedAmount = correctedAmount;
+            await _commandHandler.ExecuteAsync(_command);
 
-            // Act
-            await _commandHandler.UndoAsync(_command);
-
-            // Assert
-            _tempHps.Should().Be(startingHps + correctedAmount);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(
+                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("loses") && x.Content.Contains("temp HPs") && x.Content.Contains("7")),
+                A<LooseTempHpCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
     }
 
@@ -155,16 +85,12 @@ internal class LooseTempHpCommandHandlerTests
     private class RedoTests : LooseTempHpCommandHandlerTests
     {
         [Test]
-        public async Task Should_Update_Hps()
+        public async Task Should_Clear_SubCommands_And_Re_Execute()
         {
-            // Arrange
-            var startingHps = _tempHps;
+            await _commandHandler.RedoAsync(_command);
 
-            // Act
-            await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
-            _tempHps.Should().Be(startingHps - _command.Amount);
+            A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseTempHpAtomicCommand>._, A<LooseTempHpCommand>._))
+                .MustHaveHappenedOnceExactly();
         }
     }
 }

@@ -1,0 +1,59 @@
+.fighters-page {
+    display: flex;
+    height: calc(100dvh - var(--mud-appbar-height, 64px));
+    padding: 8px;
+    gap: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.fighters-column {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-header {
+    flex-shrink: 0;
+}
+
+.group-section {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.group-section + .group-section {
+    margin-top: 12px;
+}
+
+.group-section-header {
+    flex-shrink: 0;
+}
+
+.group-header {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.group-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 4px 2px; /* room for card box-shadow */
+}
+
+.fighter-row-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.empty-state {
+    opacity: 0.6;
+    font-style: italic;
+    margin: 8px 0;
+}

@@ -15,9 +15,9 @@ public partial class InitiativeInputDialog : IDisposable
     public IDiceRollNotifier DiceRollNotifier { get; set; } = null!;
 
     [Parameter]
-    public FightingCharacter[] Fighters { get; set; } = [];
+    public IFightingCharacter[] Fighters { get; set; } = [];
 
-    private (FightingCharacter Fighter, RawD20RollResult Roll)[] _rows = [];
+    private (IFightingCharacter Fighter, RawD20RollResult Roll)[] _rows = [];
 
     private bool CanValidate => !DiceRollNotifier.CanRoll;
 

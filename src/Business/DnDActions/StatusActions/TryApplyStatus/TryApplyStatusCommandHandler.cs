@@ -50,7 +50,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         return CommandResponse.Success();
     }
 
-    private async Task TryApplyStatus(TryApplyStatusCommand command, StatusTemplate status, FightingCharacter caster, FightingCharacter target)
+    private async Task TryApplyStatus(TryApplyStatusCommand command, StatusTemplate status, IFightingCharacter caster, IFightingCharacter target)
     {
         if (status.ShouldBeApplied(caster, target, command.SaveRollResult))
         {
@@ -58,7 +58,7 @@ public class TryApplyStatusCommandHandler : CommandHandlerBase<TryApplyStatusCom
         }
     }
 
-    private async Task LogSaveRoll(SaveRollResult save, FightingCharacter caster, FightingCharacter target, TryApplyStatusCommand command)
+    private async Task LogSaveRoll(SaveRollResult save, IFightingCharacter caster, IFightingCharacter target, TryApplyStatusCommand command)
     {
         var dc = save.Target.GetValue(caster);
         var modifier = target.AbilityScores.GetSavingModifier(save.Ability);

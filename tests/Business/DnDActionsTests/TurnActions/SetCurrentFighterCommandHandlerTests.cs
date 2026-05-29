@@ -25,11 +25,14 @@ internal class SetCurrentFighterCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-        _combatTurnService = A.Fake<ICombatTurnService>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _combatTurnService = A.Fake<ICombatTurnService>(options => options.Strict());
 
         _fighter1 = CharacterFactory.BuildMonster(name: "Goblin").AsFighter();
         _fighter2 = CharacterFactory.BuildMonster(name: "Orc").AsFighter();
+
+        A.CallTo(() => _combatTurnService.CurrentTurnFighter).Returns((FightingCharacter?)null);
+        A.CallTo(() => _combatTurnService.SetCurrentTurnFighter(A<Guid?>._)).DoesNothing();
     }
 
     [TestFixture]
@@ -92,6 +95,22 @@ internal class SetCurrentFighterCommandHandlerTests
 
             // Assert
             command.PreviousFighterId.Should().BeNull();
+        }
+
+        [Test]
+        public async Task Should_Clear_CurrentFighter_When_Null_FighterId()
+        {
+            // Arrange
+            var command = new SetCurrentFighterCommand(null);
+            var handler = new SetCurrentFighterCommandHandler(_mediator, _combatTurnService);
+
+            // Act
+            var response = await handler.ExecuteAsync(command);
+
+            // Assert
+            response.Status.Should().Be(RequestStatus.Success);
+            A.CallTo(() => _combatTurnService.SetCurrentTurnFighter(null))
+                .MustHaveHappenedOnceExactly();
         }
     }
 

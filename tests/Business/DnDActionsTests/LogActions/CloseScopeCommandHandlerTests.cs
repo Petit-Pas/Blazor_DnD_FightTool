@@ -20,10 +20,12 @@ internal class CloseScopeCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
-        _logService = A.Fake<IDnDLogService>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict());
+        _logService = A.Fake<IDnDLogService>(options => options.Strict());
         _command = new CloseScopeCommand();
         _commandHandler = new CloseScopeCommandHandler(_mediator, _logService);
+
+        A.CallTo(() => _logService.CloseScope()).DoesNothing();
     }
 
     [TestFixture]

@@ -6,6 +6,8 @@ using FluentAssertions;
 using NUnit.Framework;
 using System;
 using UndoableMediator.Mediators;
+using UndoableMediator.Commands;
+using UndoableMediator.Requests;
 using DnDFightTool.Business.DnDActions.DamageActions.TakeDamage;
 using DnDFightTool.Business.DnDActions.HitPointActions.LooseHp;
 using DnDFightTool.Business.DnDActions.HitPointActions.LooseTempHp;
@@ -29,8 +31,8 @@ public class TakeDamageCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
-        _fightContext = A.Fake<IFightContext>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _fightContext = A.Fake<IFightContext>(options => options.Strict());
 
         _character = new Character
         {
@@ -42,6 +44,11 @@ public class TakeDamageCommandHandlerTests
 
         A.CallTo(() => _fightContext[A<Guid>._])
             .Returns(_character);
+
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseHpCommand>._, A<TakeDamageCommand>._))
+            .Returns(Task.FromResult<ICommandResponse<NoResponse>>(CommandResponse.Success()));
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<LooseTempHpCommand>._, A<TakeDamageCommand>._))
+            .Returns(Task.FromResult<ICommandResponse<NoResponse>>(CommandResponse.Success()));
     }
 
     private HitPoints _hps { get => _character.HitPoints; }

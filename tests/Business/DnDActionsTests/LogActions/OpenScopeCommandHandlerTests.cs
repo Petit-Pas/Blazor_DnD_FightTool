@@ -20,10 +20,12 @@ internal class OpenScopeCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
-        _logService = A.Fake<IDnDLogService>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict());
+        _logService = A.Fake<IDnDLogService>(options => options.Strict());
         _command = new OpenScopeCommand();
         _commandHandler = new OpenScopeCommandHandler(_mediator, _logService);
+
+        A.CallTo(() => _logService.OpenScope()).DoesNothing();
     }
 
     [TestFixture]

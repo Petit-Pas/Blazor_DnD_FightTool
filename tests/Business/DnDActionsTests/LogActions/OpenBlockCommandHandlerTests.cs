@@ -21,10 +21,14 @@ internal class OpenBlockCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>();
-        _logService = A.Fake<IDnDLogService>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict());
+        _logService = A.Fake<IDnDLogService>(options => options.Strict());
         _command = new OpenBlockCommand("Test Block");
         _commandHandler = new OpenBlockCommandHandler(_mediator, _logService);
+
+        A.CallTo(() => _logService.OpenBlock(A<string>._)).Returns(Guid.NewGuid());
+        A.CallTo(() => _logService.CloseBlock()).Returns(Guid.NewGuid());
+        A.CallTo(() => _logService.ReopenBlock(A<Guid>._)).DoesNothing();
     }
 
     [TestFixture]

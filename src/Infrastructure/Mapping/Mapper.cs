@@ -36,7 +36,16 @@ public class Mapper : IMapper
     public T Clone<T>(T source, params ValueTuple<string, object>[] runtimeParameters)
             where T : class
     {
-        return Map<T, T>(source, [.. runtimeParameters, ("IsADuplication", true)]);
+        // Use the runtime type so TypeAdapterConfig registered for the concrete type
+        // (e.g. Character → Character) is picked up even when T is an interface (e.g. ICharacter).
+        using var scope = new MapContextScope();
+        scope.Context.Parameters["IsADuplication"] = true;
+        foreach (var (name, value) in runtimeParameters)
+        {
+            scope.Context.Parameters[name] = value;
+        }
+        var runtimeType = source.GetType();
+        return (T)TypeAdapter.Adapt(source, runtimeType, runtimeType);
     }
 
     public T Copy<T>(T source, params ValueTuple<string, object>[] runtimeParameters)

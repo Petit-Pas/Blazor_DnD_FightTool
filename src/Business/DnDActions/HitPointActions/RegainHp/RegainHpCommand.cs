@@ -1,20 +1,16 @@
 ﻿namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainHp;
 
+/// <summary>
+///     Orchestrator command: restores a fighter's hit points and logs the gain.
+///     Dispatches <see cref="RegainHpAtomicCommand"/> (mutation) and a <see cref="DnDFightTool.Business.DnDActions.LogActions.WriteLog.WriteLogCommand"/> (log) as sub-commands.
+/// </summary>
 public class RegainHpCommand : TargetCommandBase
 {
-    /// <summary>
-    ///     This is the expected amount of hp gained, could be lowered in reality if the amount of Hp is too high
-    /// </summary>
-    public int Amount { get; set; }
-
-    /// <summary>
-    ///     This is the actual amount of hp gained
-    /// </summary>
-    public int? CorrectedAmount { get; set; }
+    /// <summary>The requested amount of HP to restore.</summary>
+    public int Amount { get; }
 
     public RegainHpCommand(Guid targetId, int amount) : base(targetId)
     {
         Amount = amount;
     }
-
 }

@@ -7,6 +7,7 @@ using DnDFightTool.Domain.CharacterSheet.Damage;
 using DnDFightTool.Domain.Fight;
 using NUnit.Framework;
 using UndoableMediator.Mediators;
+using UndoableMediator.Commands;
 using UndoableMediator.Requests;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.MartialAttackActions.ExecuteMartialAttack;
@@ -43,8 +44,8 @@ public class ExecuteMartialAttackCommandHandlerTests
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>()); 
-        _fightContext = A.Fake<IFightContext>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _fightContext = A.Fake<IFightContext>(options => options.Strict());
         _caster = new Character(true).AsFighter();
         _caster.MartialAttacks.Add(MartialAttackTemplateFactory.Build()); ;
         _target = new Character(true)
@@ -60,6 +61,17 @@ public class ExecuteMartialAttackCommandHandlerTests
         A.CallTo(() => _fightContext[_target.Id])
             .Returns(_target);
 
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<OpenScopeCommand>._, A<ExecuteMartialAttackCommand>._))
+            .Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<CloseScopeCommand>._, A<ExecuteMartialAttackCommand>._))
+            .Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<WriteLogCommand>._, A<ExecuteMartialAttackCommand>._))
+            .Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<ApplyDamageRollResultsCommand>._, A<ExecuteMartialAttackCommand>._))
+            .Returns(CommandResponse.Success());
+        A.CallTo(() => _mediator.SendAsSubCommandAsync(A<TryApplyStatusCommand>._, A<ExecuteMartialAttackCommand>._))
+            .Returns(CommandResponse.Success());
+
         When_Query_Returns();
     }
 
@@ -73,7 +85,7 @@ public class ExecuteMartialAttackCommandHandlerTests
     /// <exception cref="System.NotImplementedException"></exception>
     private void When_Query_Returns(MartialAttackRollResult? result = null, RequestStatus status = RequestStatus.Success)
     {
-        result ??= MartialAttackRollResultFactory.Build();
+        result ??= MartialAttackRollResultFactory.Build(targetId: _target.Id);
 
         // TODO should update mediator package to make the constructor public, this is annoying as hell in the end.
         var queryResponse = status switch
@@ -120,7 +132,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Store_Result_Of_Query_In_Command()
         {
             // Arrange
-            var result = MartialAttackRollResultFactory.Build();
+            var result = MartialAttackRollResultFactory.Build(targetId: _target.Id);
             When_Query_Returns(result);
 
             // Act
@@ -136,6 +148,7 @@ public class ExecuteMartialAttackCommandHandlerTests
             // Act
             var result = MartialAttackRollResultFactory.Build(targetId: Guid.NewGuid());
             When_Query_Returns(result);
+            A.CallTo(() => _fightContext[result.TargetId]).Returns(_target);
 
             await _commandHandler.ExecuteAsync(_command);
 
@@ -148,7 +161,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Not_Apply_Damage_When_The_Attack_Does_Not_Hit()
         {
             // Arrange
-            var result = MartialAttackRollResultFactory.Build(hitRollResult: new HitRollResult() { Result = 3 });
+            var result = MartialAttackRollResultFactory.Build(hitRollResult: new HitRollResult() { Result = 3 }, targetId: _target.Id);
             When_Query_Returns(result);
 
             // Act
@@ -169,7 +182,8 @@ public class ExecuteMartialAttackCommandHandlerTests
                     damageRollResult: [
                         DamageRollResultFactory.BuildRolledDice(
                             damageType: DamageTypeEnum.Thunder, 
-                            damage: 7) ]);
+                            damage: 7) ],
+                    targetId: _target.Id);
             When_Query_Returns(result);
 
             // Act
@@ -186,7 +200,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Try_Applying_Status_When_The_Attack_Does_Hit()
         {
             // Arrange
-            var result = MartialAttackRollResultFactory.Build(hitRollResult: new HitRollResult() { Result = 17 });
+            var result = MartialAttackRollResultFactory.Build(hitRollResult: new HitRollResult() { Result = 17 }, targetId: _target.Id);
             When_Query_Returns(result);
 
             // Act
@@ -286,7 +300,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Not_Redo_Query_When_Template_Is_The_Same()
         {
             // Arrange
-            var result = MartialAttackRollResultFactory.Build();
+            var result = MartialAttackRollResultFactory.Build(targetId: _target.Id);
             When_Query_Returns(result);
 
             await _commandHandler.ExecuteAsync(_command);
@@ -304,7 +318,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Redo_Even_The_Query_When_Template_Got_Updated()
         {
             // Arrange
-            When_Query_Returns(MartialAttackRollResultFactory.Build());
+            When_Query_Returns(MartialAttackRollResultFactory.Build(targetId: _target.Id));
             await _commandHandler.ExecuteAsync(_command);
             await _commandHandler.UndoAsync(_command);
             _attackTemplate.Name = "New name to change hash value";
@@ -322,7 +336,7 @@ public class ExecuteMartialAttackCommandHandlerTests
         public async Task Should_Update_Hash_When_Template_Got_Updated()
         {
             // Arrange
-            When_Query_Returns(MartialAttackRollResultFactory.Build());
+            When_Query_Returns(MartialAttackRollResultFactory.Build(targetId: _target.Id));
             await _commandHandler.ExecuteAsync(_command);
             var firstHash = _command.AttackTemplateHash;
             await _commandHandler.UndoAsync(_command);

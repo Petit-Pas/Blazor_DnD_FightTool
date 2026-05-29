@@ -8,17 +8,17 @@ namespace DnDFightTool.Business.DnDActions.TurnActions.SetCurrentFighter;
 public class SetCurrentFighterCommand : CommandBase
 {
     /// <summary>
-    ///     Initializes a new instance with the fighter to make current.
+    ///     Initializes a new instance with the fighter to make current. Pass <c>null</c> to clear.
     /// </summary>
-    public SetCurrentFighterCommand(Guid fighterId)
+    public SetCurrentFighterCommand(Guid? fighterId)
     {
         FighterId = fighterId;
     }
 
     /// <summary>
-    ///     The ID of the fighter to set as the current turn fighter.
+    ///     The ID of the fighter to set as the current turn fighter, or <c>null</c> to clear.
     /// </summary>
-    public Guid FighterId { get; }
+    public Guid? FighterId { get; }
 
     /// <summary>
     ///     The ID of the fighter that was current before this command ran. <c>null</c> if none.

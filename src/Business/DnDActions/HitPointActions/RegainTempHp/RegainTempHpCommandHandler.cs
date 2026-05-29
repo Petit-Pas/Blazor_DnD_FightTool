@@ -5,6 +5,10 @@ using UndoableMediator.Mediators;
 
 namespace DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
 
+/// <summary>
+///     Orchestrator: dispatches <see cref="RegainTempHpAtomicCommand"/> (mutation) then logs the corrected amount.
+///     Undo cascades to sub-commands via <c>base.UndoAsync</c>.
+/// </summary>
 public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand>
 {
     private readonly IFightContext _fightContext;
@@ -17,46 +21,30 @@ public class RegainTempHpCommandHandler : CommandHandlerBase<RegainTempHpCommand
     public async override Task<ICommandResponse<NoResponse>> ExecuteAsync(RegainTempHpCommand command)
     {
         var fighter = _fightContext[command.TargetId] ?? throw new ArgumentException($"{typeof(RegainTempHpCommandHandler)} could not find target with id {command.TargetId}");
-        var hitPoints = fighter.HitPoints;
 
-        var expectedTotalCurrentHps = Math.Max(command.Amount, hitPoints.CurrentTempHps);
-        command.CorrectedAmount = expectedTotalCurrentHps - hitPoints.CurrentTempHps;
+        var atomicCmd = new RegainTempHpAtomicCommand(command.TargetId, command.Amount);
+        var atomicResponse = await _mediator.SendAsSubCommandAsync(atomicCmd, parentCommand: command);
 
-        hitPoints.CurrentTempHps += command.CorrectedAmount.Value;
-
-        _fightContext.NotifyFighterUpdated(command.TargetId);
-
-        await LogTempHpGain(fighter.Name, command);
+        await LogTempHpGain(fighter.Name, atomicResponse.Response, command);
 
         return CommandResponse.Success();
     }
 
-    public async override Task UndoAsync(RegainTempHpCommand command)
+    public override Task UndoAsync(RegainTempHpCommand command)
     {
-        await base.UndoAsync(command);
-
-        var hitPoints = _fightContext[command.TargetId]?.HitPoints ?? throw new ArgumentException($"{typeof(RegainTempHpCommandHandler)} could not find target with id {command.TargetId}");
-        
-        if (command.CorrectedAmount == null)
-        {
-            throw new InvalidOperationException($"Cannot undo a {command.GetType()} when it has not been executed yet.");
-        }
-
-        hitPoints.CurrentTempHps -= command.CorrectedAmount.Value;
-
-        _fightContext.NotifyFighterUpdated(command.TargetId);
+        return base.UndoAsync(command);
     }
 
     public async override Task RedoAsync(RegainTempHpCommand command)
     {
+        ClearSubCommands(command);
         await ExecuteAsync(command);
     }
 
-    private async Task LogTempHpGain(string fighterName, RegainTempHpCommand command)
+    private async Task LogTempHpGain(string fighterName, int correctedAmount, RegainTempHpCommand command)
     {
         await _mediator.SendAsSubCommandAsync(
-            new WriteLogCommand($"[b]{fighterName}[/b] gains [c:heal][b]{command.CorrectedAmount}[/b] temp HPs[/c]"),
+            new WriteLogCommand($"[b]{fighterName}[/b] gains [c:heal][b]{correctedAmount}[/b] temp HPs[/c]"),
             parentCommand: command);
     }
-        
 }

@@ -1,0 +1,10 @@
+.initiative-roll {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.initiative-total {
+    font-weight: bold;
+    white-space: nowrap;
+}

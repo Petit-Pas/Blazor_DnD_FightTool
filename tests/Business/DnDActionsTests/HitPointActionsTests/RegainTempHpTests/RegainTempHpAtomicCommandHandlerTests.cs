@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using DnDFightTool.Business.DnDActions.HitPointActions.RegainTempHp;
-using DnDFightTool.Business.DnDActions.LogActions.WriteLog;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.Domain.CharacterSheet.HitPoint;
 using DnDFightTool.Domain.Fight;
@@ -9,7 +8,6 @@ using DnDFightTool.Domain.Fight.Characters;
 using DomainTestsUtilities.Extensions;
 using FakeItEasy;
 using FluentAssertions;
-using MudBlazor.Charts;
 using NUnit.Framework;
 using UndoableMediator.Mediators;
 using UndoableMediator.Requests;
@@ -17,32 +15,33 @@ using UndoableMediator.Requests;
 namespace DnDActionsTests.HitPointActionsTests.RegainTempHpTests;
 
 [TestFixture]
-internal class RegainTempHpCommandHandlerBase
+internal class RegainTempHpAtomicCommandHandlerTests
 {
     private IUndoableMediator _mediator = null!;
     private IFightContext _fightContext = null!;
 
     private FightingCharacter _character = null!;
     
-    private RegainTempHpCommand _command = null!;
-    private RegainTempHpCommandHandler _commandHandler = null!;
+    private RegainTempHpAtomicCommand _command = null!;
+    private RegainTempHpAtomicCommandHandler _commandHandler = null!;
 
     [SetUp]
     public void SetUp()
     {
-        _mediator = A.Fake<IUndoableMediator>(options => options.Implements<ISubCommandDispatcher>());
-        _fightContext = A.Fake<IFightContext>();
+        _mediator = A.Fake<IUndoableMediator>(options => options.Strict().Implements<ISubCommandDispatcher>());
+        _fightContext = A.Fake<IFightContext>(options => options.Strict());
 
         _character = new Character
         {
             HitPoints = new HitPoints() { CurrentTempHps = 5 }
         }.AsFighter();
 
-        _command = new RegainTempHpCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
-        _commandHandler = new RegainTempHpCommandHandler(_mediator, _fightContext);
+        _command = new RegainTempHpAtomicCommand(Guid.NewGuid(), 10) { CorrectedAmount = 10 };
+        _commandHandler = new RegainTempHpAtomicCommandHandler(_mediator, _fightContext);
 
         A.CallTo(() => _fightContext[A<Guid>._])
             .Returns(_character);
+        A.CallTo(() => _fightContext.NotifyFighterUpdated(A<Guid>._)).DoesNothing();
     }
 
     private int _tempHps
@@ -52,7 +51,7 @@ internal class RegainTempHpCommandHandlerBase
     }
 
     [TestFixture]
-    private class ExecuteTests : RegainTempHpCommandHandlerBase
+    private class ExecuteTests : RegainTempHpAtomicCommandHandlerTests
     {
         [Test]
         public async Task Should_Return_Success()
@@ -85,28 +84,17 @@ internal class RegainTempHpCommandHandlerBase
             _tempHps = hps;
 
             // Act
-            await _commandHandler.ExecuteAsync(_command);
+            var response = await _commandHandler.ExecuteAsync(_command);
 
             // Assert
             _command.CorrectedAmount.Should().Be(correctedAmountExpected);
+            response.Response.Should().Be(correctedAmountExpected);
         }
 
-        [Test]
-        public async Task Should_Send_WriteLogCommand()
-        {
-            // Act
-            await _commandHandler.ExecuteAsync(_command);
-
-            // Assert
-            A.CallTo(() => _mediator.SendAsSubCommandAsync(
-                A<WriteLogCommand>.That.Matches(x => x.Content.Contains("gains") && x.Content.Contains("temp HPs")),
-                A<RegainTempHpCommand>._))
-                .MustHaveHappenedOnceExactly();
-        }
     }
 
     [TestFixture]
-    private class UndoTests : RegainTempHpCommandHandlerBase
+    private class UndoTests : RegainTempHpAtomicCommandHandlerTests
     {
         [Test]
         public async Task Should_Throw_InvalidOperationException_When_CorrectedAmount_Is_Null()
@@ -139,7 +127,7 @@ internal class RegainTempHpCommandHandlerBase
     }
 
     [TestFixture]
-    private class RedoTests : RegainTempHpCommandHandlerBase
+    private class RedoTests : RegainTempHpAtomicCommandHandlerTests
     {
         [Test]
         public async Task Should_Update_Hps()

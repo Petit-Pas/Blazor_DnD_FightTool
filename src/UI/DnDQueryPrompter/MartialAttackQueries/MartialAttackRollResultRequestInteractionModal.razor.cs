@@ -15,7 +15,7 @@ public partial class MartialAttackRollResultRequestInteractionModal
     public MartialAttackRollResult? MartialAttackRollResult { get; set; }
 
     private string _filter = string.Empty;
-    private FightingCharacter[] _fighters = [];
+    private IFightingCharacter[] _fighters = [];
 
     protected override void OnInitialized()
     {
