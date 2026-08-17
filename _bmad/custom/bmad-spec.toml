@@ -1,0 +1,11 @@
+# Team overrides for bmad-spec.
+# Arrays append to the skill defaults; scalars override.
+
+[workflow]
+
+# The default only looks at {project-root}/project-context.md (no glob), which
+# misses our file in _bmad-output/. Widen it to match the glob every other
+# BMad skill uses.
+persistent_facts = [
+  "file:{project-root}/**/project-context.md",
+]
