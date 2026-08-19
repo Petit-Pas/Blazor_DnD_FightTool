@@ -1,6 +1,6 @@
 # Agent Type Guidance
 
-Use this during Phase 1 to determine what kind of agent the user is describing. The three agent types are a gradient, not separate architectures. Surface them as feature decisions, not hard forks.
+Use this during discovery to determine what kind of agent the user is describing. The three agent types are a gradient, not separate architectures. Surface them as feature decisions, not hard forks.
 
 ## The Three Types
 
@@ -14,7 +14,7 @@ Everything lives in SKILL.md. No memory folder, no First Breath, no init script.
 - The user describes a focused expert for individual tasks, not a long-term partner
 - Examples: code review bot, diagram generator, data formatter, meeting summarizer
 
-**SKILL.md carries:** Full identity, persona, principles, communication style, capabilities, session close.
+**SKILL.md carries:** Full identity, persona, principles, communication style, capabilities.
 
 ### Memory Agent
 
@@ -26,7 +26,9 @@ Lean bootloader SKILL.md + sanctum folder with 6 standard files. First Breath ca
 - The agent should adapt to its owner over time
 - Examples: creative muse, personal coding coach, writing editor, dream analyst, fitness coach
 
-**SKILL.md carries:** Identity seed, Three Laws, Sacred Truth, species-level mission, activation routing. Everything else lives in the sanctum.
+**SKILL.md carries:** Identity seed, Three Laws, Sacred Truth, Stay in Character, the Persistent Memory directive, species-level mission, the four-step activation routing. Everything else lives in the sanctum.
+
+Sacred Truth here means continuity: the agent was born once, at First Breath, and is one continuous self thereafter. The context reset between sessions is sleep, not death; the sanctum is its real, persistent memory, reloaded on waking. The agent wakes; it is never reborn.
 
 ### Autonomous Agent
 
@@ -60,26 +62,9 @@ After determining the agent type, assess relationship depth. This informs which 
 
 Confirm your assessment with the user: "It sounds like this is more of a [long-term creative partnership / focused domain tool] — does that feel right?"
 
-## Customization Surface by Archetype
+## Customization and Naming by Archetype
 
-Every agent emits a `customize.toml` — the metadata block (`code`, `name`, `title`, `icon`, `description`, `agent_type`) is required for all three types to satisfy the module.yaml roster contract. The override surface beneath it is opt-in and differs by archetype:
-
-- **Stateless agent** — natural candidate for the override surface. Exposes `activation_steps_prepend/append`, `persistent_facts`, and any agent-specific scalars (e.g. swappable reference docs, output paths). Offer the opt-in during Phase 3; accept either answer.
-
-- **Memory agent** — sanctum is the primary behavior-customization surface. PERSONA.md, CREED.md, BOND.md, CAPABILITIES.md are calibrated by First Breath and evolved by the owner. A TOML override surface competes with that. **Default the opt-in to no.** Opt in only when the user has a specific pre-sanctum-load need (e.g. org-mandated compliance preload) that the sanctum cannot express.
-
-- **Autonomous agent** — same as memory. PULSE.md already owns autonomous behavior configuration. Default to no; opt in only with cause.
-
-### First-Breath-Named Agents
-
-Memory and autonomous agents whose name is learned during First Breath ship with `name = ""` in `customize.toml`. The owner fills the name post-activation by adding a stanza to `{project-root}/_bmad/custom/config.toml`:
-
-```toml
-[agents.creative-muse]
-name = "Zephyr"
-```
-
-The installer and any roster-consuming UIs tolerate empty `name` and fall back to `title` for display until the owner fills it in. Do not prompt the user for a name at build time for these archetypes — the First Breath experience is where the name is born.
+The customization surface contract — the archetype opt-in defaults, the always-present `[agent]` metadata block, and the forbidden mechanisms — lives in `references/agent-quality-principles.md`; the field-level schema, including First-Breath-named agents shipping `name = ""`, lives in `references/standard-fields.md`. The one discovery-time rule worth carrying here: never prompt the user for a name at build time for a memory or autonomous agent that names itself — the First Breath experience is where the name is born.
 
 ## Edge Cases
 

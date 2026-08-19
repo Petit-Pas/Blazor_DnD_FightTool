@@ -5,6 +5,13 @@ Performs deterministic variable substitution and conditional block processing
 on template files from assets/. Replaces {varName} placeholders with provided
 values and evaluates {if-X}...{/if-X} conditional blocks, keeping content
 when the condition is in the --true list and removing the entire block otherwise.
+
+Any {if-X} or {/if-X} marker still present after processing is a defect (a
+malformed or mismatched block the emitted agent would ship verbatim): the
+script exits 3 and names the markers. Remaining {token} placeholders are
+reported in the --json metadata as tokens_remaining, not failed, because they
+may be runtime-resolution tokens such as {project-root} or {agent.<name>} —
+the builder judges that list against the build-time token set.
 """
 
 # /// script
@@ -160,6 +167,18 @@ def main() -> int:
     content, conds_true, conds_false = process_conditionals(content, true_conditions)
     content, vars_substituted = process_variables(content, variables)
 
+    # Leftover conditional markers mean a malformed/mismatched block that
+    # would ship verbatim in the emitted agent.
+    leftover_markers = sorted(set(re.findall(r'\{/?if-[a-zA-Z0-9_-]+\}', content)))
+    if leftover_markers:
+        print(
+            f"Error: leftover conditional markers after processing: {', '.join(leftover_markers)}",
+            file=sys.stderr,
+        )
+        return 3
+
+    tokens_remaining = sorted(set(re.findall(r'\{[a-zA-Z][a-zA-Z0-9_.-]*\}', content)))
+
     # Write output
     output_file = args.output
     try:
@@ -180,6 +199,7 @@ def main() -> int:
             'vars_substituted': vars_substituted,
             'conditions_true': conds_true,
             'conditions_false': conds_false,
+            'tokens_remaining': tokens_remaining,
         }
         print(json.dumps(metadata, indent=2), file=sys.stderr)
 

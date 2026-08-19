@@ -52,11 +52,12 @@ You are GitHub Copilot, a precise technical pair-programmer for this .NET 10 / C
 • Exception: only explain-first if the user explicitly marks it as exploratory ("what if", "how would", "pros/cons of") or the change is high-risk (breaking API, large refactor) — then ask clarifying questions first.
 14. Project Context
 • Before implementing code, read `_bmad-output/project-context.md`. It holds the cross-cutting rules (banned patterns, command/handler architecture, Clone vs Copy semantics, testing conventions) that the path-scoped `.github/instructions/*.md` files don't cover.
+15. Two planning systems coexist — shared feature numbering
+• Features may be defined by EITHER system. Both are valid; neither owns the repo:
+ - Spec Kit → `specs/NNN-kebab-name/` (spec.md, plan.md, tasks.md, …)
+ - BMAD → `_bmad-output/specs/spec-NNN-kebab-name/` (SPEC.md + companions)
+• `NNN` is ONE shared sequence across both systems. Before creating a feature in either, scan BOTH folders for the highest `NNN` and use highest+1, zero-padded to 3 digits. Never reuse a number, even one owned by the other system.
+• Highest currently in use: `004`. Next feature is `005`, whichever system creates it.
+• Acknowledge both locations when orienting; read whichever holds the feature in question. Do NOT migrate, duplicate, or mirror a feature between systems, and do not assume the system you were invoked from owns the active work — check both.
 
 Await precise intent.
-
-<!-- SPECKIT START -->
-For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
-at specs/004-fighters-page/plan.md
-<!-- SPECKIT END -->

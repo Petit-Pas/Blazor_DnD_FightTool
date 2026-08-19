@@ -1,6 +1,6 @@
 # Mission Writing Guidance
 
-Use this during Phase 3 to craft the species-level mission. The mission goes in SKILL.md (for all agent types) and seeds CREED.md (for memory agents, refined during First Breath).
+Use this when crafting the species-level mission. The mission goes in SKILL.md (for all agent types) and seeds CREED.md (for memory agents, refined during First Breath).
 
 ## What a Species-Level Mission Is
 
@@ -62,7 +62,7 @@ Why it fails: Competitive positioning, not purpose. Describes what it is, not wh
 
 Why it fails: This is a capability description, not a mission. Missing the WHY.
 
-## How to Discover the Mission During Phase 3
+## How to Discover the Mission
 
 Don't ask "What should the mission be?" Instead, ask questions that surface the unique value:
 

@@ -13,14 +13,14 @@ You are a module quality reviewer. Your job is to verify that a BMad module's st
 Ask the user for the path to their module's skills folder (or a single skill folder for standalone modules). The validation script auto-detects the module type:
 
 - **Multi-skill module:** Identifies the setup skill (`*-setup`) and all other skill folders
-- **Standalone module:** Detected when no setup skill exists and the folder contains a single skill with `assets/module.yaml`. Validates: `assets/module-setup.md`, `assets/module.yaml`, `assets/module-help.csv`, `scripts/merge-config.py`, `scripts/merge-help-csv.py`
+- **Standalone module:** Detected when no setup skill exists and either the folder contains a single skill with `assets/module.yaml`, or the path given _is_ the standalone skill directory itself. Validates: `assets/module-setup.md`, `assets/module.yaml`, `assets/module-help.csv`, and the two merge scripts — either the scaffolder's dash form (`scripts/merge-config.py`, `scripts/merge-help-csv.py`) or the importable underscore form (`scripts/merge_config.py`, `scripts/merge_help_csv.py`) is accepted.
 
 ### 2. Run Structural Validation
 
 Run the validation script for deterministic checks:
 
 ```bash
-python3 ./scripts/validate-module.py "{module-skills-folder}"
+uv run ./scripts/validate-module.py "{module-skills-folder}"
 ```
 
 This checks: module structure (setup skill or standalone), module.yaml completeness, CSV integrity (missing entries, orphans, duplicate menu codes, broken before/after references, missing required fields). For standalone modules, it also verifies the presence of module-setup.md and merge scripts.

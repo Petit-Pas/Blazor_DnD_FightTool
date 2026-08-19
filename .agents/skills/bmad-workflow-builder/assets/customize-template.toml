@@ -31,15 +31,13 @@ activation_steps_append = []
 #   - a file reference prefixed with `file:`, e.g. "file:{project-root}/docs/standards.md"
 #     (glob patterns are supported; the file's contents are loaded and treated as facts).
 
-persistent_facts = [
-  "file:{project-root}/**/project-context.md",
-]
+persistent_facts = []
 
-# Scalar: executed when the workflow reaches its terminal stage, after
+# Items that are executed when the workflow reaches its terminal stage, after
 # the main output has been delivered. Override wins. Leave empty for
 # no custom post-completion behavior.
 
-on_complete = ""
+on_complete = []
 
 # --- Workflow-specific configurables (lifted during Configurability Discovery) ---
 #

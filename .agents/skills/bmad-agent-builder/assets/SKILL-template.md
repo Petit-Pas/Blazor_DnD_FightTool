@@ -42,7 +42,7 @@ description: { skill-description } # [4-6 word summary]. [trigger phrases]
 {if-customizable}
 ### Step 1: Resolve the Agent Block
 
-Run: `python3 {project-root}/_bmad/scripts/resolve_customization.py --skill {skill-root} --key agent`
+Run: `uv run {project-root}/_bmad/scripts/resolve_customization.py --skill {skill-root} --key agent`
 
 If the script fails, resolve the `agent` block yourself by reading these three files in base → team → user order and applying structural merge rules: `{skill-root}/customize.toml`, `{project-root}/_bmad/custom/{skill-name}.toml`, `{project-root}/_bmad/custom/{skill-name}.user.toml`. Scalars override, tables deep-merge, arrays of tables keyed by `code`/`id` replace matching entries and append new ones, all other arrays append.
 
@@ -83,8 +83,8 @@ Greet the user and offer to show available capabilities.
 
 ## Capabilities
 
-{Succinct routing table — each capability routes to a progressive disclosure file in ./references/:}
+{Succinct routing table — each capability routes to a progressive disclosure file in references/:}
 
 | Capability        | Route                               |
 | ----------------- | ----------------------------------- |
-| {Capability Name} | Load `./references/{capability}.md` |
+| {Capability Name} | Load `references/{capability}.md` |

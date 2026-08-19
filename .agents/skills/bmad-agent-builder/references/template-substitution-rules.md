@@ -1,6 +1,6 @@
 # Template Substitution Rules
 
-The SKILL-template provides a minimal skeleton: frontmatter, overview, agent identity sections, memory, and activation with config loading. Everything beyond that is crafted by the builder based on what was learned during discovery and requirements phases.
+The SKILL-template provides a minimal skeleton: frontmatter, overview, agent identity sections, memory, and the activation spine. The bootloader carries no standalone config-load step — `init-sanctum` bakes config into the sanctum, so wake.py loads it as part of the identity. Everything beyond the skeleton is crafted by the builder based on what was learned during discovery. Apply these rules deterministically via `uv run scripts/process-template.py <template> -o <dest> --var key=value... --true <condition>...` — one `--var` per token, one `--true` per conditional that holds. The script fails (exit 3) on any leftover `{if-...}` marker and reports remaining `{token}` placeholders as `tokens_remaining` for you to judge against the runtime-token set.
 
 ## Frontmatter
 
@@ -10,52 +10,28 @@ The SKILL-template provides a minimal skeleton: frontmatter, overview, agent ide
 - `{displayName}` → Friendly display name
 - `{skillName}` → Full skill name with module prefix
 
-## Module Conditionals
+## Conditionals
 
-### For Module-Based Agents
+A `--true` condition keeps the block's content (markers stripped); anything else removes the whole block including markers.
 
-- `{if-module}` ... `{/if-module}` → Keep the content inside
-- `{if-standalone}` ... `{/if-standalone}` → Remove the entire block including markers
-- `{module-code}` → Module code without trailing hyphen (e.g., `cis`)
-- `{module-setup-skill}` → Name of the module's setup skill (e.g., `cis-setup`)
+- `{if-module}` / `{if-standalone}` → module-based vs standalone agent
+- `{if-memory-agent}` / `{if-stateless-agent}` → memory and autonomous agents vs stateless
+- `{if-evolvable}` → the owner can teach the agent new capabilities
+- `{if-pulse}` → autonomous mode (PULSE enabled)
+- `{if-customizable}` → the author opted in to the override surface
 
-### For Standalone Agents
-
-- `{if-module}` ... `{/if-module}` → Remove the entire block including markers
-- `{if-standalone}` ... `{/if-standalone}` → Keep the content inside
-
-## Memory Conditionals (legacy — stateless agents)
-
-- `{if-memory}` ... `{/if-memory}` → Keep if agent has persistent memory, otherwise remove
-- `{if-no-memory}` ... `{/if-no-memory}` → Inverse of above
-
-## Headless Conditional (legacy — stateless agents)
-
-- `{if-headless}` ... `{/if-headless}` → Keep if agent supports headless mode, otherwise remove
-
-## Agent Type Conditionals
-
-These replace the legacy memory/headless conditionals for the new agent type system:
-
-- `{if-memory-agent}` ... `{/if-memory-agent}` → Keep for memory and autonomous agents, remove for stateless
-- `{if-stateless-agent}` ... `{/if-stateless-agent}` → Keep for stateless agents, remove for memory/autonomous
-- `{if-evolvable}` ... `{/if-evolvable}` → Keep if agent has evolvable capabilities (owner can teach new capabilities)
-- `{if-pulse}` ... `{/if-pulse}` → Keep if agent has autonomous mode (PULSE enabled)
-
-**Mapping from legacy conditionals:**
-- `{if-memory}` is equivalent to `{if-memory-agent}` — both mean the agent has persistent state
-- `{if-headless}` maps to `{if-pulse}` — both mean the agent can operate autonomously
+Module tokens, filled when `{if-module}` holds: `{module-code}` (no trailing hyphen, e.g. `cis`) and `{module-setup-skill}` (e.g. `cis-setup`).
 
 ## Template Selection
 
-The builder selects the appropriate SKILL.md template based on agent type:
+- **Stateless agent:** `assets/SKILL-template.md` (full identity, no Three Laws/Sacred Truth)
+- **Memory/autonomous agent:** `assets/SKILL-template-bootloader.md` (lean bootloader with Three Laws, Sacred Truth, Stay in Character, the Persistent Memory directive, and the four-step "Invoke & hold" activation spine)
 
-- **Stateless agent:** Use `./assets/SKILL-template.md` (full identity, no Three Laws/Sacred Truth)
-- **Memory/autonomous agent:** Use `./assets/SKILL-template-bootloader.md` (lean bootloader with Three Laws, Sacred Truth, 3-path activation)
+The activation is a fixed four-step spine, not a set of renumbered paths: (1) Wake via `scripts/wake.py`; (2) Become yourself; (3) Bind the standing rules; (4) Execute the Proper Mode. The Mode in step 4 is what varies — Waking and First Breath are always present; only Pulse Mode is conditional, wrapped in `{if-pulse}` for autonomous agents. The step numbers never shift, so there is no gap to renumber; keep `{if-pulse}` strictly around the Pulse Mode bullet.
 
 ## Customize.toml Emission
 
-Every agent ships `customize.toml` alongside SKILL.md. The template is `./assets/customize-template.toml`. Fill the `[agent]` metadata block from Phase 3's metadata gathering:
+Every agent ships `customize.toml` alongside SKILL.md, from `assets/customize-template.toml`. Fill the `[agent]` metadata block from the metadata gathered during discovery:
 
 - `{agent-code}` → stable identifier (skill dir basename without module prefix)
 - `{agent-name-or-empty}` → display name, or empty string for First-Breath-named agents
@@ -64,12 +40,7 @@ Every agent ships `customize.toml` alongside SKILL.md. The template is `./assets
 - `{agent-description}` → one-sentence description
 - `{agent-type}` → `stateless` | `memory` | `autonomous`
 
-### Customization Opt-In Conditional
-
-- `{if-customizable}` ... `{/if-customizable}` → Keep the content inside when the author opted in to the override surface; add the resolver step to SKILL.md; reference lifted scalars as `{agent.<name>}` in SKILL.md body.
-- When not opted in → Remove the entire block including markers; `customize.toml` ships with metadata only; SKILL.md has no resolver step and uses hardcoded paths.
-
-Lifted configurable scalars are referenced in SKILL.md as `{agent.<name>}` (e.g. `{agent.style_guide_template}`). These are resolved at runtime by the resolver, not at build time — emit them verbatim.
+When `{if-customizable}` holds, also add the resolver step to SKILL.md and reference lifted scalars as `{agent.<name>}` in the SKILL.md body — these resolve at runtime, so emit them verbatim. When it does not hold, `customize.toml` ships metadata-only and SKILL.md uses hardcoded paths with no resolver step.
 
 ## Beyond the Template
 
@@ -77,16 +48,4 @@ The builder determines the rest of the agent structure — capabilities, activat
 
 ## Path References
 
-All generated agents use `./` prefix for skill-internal paths:
-
-**Stateless agents:**
-- `./references/{capability}.md` — Individual capability prompts
-- `./scripts/` — Python/shell scripts for deterministic operations
-
-**Memory agents:**
-- `./references/first-breath.md` — First Breath onboarding (loaded when no sanctum exists)
-- `./references/memory-guidance.md` — Memory philosophy
-- `./references/capability-authoring.md` — Capability evolution framework (if evolvable)
-- `./references/{capability}.md` — Individual capability prompts
-- `./assets/{FILE}-template.md` — Sanctum templates (copied by init script)
-- `./scripts/init-sanctum.py` — Deterministic sanctum scaffolding
+Everything the builder emits follows the bare-path convention the lint gate enforces: skill-internal paths are written bare from the skill root (`references/first-breath.md`, `scripts/wake.py`, `scripts/init-sanctum.py`, `assets/PERSONA-template.md`), `./` appears only for a file in the same directory as the file referencing it, and project-scope paths carry `{project-root}/`. This applies equally to SKILL.md, capability prompts, the sanctum templates the init script copies, and the emitted `scripts/wake.py` (from `assets/wake-template.py`, parameterized with the agent's `{skillName}`).

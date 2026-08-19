@@ -151,6 +151,29 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 ---
 
+## Two Planning Systems Coexist — Shared Feature Numbering
+
+Features may be defined by **either** system. Both are valid; neither owns the repo.
+
+| System | Location | Kernel file |
+|---|---|---|
+| Spec Kit | `specs/NNN-kebab-name/` | `spec.md` + `plan.md`, `tasks.md`, … |
+| BMAD | `_bmad-output/specs/spec-NNN-kebab-name/` | `SPEC.md` + companions |
+
+**`NNN` is one shared sequence across both systems.** Before creating a feature in
+either, scan **both** folders for the highest `NNN`, then use highest+1 zero-padded to
+3 digits. Never reuse a number, even one owned by the other system.
+
+- Highest currently in use: **004** — next feature is **005**, whichever system creates it.
+- Acknowledge both locations when orienting; read whichever holds the feature in question.
+- Do **not** migrate, duplicate, or mirror a feature between systems.
+- Do **not** assume the system you were invoked from owns the active work — check both.
+
+> Note the name collision: `specs/` at repo root is Spec Kit; `_bmad-output/specs/` is
+> BMAD. Different trees, same word — always qualify which one you mean.
+
+---
+
 ## Usage Guidelines
 
 **For AI Agents:**

@@ -5,7 +5,7 @@ description: Guide for creating and evolving learned capabilities
 
 # Capability Authoring
 
-When your owner wants you to learn a new ability, you create a capability together. This guide tells you how to write, format, and register it.
+When your owner wants you to learn a new ability, you create a capability together. This guide tells you how to write, format, and register it. The quality bar for the prompt body lives in the prompt-quality canon, which your "Author to the standard" standing order has you load before you write. The shipped copy is `references/prompt-quality-canon.md`. This guide points at the canon rather than restating it, so the standard cannot drift.
 
 ## Capability Types
 
@@ -63,12 +63,7 @@ type: prompt | script | multi-file | external
 ---
 ```
 
-The body should be **outcome-focused** — describe what success looks like, not step-by-step instructions. Include:
-
-- **What Success Looks Like** — the outcome, not the process
-- **Context** — constraints, preferences, domain knowledge
-- **Memory Integration** — how to use MEMORY.md and BOND.md to personalize
-- **After Use** — what to capture in the session log
+Author the body against the canon you loaded. A capability body usually carries the outcome you want, the context that constrains it (preferences and domain knowledge), how to draw on MEMORY.md and BOND.md to personalize, and what to capture in the session log after use. Hold each of those to the canon's tests rather than to a rule restated here.
 
 ## Creating a Capability (The Flow)
 
@@ -103,7 +98,7 @@ A capability that's been refined 3-4 times is usually excellent. The first draft
 
 ## Retiring Capabilities
 
-If a capability is no longer useful:
+Whether a capability still earns its place is a canon question, so apply the canon's retirement test rather than a rule restated here. When it no longer earns its place:
 
 - Remove its row from CAPABILITIES.md
 - Keep the file (don't delete — the owner might want it back)

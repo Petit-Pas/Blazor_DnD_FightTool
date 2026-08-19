@@ -187,8 +187,8 @@
 
 ### Workflow Dependencies
 
-- [ ] Can proceed to `*atdd` workflow with P0 scenarios
-- [ ] `*atdd` is a separate workflow and must be run explicitly (not auto-run)
+- [ ] Can proceed to `/bmad-testarch-atdd` workflow with P0 scenarios
+- [ ] `/bmad-testarch-atdd` is a separate workflow and must be run explicitly (not auto-run)
 - [ ] Can proceed to `automate` workflow with full coverage plan
 - [ ] Risk assessment informs `gate` workflow criteria
 - [ ] Integrates with `ci` workflow execution order
@@ -292,8 +292,9 @@
   - [ ] Backend/Architecture dependencies listed (what QA needs from other teams)
   - [ ] QA infrastructure setup listed (factories, fixtures, environments)
   - [ ] Code example with playwright-utils if config.tea_use_playwright_utils is true
-  - [ ] Test from '@seontechnologies/playwright-utils/api-request/fixtures'
+  - [ ] Test from '@seontechnologies/playwright-utils/api-request/fixtures', or from the project's merged-fixtures module
   - [ ] Expect from '@playwright/test' (playwright-utils does not re-export expect)
+  - [ ] No vanilla equivalent in any example when the flag is true: no raw `request.<method>`, no `page.route` on an application endpoint, no `page.waitForTimeout`, no `console.log` (per `playwright-utils-mandate.md`)
   - [ ] Code examples include assertions (no unused imports)
 - [ ] **Risk Assessment** section (brief, references Architecture doc)
   - [ ] High-priority risks table
@@ -413,7 +414,7 @@
 1. [ ] Review risk assessment with team
 2. [ ] Prioritize mitigation for high-priority risks (score ≥6)
 3. [ ] Allocate resources per estimates
-4. [ ] Run `*atdd` workflow to generate P0 tests (separate workflow; not auto-run)
+4. [ ] Run `/bmad-testarch-atdd` workflow to generate P0 tests (separate workflow; not auto-run)
 5. [ ] Set up test data factories and fixtures
 6. [ ] Schedule team review of test design document
 

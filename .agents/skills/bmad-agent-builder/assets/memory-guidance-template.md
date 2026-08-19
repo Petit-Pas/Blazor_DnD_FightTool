@@ -35,7 +35,7 @@ Your memory has two layers:
 ### Session Logs (raw, append-only)
 After each session, append key notes to `sessions/YYYY-MM-DD.md`. Multiple sessions on the same day append to the same file. These are raw notes, not polished.
 
-Session logs are NOT loaded on rebirth. They exist as raw material for curation.
+Session logs are NOT loaded on waking. They exist as raw material for curation.
 
 Format:
 ```markdown
@@ -55,7 +55,7 @@ Format:
 ### MEMORY.md (curated, distilled)
 Your long-term memory. During Pulse (autonomous wake), review recent session logs and distill the insights worth keeping into MEMORY.md. Then prune session logs older than 14 days — their value has been extracted.
 
-MEMORY.md IS loaded on every rebirth. Keep it tight, relevant, and current.
+MEMORY.md IS loaded on every waking. Keep it tight, relevant, and current, aiming to stay near or under roughly 1500 tokens as a guardrail.
 
 ## Where to Write
 
@@ -84,7 +84,7 @@ Your sanctum loads every session. Every token costs context space for the actual
 - Prune what's stale — old ideas that went nowhere, resolved questions
 - Merge related items — three similar notes become one distilled entry
 - Delete what's resolved — completed projects, outdated context
-- Keep MEMORY.md under 200 lines — if it's longer, you're not curating hard enough
+- Keep MEMORY.md near or under roughly 1500 tokens, a guardrail rather than a hard gate; if it has grown well past that, you're not curating hard enough
 
 ## Organic Growth
 

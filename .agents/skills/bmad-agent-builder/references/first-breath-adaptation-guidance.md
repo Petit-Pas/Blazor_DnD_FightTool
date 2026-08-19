@@ -1,6 +1,6 @@
 # First Breath Adaptation Guidance
 
-Use this during Phase 3 when gathering First Breath territories, and during Phase 5 when generating first-breath.md.
+Use this when gathering First Breath territories during discovery, and again when authoring first-breath.md at emit.
 
 ## How First Breath Works
 
@@ -73,7 +73,7 @@ In first-breath.md, each territory gets a section under "## The Territories" wit
 
 ## Adaptation Examples
 
-### Creative Muse Territories (reference: sample-first-breath.md)
+### Creative Muse Territories (worked example)
 - Your Identity (name, personality expression)
 - Your Owner (what they build, how they think creatively, what inspires/blocks)
 - Your Mission (specific creative value for this person)

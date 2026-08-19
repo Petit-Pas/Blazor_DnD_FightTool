@@ -1,91 +1,98 @@
 ---
 name: bmad-eval-runner
-description: Run a skill's evals in a clean, isolated environment and report results. Use when the user wants to evaluate a skill, run evals, benchmark a skill, validate triggers, or grade skill outputs.
+description: Run a skill's evals and report results. Use when the user wants to evaluate a skill, run evals, benchmark a skill, validate triggers, optimize a description, or grade skill outputs.
 ---
 
 # Skill Eval Runner
 
-## Overview
+You run a skill's evals and report what they say. The user wants signal, not theatre, so cite specific findings, surface evals that pass for trivial reasons, and never widen a tolerance to make a run look like it succeeded.
 
-Run a skill's evals in an environment that does not bleed in the user's global config, auto-memory, or ancestor `CLAUDE.md` files — so the result reflects the skill itself, not the bench it was tested on. Preserve every run's artifacts so the user can inspect what happened, not just whether it passed.
+The runner is platform-agnostic. Everything runtime-specific (how a skill is invoked, where its auth comes from, what its transcript looks like) lives behind the adapter seam described in `references/platform-adapter.md`. No model name is hardcoded anywhere in this skill.
 
-Two eval shapes are supported and run independently:
+## The four modes
 
-- **Artifact evals** (`evals.json`) — execute the skill against a prompt, capture the run's outputs, and grade each output against the eval's `expectations`.
-- **Trigger evals** (`triggers.json`) — measure whether the skill's `description` actually causes Claude to invoke the skill on a given query versus stay clear when it shouldn't.
+Each mode answers a different question about a skill. Pick the one that matches what the user is asking, or run several.
 
-You are an experienced eval engineer. The user wants signal, not theatre. Cite specific findings, surface evals that pass for trivial reasons, and never silently widen tolerances to make a run "succeed."
+| Mode | Question it answers | Script / reference |
+|---|---|---|
+| baseline | Does the skill beat the bare model on the same input? | `references/eval-format.md`, `scripts/run_evals.py` |
+| variant | Does a section earn its place, or does a stripped version do as well? | `references/eval-format.md`, `scripts/run_evals.py` |
+| quality | Does the output meet the named rubric? | `references/grader.md`, `references/eval-format.md` |
+| trigger | Does the description fire on the right queries and stay quiet on the rest? | `references/platform-adapter.md`, `scripts/run_triggers.py` |
+
+Baseline runs every case twice — once with the skill staged into the clean working directory and once with nothing staged — so the bare model is measured as the long-term floor under identical conditions. Variant runs the full skill against a stripped smallest-version of itself to settle whether a section is doing real work. Quality grades one config's output against a rubric with the read-only grader. Trigger measures real firing through the adapter and can optimize the description across rounds; the optimization loop lives in `references/description-optimization.md`.
+
+A case is `input + rubric + optional state_prefix + optional fixture files`. The `state_prefix` is a bracketed prime prepended to the input that places the skill mid-workflow in a single shot, so one input can exercise any turn without a multi-turn simulator. The full case format and the strong-versus-weak expectation taxonomy are in `references/eval-format.md`.
 
 ## Args
 
 - Positional: a path to the skill being evaluated (directory containing `SKILL.md`).
-- `--evals <path>` — explicit path to evals folder or a specific `evals.json` / `triggers.json` file. If omitted, discover.
-- `--mode artifact|trigger|both` — which eval kind to run. Default: `both` if both files are found, else whichever exists.
-- `--isolation docker|local|auto` — sandbox strategy. Default: `auto` (Docker when available, otherwise local).
-- `--project-root <path>` — root of the project the skill belongs to. Default: walk up from skill path looking for `_bmad/` or `.git/`.
-- `--output-dir <path>` — where run folders are written. Default: `{bmad_builder_reports}/eval-runs/` if configured, else `~/bmad-evals/`.
-- `--workers <n>` — parallel evals. Default: 4.
-- `--headless` / `-H` — non-interactive; emit final JSON only.
+- `--evals <path>`: explicit path to the cases file. If omitted, discover.
+- `--mode baseline|variant|quality|trigger`: which mode to run. May be repeated.
+- `--variant-path <path>`: for variant mode, the stripped or prior-version skill to compare against.
+- `--project-root <path>`: root of the project the skill belongs to. Default: walk up from the skill path looking for `_bmad/` or `.git/`.
+- `--output-dir <path>`: where run folders are written. Default: `{bmad_builder_reports}/eval-runs/` if configured, else `~/bmad-evals/`.
+- `--runs <n>`: repeats per case for the variance benchmark. Default: 1 for a single check, higher when the user wants a stable mean.
+- `--headless` / `-H`: non-interactive; emit final JSON only.
 
-## On Activation
+These map directly onto the script CLIs below; anything not listed there (case subsets, timeouts, workers) is in the script docstrings.
 
-1. Resolve config the same way `bmad-workflow-builder` does (`{project-root}/_bmad/config.yaml` then `config.user.yaml`, falling back to `bmb/config.yaml`). Resolve `{user_name}`, `{communication_language}`, `{bmad_builder_reports}`. Apply throughout the session.
+## On activation
 
-2. If `--headless` was passed, set `{headless_mode}=true` and skip every confirmation below; pick the safest defaults and proceed.
+1. Resolve config the way `bmad-workflow-builder` does (`{project-root}/_bmad/config.yaml` then `config.user.yaml`, falling back to `bmb/config.yaml`). Resolve `{user_name}`, `{communication_language}`, `{bmad_builder_reports}` and apply them through the session.
 
-3. Locate the skill. Verify `<skill-path>/SKILL.md` exists; halt with a clear error if it doesn't.
+2. If `--headless` was passed, set `{headless_mode}=true`, skip every confirmation below, pick the safest defaults, and proceed.
 
-4. Discover evals — see `## Eval Discovery` below.
+3. Resume check: glob the output dir for an in-progress run's `.memlog.md`. If one exists and matches this skill, read it once to rebuild state, then continue append-only. Capture decisions and direction changes into the run's memlog through `scripts/memlog.py` as they land.
 
-5. Choose isolation — see `## Isolation` below. On the first Docker run on this machine, the image will need to be built; surface that, ask once unless headless, then cache.
+4. Locate the skill and verify `<skill-path>/SKILL.md` exists. Halt with a clear error if it does not.
 
-6. Confirm the run summary with the user (skill, evals found, mode, isolation, output dir) unless headless. Then execute.
+5. Resolve the adapter config per the discovery rules in `references/platform-adapter.md` (explicit `--adapter`, `BMAD_EVAL_ADAPTER`, `adapter.json` beside the cases file). When nothing is configured and the current runtime is Claude Code, use `{skill-root}/assets/adapter-claude-code.json`.
 
-## Eval Discovery
+6. Discover the cases file. Look at `--evals` first, then `<skill-path>/evals/`, then `<skill-path>/../../evals/<skill-name>/`, then `<project-root>/evals/<skill-name>/`, then anywhere under `<project-root>/evals/`. Take the first match. If nothing is found, halt and say so; the runner does not invent cases.
 
-Look in this order, taking the first match:
+7. Confirm the run summary (skill, cases found, modes, output dir) unless headless, then execute.
 
-1. `--evals` argument if provided. May point to a folder (containing `evals.json` and/or `triggers.json`) or a specific JSON file.
-2. `<skill-path>/evals/` — colocated with the skill.
-3. `<skill-path>/../../evals/<skill-name>/` — sibling-of-parent layout (common in BMad modules where `evals/` is excluded from distribution but lives next to `src/`).
-4. `<project-root>/evals/<skill-name>/` — top-level evals tree.
-5. `<project-root>/evals/**/<skill-name>/` — anywhere under project evals.
+## Run execution
 
-Surface what you found and where. If no evals are discovered, halt with a clear message — do not attempt to fabricate evals.
+Each case runs in a clean working directory with the skill under test staged into it and an environment built from scratch, so the host shell config, prior runs, and ancestor instruction files do not bias the result. The isolation contract lives in `references/platform-adapter.md`; there is no container, no terminal emulation, and no credential staging.
 
-## Isolation
+For baseline, variant, and quality modes:
 
-Run each eval in a fresh workspace so memory, project CLAUDE.md, prior runs, and host shell config cannot bias the result. Two strategies, picked automatically by default:
+```
+uv run {skill-root}/scripts/run_evals.py \
+  --cases <cases-file> --skill-path <skill> --output-dir <dir> \
+  --mode quality|baseline|variant [--variant-path <skill>] \
+  [--adapter <adapter.json>] [--runs N]
+```
 
-- **Docker** (preferred when available): each eval runs in a fresh container off `bmad-eval-runner:latest`. The host's `ANTHROPIC_API_KEY` is the only env passed in. The skill's project is bind-mounted read-only and copied into a writable scratch dir inside the container; `HOME` is a fresh in-container directory; there is no auto-memory and no host CLAUDE.md.
+The script stages the skill and any case fixtures, applies any `state_prefix` to the input, runs each config (baseline = skill staged AND bare; variant = skill AND `--variant-path`), and writes `<run-dir>/<config>/<case-id>/`. It captures timing and token counts the moment each invocation completes and writes them to `timing.json` immediately, so a later crash never loses the measurement.
 
-- **Local fallback** (when Docker is unavailable or the user opts out): each eval runs in a fresh `~/bmad-evals/<run-id>/<eval-id>/workspace/` directory with `HOME=<workspace>/.home` overridden so global memory and global CLAUDE.md do not leak. The project is copied (or hardlinked where supported) into the workspace. Tell the user this is the active mode and acknowledge that local isolation is best-effort, not hermetic.
+For trigger mode:
 
-The first time Docker is selected on this machine, build the image — `python3 {skill-root}/scripts/docker_setup.py --build` — and tell the user this is happening once.
+```
+uv run {skill-root}/scripts/run_triggers.py \
+  --skill-path <skill> --queries <queries-file> --output-dir <dir> \
+  [--adapter <adapter.json>] [--runs-per-query N]
+```
 
-Details and the exact mount layout live in `references/isolation.md`. Read that file when you need to debug an isolation issue or explain to the user what is being isolated.
+It stages a synthetic skill where the runtime discovers skills, sends each query through the adapter, and detects the skill-load tool call. Each query runs several times for stability. When the user wants to optimize the description rather than just measure it, follow `references/description-optimization.md`.
 
-## Run Execution
+For quality mode, spawn the grader described in `references/grader.md` per case, passing the case's rubric, transcript path, artifacts dir (the case's `cwd/`), and a `grading_path` of `<case-folder>/grading.json`. The grader writes that file, gives no partial credit, and flags weak or non-discriminating assertions; relay that feedback. If a grader subagent errors, mark that case `grading_error` — never substitute a default verdict.
 
-For artifact evals, invoke `python3 {skill-root}/scripts/run_evals.py` with the resolved arguments. The script handles isolation per eval, runs `claude -p` in the sandbox with the eval's prompt and any staged fixture files, and writes a per-eval folder with `prompt.txt`, `transcript.jsonl`, `artifacts/`, and `metrics.json`.
+When `--runs` is greater than one, call `uv run {skill-root}/scripts/aggregate_benchmark.py --baseline <run-dir>/<config-a> --variant <run-dir>/<config-b>` to produce the mean, sample standard deviation, min, max, and the delta between configs (`--runs <run-dir>/<config>` for a single config's spread).
 
-For trigger evals, invoke `python3 {skill-root}/scripts/run_triggers.py`. The script measures whether the skill's description causes the skill to fire for each query, with `runs-per-query` repeats for stability, and writes `triggers-result.json`. Trigger evals should run under Docker isolation when available — local mode can have the host's installed skills bleed in via cwd-based skill discovery, biasing the trigger signal. If Docker is unavailable, run trigger evals locally but say so explicitly.
+When a run fails or comes back weak and the user wants the skill improved from the results, follow `references/self-improvement.md`.
 
-After artifact runs complete, grade each eval. Spawn a grader subagent per eval in parallel (Agent tool, prompt loaded from `{skill-root}/agents/grader.md` plus the eval's `expectations` and the path to its outputs). Each grader writes `grading.json` next to the artifacts. The grader has license to flag weak assertions — relay that feedback to the user.
+## Artifacts
 
-After all grading is done, generate the aggregate report — `python3 {skill-root}/scripts/generate_report.py --run-dir <run-id>` — which produces `report.html`. Tell the user where the run folder is and where the HTML report is.
+Every run writes a dated run folder under the output dir, and those artifacts are permanent. Each case folder holds its prompt, transcript, the `cwd/` with any files the skill wrote, `timing.json`, and `grading.json` when quality mode ran. Never delete, overwrite, or rotate a run folder; disk usage is the user's call. The run's `.memlog.md` records the decisions and deltas so a resumed or audited run reads back cleanly.
+
+Tell the user where the run folder is when you finish.
 
 ## Outcomes
 
-- Every eval's prompt, transcript, artifacts, and grading land on disk and stay there. Nothing is silently cleaned up.
-- The run honestly reflects the skill's behavior in a clean room — not the behavior of the host shell with its memories and configs.
-- The user knows whether Docker or local was used and why.
-- Failures cite specific expectations and evidence; passes that look superficial are flagged, not papered over.
-
-## Constraints
-
-- **Artifacts are forever.** Never delete, overwrite, or rotate run folders. Disk usage is the user's call.
-- **Auth boundary is narrow.** On macOS, the host's Claude Code OAuth credential is staged into each isolated `.claude/.credentials.json` so the subprocess can authenticate without inheriting host config. `ANTHROPIC_API_KEY`, if set, is also forwarded. Nothing else crosses.
-- **Trigger evals do not need real artifacts.** They use a stub command file and only measure description firing — keep them cheap and parallel.
-- **No silent fallbacks on grading.** If a grader subagent errors, mark that eval `grading_error` rather than substituting a default verdict.
-- **Stop when evals are missing.** If discovery returns nothing, halt with diagnostics — the runner does not invent test cases.
+- The run reflects the skill's behavior in a clean working directory, not the behavior of the host shell with its memories and configs.
+- Timing and token counts land on disk the moment they are measured.
+- Failures cite specific expectations with evidence, and a pass that looks superficial is flagged rather than papered over.
+- A baseline run that the skill no longer wins points to retiring the skill, not patching it.
