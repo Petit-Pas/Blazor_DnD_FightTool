@@ -1,0 +1,98 @@
+- id: "1"
+  title: Extract DndUi.Web registrations into RegisterWebAppServices
+  description: >-
+    Move the inline service registrations in Program.cs into an IoC extension
+    taking dataFolder, so Program.cs and the test fixture compose the same host.
+  spec_checkpoint: true
+  invoke_dev_with: >-
+    Pure refactor. No registration may change lifetime, order, or implementation
+    type, and dataFolder stays a parameter so the fixture can pass its own.
+    Verify DndUi.Web still boots and the fight dashboard works before finishing.
+    MauiProgram.cs registers the same services differently; leave it alone here.
+
+- id: "2"
+  title: Scaffold /uitests and the application fixture
+  description: >-
+    Create the /uitests folder with the library project and the gitignored
+    scratch shell, plus a fixture that starts the host and manages the browser.
+  spec_checkpoint: true
+  done_checkpoint: true
+  invoke_dev_with: >-
+    Kestrel must bind a dynamic port. WebApplicationFactory's default TestServer
+    is an in-memory transport with no socket and will not work. One browser
+    launch per assembly. Finish with a smoke scenario that loads the home page
+    and passes, so there is something real to review at the checkpoint.
+
+- id: "3"
+  title: Scenario isolation and teardown
+  description: >-
+    Teardown undoes every command while HistoryLength is above zero, then deletes
+    remaining characters through the repository's existing business API.
+  spec_checkpoint: true
+  invoke_dev_with: >-
+    Set CommandHistoryMaxSize to 1000 in the test host composition only, never in
+    production. Teardown must assert the state is actually empty after undoing,
+    not merely perform the undo; that assertion is the point. Provide an opt-out
+    for scenarios whose own subject is undo/redo.
+
+- id: "4"
+  title: Screenshot evidence capture
+  description: >-
+    A named-capture API plus an automatic final-state image per scenario, written
+    to a gitignored artifacts folder.
+  spec_checkpoint: true
+  invoke_dev_with: >-
+    Images must be captured on passing runs, not only on failure — the whole
+    point is positive evidence. No baseline images and no diffing. Name files by
+    scenario and step so a reader can follow them without opening each one.
+
+- id: "5"
+  title: Page objects for the five routable pages
+  description: >-
+    Typed fluent objects for CharacterListEditorPage, FightDashboardPage,
+    FightersPage, CharacterEditorPage and AttackEditorPage, with scenarios.
+  spec_checkpoint: true
+  invoke_dev_with: >-
+    Use Playwright role and text locators. Adding a data-testid to production
+    markup is a last resort for genuinely ambiguous cases only — call it out
+    explicitly whenever you do. No locator expression may appear in a scenario
+    file; if one is tempting, the page object is missing a method.
+
+- id: "6"
+  title: Dialog objects, roll input, and the combat scenario
+  description: >-
+    Typed objects for the four DnDQueryPrompter modals, InitiativeInputDialog and
+    RollableDialogBase, proven by a deterministic end-to-end combat scenario.
+  spec_checkpoint: true
+  done_checkpoint: true
+  invoke_dev_with: >-
+    Pin dice outcomes by typing values into the roll result fields rather than
+    stubbing anything. Extract arrangement helpers here only when a scenario
+    actually needs one — do not build a flow layer up front. Run the combat
+    scenario repeatedly to prove identical log output and HP. Deliverable 1 ends
+    here, so the checkpoint review covers the whole library.
+
+- id: "7"
+  title: Page-object coverage analyzer
+  description: >-
+    An analyzer that fails the build when a component carrying an @page directive
+    has no corresponding page object.
+  spec_checkpoint: true
+  done_checkpoint: true
+  invoke_dev_with: >-
+    The marker-attribute versus AdditionalFiles-manifest choice is a design fork;
+    settle it at the spec checkpoint rather than during implementation. Severity
+    is error, not warning. Lives in the existing DnDFightTool.Analyzers project,
+    netstandard2.0 against Roslyn 4.8. Deliverable 3 is gated on this story.
+
+- id: "8"
+  title: Instructions, authoring skill, and agent verification workflow
+  description: >-
+    Update the .razor-scoped instructions file and add the page-object authoring
+    skill plus the agent screenshot-evidence workflow.
+  spec_checkpoint: true
+  invoke_dev_with: >-
+    Write this only after stories 1 to 7 are accepted, so the conventions
+    documented are the ones that actually shipped rather than the ones that were
+    planned. Read the delivered library first and describe what it does, not what
+    this spec said it would do.

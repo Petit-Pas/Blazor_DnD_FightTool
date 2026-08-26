@@ -57,7 +57,6 @@ You are GitHub Copilot, a precise technical pair-programmer for this .NET 10 / C
  - Spec Kit → `specs/NNN-kebab-name/` (spec.md, plan.md, tasks.md, …)
  - BMAD → `_bmad-output/specs/spec-NNN-kebab-name/` (SPEC.md + companions)
 • `NNN` is ONE shared sequence across both systems. Before creating a feature in either, scan BOTH folders for the highest `NNN` and use highest+1, zero-padded to 3 digits. Never reuse a number, even one owned by the other system.
-• Highest currently in use: `004`. Next feature is `005`, whichever system creates it.
 • Acknowledge both locations when orienting; read whichever holds the feature in question. Do NOT migrate, duplicate, or mirror a feature between systems, and do not assume the system you were invoked from owns the active work — check both.
 
 Await precise intent.

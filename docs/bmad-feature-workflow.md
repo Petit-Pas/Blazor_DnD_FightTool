@@ -121,6 +121,109 @@ wrong thing.
 
 ---
 
+## The personas
+
+BMAD ships five named personas. They are **skills, not VS Code agents** — no separate
+context window, no restricted toolset. Activating one layers an identity, a value
+system and a menu on top of the current conversation.
+
+| Persona | Skill | Menu | Reach for when |
+|---|---|---|---|
+| 📊 **Mary** — Business Analyst | `bmad-agent-analyst` | `BP` `MR` `DR` `TR` `TS` `CR` `UV` `CB` `WB` | you're still deciding *whether* to build it — research, competitive teardown, briefs |
+| 📋 **John** — Product Manager | `bmad-agent-pm` | `PRD` `CE` `IR` `CC` | you know it's worth building and need requirements that survive contact with code |
+| 🎨 **Sally** — UX Designer | `bmad-agent-ux-designer` | `CU` | UI is the substance of the feature, not a wrapper around it |
+| 🏗️ **Winston** — System Architect | `bmad-agent-architect` | `CA` `IR` | independently-built parts risk diverging, or you want trade-offs instead of a verdict |
+| 💻 **Amelia** — Senior Engineer | `bmad-agent-dev` | `BD` `QA` `CR` `SP` `ER` | you're implementing and want TDD discipline enforced rather than suggested |
+
+### They are never automatic
+
+No workflow skill activates a persona. Running `bmad-spec` → `bmad-build` →
+`bmad-code-review` gives you zero persona switching — those skills are self-contained.
+
+The dispatch only runs **persona → skill**, never the reverse. Each persona's menu
+invokes workflow skills; no workflow skill reaches back for a persona.
+
+### Activating one
+
+Say the name, or ask for the role:
+
+```
+talk to Winston
+I need the architect
+hey Amelia, let's implement the next story
+```
+
+Activation resolves `customize.toml`, loads persistent facts, greets you, then either
+**dispatches directly** (if your message already named an intent) or **presents the
+numbered menu** and waits.
+
+Once active the persona **carries through every subsequent skill call** until you
+dismiss it. Winston stays Winston while `bmad-architecture` runs. Messages stay
+prefixed with the icon so the active persona is visible at a glance.
+
+To drop it: *"dismiss the persona"* / *"drop the persona"*.
+
+### Persona vs. calling the skill directly
+
+Both reach the same workflow. The difference is framing.
+
+| | Persona route | Direct route |
+|---|---|---|
+| Entry | *"talk to Winston"* → menu → `CA` | *"create the architecture"* |
+| Extra baggage | greeting, menu, in-character prose | none |
+| Value system | principles enforced across the whole session | per-skill defaults |
+| Best for | open-ended thinking, several related steps | one known deliverable |
+
+**Use a persona** when you want a lens held consistently over multiple turns — pressure-
+testing a design, or working through a planning phase where you'll invoke three or four
+skills back to back.
+
+**Skip it** when you know exactly which artifact you want. `bmad-build` directly is
+fewer turns than Amelia → menu → `BD`.
+
+### What each persona already knows here
+
+All five load this as a persistent fact on activation:
+
+```toml
+persistent_facts = ["file:{project-root}/**/project-context.md"]
+```
+
+That glob picks up [`_bmad-output/project-context.md`](../_bmad-output/project-context.md)
+— the 42 rules covering MudBlazor 9 breaking changes, UndoableMediator (never MediatR),
+`IMapper.Clone` vs `.Copy` semantics, `PropertyTargetedValidator`, strict FakeItEasy
+fakes. So a persona starts already knowing this repo's non-obvious constraints; a bare
+skill invocation relies on the path-scoped `.github/instructions/*.md` files instead.
+
+### Customising a persona
+
+`customize.toml` in each skill folder is **overwritten on every BMAD update** — don't
+edit it. Layer overrides instead:
+
+```
+{skill-root}/customize.toml                    defaults  (do not edit)
+_bmad/custom/bmad-agent-dev.toml               team
+_bmad/custom/bmad-agent-dev.user.toml          personal
+```
+
+Merge rules: scalars override, `persistent_facts` / `principles` / `activation_steps_*`
+append, menu items merge by `code`. Name and title are fixed — build a custom agent if
+you need a different identity.
+
+Run **`bmad-customize`** (`BC`) rather than hand-writing the TOML.
+
+### Multiple perspectives at once
+
+**`bmad-party-mode`** (`PM`) is the exception to one-persona-at-a-time — it orchestrates
+a roundtable across several personas. Useful for a decision where you actively want the
+architect and the PM to disagree in front of you.
+
+> The WDS module ships its own separate cast (Saga, Freya, Mimir, Idun) as real
+> `.github/agents/*.agent.md` files — different mechanism, different tree. Don't confuse
+> them with the five above.
+
+---
+
 ## Testing track (optional, TEA module)
 
 Runs alongside the main pipeline rather than after it.

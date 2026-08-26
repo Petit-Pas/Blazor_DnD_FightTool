@@ -6,3 +6,5 @@ Also .Net Core and better infrastructure overall
 # Bugs
 - fighters are ordered in descending order when having the same name
 - redo undo redo undo of adding fighters => the fighters cards do not refresh automatically
+
+- LogToken and LogTokenParser might not be defined in the proper project

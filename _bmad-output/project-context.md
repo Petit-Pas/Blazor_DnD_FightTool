@@ -25,6 +25,10 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **FluentValidation 12.1.1** — always inherit `PropertyTargetedValidator<T>`, never `AbstractValidator<T>`. This base provides `ValidateValue` for MudBlazor per-field validation.
 - **NUnit 4.5.1 + FluentAssertions 7.2.0 + FakeItEasy 9.0.1** — always use strict fakes: `A.Fake<T>(options => options.Strict())`.
 
+### Build & Run Environment
+
+- **Local-only project.** There is no CI pipeline, no `.github/workflows`, no deployment, and no release process. Do not propose, scaffold, or assume CI/CD steps. Everything is built and run on the developer's machine.
+
 ### Dependency Interactions
 
 - `IMapper.Copy<T>()` (same IDs) is used in Blazor components to snapshot an entity before editing, enabling local undo/cancel of edits. `IMapper.Clone<T>()` (new IDs) is for duplication.
@@ -164,7 +168,7 @@ Features may be defined by **either** system. Both are valid; neither owns the r
 either, scan **both** folders for the highest `NNN`, then use highest+1 zero-padded to
 3 digits. Never reuse a number, even one owned by the other system.
 
-- Highest currently in use: **004** — next feature is **005**, whichever system creates it.
+- Highest currently in use: **005** (`_bmad-output/specs/spec-005-ui-test-navigation-library/`) — next feature is **006**, whichever system creates it.
 - Acknowledge both locations when orienting; read whichever holds the feature in question.
 - Do **not** migrate, duplicate, or mirror a feature between systems.
 - Do **not** assume the system you were invoked from owns the active work — check both.

@@ -9,7 +9,16 @@
     "chat.tools.terminal.autoApprove": {
         ".specify/scripts/bash/": true,
         ".specify/scripts/powershell/": true,
-        ".specify/extensions/git/scripts/powershell/create-new-feature.ps1": true
+        ".specify/extensions/git/scripts/powershell/create-new-feature.ps1": true,
+        // BMad helpers only. Read-only TOML resolvers, and memlog writes which are
+        // confined to the --workspace spec folder. Any other `uv run` still prompts.
+        "/^uv run .*_bmad.scripts.resolve_(config|customization)\\.py\\b/": true,
+        "/^uv run .*_bmad.scripts.memlog\\.py (init|append|set)\\b/": true,
+        // BMad skills prefix the above with `cd '<root>'` and a `$w = '<spec folder>'`
+        // assignment; every subcommand must be allowed or the whole line prompts.
+        // Single quotes only — PowerShell does not expand subexpressions inside them.
+        "cd": true,
+        "/^\\$\\w+\\s*=\\s*'[^']*'\\s*$/": true
     }
 }
 
