@@ -43,6 +43,9 @@
   <Folder Name="/tests/Business/">
     <Project Path="tests/Business/DnDActionsTests/DnDActionsTests.csproj" />
   </Folder>
+  <Folder Name="/tests/Components/">
+    <Project Path="tests/Components/DndUiWebTests/DndUiWebTests.csproj" />
+  </Folder>
   <Folder Name="/tests/Domain/">
     <Project Path="tests/Domain/DnDEntitiesTests/DnDEntitiesTests.csproj" />
     <Project Path="tests/Domain/DomainTestsUtilities/DomainTestsUtilities.csproj" />

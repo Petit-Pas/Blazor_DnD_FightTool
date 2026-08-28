@@ -1,0 +1,20 @@
+@page "/Error"
+
+@using MudBlazor
+
+<PageTitle>Error</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-16">
+    <MudPaper Class="pa-8" Elevation="2">
+        <MudText Typo="Typo.h5" GutterBottom="true">Something went wrong</MudText>
+        <MudText Typo="Typo.body1" Class="mb-6">
+            An unexpected error interrupted the last action. Check the application logs for details.
+        </MudText>
+        <MudButton Href="/"
+                   Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Home">
+            Back to characters
+        </MudButton>
+    </MudPaper>
+</MudContainer>
