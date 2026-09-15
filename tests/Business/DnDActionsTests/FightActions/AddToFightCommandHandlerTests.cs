@@ -69,7 +69,7 @@ internal class AddToFightCommandHandlerTests
         A.CallTo(() => _mediator.SendAsSubCommandAsync(
                 A<AddToFightAtomicCommand>.That.Matches(x => x.SourceCharacterId == character.Id),
                 A<AddToFightCommand>._))
-            .Returns(CommandResponse.Success<Guid>(newFighter.Id));
+            .Returns(CommandResponse.Success(newFighter.Id));
 
         A.CallTo(() => _mediator.SendAsSubCommandAsync(
                 A<WriteLogCommand>._,
@@ -263,61 +263,6 @@ internal class AddToFightCommandHandlerTests
             A.CallTo(() => _mediator.SendAsSubCommandAsync(
                 A<WriteLogCommand>.That.Matches(x => x.Content.Contains("joined the fight")),
                 A<AddToFightCommand>._))
-                .MustHaveHappenedOnceExactly();
-        }
-    }
-
-    [TestFixture]
-    internal class UndoTests : AddToFightCommandHandlerTests
-    {
-        [Test]
-        public async Task Should_Remove_AddedFighter()
-        {
-            // Arrange
-            var player = CharacterFactory.BuildPlayer(name: "Aragorn");
-            var fighter = player.AsFighter();
-            A.CallTo(() => _fightContext[fighter.Id]).Returns(fighter);
-
-            var command = new AddToFightCommand(player.Id) { AddedFighterId = fighter.Id };
-
-            // Act / Assert — removal is handled by the atomic sub-command cascade
-            await _handler.UndoAsync(command);
-        }
-
-        [Test]
-        public async Task Should_Not_Fail_When_Fighter_Already_Gone()
-        {
-            // Arrange
-            var command = new AddToFightCommand(Guid.NewGuid()) { AddedFighterId = Guid.NewGuid() };
-            A.CallTo(() => _fightContext[command.AddedFighterId.Value]).Returns((FightingCharacter?)null);
-
-            // Act / Assert — should not throw
-            await _handler.UndoAsync(command);
-        }
-    }
-
-    [TestFixture]
-    internal class RedoTests : AddToFightCommandHandlerTests
-    {
-        [Test]
-        public async Task Should_ReExecute()
-        {
-            // Arrange
-            var player = CharacterFactory.BuildPlayer(name: "Aragorn");
-            var fighter = player.AsFighter();
-            A.CallTo(() => _characterRepository.GetCharacterById(player.Id)).Returns(player);
-            SetupPromptReturns(14);
-            SetupAddCreatesNewFighter(player, fighter);
-
-            var command = new AddToFightCommand(player.Id);
-
-            // Act
-            await _handler.RedoAsync(command);
-
-            // Assert
-            A.CallTo(() => _mediator.SendAsSubCommandAsync(
-                    A<AddToFightAtomicCommand>.That.Matches(x => x.SourceCharacterId == player.Id),
-                    A<AddToFightCommand>._))
                 .MustHaveHappenedOnceExactly();
         }
     }

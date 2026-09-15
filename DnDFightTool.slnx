@@ -58,4 +58,8 @@
   <Folder Name="/tests/UI/">
     <Project Path="tests/UI/FightBlazorComponentsTests/FightBlazorComponentsTests.csproj" />
   </Folder>
+  <Folder Name="/uitests/">
+    <Project Path="uitests/UiTestNavigation/UiTestNavigation.csproj" />
+    <Project Path="uitests/Scratch/Scratch.csproj" />
+  </Folder>
 </Solution>

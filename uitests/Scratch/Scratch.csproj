@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>DnDFightTool.UiTests.Scratch</RootNamespace>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
+    <PackageReference Include="NUnit" Version="4.5.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.2.0" />
+    <ProjectReference Include="..\UiTestNavigation\UiTestNavigation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\UiTestNavigation\AssemblyFixture.cs" Link="AssemblyFixture.cs" />
+    <Compile Include="..\UiTestNavigation\AssemblyInfo.cs" Link="AssemblyInfo.cs" />
+  </ItemGroup>
+
+</Project>

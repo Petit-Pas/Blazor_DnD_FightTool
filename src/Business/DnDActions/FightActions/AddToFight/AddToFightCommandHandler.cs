@@ -62,12 +62,6 @@ public class AddToFightCommandHandler : CommandHandlerBase<AddToFightCommand>
         return CommandResponse.Success();
     }
 
-    /// <inheritdoc />
-    public override Task UndoAsync(AddToFightCommand command)
-    {
-        return base.UndoAsync(command);
-    }
-
     private async Task<IQueryResponse<int>> PromptInitiativeRoll(Guid characterId)
     {
         return await _mediator.QueryAsync(new InitiativeRollQuery(characterId));

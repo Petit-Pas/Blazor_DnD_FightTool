@@ -119,7 +119,13 @@ public class FightContext : IFightContext
 
         if (fighter.Type == CharacterType.Monster)
         {
-            _monsterCountByOriginalId[fighter.OriginalCharacterId]++;
+            if (!_monsterCountByOriginalId.ContainsKey(fighter.OriginalCharacterId))
+            {
+                _monsterCountByOriginalId[fighter.OriginalCharacterId] = 1;
+            }
+            else {
+                _monsterCountByOriginalId[fighter.OriginalCharacterId]++;
+            }
         }
 
         OnFighterAdded?.Invoke(this, fighter);
