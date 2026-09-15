@@ -54,4 +54,13 @@ public class AppliedStatusRepository : Dictionary<Guid, AppliedStatus>, IApplied
     {
         return Values.Where(x => x.TargetId == affectedCharacterId);
     }
+
+    /// <inheritdoc/>
+    public IEnumerable<AppliedStatus> AppliedStatuses
+    {
+        get
+        {
+            return Values;
+        }
+    }
 }

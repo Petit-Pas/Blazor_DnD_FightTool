@@ -27,4 +27,10 @@ public interface IAppliedStatusRepository
     /// <param name="affectedCharacterId"></param>
     /// <returns></returns>
     IEnumerable<AppliedStatus> GetStatusAppliedTo(Guid affectedCharacterId);
+
+    /// <summary>
+    ///     All applied statuses currently held by the repository so callers
+    ///     can inspect the global state (for example, teardown asserting the applied-status state is empty).
+    /// </summary>
+    IEnumerable<AppliedStatus> AppliedStatuses { get; }
 }

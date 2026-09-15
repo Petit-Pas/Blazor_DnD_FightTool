@@ -36,10 +36,15 @@ public static class ServiceCollectionExtensions
     ///     Folder the <see cref="LocalFileCharacterRepository"/> persists characters to. It is read eagerly the first time
     ///     <see cref="ICharacterRepository"/> is resolved, not at registration time.
     /// </param>
+    /// <param name="commandHistoryMaxSize">
+    ///     Maximum number of commands the undo history retains. Defaults to 256 for production; the UI test host raises it
+    ///     so no scenario overflows the history and leaves state that teardown cannot undo.
+    /// </param>
     /// <returns>The same <paramref name="services"/> instance, for chaining.</returns>
-    public static IServiceCollection RegisterWebAppServices(this IServiceCollection services, string dataFolder)
+    public static IServiceCollection RegisterWebAppServices(this IServiceCollection services, string dataFolder, int commandHistoryMaxSize = 256)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(dataFolder);
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(commandHistoryMaxSize);
 
         services.AddRazorComponents()
             .AddInteractiveServerComponents();
@@ -64,6 +69,7 @@ public static class ServiceCollectionExtensions
         services.ConfigureMediator(options =>
         {
             options.ShouldScanAutomatically = false;
+            options.CommandHistoryMaxSize = commandHistoryMaxSize;
             options.AssembliesToScan =
             [
                 typeof(CasterCommandBase).Assembly,

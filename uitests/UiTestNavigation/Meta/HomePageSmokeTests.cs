@@ -2,7 +2,7 @@ using FluentAssertions;
 using Microsoft.Playwright;
 using NUnit.Framework;
 
-namespace DnDFightTool.UiTests.UiTestNavigation;
+namespace DnDFightTool.UiTests.UiTestNavigation.Meta;
 
 /// <summary>
 ///     Verifies that the real web host renders the home page.

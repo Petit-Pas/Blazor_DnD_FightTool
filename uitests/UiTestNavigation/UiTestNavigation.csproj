@@ -32,6 +32,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Components\DndUi.Web\DndUi.Web.csproj" />
+    <ProjectReference Include="..\..\tests\Domain\DomainTestsUtilities\DomainTestsUtilities.csproj" />
   </ItemGroup>
 
 </Project>
