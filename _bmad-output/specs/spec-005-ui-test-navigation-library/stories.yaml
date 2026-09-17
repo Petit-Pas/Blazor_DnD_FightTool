@@ -56,7 +56,8 @@
     Use Playwright role and text locators. Adding a data-testid to production
     markup is a last resort for genuinely ambiguous cases only — call it out
     explicitly whenever you do. No locator expression may appear in a scenario
-    file; if one is tempting, the page object is missing a method.
+    file; if one is tempting, the page object is missing a method. Independent
+    per-page scenarios derive from IsolatedScenarioFixture.
 
 - id: "6"
   title: Dialog objects, roll input, and the combat scenario
@@ -70,7 +71,11 @@
     stubbing anything. Extract arrangement helpers here only when a scenario
     actually needs one — do not build a flow layer up front. Run the combat
     scenario repeatedly to prove identical log output and HP. Deliverable 1 ends
-    here, so the checkpoint review covers the whole library.
+    here, so the checkpoint review covers the whole library. The multi-step
+    combat scenario is the first real use of SequentialScenarioFixture: compose
+    it from small [Order]ed steps, each asserting one increment and leaving its
+    own screenshots, with state shared across steps and reset only at the fixture
+    boundary.
 
 - id: "7"
   title: Page-object coverage analyzer

@@ -16,7 +16,7 @@ namespace DnDFightTool.UiTests.UiTestNavigation.Meta;
 ///     leftover characters, so a scenario that mutates the fight, history and repository leaves a proven-clean slate for
 ///     whichever scenario runs next, regardless of ordering.
 /// </summary>
-public sealed class ScenarioIsolationTests : ApplicationFixture
+public sealed class ScenarioIsolationTests : IsolatedScenarioFixture
 {
     /// <summary>
     ///     CLEAN_AFTER_COMBAT: mutates the fight via a command and persists a character, then relies on teardown to undo
@@ -112,38 +112,29 @@ public sealed class ScenarioIsolationTests : ApplicationFixture
 }
 
 /// <summary>
-///     UNDO_REDO_SUBJECT: a scenario whose subject is undo/redo itself. It opts out of the automatic undo-everything
-///     teardown and owns its own history cleanup, leaving the fight and history empty by its own hand.
+///     Drives undo and redo directly as the thing under test. Like any isolated scenario it asserts on the mediator
+///     history in its body and lets the teardown reset whatever it leaves behind — the two-fixture split means an
+///     undo/redo scenario needs no special opt-out: its assertions are done before teardown runs.
 /// </summary>
-public sealed class UndoRedoSubjectScenarioTests : ApplicationFixture
+public sealed class UndoRedoScenarioTests : IsolatedScenarioFixture
 {
-    /// <inheritdoc />
-    protected override bool UndoAllCommandsOnTeardown
-    {
-        get
-        {
-            return false;
-        }
-    }
-
     /// <summary>
-    ///     Drives undo and redo directly as the thing under test, then cleans its own history so the opted-out teardown does
-    ///     not have to.
+    ///     Adds a fighter through a command, then undoes and redoes it, asserting the history and redo counts at each step.
     /// </summary>
     [Test]
-    public async Task Should_Own_Its_Own_History_Cleanup()
+    public async Task Should_Undo_Then_Redo_A_Command()
     {
         // Arrange
         var repository = Services.GetRequiredService<ICharacterRepository>();
         var fightContext = Services.GetRequiredService<IFightContext>();
         var mediator = Services.GetRequiredService<IUndoableMediator>();
 
-        var monster = CharacterFactory.BuildMonster(name: "Undo subject goblin");
+        var monster = CharacterFactory.BuildMonster(name: "Undo redo goblin");
         repository.Save(monster);
         await mediator.SendAsync(new AddToFightAtomicCommand(monster.Id, initiative: 12));
         fightContext.Fighters.Should().HaveCount(1);
 
-        // Act
+        // Act / Assert
         await mediator.UndoLastCommandAsync();
         fightContext.Fighters.Should().BeEmpty();
         mediator.HistoryLength.Should().Be(0);
@@ -153,9 +144,6 @@ public sealed class UndoRedoSubjectScenarioTests : ApplicationFixture
         fightContext.Fighters.Should().HaveCount(1);
         mediator.HistoryLength.Should().Be(1);
 
-        // Assert: the scenario owns its own cleanup, leaving history and fight empty for the next scenario.
-        await mediator.UndoLastCommandAsync();
-        fightContext.Fighters.Should().BeEmpty();
-        mediator.HistoryLength.Should().Be(0);
+        // The teardown undoes the remaining command and deletes the character — this scenario leaves cleanup to it.
     }
 }

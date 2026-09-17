@@ -7,7 +7,7 @@ namespace DnDFightTool.UiTests.UiTestNavigation.Meta;
 /// <summary>
 ///     Verifies that the real web host renders the home page.
 /// </summary>
-public sealed class HomePageSmokeTests : ApplicationFixture
+public sealed class HomePageSmokeTests : IsolatedScenarioFixture
 {
     /// <summary>
     ///     Loads the home page and verifies its character tabs are rendered.
