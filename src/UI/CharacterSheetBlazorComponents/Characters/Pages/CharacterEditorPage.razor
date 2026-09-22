@@ -19,7 +19,7 @@
             <MudTabs Elevation=2 Rounded=true ApplyEffectsToContainer=true TabPanelsClass="flex-fill-shrink" OnPreviewInteraction="OnPreviewInteraction" Class="h-100">
                 <MudTabPanel PanelClass="hw-100" Text="Basic infos">
                     <div class="h-100 mud-paper-grid p-2" style="grid-template-rows: 1fr auto;">
-                        <CharacterMainInfoEditorComponent 
+                        <CharacterMainInfoEditor 
                             @ref=_mainInfoComponent
                             Style="min-height: 0;"
                             Character=@_character />
@@ -57,7 +57,7 @@
                 </MudTabPanel>
                 <MudTabPanel PanelClass="hw-100 test" Text=Attacks>
                     <div class="h-100 mud-paper-grid p-2" style="grid-template-rows: 1fr auto;">
-                        <AttackListEditorComponent 
+                        <AttackListEditor 
                             Style="min-height: 0;"
                             Character=@_character />
                         <ButtonRow Style="grid-row: 2;">

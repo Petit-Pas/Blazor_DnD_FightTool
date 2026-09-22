@@ -5,7 +5,7 @@ using DnDFightTool.Infrastructure.Mapping;
 
 namespace DnDFightTool.UI.CharacterSheetBlazorComponents.MartialAttacks.Components;
 
-public partial class AttackListEditorComponent
+public partial class AttackListEditor
 {
     [Parameter]
     public ICharacter? Character { get; set; }

@@ -5,12 +5,20 @@ namespace DnDFightTool.UI.SharedComponents.Buttons.AtomicButtonsPreset;
 
 public partial class ButtonBase
 {
-    public ButtonBase(Color color, string icon, bool rotateIcon)
+    public ButtonBase(Color color, string icon, bool rotateIcon, string accessibleName)
     {
         Color = color;
         Icon = icon;
         RotateIcon = rotateIcon;
+        AccessibleName = accessibleName;
     }
+
+    /// <summary>
+    ///     Accessible name rendered as <c>aria-label</c> so assistive technology — and role-and-name UI locators — can
+    ///     identify these otherwise icon-only buttons. Supplied by each preset (e.g. "Edit", "Delete"). When the button
+    ///     renders a visible <see cref="Label"/> that text already names it, so the label is not duplicated here.
+    /// </summary>
+    internal string AccessibleName { get; }
 
     [Parameter]
     public virtual bool Disabled { get; set; } = false;

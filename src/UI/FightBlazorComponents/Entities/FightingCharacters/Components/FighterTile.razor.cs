@@ -11,7 +11,7 @@ using DnDFightTool.Domain.Fight.TurnTracking;
 
 namespace DnDFightTool.UI.FightBlazorComponents.Entities.FightingCharacters.Components;
 
-public partial class FightingCharacterTile : ComponentBase, IDisposable
+public partial class FighterTile : ComponentBase, IDisposable
 {
     [Inject]
     public required IFightContext FightContext { get; set; }

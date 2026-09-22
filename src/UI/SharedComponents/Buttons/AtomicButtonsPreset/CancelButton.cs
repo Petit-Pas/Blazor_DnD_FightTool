@@ -5,7 +5,7 @@ namespace DnDFightTool.UI.SharedComponents.Buttons.AtomicButtonsPreset;
 
 public class CancelButton : ButtonBase
 {
-    public CancelButton() : base(Color.Default, MudIcons.Material.Filled.Cancel, true)
+    public CancelButton() : base(Color.Default, MudIcons.Material.Filled.Cancel, true, "Cancel")
     {
     }
 }

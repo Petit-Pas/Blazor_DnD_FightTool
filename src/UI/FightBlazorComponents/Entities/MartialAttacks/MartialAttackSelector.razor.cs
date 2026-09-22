@@ -7,15 +7,15 @@ using UndoableMediator.Mediators;
 
 namespace DnDFightTool.UI.FightBlazorComponents.Entities.MartialAttacks;
 
-public partial class MartialAttackSelectorComponent
+public partial class MartialAttackSelector
 {
     [Inject]
     public required IUndoableMediator Mediator { get; set; }
 
     [CascadingParameter(Name = "SelectedFighter")]
-    private FightingCharacter? SelectedFighter { get; set; }
+    private IFightingCharacter? SelectedFighter { get; set; }
 
-    private FightingCharacter? Character { get; set; }
+    private IFightingCharacter? Character { get; set; }
 
     private MartialAttackTemplate? SelectedAttack { get; set; }
 

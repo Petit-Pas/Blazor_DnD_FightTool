@@ -6,7 +6,7 @@ using DnDFightTool.UI.SharedComponents;
 
 namespace DnDFightTool.UI.CharacterSheetBlazorComponents.Characters.Components;
 
-public partial class CharacterMainInfoEditorComponent : StylableComponentBase
+public partial class CharacterMainInfoEditor : StylableComponentBase
 {
     [Inject]
     private CharacterValidator _characterValidator { get; set; } = null!;

@@ -11,7 +11,7 @@ namespace DnDFightTool.UI.FightBlazorComponents.CombatStatus;
 /// <summary>
 ///     Displays the current round, active turn, and a button to start combat or advance to the next turn.
 /// </summary>
-public partial class CombatStatusComponent : StylableComponentBase, IDisposable
+public partial class CombatStatusPanel : StylableComponentBase, IDisposable
 {
     [Inject]
     private ICombatTurnService _combatTurnService { get; set; } = null!;

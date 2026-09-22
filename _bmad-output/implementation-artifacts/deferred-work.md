@@ -10,6 +10,46 @@ Status: `open` · `resolved` · `dropped`
 
 # Active
 
+## DW-009 — Extend page-object coverage analyzer to component objects
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
+- summary: Story 5 established a convention that each test `ComponentObject` is named `Test` + the production component it drives (`TestCombatLogPanel`, `TestCombatStatusPanel`, `TestFighterTile`, `TestMartialAttackSelector`, `TestAttackListEditor`, `TestCharacterMainInfoEditor`, `TestAttackMainInfoEditor`; production: `CombatLogPanel`, `CombatStatusPanel`, `FighterTile`, `MartialAttackSelector`, `AttackListEditor`, `CharacterMainInfoEditor`, `AttackMainInfoEditor`). Story 7's analyzer only covers `@page` components → page objects.
+
+Consider extending the story-7 analyzer (or a sibling) to also flag production components that have no matching `ComponentObject`, enforcing the 1:1 correspondence at build time. Benoit's related instinct: a test component object with no real production component would be a signal to extract that fragment into a real component — so the analyzer doubles as a nudge toward component extraction. Currently all seven test component objects map to an existing production component, so nothing needs extracting today.
+
+---
+
+## DW-008 — Story-5 fluent surface partially unexercised by scenarios
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
+- summary: Story-5 scenarios cover each I/O-matrix row, but several delivered page/component-object methods have no runtime scenario. Symmetric/low-risk, surfaced by the code-review layer.
+
+Uncovered by a running scenario: `FightersPage.SearchPlayers`/`AddPlayer`, `CharacterListEditorPage.GoToPlayersTab`, `EditMonster`/`DuplicateMonster`/`DeleteMonster` (player variants are covered), `FighterTile.Edit`/`Delete`/`Statuses`, `CombatLogPanel.Entries`/`FightDashboardPage.Log`, and the runtime path of `MartialAttackSelector.SelectAttack`. These are mostly mirror methods of covered ones (player↔monster) or read helpers; the `Cancel` path and the aria-label contract's `Cancel` label are now covered by `Should_Discard_A_New_Character_On_Cancel`. Add opportunistic coverage as later scenarios naturally touch these paths (story 6 will exercise the log and the attack selector). Not a defect — the tested paths pass and the untested ones are symmetric.
+
+---
+
+## DW-007 — `StateFullNavigation.NavigateBack()` can fall through to an unreachable URL
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
+- summary: Surfaced while building the story-5 page objects. `StateFullNavigation` records its page history from `NavigationManager.LocationChanged`. If no real in-app `LocationChanged` has fired yet (e.g. a fresh deep-load, or a direct `GotoAsync` in a test), `NavigateBack()` has no seeded history and falls through to a bootstrap URL (observed `https://0.0.0.1/characters`), which is unreachable.
+
+Not fixed here (spec forbids touching production). Worked around in the test library: each page object's `GoToAsync()` reaches its page through a real in-app nav-menu click so the production history is seeded before any editor `Save`/`Cancel` (which call `NavigateBack`). This is latent for real users too: a first interaction that lands directly on an editor and then cancels/saves could hit the same fall-through if the initial `LocationChanged` hasn't registered. Decide whether to make `NavigateBack()` default to `/` (or the home route) when history is empty.
+
+---
+
+## DW-006 — Exhaustive character/attack editor field coverage (story 5b)
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
+- summary: Story 5 was narrowed at its spec checkpoint to routable page objects + list/fighters/dashboard component objects + scenarios. The exhaustive field-level editing of the character and attack editors was split off into story `5b`.
+
+Deferred surface: character basic-info deep fields (Max HP, HP, Armor Class, shield toggle + value, effective AC read), `AbilityScoresEditor` (score, save bonus, mastery bonus, save-mastery toggle), `SkillsEditor` (mastery increase/decrease via left/right-click, governing-ability menu), `ResistancesEditor` (affinity increase/decrease), and attack `DamageRollCollectionEditor` + to-hit modifier editing — each with edit-and-re-read scenarios. Tracked as story `5b` in `stories.yaml`; build it on top of story 5's `PageObject`/`ComponentObject` seam (extend, don't duplicate) once story 5 is accepted.
+
+---
+
 ## DW-001 — Should `DndUi.Web` stay at all?
 
 - status: open

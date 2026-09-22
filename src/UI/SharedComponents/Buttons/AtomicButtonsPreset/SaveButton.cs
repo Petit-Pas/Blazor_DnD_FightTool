@@ -5,7 +5,7 @@ namespace DnDFightTool.UI.SharedComponents.Buttons.AtomicButtonsPreset;
 
 public class SaveButton : ButtonBase
 {
-    public SaveButton() : base(Color.Success, MudIcons.Material.Filled.Save, false)
+    public SaveButton() : base(Color.Success, MudIcons.Material.Filled.Save, false, "Save")
     {
     }
 }

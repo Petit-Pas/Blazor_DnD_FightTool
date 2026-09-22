@@ -12,7 +12,7 @@ Structured game-event logging for DnD fight actions. Handlers emit log entries a
 ```
 Domain (Logs)          → IDnDLogService, LogBlock, LogEntry, LogColorToken
 Business (DnDActions)  → WriteLogCommand / WriteLogCommandHandler
-UI (FightBlazorComponents) → DnDLogComponent, LogBlockComponent, LogEntryComponent, LogTokenParser
+UI (FightBlazorComponents) → CombatLogPanel, LogBlockComponent, LogEntryComponent, LogTokenParser
 ```
 
 - `IDnDLogService` is registered as a **singleton**.
@@ -95,7 +95,7 @@ All 20 values of the `LogColorToken` enum, each mapping to CSS variable `--dnd-c
 | `thunder` | `--dnd-color-thunder` | Damage type |
 | `heal` | `--dnd-color-heal` | Healing |
 
-Light/dark theme variants are defined in `src/Components/DndUi.Shared/wwwroot/css/log-colors.css` using `:root` (light) and `.dnd-dark` (dark). The `.dnd-dark` class is applied by `DnDLogComponent` via the `IsDarkMode` cascading parameter.
+Light/dark theme variants are defined in `src/Components/DndUi.Shared/wwwroot/css/log-colors.css` using `:root` (light) and `.dnd-dark` (dark). The `.dnd-dark` class is applied by `CombatLogPanel` via the `IsDarkMode` cascading parameter.
 
 ## DamageTypeEnum → Color Token
 
@@ -156,7 +156,7 @@ public class MyAttackCommandHandler : CommandHandlerBase<MyAttackCommand>
 }
 ```
 
-> **Undo behavior**: `WriteLogCommand` entries are hidden via their own undo. `OpenBlockCommand`/`CloseBlockCommand`/`OpenScopeCommand`/`CloseScopeCommand` are all no-ops on undo — indent level is baked into each entry at creation time, and `DnDLogComponent` automatically hides blocks with no visible entries.
+> **Undo behavior**: `WriteLogCommand` entries are hidden via their own undo. `OpenBlockCommand`/`CloseBlockCommand`/`OpenScopeCommand`/`CloseScopeCommand` are all no-ops on undo — indent level is baked into each entry at creation time, and `CombatLogPanel` automatically hides blocks with no visible entries.
 
 ### Leaf handler (single log entry, no block)
 

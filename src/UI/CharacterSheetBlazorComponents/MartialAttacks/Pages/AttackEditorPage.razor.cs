@@ -14,7 +14,7 @@ public partial class AttackEditorPage
     private MartialAttackTemplate? _attackTemplate { get; set; }
     
     private int _previousTabIndex;
-    private MartialAttackTemplateMainInfoEditorComponent? _mainInfoComponent;
+    private AttackMainInfoEditor? _mainInfoComponent;
     private DamageRollTemplateCollectionEditorComponent? _damageComponent;
 
     protected override void OnInitialized()

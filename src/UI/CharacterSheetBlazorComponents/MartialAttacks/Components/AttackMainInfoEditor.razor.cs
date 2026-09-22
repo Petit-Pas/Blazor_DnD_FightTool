@@ -6,7 +6,7 @@ using MudBlazor;
 
 namespace DnDFightTool.UI.CharacterSheetBlazorComponents.MartialAttacks.Components;
 
-public partial class MartialAttackTemplateMainInfoEditorComponent
+public partial class AttackMainInfoEditor
 {
     [Inject]
     private MartialAttackTemplateValidator _attackTemplateValidator { get; set; } = null!;

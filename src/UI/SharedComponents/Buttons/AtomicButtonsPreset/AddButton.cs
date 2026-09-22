@@ -5,7 +5,7 @@ namespace DnDFightTool.UI.SharedComponents.Buttons.AtomicButtonsPreset;
 
 public class AddButton : ButtonBase
 {
-    public AddButton() : base(Color.Primary, MudIcons.Material.Filled.AddCircle, true)
+    public AddButton() : base(Color.Primary, MudIcons.Material.Filled.AddCircle, true, "Add")
     {
     }
 }

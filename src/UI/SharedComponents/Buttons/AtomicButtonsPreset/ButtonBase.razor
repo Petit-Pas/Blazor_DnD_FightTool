@@ -10,6 +10,7 @@
                Variant=Variant
                Color=Color
                Disabled=Disabled
+               aria-label=@(string.IsNullOrWhiteSpace(Label) ? AccessibleName : null)
                OnClick=OnClick>
         <div class="f-row align-center">
             @if (!string.IsNullOrWhiteSpace(Label))
@@ -29,6 +30,7 @@ else if (Size is Size.Medium)
                    Variant=Variant
                    Color=Color
                    Disabled=Disabled
+                   aria-label=@(string.IsNullOrWhiteSpace(AccessibleName) ? null : AccessibleName)
                    OnClick=OnClick>
         <div class="parent-hover-jump">
             <MudIcon Class="@("parent-hover-rotate-90".When(RotateIcon))" Size=Size.Large Icon=@Icon />
@@ -42,6 +44,7 @@ else if (Size is Size.Small)
                    Variant=Variant
                    Color=Color
                    Disabled=Disabled
+                   aria-label=@(string.IsNullOrWhiteSpace(AccessibleName) ? null : AccessibleName)
                    OnClick=OnClick>
         <div class="parent-hover-jump">
             <MudIcon Class="@("parent-hover-rotate-90".When(RotateIcon))" Size=Size.Medium Icon=@Icon />

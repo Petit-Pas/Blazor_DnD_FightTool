@@ -33,7 +33,7 @@ public partial class CharacterEditorPage
 
     private int _previousTabIndex;
 
-    private CharacterMainInfoEditorComponent? _mainInfoComponent;
+    private CharacterMainInfoEditor? _mainInfoComponent;
     private AbilityScoresEditorComponent? _abilityScoreComponent;
 
     private async Task OnPreviewInteraction(TabInteractionEventArgs arg)

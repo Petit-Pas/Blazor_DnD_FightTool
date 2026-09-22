@@ -57,7 +57,30 @@
     markup is a last resort for genuinely ambiguous cases only — call it out
     explicitly whenever you do. No locator expression may appear in a scenario
     file; if one is tempting, the page object is missing a method. Independent
-    per-page scenarios derive from IsolatedScenarioFixture.
+    per-page scenarios derive from IsolatedScenarioFixture. Scope was narrowed at
+    the story-5 spec checkpoint: this story covers routable page objects, the
+    list/fighters/dashboard component objects and their scenarios. Exhaustive
+    field-level editor coverage was split into story 5b.
+
+- id: "5b"
+  title: Exhaustive character and attack editor field coverage
+  description: >-
+    Extend the story-5 editor page objects with component objects that drive
+    every field: character basic-info (HP, AC, shield), abilities (score, save
+    bonus, mastery), skills (mastery up/down, governing ability), resistances
+    (affinity up/down), and attack damage rolls plus to-hit modifiers, with
+    scenarios that edit and re-read each.
+  spec_checkpoint: true
+  invoke_dev_with: >-
+    Build only after story 5 is accepted, on top of its PageObject/ComponentObject
+    seam — extend, do not duplicate. The character and attack editor pages already
+    exist as page objects; add OpenAbilitiesAndSkills/OpenResistances tab methods
+    and the deep-field component objects (AbilityScoresEditor, SkillsEditor,
+    ResistancesEditor, DamageRollCollectionEditor). Skills/resistances use raw
+    MudIconButtons with left-click increase / right-click (@oncontextmenu)
+    decrease — locate them within their table row by the adjacent skill/damage-type
+    text. Same rules as story 5: no locator in a scenario body, role/text locators,
+    IsolatedScenarioFixture. See deferred-work.md DW-006.
 
 - id: "6"
   title: Dialog objects, roll input, and the combat scenario
