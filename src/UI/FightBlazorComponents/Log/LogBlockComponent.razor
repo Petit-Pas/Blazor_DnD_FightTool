@@ -1,0 +1,22 @@
+@using DnDFightTool.UI.SharedComponents
+@using DnDFightTool.Domain.Logs
+
+@inherits StylableComponentBase
+
+<div class="log-block @Class" style="@Style">
+    @if (!string.IsNullOrEmpty(Block.Name))
+    {
+        <div class="log-block-header">
+            <MudBlazor.MudText Typo="MudBlazor.Typo.caption" Class="log-block-name">@Block.Name</MudBlazor.MudText>
+        </div>
+    }
+    <div class="log-block-entries">
+        @foreach (var entry in Block.Entries)
+        {
+            if (!LogService.IsHidden(entry.Id))
+            {
+                <LogEntryComponent Entry="entry" />
+            }
+        }
+    </div>
+</div>

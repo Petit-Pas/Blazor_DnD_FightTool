@@ -1,0 +1,19 @@
+@using DnDFightTool.UI.SharedComponents
+@using DnDFightTool.Domain.Logs
+@using DnDFightTool.Infrastructure.Extensions
+@using MudBlazor
+
+@inherits StylableComponentBase
+
+<MudPaper Elevation="3" Class="@($"log-paper {"dnd-dark".When(IsDarkMode)} {Class}")" Style="@Style">
+    <div class="log-container">
+        @foreach (var block in LogService.Blocks)
+        {
+            if (block.Entries.Any(e => !LogService.IsHidden(e.Id)))
+            {
+                <LogBlockComponent Block="block" />
+            }
+        }
+        <div @ref="_scrollSentinel"></div>
+    </div>
+</MudPaper>

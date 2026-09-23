@@ -1,0 +1,10 @@
+.log-entry {
+    line-height: 1.5;
+    font-size: 0.875rem;
+}
+
+.log-hover-trigger {
+    border-bottom: 1px dotted currentColor;
+    cursor: help;
+    transition: opacity 0.15s ease;
+}

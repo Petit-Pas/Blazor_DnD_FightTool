@@ -1,0 +1,21 @@
+.log-block {
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+}
+
+.log-block:hover {
+    background-color: var(--mud-palette-action-default-hover);
+}
+
+.log-block-name {
+    opacity: 0.6;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.log-block-entries {
+    display: flex;
+    flex-direction: column;
+}

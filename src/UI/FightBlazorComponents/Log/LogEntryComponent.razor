@@ -1,0 +1,20 @@
+@using DnDFightTool.UI.SharedComponents
+@using MudBlazor
+
+@inherits StylableComponentBase
+
+<div class="log-entry @Class" style="padding-left: @(Entry.IndentLevel * 16)px; @Style">
+    @foreach (var segment in BuildSegments())
+    {
+        if (segment is HoverSegment hover)
+        {
+            <MudTooltip Text="@hover.TooltipText" Placement="Placement.Top" Arrow="true" RootClass="log-hover-tooltip">
+                <span class="log-hover-trigger">@((MarkupString)hover.Html)</span>
+            </MudTooltip>
+        }
+        else if (segment is PlainSegment plain)
+        {
+            @((MarkupString)plain.Html)
+        }
+    }
+</div>
