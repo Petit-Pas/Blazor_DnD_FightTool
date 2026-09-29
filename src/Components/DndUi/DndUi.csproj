@@ -33,6 +33,13 @@
 
 	</PropertyGroup>
 
+    <!-- Windows-only MAUI app: elsewhere, drop MAUI so a solution-wide restore does not require the MAUI workload. -->
+    <PropertyGroup Condition="!$([MSBuild]::IsOSPlatform('Windows'))">
+        <TargetFramework>net10.0</TargetFramework>
+        <UseMaui>false</UseMaui>
+        <SingleProject>false</SingleProject>
+    </PropertyGroup>
+
     <ItemGroup>
         <!-- App Icon -->
         <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />

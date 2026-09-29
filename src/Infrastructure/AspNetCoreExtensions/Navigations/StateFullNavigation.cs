@@ -11,12 +11,15 @@ internal class StateFullNavigation : IStateFullNavigation
 {
     private readonly NavigationManager _navigationManager;
 
-    private List<string> _pages = new(_maxSize) { "https://0.0.0.1/characters" }; // A very shitty way to fix the fact that we can't catch the original navigation.
+    private List<string> _pages;
     private const int _maxSize = 100;
 
     public StateFullNavigation(NavigationManager navigationManager)
     {
         _navigationManager = navigationManager ?? throw new ArgumentNullException(nameof(navigationManager));
+
+        // Seed with the actual page the circuit started on (LocationChanged never fires for the initial load).
+        _pages = new List<string>(_maxSize) { _navigationManager.Uri };
 
         _navigationManager.LocationChanged += NavigationManager_LocationChanged;
     }

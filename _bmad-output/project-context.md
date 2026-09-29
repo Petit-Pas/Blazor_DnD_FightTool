@@ -119,6 +119,13 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - `CharacterFactory.BuildMonster()` / `.BuildPlayer()` — never `new Character()`.
 - Test namespace mirrors source but without `DnDFightTool.` prefix.
 
+**UI tests (`/uitests`, Playwright) — layout in `_bmad-output/specs/spec-005-ui-test-navigation-library/uitests-layout.md`:**
+- `uitests/Framework` holds only fixtures and typed-object base classes (`PageObject`, `ComponentObject`, `DialogSeam`). Never put a typed object or a test there.
+- A component's typed object is `Testable{Component}` in `uitests/TestableComponents/{src layer}/Testable{OriginProject}`, at the component's exact relative path. Testable projects reference `Framework`, Playwright and sibling Testable projects only — never `src/`.
+- A component's UI test lives in `uitests/Tests/{src layer}/{OriginProject}UiTests` (path mirrors `src/` exactly), at the component's exact relative path, in one file `{TestedComponent}UiTests.cs`: an empty `public static class` whose nested classes derive from `SequentialScenarioFixture` (dependent `[Order]`ed steps) or `IsolatedScenarioFixture` (self-contained tests).
+- UI-test namespaces are the full location: `DnDFightTool.UiTests.{path below uitests/}` (unlike `tests/`). `AssemblyFixture` stays in `DnDFightTool.UiTests`.
+- New UI test projects reference `Framework` and their Testable projects, link `Framework/AssemblyFixture.cs` + `AssemblyInfo.cs`, and are added to `DnDFightTool.slnx` and `DnDFightTool.CrossPlatform.slnf`. `uitests/Scratch` is an agent playground only (see its README).
+
 ### Code Organization & Infrastructure
 
 **IoC registration:**

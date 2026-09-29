@@ -9,8 +9,11 @@ namespace DnDFightTool.Domain.CharacterSheet.Characters;
 /// </summary>
 public class LocalFileCharacterRepository : ICharacterRepository
 {
+    // Cross-platform local app data root: %LocalAppData% on Windows, ~/.local/share on Linux, ~/Library/Application Support on macOS.
     // Note that this path will be transformed on windows on C/user/*username*/appdata/local/package/*app_uid*_suffix/localappdata... 
-    private readonly static string _defaultFolder = Environment.GetEnvironmentVariable("LocalAppData") + @"\DnDFightTool";
+    private readonly static string _defaultFolder = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "DnDFightTool");
 
     private readonly string _mainFolder;
     private readonly Dictionary<Guid, Character> _characters;

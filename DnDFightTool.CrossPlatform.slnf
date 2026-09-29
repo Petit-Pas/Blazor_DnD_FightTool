@@ -1,0 +1,43 @@
+{
+  "solution": {
+    "path": "DnDFightTool.slnx",
+    "projects": [
+      "src/Analyzers/DnDFightTool.Analyzers/DnDFightTool.Analyzers.csproj",
+      "src/Business/DnDActions/DnDActions.csproj",
+      "src/Business/DnDQueries/DnDQueries.csproj",
+      "src/Components/DndUi.Shared/DndUi.Shared.csproj",
+      "src/Components/DndUi.Web/DndUi.Web.csproj",
+      "src/Domain/CharacterSheet/CharacterSheet.csproj",
+      "src/Domain/Fight/Fight.csproj",
+      "src/Domain/Logs/Logs.csproj",
+      "src/Domain/Rolls/Rolls.csproj",
+      "src/Infrastructure/AspNetCoreExtensions/AspNetCoreExtensions.csproj",
+      "src/Infrastructure/Extensions/Extensions.csproj",
+      "src/Infrastructure/IO/IO.csproj",
+      "src/Infrastructure/Mapping/Mapping.csproj",
+      "src/Infrastructure/Memory/Memory.csproj",
+      "src/UI/CharacterSheetBlazorComponents/CharacterSheetBlazorComponents.csproj",
+      "src/UI/DnDQueryPrompter/DnDQueryPrompter.csproj",
+      "src/UI/FightBlazorComponents/FightBlazorComponents.csproj",
+      "src/UI/JavascriptInteropExtensions/JavascriptInteropExtensions.csproj",
+      "src/UI/SharedComponents/SharedComponents.csproj",
+      "tests/Business/DnDActionsTests/DnDActionsTests.csproj",
+      "tests/Components/DndUiWebTests/DndUiWebTests.csproj",
+      "tests/Domain/DnDEntitiesTests/DnDEntitiesTests.csproj",
+      "tests/Domain/DomainTestsUtilities/DomainTestsUtilities.csproj",
+      "tests/Domain/FightTests/FightTests.csproj",
+      "tests/Domain/LogsTests/LogsTests.csproj",
+      "tests/Infrastructure/MemoryTests/MemoryTests.csproj",
+      "tests/UI/FightBlazorComponentsTests/FightBlazorComponentsTests.csproj",
+      "uitests/Framework/UiTestFramework.csproj",
+      "uitests/TestableComponents/Components/TestableDndUi.Shared/TestableDndUi.Shared.csproj",
+      "uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents/TestableCharacterSheetBlazorComponents.csproj",
+      "uitests/TestableComponents/UI/TestableDnDQueryPrompter/TestableDnDQueryPrompter.csproj",
+      "uitests/TestableComponents/UI/TestableFightBlazorComponents/TestableFightBlazorComponents.csproj",
+      "uitests/Tests/Components/DndUi.SharedUiTests/DndUi.SharedUiTests.csproj",
+      "uitests/Tests/Framework/UiTestFrameworkUiTests/UiTestFrameworkUiTests.csproj",
+      "uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests/CharacterSheetBlazorComponentsUiTests.csproj",
+      "uitests/Scratch/Scratch.csproj"
+    ]
+  }
+}

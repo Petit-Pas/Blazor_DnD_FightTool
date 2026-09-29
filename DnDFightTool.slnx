@@ -59,7 +59,28 @@
     <Project Path="tests/UI/FightBlazorComponentsTests/FightBlazorComponentsTests.csproj" />
   </Folder>
   <Folder Name="/uitests/">
-    <Project Path="uitests/UiTestNavigation/UiTestNavigation.csproj" />
     <Project Path="uitests/Scratch/Scratch.csproj" />
+  </Folder>
+  <Folder Name="/uitests/Framework/">
+    <Project Path="uitests/Framework/UiTestFramework.csproj" />
+  </Folder>
+  <Folder Name="/uitests/TestableComponents/" />
+  <Folder Name="/uitests/TestableComponents/Components/">
+    <Project Path="uitests/TestableComponents/Components/TestableDndUi.Shared/TestableDndUi.Shared.csproj" />
+  </Folder>
+  <Folder Name="/uitests/TestableComponents/UI/">
+    <Project Path="uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents/TestableCharacterSheetBlazorComponents.csproj" />
+    <Project Path="uitests/TestableComponents/UI/TestableDnDQueryPrompter/TestableDnDQueryPrompter.csproj" />
+    <Project Path="uitests/TestableComponents/UI/TestableFightBlazorComponents/TestableFightBlazorComponents.csproj" />
+  </Folder>
+  <Folder Name="/uitests/Tests/" />
+  <Folder Name="/uitests/Tests/Components/">
+    <Project Path="uitests/Tests/Components/DndUi.SharedUiTests/DndUi.SharedUiTests.csproj" />
+  </Folder>
+  <Folder Name="/uitests/Tests/Framework/">
+    <Project Path="uitests/Tests/Framework/UiTestFrameworkUiTests/UiTestFrameworkUiTests.csproj" />
+  </Folder>
+  <Folder Name="/uitests/Tests/UI/">
+    <Project Path="uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests/CharacterSheetBlazorComponentsUiTests.csproj" />
   </Folder>
 </Solution>

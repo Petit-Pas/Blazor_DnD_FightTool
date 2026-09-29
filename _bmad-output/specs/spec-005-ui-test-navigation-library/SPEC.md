@@ -2,6 +2,7 @@
 id: SPEC-005-ui-test-navigation-library
 companions:
   - deliverables.md
+  - uitests-layout.md
   - ../../project-context.md
 sources: []
 ---
@@ -54,12 +55,13 @@ A vision to realize, with a pain underneath it. Today the UI of DnDFightTool has
 
 - **CAP-10**
   - **intent:** A scenario starts from a clean slate regardless of what ran before it, without any scenario needing to know what the previous one did, and teardown proves the slate is genuinely clean rather than assuming it.
-  - **success:** The full scenario suite passes in a randomised order, any single scenario passes when run alone, and a scenario whose command undo is incomplete fails in its own teardown rather than corrupting a later scenario.
+  - **success:** The unit of isolation is the fixture: every isolated test and every sequential fixture passes in any fixture order and when run alone, a sequential chain runs as a whole, and a fixture whose command undo is incomplete fails in its own teardown rather than corrupting a later one.
 
 ## Constraints
 
 - Playwright driving the `DndUi.Web` host is the only rendering path. bUnit is excluded: it cannot produce image screenshots, and MudBlazor 9 dialogs and popovers require hand-stubbed JSInterop — precisely the surface CAP-3 targets.
 - The library and the agent scratch project live under a new top-level `/uitests` folder, consumed by project reference only. Nothing is packaged.
+- `/uitests` has three kinds of project, each mirroring `src/` exactly: `Framework` (fixtures and typed-object base classes only), `TestableComponents/{layer}/Testable{OriginProject}` (one `Testable{Component}` typed object per component, at the component's path), and `Tests/{layer}/{OriginProject}UiTests` (one `{TestedComponent}UiTests.cs` per tested component — an empty static container whose nested classes derive from `SequentialScenarioFixture` or `IsolatedScenarioFixture`). Placement, namespace and reference rules are in [uitests-layout.md](uitests-layout.md).
 - The fixture must start real Kestrel on a dynamic port. `WebApplicationFactory`'s default `TestServer` is an in-memory transport with no socket and is unreachable by a browser.
 - `DndUi.Web`'s inline service registrations move into `RegisterWebAppServices(services, dataFolder)`, called by both `Program.cs` and the test fixture, matching the existing `IoC/ServiceCollectionExtensions` convention. This is a production refactor so the fixture can compose the same host — not a test hook inside it.
 - **No `Reset()` is added to any service.** Cleanup uses two existing mechanisms, split along the seam of what is command-driven:
@@ -107,7 +109,7 @@ An agent finishes implementing a UI feature, writes a scratch scenario against t
 
 - Chromium only; no cross-browser matrix was requested or implied.
 - The screenshot output folder is gitignored build output, not committed evidence.
-- NUnit parallelization is disabled for the scenario project, following from the host-wide singleton constraint.
+- NUnit parallelization is disabled in every `/uitests` test project (the shared `AssemblyInfo.cs` is linked into each), following from the host-wide singleton constraint.
 - The existing `FightBlazorComponentsTests` project stays as it is; this work adds separate projects under `/uitests`.
 - Playwright browser binaries are installed via the standard install step, a documented local prerequisite for running the suite.
 - The scratch project is committed as an empty shell whose contents are gitignored.

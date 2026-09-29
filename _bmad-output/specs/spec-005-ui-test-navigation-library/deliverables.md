@@ -9,7 +9,10 @@ rather than intentions.
 ## Deliverable 1 — The navigation library
 
 The typed page-object library and its fixture, plus scenarios covering the existing UI.
-Lives under a new top-level `/uitests` folder, consumed by project reference.
+Lives under a new top-level `/uitests` folder, consumed by project reference. Fixtures and
+base classes are in `uitests/Framework`, typed objects in per-origin
+`uitests/TestableComponents/**/Testable{OriginProject}` projects, tests in per-origin
+`uitests/Tests/**/{OriginProject}UiTests` projects — see [uitests-layout.md](uitests-layout.md).
 
 **Contents**
 
@@ -18,18 +21,18 @@ Lives under a new top-level `/uitests` folder, consumed by project reference.
 | `RegisterWebAppServices` refactor | `DndUi.Web`'s inline registrations extracted into an IoC extension taking `dataFolder`, called by both `Program.cs` and the fixture. Production refactor, prerequisite for everything else. |
 | Application fixture | Starts `DndUi.Web` on real Kestrel at a dynamic port and manages the Playwright browser lifecycle. One launch per assembly. |
 | Isolation | Per-run unique temp folder for the real `LocalFileCharacterRepository`; teardown undoes every command via `UndoLastCommandAsync()` while `HistoryLength > 0`, then deletes remaining characters through the existing repository API. No `Reset()` anywhere. |
-| Page objects | One typed fluent object per routable page: `CharacterListEditorPage`, `FightDashboardPage`, `FightersPage`, `CharacterEditorPage`, `AttackEditorPage`. |
-| Dialog objects | Typed objects for the `DnDQueryPrompter` modals (initiative roll, martial-attack roll result, martial-attack interaction request, save roll result), `InitiativeInputDialog`, and the `RollableDialogBase` surface. |
+| Page objects | One typed fluent `Testable{Page}` object per routable page (`CharacterListEditorPage`, `FightDashboardPage`, `FightersPage`, `CharacterEditorPage`, `AttackEditorPage`), in its origin's `Testable{OriginProject}` project at the page's path. |
+| Dialog objects | One `Testable{Dialog}` object per modal — the `DnDQueryPrompter` modals (initiative roll, martial-attack roll result, martial-attack interaction request, save roll result), `InitiativeInputDialog`, and the `RollableDialogBase` surface — each at its dialog's path. |
 | Roll input helpers | Typed access to the numeric roll fields inside the query modals, so a scenario pins outcomes by typing the value (CAP-4). |
 | Composable flows | Named building blocks — create a monster, add it to a fight, roll initiative — free to call domain services directly rather than going through page objects (CAP-5). |
 | Screenshot capture | Named-capture API plus an automatic final-state capture per scenario, written to a gitignored artifacts folder (CAP-6). |
-| Scenarios | Committed NUnit scenarios exercising each page and dialog, which are also the proof the library works. |
-| Scratch project | Committed empty shell under `/uitests` whose contents are gitignored, where agents write throwaway verification scenarios (CAP-7). |
+| Scenarios | Committed NUnit tests exercising each page and dialog, which are also the proof the library works. Each lives in its origin's `uitests/Tests/**/{OriginProject}UiTests` project at the tested component's path, in `{TestedComponent}UiTests.cs` with one nested sequential or isolated fixture per sub-case. Framework self-tests live in `uitests/Tests/Framework/UiTestFrameworkUiTests/Meta/`. |
+| Scratch project | Committed shell at `uitests/Scratch` (csproj + README) whose scenarios are gitignored, where agents write throwaway verification scenarios against every Testable project (CAP-7). |
 
 **Covers** CAP-1 through CAP-6, and CAP-10.
 
 **Done when** every routable page and dialog surface is reachable through a typed object,
-the committed scenarios pass in a randomised order, and a scenario file contains no
+the committed fixtures pass in any fixture order, and a test file contains no
 Playwright locator expression.
 
 ---
@@ -41,12 +44,15 @@ project (netstandard2.0, Roslyn 4.8) that flags any component carrying an `@page
 directive with no corresponding page object.
 
 **The reference-direction problem.** The analyzer must see both the UI project and the
-page-object library, which reference in one direction only. Two viable resolutions, to be
-chosen during implementation:
+page objects (`uitests/TestableComponents/**/Testable{OriginProject}`), which reference in
+one direction only — and Testable projects deliberately never reference `src/`. Two viable
+resolutions, to be chosen during implementation:
 
 - a small shared contracts assembly holding a marker attribute such as
-  `[CoversPage(typeof(FightDashboardPage))]`, referenced by both sides; or
-- an `AdditionalFiles` coverage manifest listing which pages are covered.
+  `[CoversPage(typeof(FightDashboardPage))]`, referenced by both sides — this needs a
+  `src/` reference from the Testable projects, which the current layout rules out; or
+- an `AdditionalFiles` coverage manifest listing which pages are covered, or matching the
+  `Testable{Page}` naming convention by file name.
 
 **Deliberately not built:** a source generator emitting selector constants from `.razor`
 markup, and an analyzer mandating `data-testid` on interactive components. Both were
@@ -70,7 +76,7 @@ Authored last, from the finished shape of 1 and 2.
 | Piece | What it is |
 |---|---|
 | `.razor`-scoped instructions | An update to the existing `.github/instructions/blazor-components.instructions.md` (or a sibling) stating that a UI change must carry the matching page-object and scenario update. |
-| Page-object authoring skill | Conventions, the fluent shape, locator strategy, and a worked example, sufficient for an agent to add a page object unaided. |
+| Page-object authoring skill | Conventions, the fluent shape, locator strategy, the `/uitests` placement and naming rules from [uitests-layout.md](uitests-layout.md), and a worked example, sufficient for an agent to add a page object and its test unaided. |
 | Agent verification workflow | How an agent writes a scratch scenario, runs `dotnet test`, and reports assertions plus screenshot paths as evidence (CAP-7). |
 
 **Covers** CAP-7 and CAP-9.

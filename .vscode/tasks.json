@@ -25,14 +25,12 @@
 			"problemMatcher": "$msCompile"
 		},
 		{
-			"label": "Build DndUi.Web",
+			"label": "build-dndui-web",
 			"type": "shell",
-			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build src/Components/DndUi.Web/DndUi.Web.csproj 2>&1 | Select-Object -Last 15"
-		},
-		{
-			"label": "Build DndUi MAUI",
-			"type": "shell",
-			"command": "cd 'd:\\Code\\Perso\\DnDFightTool' ; dotnet build src/Components/DndUi/DndUi.csproj 2>&1 | Select-Object -Last 15"
+			"command": "dotnet build '${workspaceFolder}/src/Components/DndUi.Web/DndUi.Web.csproj'",
+			"group": "build",
+			"presentation": { "reveal": "silent", "panel": "shared" },
+			"problemMatcher": "$msCompile"
 		},
 		{
 			"label": "Run DndUi.Web",
@@ -51,7 +49,15 @@
 		{
 			"label": "Full build",
 			"type": "shell",
-			"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-String -Pattern '(error CS|error RZ|Générer a)' | Select-Object -Last 3",
+			"windows": {
+				"command": "dotnet build DnDFightTool.slnx 2>&1 | Select-String -Pattern '(error CS|error RZ|Générer a)' | Select-Object -Last 3"
+			},
+			"linux": {
+				"command": "dotnet build DnDFightTool.CrossPlatform.slnf 2>&1 | grep -E '(error CS|error RZ|Build succeeded|Build FAILED)' | tail -3"
+			},
+			"osx": {
+				"command": "dotnet build DnDFightTool.CrossPlatform.slnf 2>&1 | grep -E '(error CS|error RZ|Build succeeded|Build FAILED)' | tail -3"
+			},
 			"problemMatcher": [
 				"$msCompile"
 			]
@@ -59,7 +65,15 @@
 		{
 			"label": "Build check",
 			"type": "shell",
-			"command": "dotnet build DnDFightTool.slnx --no-restore 2>&1 | Select-String -Pattern '(error|warning|Build succeeded|Build FAILED)' | Select-Object -Last 30",
+			"windows": {
+				"command": "dotnet build DnDFightTool.slnx --no-restore 2>&1 | Select-String -Pattern '(error|warning|Build succeeded|Build FAILED)' | Select-Object -Last 30"
+			},
+			"linux": {
+				"command": "dotnet build DnDFightTool.CrossPlatform.slnf --no-restore 2>&1 | grep -E '(error|warning|Build succeeded|Build FAILED)' | tail -30"
+			},
+			"osx": {
+				"command": "dotnet build DnDFightTool.CrossPlatform.slnf --no-restore 2>&1 | grep -E '(error|warning|Build succeeded|Build FAILED)' | tail -30"
+			},
 			"problemMatcher": [
 				"$msCompile"
 			]
@@ -75,17 +89,41 @@
 		{
 			"label": "Run all tests",
 			"type": "shell",
-			"command": "dotnet test DnDFightTool.slnx --verbosity quiet 2>&1 | Select-Object -Last 20"
+			"windows": {
+				"command": "dotnet test DnDFightTool.slnx --verbosity quiet 2>&1 | Select-Object -Last 20"
+			},
+			"linux": {
+				"command": "dotnet test DnDFightTool.CrossPlatform.slnf --verbosity quiet 2>&1 | tail -20"
+			},
+			"osx": {
+				"command": "dotnet test DnDFightTool.CrossPlatform.slnf --verbosity quiet 2>&1 | tail -20"
+			}
 		},
 		{
 			"label": "Show failed tests",
 			"type": "shell",
-			"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity normal 2>&1 | Select-String '(Echou|Failed|ERREUR|error|Échec)' | Select-Object -First 30"
+			"windows": {
+				"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity normal 2>&1 | Select-String '(Echou|Failed|ERREUR|error|Échec)' | Select-Object -First 30"
+			},
+			"linux": {
+				"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity normal 2>&1 | grep -E '(Echou|Failed|ERREUR|error|Échec)' | head -30"
+			},
+			"osx": {
+				"command": "dotnet test tests/Business/DnDActionsTests/DnDActionsTests.csproj --verbosity normal 2>&1 | grep -E '(Echou|Failed|ERREUR|error|Échec)' | head -30"
+			}
 		},
 		{
 			"label": "Kill DndUi process",
 			"type": "shell",
-			"command": "Stop-Process -Name DndUi -Force -ErrorAction SilentlyContinue; Write-Host 'Done'"
+			"windows": {
+				"command": "Stop-Process -Name DndUi -Force -ErrorAction SilentlyContinue; Write-Host 'Done'"
+			},
+			"linux": {
+				"command": "pkill -f DndUi.Web.dll; echo Done"
+			},
+			"osx": {
+				"command": "pkill -f DndUi.Web.dll; echo Done"
+			}
 		}
 	]
 }

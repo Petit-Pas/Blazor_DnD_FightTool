@@ -38,23 +38,25 @@ context:
 
 ## Code Map
 
+> Paths reflect the later `/uitests` split into `Framework`, `TestableComponents` and `Tests` (see [uitests-layout.md](../uitests-layout.md)): the original `UiTestNavigation` project's fixtures now live in `uitests/Framework`, its Meta tests in `uitests/Tests/Framework/UiTestFrameworkUiTests`.
+
 - `src/Components/DndUi.Web/Program.cs` -- production entry point; already delegates service registration and pipeline composition to public extensions.
 - `src/Components/DndUi.Web/IoC/ServiceCollectionExtensions.cs` -- `RegisterWebAppServices(IServiceCollection, string)` accepts the fixture's isolated `dataFolder` and registers the real singleton graph.
 - `src/Components/DndUi.Web/Hosting/WebApplicationExtensions.cs` -- `ConfigureWebAppPipeline(WebApplication)` maps the Blazor app and currently applies HTTPS redirection; fixture URL configuration must account for this.
 - `tests/Components/DndUiWebTests/DndUiWebTests.csproj` -- nearby NUnit project pattern and pinned test package versions; do not modify this project.
 - `DnDFightTool.slnx` -- solution project listing; add the reusable and scratch projects beneath a `/uitests/` folder.
 - `.gitignore` -- existing build/artifact exclusions; extend narrowly for scratch contents and future UI-test artifacts without ignoring committed project files.
-- `uitests/UiTestNavigation/UiTestNavigation.csproj` -- new NUnit/Playwright library test project; reference `DndUi.Web` and pin `Microsoft.Playwright`.
-- `uitests/UiTestNavigation/ApplicationFixture.cs` -- new assembly-level fixture that builds the real host with a unique temp data folder, binds a dynamic Kestrel endpoint, and owns one browser lifecycle.
-- `uitests/UiTestNavigation/HomePageSmokeTests.cs` -- committed smoke scenario using only fixture-provided browser/page access and semantic assertions.
+- `uitests/Framework/UiTestFramework.csproj` -- new NUnit/Playwright library test project; reference `DndUi.Web` and pin `Microsoft.Playwright`.
+- `uitests/Framework/ApplicationFixture.cs` -- new assembly-level fixture that builds the real host with a unique temp data folder, binds a dynamic Kestrel endpoint, and owns one browser lifecycle.
+- `uitests/Tests/Framework/UiTestFrameworkUiTests/Meta/HomePageSmokeTests.cs` -- committed smoke scenario using only fixture-provided browser/page access and semantic assertions.
 - `uitests/Scratch/Scratch.csproj` -- committed empty test shell referencing the reusable project; scratch source and output are ignored.
 
 ## Tasks & Acceptance
 
 **Execution:**
-- [x] `uitests/UiTestNavigation/UiTestNavigation.csproj` -- create the pinned NUnit/Playwright test project with the web-host project reference -- provide the reusable test boundary.
-- [x] `uitests/UiTestNavigation/ApplicationFixture.cs` -- implement real Kestrel startup on a dynamic reachable endpoint, unique temp data-folder composition through existing extensions, one Chromium launch per assembly, and deterministic disposal -- hide infrastructure from scenarios.
-- [x] `uitests/UiTestNavigation/HomePageSmokeTests.cs` -- add a smoke test that derives from the fixture and asserts home-page rendered content without launch, port, URL, or browser setup code -- prove the harness works.
+- [x] `uitests/Framework/UiTestFramework.csproj` -- create the pinned NUnit/Playwright test project with the web-host project reference -- provide the reusable test boundary.
+- [x] `uitests/Framework/ApplicationFixture.cs` -- implement real Kestrel startup on a dynamic reachable endpoint, unique temp data-folder composition through existing extensions, one Chromium launch per assembly, and deterministic disposal -- hide infrastructure from scenarios.
+- [x] `uitests/Tests/Framework/UiTestFrameworkUiTests/Meta/HomePageSmokeTests.cs` -- add a smoke test that derives from the fixture and asserts home-page rendered content without launch, port, URL, or browser setup code -- prove the harness works.
 - [x] `uitests/Scratch/Scratch.csproj` -- add an empty non-packable test shell referencing the library -- establish the agent scratch entry point.
 - [x] `DnDFightTool.slnx` -- register both projects under `/uitests/` -- make the new projects buildable from the solution.
 - [x] `.gitignore` -- ignore scratch scenario contents and UI-test artifacts while retaining project files -- prevent throwaway output from entering source control.
@@ -69,7 +71,7 @@ context:
 
 **Commands:**
 - `dotnet build DnDFightTool.slnx` -- expected: SUCCESS.
-- `dotnet test uitests/UiTestNavigation/UiTestNavigation.csproj` -- expected: smoke scenario passes.
+- `dotnet test uitests/Tests/Framework/UiTestFrameworkUiTests/UiTestFrameworkUiTests.csproj` -- expected: smoke scenario passes.
 - `dotnet test uitests/Scratch/Scratch.csproj` -- expected: project discovers no committed scenarios and exits successfully.
 
 ## Suggested Review Order
@@ -77,21 +79,21 @@ context:
 **Host and fixture lifecycle**
 
 - The fixture composes the production host while supplying a real dynamic Kestrel endpoint.
-  [ApplicationFixture.cs:52](../../../../uitests/UiTestNavigation/ApplicationFixture.cs#L52)
+  [ApplicationFixture.cs:52](../../../../uitests/Framework/ApplicationFixture.cs#L52)
 
 - Assembly setup owns one browser lifecycle and links cleanly into scratch test assemblies.
-  [AssemblyFixture.cs:8](../../../../uitests/UiTestNavigation/AssemblyFixture.cs#L8)
+  [AssemblyFixture.cs:8](../../../../uitests/Framework/AssemblyFixture.cs#L8)
 
 - Cleanup releases browser and host resources and removes the isolated temporary data folder.
-  [ApplicationFixture.cs:96](../../../../uitests/UiTestNavigation/ApplicationFixture.cs#L96)
+  [ApplicationFixture.cs:96](../../../../uitests/Framework/ApplicationFixture.cs#L96)
 
 **Test entry points and project wiring**
 
 - The smoke scenario proves a derived test can reach rendered home-page content without launch code.
-  [HomePageSmokeTests.cs:10](../../../../uitests/UiTestNavigation/HomePageSmokeTests.cs#L10)
+  [HomePageSmokeTests.cs:11](../../../../uitests/Tests/Framework/UiTestFrameworkUiTests/Meta/HomePageSmokeTests.cs#L11)
 
 - Package and project references define the reusable NUnit/Playwright test boundary.
-  [UiTestNavigation.csproj:1](../../../../uitests/UiTestNavigation/UiTestNavigation.csproj#L1)
+  [UiTestFramework.csproj:1](../../../../uitests/Framework/UiTestFramework.csproj#L1)
 
 - The scratch shell reuses lifecycle setup while keeping temporary scenarios uncommitted.
   [Scratch.csproj:13](../../../../uitests/Scratch/Scratch.csproj#L13)

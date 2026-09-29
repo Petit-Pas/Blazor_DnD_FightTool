@@ -19,6 +19,7 @@
         // Single quotes only — PowerShell does not expand subexpressions inside them.
         "cd": true,
         "/^\\$\\w+\\s*=\\s*'[^']*'\\s*$/": true
-    }
+    },
+    "dotnet.defaultSolution": "DnDFightTool.CrossPlatform.slnf"
 }
 

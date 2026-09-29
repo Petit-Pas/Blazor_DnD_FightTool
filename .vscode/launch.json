@@ -18,6 +18,23 @@
             }
         },
         {
+            "name": "DndUi.Web (Debug)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-dndui-web",
+            "program": "${workspaceFolder}/src/Components/DndUi.Web/bin/Debug/net10.0/DndUi.Web.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/Components/DndUi.Web",
+            "stopAtEntry": false,
+            "env": {
+                "DOTNET_ENVIRONMENT": "Development"
+            },
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            }
+        },
+        {
             "name": "DndUi.Web (watch + hot reload)",
             "type": "coreclr",
             "request": "launch",

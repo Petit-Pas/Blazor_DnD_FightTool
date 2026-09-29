@@ -80,7 +80,12 @@
     MudIconButtons with left-click increase / right-click (@oncontextmenu)
     decrease — locate them within their table row by the adjacent skill/damage-type
     text. Same rules as story 5: no locator in a scenario body, role/text locators,
-    IsolatedScenarioFixture. See deferred-work.md DW-006.
+    IsolatedScenarioFixture. See deferred-work.md DW-006. Layout per
+    uitests-layout.md: each Testable{Component} object goes in
+    uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents at its
+    component's path; each test goes in
+    uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests at the tested
+    component's path, named {TestedComponent}UiTests.cs.
 
 - id: "6"
   title: Dialog objects, roll input, and the combat scenario
@@ -96,9 +101,16 @@
     scenario repeatedly to prove identical log output and HP. Deliverable 1 ends
     here, so the checkpoint review covers the whole library. The multi-step
     combat scenario is the first real use of SequentialScenarioFixture: compose
-    it from small [Order]ed steps, each asserting one increment and leaving its
+    it from small [Order]ed stept it isn't a s, each asserting one increment and leaving its
     own screenshots, with state shared across steps and reset only at the fixture
-    boundary.
+    boundary. Layout per uitests-layout.md: each dialog gets a Testable{Dialog}
+    object at its dialog's path (TestableDnDQueryPrompter or
+    TestableFightBlazorComponents; seams TestableInitiativeInputDialog and
+    TestableMartialAttackRollResultQueryHandlerModal already exist); the combat test
+    goes in the origin project of its entry component (FightDashboardPage ->
+    uitests/Tests/Components/DndUi.SharedUiTests/Components/Pages). The combat chain is
+    a nested SequentialScenarioFixture class inside FightDashboardPageUiTests, per
+    the test file shape in uitests-layout.md.
 
 - id: "7"
   title: Page-object coverage analyzer
@@ -112,6 +124,9 @@
     settle it at the spec checkpoint rather than during implementation. Severity
     is error, not warning. Lives in the existing DnDFightTool.Analyzers project,
     netstandard2.0 against Roslyn 4.8. Deliverable 3 is gated on this story.
+    Testable projects never reference src/, which rules out a typeof-based marker
+    attribute unless that rule is renegotiated; page objects follow the
+    Testable{Page} naming at the page's path, which a file-name match can use.
 
 - id: "8"
   title: Instructions, authoring skill, and agent verification workflow

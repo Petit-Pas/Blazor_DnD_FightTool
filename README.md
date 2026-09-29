@@ -18,7 +18,8 @@ Also .Net Core and better infrastructure overall
 
 /bmad-build spec 005, user story 5
 avant de démarrer la user story 6: 
-- check defffered work
-- verifie qu'y a pas de fichier zombies
-- verifier la localisation de tout les nouveaux fichiers
 - verifier que des tests ne doivent pas être split
+- UITests UI/ folder does not exist, but we still need to make an easy differencniation between UI/ anc Components/ 
+- can we make a sequential be skipped if they are not ran in the proper order? 
+- the actual mock of the UI components all live in the same place under UITestFramework
+- new rules have been set for UITests: empty static then internal class for each test scenario, this has not been applied so far.

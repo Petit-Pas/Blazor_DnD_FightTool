@@ -21,7 +21,7 @@ context:
 
 ## Boundaries & Constraints
 
-**Always:** Typed objects live under `uitests/UiTestNavigation/Pages/` (routable `PageObject`s) and `uitests/UiTestNavigation/Components/` (`ComponentObject`s), namespaced `DnDFightTool.UiTests.UiTestNavigation.{Pages|Components}`. Every locator lives inside a page/component object — never in a scenario, a flow, or a test body. Objects take the Playwright `IPage` (and, for a component, its root `ILocator` scope) through their constructor; page objects also take the host base URL. A page/component object exposes a method for every action its element supports **within this story's scope**, named for the user intent (`GoToMonstersTab`, `CreatePlayer`, `AddToFight`, `StartCombat`, `SelectFighter`, `Edit`, `Duplicate`, `Delete`), plus read methods for asserting (`PlayerNames`, `InFightNames`, `LogEntries`, `GetRound`). A method that navigates returns the destination page object; a method that opens a modal returns its dialog seam. List/dashboard/fighters pages navigate by route (`/`, `/fight-dashboard`, `/fighters`); the editor pages are returned from the parent list page's create/edit/duplicate methods because their subject comes from a per-circuit scoped context the test process cannot seed. Locators use Playwright role and text/label semantics; rows are found by their name text and the action button by role + name within that row. Fight arrangement seeds a non-zero initiative (`AddToFightAtomicCommand(id, initiative: 15)`) so the dashboard's initiative dialog never opens. Follow the repo C# rules: file-scoped namespaces, no primary constructors, no expression-bodied members, XML docs on public/internal members, NUnit + FluentAssertions.
+**Always:** The `PageObject`/`ComponentObject`/`DialogSeam` bases live in `uitests/Framework/{Pages|Components|Dialogs}/`. Each typed object is named `Testable{Component}` and lives in the `Testable{OriginProject}` project under `uitests/TestableComponents/`, at the path mirroring its production component (namespace `DnDFightTool.UiTests.TestableComponents.{layer}.Testable{OriginProject}.{subpath}`). Tests live in the tested component's origin `{OriginProject}UiTests` project at its mirrored path, named `{TestedComponent}UiTests.cs` (see [uitests-layout.md](../uitests-layout.md)). Every locator lives inside a page/component object — never in a scenario, a flow, or a test body. Objects take the Playwright `IPage` (and, for a component, its root `ILocator` scope) through their constructor; page objects also take the host base URL. A page/component object exposes a method for every action its element supports **within this story's scope**, named for the user intent (`GoToMonstersTab`, `CreatePlayer`, `AddToFight`, `StartCombat`, `SelectFighter`, `Edit`, `Duplicate`, `Delete`), plus read methods for asserting (`PlayerNames`, `InFightNames`, `LogEntries`, `GetRound`). A method that navigates returns the destination page object; a method that opens a modal returns its dialog seam. List/dashboard/fighters pages navigate by route (`/`, `/fight-dashboard`, `/fighters`); the editor pages are returned from the parent list page's create/edit/duplicate methods because their subject comes from a per-circuit scoped context the test process cannot seed. Locators use Playwright role and text/label semantics; rows are found by their name text and the action button by role + name within that row. Fight arrangement seeds a non-zero initiative (`AddToFightAtomicCommand(id, initiative: 15)`) so the dashboard's initiative dialog never opens. Follow the repo C# rules: file-scoped namespaces, no primary constructors, no expression-bodied members, XML docs on public/internal members, NUnit + FluentAssertions.
 
 **Ask First:** Any accessible-name (`aria-label`) addition beyond the atomic button presets, or any `data-testid` on production markup — the presets are the only production change this story sanctions.
 
@@ -64,9 +64,12 @@ context:
 - `.../AtomicButtonsPreset/{Edit,Duplicate,Delete,Add,Save,Cancel,Subtract,Undo,Redo,Fight}Button.cs` -- supply each preset's `AccessibleName`.
 
 **Harness (read-only reuse)**
-- `uitests/UiTestNavigation/ApplicationFixture.cs` -- protected `Page`, `BaseUrl`, `Services`, `CaptureAsync`; scenarios build page objects from `Page`/`BaseUrl` and arrange via `Services`.
-- `uitests/UiTestNavigation/IsolatedScenarioFixture.cs` -- base for the new per-capability scenarios.
-- `uitests/UiTestNavigation/Meta/ScenarioIsolationTests.cs` -- reference for arranging via `ICharacterRepository`/`IUndoableMediator` + `CharacterFactory.BuildMonster/BuildPlayer`.
+
+> Paths reflect the later `/uitests` split into `Framework`, `TestableComponents` and `Tests` (see [uitests-layout.md](../uitests-layout.md)): bases and fixtures live in `uitests/Framework`, `Testable*` objects in `uitests/TestableComponents/**`, tests in `uitests/Tests/**`.
+
+- `uitests/Framework/ApplicationFixture.cs` -- protected `Page`, `BaseUrl`, `Services`, `CaptureAsync`; scenarios build page objects from `Page`/`BaseUrl` and arrange via `Services`.
+- `uitests/Framework/IsolatedScenarioFixture.cs` -- base for the new per-capability scenarios.
+- `uitests/Tests/Framework/UiTestFrameworkUiTests/Meta/ScenarioIsolationTests.cs` -- reference for arranging via `ICharacterRepository`/`IUndoableMediator` + `CharacterFactory.BuildMonster/BuildPlayer`.
 
 ## Tasks & Acceptance
 
@@ -75,36 +78,36 @@ context:
 - [x] `.../AtomicButtonsPreset/{Edit,Duplicate,Delete,Add,Save,Cancel,Subtract,Undo,Redo,Fight}Button.cs` -- set each `AccessibleName`.
 
 **Execution — typed-object infrastructure:**
-- [x] `uitests/UiTestNavigation/Pages/PageObject.cs` -- NEW abstract base: `IPage Page`, host base URL, `GotoAsync(route)`.
-- [x] `uitests/UiTestNavigation/Components/ComponentObject.cs` -- NEW abstract base: `IPage Page` + a root `ILocator` scope so a fragment's locators resolve within its element.
-- [x] `uitests/UiTestNavigation/Dialogs/DialogSeam.cs` (+ `MartialAttackRollDialog`, `InitiativeDialog` seams) -- NEW minimal placeholder objects returned by modal-trigger methods; documented as completed in story 6. No interaction methods here.
+- [x] `uitests/Framework/Pages/PageObject.cs` -- NEW abstract base: `IPage Page`, host base URL, `GotoAsync(route)`.
+- [x] `uitests/Framework/Components/ComponentObject.cs` -- NEW abstract base: `IPage Page` + a root `ILocator` scope so a fragment's locators resolve within its element.
+- [x] `uitests/Framework/Dialogs/DialogSeam.cs` (+ `TestableMartialAttackRollResultQueryHandlerModal` in `TestableComponents/UI/TestableDnDQueryPrompter/MartialAttackQueries/`, `TestableInitiativeInputDialog` in `TestableComponents/UI/TestableFightBlazorComponents/Entities/FightingCharacters/Dialog/`) -- NEW minimal placeholder objects returned by modal-trigger methods; documented as completed in story 6. No interaction methods here.
 
 **Execution — page objects:**
-- [x] `uitests/UiTestNavigation/Pages/TestCharacterListEditorPage.cs` -- `GoToAsync`, `GoToPlayersTab`/`GoToMonstersTab`, `CreatePlayer`/`CreateMonster` → `TestCharacterEditorPage`, `EditPlayer`/`EditMonster`/`DuplicatePlayer`/`DuplicateMonster` → `TestCharacterEditorPage`, `DeletePlayer`/`DeleteMonster`, `PlayerNames`/`MonsterNames`.
-- [x] `uitests/UiTestNavigation/Pages/TestCharacterEditorPage.cs` -- `MainInfo()` (→ `TestCharacterMainInfoEditor`), `OpenAttacks()` (→ `TestAttackListEditor`), `Save`, `Cancel`. (Abilities/Skills/Resistances tab objects are the deferred story.)
-- [x] `uitests/UiTestNavigation/Pages/TestAttackEditorPage.cs` -- `MainInfo()` (→ `TestAttackMainInfoEditor`), `Save`, `Cancel`.
-- [x] `uitests/UiTestNavigation/Pages/TestFightersPage.cs` -- `GoToAsync`, `SearchPlayers`/`SearchMonsters`, `AddPlayer`/`AddMonster`, `RemoveFromFight`, `AvailablePlayerNames`/`AvailableMonsterNames`/`InFightNames`.
-- [x] `uitests/UiTestNavigation/Pages/TestFightDashboardPage.cs` -- `GoToAsync`, `FighterTile(name)`, `SelectFighter(name)`, `Log()`, `CombatStatus()`, `Attacks()`; `Attacks().SelectAttack(name).Attack()` returns `MartialAttackRollDialog` seam.
+- [x] `uitests/TestableComponents/Components/TestableDndUi.Shared/Components/Pages/TestableCharacterListEditorPage.cs` -- `GoToAsync`, `GoToPlayersTab`/`GoToMonstersTab`, `CreatePlayer`/`CreateMonster` → `TestableCharacterEditorPage`, `EditPlayer`/`EditMonster`/`DuplicatePlayer`/`DuplicateMonster` → `TestableCharacterEditorPage`, `DeletePlayer`/`DeleteMonster`, `PlayerNames`/`MonsterNames`.
+- [x] `uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents/Characters/Pages/TestableCharacterEditorPage.cs` -- `MainInfo()` (→ `TestableCharacterMainInfoEditor`), `OpenAttacks()` (→ `TestableAttackListEditor`), `Save`, `Cancel`. (Abilities/Skills/Resistances tab objects are the deferred story.)
+- [x] `uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents/MartialAttacks/Pages/TestableAttackEditorPage.cs` -- `MainInfo()` (→ `TestableAttackMainInfoEditor`), `Save`, `Cancel`.
+- [x] `uitests/TestableComponents/Components/TestableDndUi.Shared/Components/Pages/TestableFightersPage.cs` -- `GoToAsync`, `SearchPlayers`/`SearchMonsters`, `AddPlayer`/`AddMonster`, `RemoveFromFight`, `AvailablePlayerNames`/`AvailableMonsterNames`/`InFightNames`.
+- [x] `uitests/TestableComponents/Components/TestableDndUi.Shared/Components/Pages/TestableFightDashboardPage.cs` -- `GoToAsync`, `FighterTile(name)`, `SelectFighter(name)`, `Log()`, `CombatStatus()`, `Attacks()`; `Attacks().SelectAttack(name).Attack()` returns `TestableMartialAttackRollResultQueryHandlerModal` seam.
 
 **Execution — component objects** (each named to match its production component 1:1):
-- [x] `uitests/UiTestNavigation/Components/TestCharacterMainInfoEditor.cs` -- `SetName`, `GetName` (deep fields deferred).
-- [x] `uitests/UiTestNavigation/Components/TestAttackListEditor.cs` -- `AddAttack` → `TestAttackEditorPage`, `EditAttack`/`DuplicateAttack` → `TestAttackEditorPage`, `DeleteAttack`, `AttackNames`.
-- [x] `uitests/UiTestNavigation/Components/TestAttackMainInfoEditor.cs` -- `SetName`, `GetName` (to-hit modifiers deferred).
-- [x] `uitests/UiTestNavigation/Components/TestFighterTile.cs` -- `GetName`, `GetCurrentHp`/`GetMaxHp`, `GetInitiative`, `Statuses`, `Edit` → `TestCharacterEditorPage`, `Delete`.
-- [x] `uitests/UiTestNavigation/Components/TestCombatStatusPanel.cs` -- `StartCombat`/`NextTurn`, `Undo`, `Redo`, `GetRound`, `GetTurnText`, `IsCombatStarted`.
-- [x] `uitests/UiTestNavigation/Components/TestCombatLogPanel.cs` -- `Entries` (visible text).
-- [x] `uitests/UiTestNavigation/Components/TestMartialAttackSelector.cs` -- `SelectAttack(name)`, `Attack()` → `MartialAttackRollDialog` seam.
+- [x] `uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents/Characters/Components/TestableCharacterMainInfoEditor.cs` -- `SetName`, `GetName` (deep fields deferred).
+- [x] `uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents/MartialAttacks/Components/TestableAttackListEditor.cs` -- `AddAttack` → `TestableAttackEditorPage`, `EditAttack`/`DuplicateAttack` → `TestableAttackEditorPage`, `DeleteAttack`, `AttackNames`.
+- [x] `uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents/MartialAttacks/Components/TestableAttackMainInfoEditor.cs` -- `SetName`, `GetName` (to-hit modifiers deferred).
+- [x] `uitests/TestableComponents/UI/TestableFightBlazorComponents/Entities/FightingCharacters/Components/TestableFighterTile.cs` -- `GetName`, `GetCurrentHp`/`GetMaxHp`, `GetInitiative`, `Statuses`, `Edit` → `TestableCharacterEditorPage`, `Delete`.
+- [x] `uitests/TestableComponents/UI/TestableFightBlazorComponents/CombatStatus/TestableCombatStatusPanel.cs` -- `StartCombat`/`NextTurn`, `Undo`, `Redo`, `GetRound`, `GetTurnText`, `IsCombatStarted`.
+- [x] `uitests/TestableComponents/UI/TestableFightBlazorComponents/Log/TestableCombatLogPanel.cs` -- `Entries` (visible text).
+- [x] `uitests/TestableComponents/UI/TestableFightBlazorComponents/Entities/MartialAttacks/TestableMartialAttackSelector.cs` -- `SelectAttack(name)`, `Attack()` → `TestableMartialAttackRollResultQueryHandlerModal` seam.
 
 **Execution — scenarios:**
-- [x] `uitests/UiTestNavigation/Scenarios/**` -- NEW `IsolatedScenarioFixture` scenarios covering each non-modal I/O-matrix row, capturing named screenshots and asserting only through typed objects. No scenario for the modal-trigger seams (story 6).
+- [x] Tests (originally `Scenarios/**`, now per-origin): `uitests/Tests/Components/DndUi.SharedUiTests/Components/Pages/{CharacterListEditorPage,FightDashboardPage,FightersPage}UiTests.cs` and `uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests/MartialAttacks/Components/AttackListEditorUiTests.cs` -- NEW `IsolatedScenarioFixture` scenarios covering each non-modal I/O-matrix row, capturing named screenshots and asserting only through typed objects. No scenario for the modal-trigger seams (story 6).
 
 **Acceptance Criteria:**
 - Given the character list, when a scenario creates a player through the UI (set name, save) and re-reads the list, then the player is listed and the scenario contains no Playwright locator expression.
 - Given a character in the editor, when the scenario adds, edits, duplicates and deletes attacks through `AttackEditorPage`, then the attack list reflects each operation.
 - Given a seeded player and monster, when the scenario searches, adds to the fight and removes, then the "In Fight" list updates accordingly.
 - Given two fighters seeded with a non-zero initiative, when the scenario navigates to the dashboard, then both tiles render with readable name/HP/initiative, `StartCombat` shows "Round 1", `SelectFighter` marks a tile, and `Undo`/`Redo` toggle — with no initiative dialog opening.
-- Given the attack selector, when the scenario calls `Attack()`, then it receives a `MartialAttackRollDialog` seam (compiles, returns typed), and no scenario attempts to drive the modal.
-- Given the full `uitests/UiTestNavigation` suite, when it runs in randomised order, then every scenario passes.
+- Given the attack selector, when the scenario calls `Attack()`, then it receives a `TestableMartialAttackRollResultQueryHandlerModal` seam (compiles, returns typed), and no scenario attempts to drive the modal.
+- Given the full `/uitests` suite, when it runs in randomised order, then every scenario passes.
 
 ## Design Notes
 
@@ -122,11 +125,11 @@ context:
 
 **Commands:**
 - `dotnet build DnDFightTool.slnx` -- expected: SUCCESS.
-- `dotnet test uitests/UiTestNavigation/UiTestNavigation.csproj` -- expected: the new per-capability scenarios pass alongside the existing Meta scenarios.
+- `dotnet test uitests/Tests/Components/DndUi.SharedUiTests/DndUi.SharedUiTests.csproj` and `dotnet test uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests/CharacterSheetBlazorComponentsUiTests.csproj` -- expected: the per-capability tests pass; `dotnet test uitests/Tests/Framework/UiTestFrameworkUiTests/UiTestFrameworkUiTests.csproj` -- expected: the Meta tests pass.
 
 **Manual checks:**
-- After the run, `uitests/UiTestNavigation/artifacts/` holds each new scenario's step PNGs ending in `*-final.png`.
-- Grep the `Scenarios/` folder: no `GetByRole`/`Locator`/`GotoAsync`/URL string appears in any scenario body.
+- After the run, each component test project's `artifacts/` holds each test's step PNGs, under the tested component's path, ending in `*-final.png`.
+- Grep the `{OriginProject}UiTests` projects: no `GetByRole`/`Locator`/`GotoAsync`/URL string appears in any test body.
 
 ## Suggested Review Order
 
@@ -138,35 +141,35 @@ context:
 **Typed-object architecture**
 
 - Routable base: navigate by route; every locator is owned here, never in a scenario.
-  [`PageObject.cs:49`](../../../../uitests/UiTestNavigation/Pages/PageObject.cs#L49)
+  [`PageObject.cs:49`](../../../../uitests/Framework/Pages/PageObject.cs#L49)
 
 - Fragment base scoped to a root `ILocator` — the seam that lets the surface grow without locator collisions.
-  [`ComponentObject.cs:12`](../../../../uitests/UiTestNavigation/Components/ComponentObject.cs#L12)
+  [`ComponentObject.cs:12`](../../../../uitests/Framework/Components/ComponentObject.cs#L12)
 
 - Minimal typed placeholder for a modal, so the trigger is complete now and story 6 fills the interaction.
-  [`DialogSeam.cs:11`](../../../../uitests/UiTestNavigation/Dialogs/DialogSeam.cs#L11)
+  [`DialogSeam.cs:11`](../../../../uitests/Framework/Dialogs/DialogSeam.cs#L11)
 
 **Navigation model (the interesting decisions)**
 
 - Editors are flow-reachable, not URL-reachable: `CreatePlayer` returns the editor by clicking the real control.
-  [`TestCharacterListEditorPage.cs:80`](../../../../uitests/UiTestNavigation/Pages/TestCharacterListEditorPage.cs#L80)
+  [`TestableCharacterListEditorPage.cs:82`](../../../../uitests/TestableComponents/Components/TestableDndUi.Shared/Components/Pages/TestableCharacterListEditorPage.cs#L82)
 
 - The editor page is only ever returned from its parent — never navigated to directly.
-  [`TestCharacterEditorPage.cs:13`](../../../../uitests/UiTestNavigation/Pages/TestCharacterEditorPage.cs#L13)
+  [`TestableCharacterEditorPage.cs:15`](../../../../uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents/Characters/Pages/TestableCharacterEditorPage.cs#L15)
 
 - `GoToAsync` reaches the dashboard through a real in-app click to seed nav history (works around DW-007).
-  [`TestFightDashboardPage.cs:26`](../../../../uitests/UiTestNavigation/Pages/TestFightDashboardPage.cs#L26)
+  [`TestableFightDashboardPage.cs:35`](../../../../uitests/TestableComponents/Components/TestableDndUi.Shared/Components/Pages/TestableFightDashboardPage.cs#L35)
 
-- Selection wait is token-anchored to the `active` class (post-review fix), aligned with `TestFighterTile.IsSelected`.
-  [`TestFightDashboardPage.cs:51`](../../../../uitests/UiTestNavigation/Pages/TestFightDashboardPage.cs#L51)
+- Selection wait is token-anchored to the `active` class (post-review fix), aligned with `TestableFighterTile.IsSelected`.
+  [`TestableFightDashboardPage.cs:65`](../../../../uitests/TestableComponents/Components/TestableDndUi.Shared/Components/Pages/TestableFightDashboardPage.cs#L65)
 
 **Modal trigger seam**
 
 - `Attack()` opens the roll modal and returns the seam; no story-5 scenario drives it.
-  [`TestMartialAttackSelector.cs:37`](../../../../uitests/UiTestNavigation/Components/TestMartialAttackSelector.cs#L37)
+  [`TestableMartialAttackSelector.cs:38`](../../../../uitests/TestableComponents/UI/TestableFightBlazorComponents/Entities/MartialAttacks/TestableMartialAttackSelector.cs#L38)
 
 **Proof (tests)**
 
 - Non-modal capabilities driven only through typed objects — create, cancel, duplicate, delete.
-  [`CharacterCreationScenarios.cs:20`](../../../../uitests/UiTestNavigation/Scenarios/CharacterCreationScenarios.cs#L20)
+  [`CharacterListEditorPageUiTests.cs:26`](../../../../uitests/Tests/Components/DndUi.SharedUiTests/Components/Pages/CharacterListEditorPageUiTests.cs#L26)
 
