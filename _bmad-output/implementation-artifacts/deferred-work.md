@@ -10,6 +10,18 @@ Status: `open` · `resolved` · `dropped`
 
 # Active
 
+## DW-015 — Exhaustive character/attack editor field coverage (story 5b)
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
+- summary: Story 5 was narrowed at its spec checkpoint to routable page objects + list/fighters/dashboard component objects + scenarios. The exhaustive field-level editing of the character and attack editors was split off into story `5b`.
+
+Deferred surface: character basic-info deep fields (Max HP, HP, Armor Class, shield toggle + value, effective AC read), `AbilityScoresEditor` (score, save bonus, mastery bonus, save-mastery toggle), `SkillsEditor` (mastery increase/decrease via left/right-click, governing-ability menu), `ResistancesEditor` (affinity increase/decrease), and attack `DamageRollCollectionEditor` + to-hit modifier editing. Each needs UI-to-real-repository action tests and independently seeded repository-to-UI rendering tests, no fakes. Character fields are story `5b`, attack fields story `5c` in `stories.yaml`; extend story 5's existing typed objects. Save the parent character before observing stored attack drafts.
+
+Renumbered from DW-006, which collided with the story-1 service-graph entry.
+
+---
+
 ## DW-014 — Split `ApplicationFixture` into a business-free Framework base and a `DndUi.Web` host
 
 - status: open
@@ -23,7 +35,7 @@ Proposed split: Framework keeps a generic `UiTestFixture` (Playwright browser an
 ## DW-013 — Review findings on the uncommitted Linux-setup work
 
 - status: open
-- source_spec: `_bmad-output/implementation-artifacts/spec-uitests-nested-fixture-artifact-folders.md`
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/4-screenshot-evidence-capture.md`
 - summary: Blind-hunter review of the worktree flagged issues in in-progress changes unrelated to the nested-fixture change.
 
 Evidence: `StateFullNavigation`'s constructor now reads `NavigationManager.Uri`, which throws if the scoped service is resolved before the manager is initialized. Data folders move (`Program.cs`, `LocalFileCharacterRepository`) with no migration of existing data and no guard when `GetFolderPath` returns `""`. Linux `.vscode/tasks.json` pipes `dotnet build/test` through `grep`/`tail` without `pipefail`, so failures report success, and `pkill -f DndUi.Web.dll` can match its own shell.
@@ -33,7 +45,7 @@ Evidence: `StateFullNavigation`'s constructor now reads `NavigationManager.Uri`,
 ## DW-012 — memlog rewrites line endings
 
 - status: open
-- source_spec: `_bmad-output/implementation-artifacts/spec-uitests-nested-fixture-artifact-folders.md`
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/4-screenshot-evidence-capture.md`
 - summary: Appending to spec-005's `.memlog.md` on Linux converted the file from CRLF to LF, so its diff shows a full rewrite and hides the real additions.
 
 Evidence: there is no `.gitattributes`; a `* text=auto` (or `*.md eol=lf`) rule would normalise line endings across Windows and Linux.
@@ -43,7 +55,7 @@ Evidence: there is no `.gitattributes`; a `* text=auto` (or `*.md eol=lf`) rule 
 ## DW-011 — Duplicated package lists across `/uitests` projects
 
 - status: open
-- source_spec: `_bmad-output/implementation-artifacts/spec-uitests-nested-fixture-artifact-folders.md`
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/4-screenshot-evidence-capture.md`
 - summary: `DndUi.SharedUiTests`, `CharacterSheetBlazorComponentsUiTests`, `UiTestFrameworkUiTests` and `Scratch` repeat the same NUnit/Playwright/FluentAssertions package list and linked `AssemblyFixture`/`AssemblyInfo` items; the four `Testable*` projects repeat the same library boilerplate.
 
 Evidence: every new `{OriginProject}UiTests` project copies the block, so versions can drift. A `uitests/Directory.Build.props` could hold the shared packages and links.
@@ -53,7 +65,7 @@ Evidence: every new `{OriginProject}UiTests` project copies the block, so versio
 ## DW-010 — `GetScenarioFolder` project-name stripping has no Meta test
 
 - status: open
-- source_spec: `_bmad-output/implementation-artifacts/spec-uitests-nested-fixture-artifact-folders.md`
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/4-screenshot-evidence-capture.md`
 - summary: No Meta test covers the nested-class (`+`) folder split or the strip-up-to-assembly-name rule.
 
 Evidence: when the test class namespace does not contain `.{AssemblyName}.` (e.g. a test method inherited from a base class in another assembly), the method silently falls back to the full namespace as the folder path. A Meta test with a nested fixture asserting its artifact folder would pin both behaviours.
@@ -74,19 +86,11 @@ Consider extending the story-7 analyzer (or a sibling) to also flag production c
 
 - status: open
 - source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
-- summary: Story-5 scenarios cover each I/O-matrix row, but several delivered page/component-object methods have no runtime scenario. Symmetric/low-risk, surfaced by the code-review layer.
+- summary: Some delivered page/component methods still lack focused runtime evidence. The business-test review added separate player/monster control coverage and first-add initiative interaction; those latest additions have not been collectively runtime-validated.
 
-Uncovered by a running scenario: `FightersPage.SearchPlayers`/`AddPlayer`, `CharacterListEditorPage.GoToPlayersTab`, `EditMonster`/`DuplicateMonster`/`DeleteMonster` (player variants are covered), `FighterTile.Edit`/`Delete`/`Statuses`, `CombatLogPanel.Entries`/`FightDashboardPage.Log`, and the runtime path of `MartialAttackSelector.SelectAttack`. These are mostly mirror methods of covered ones (player↔monster) or read helpers; the `Cancel` path and the aria-label contract's `Cancel` label are now covered by `Should_Discard_A_New_Character_On_Cancel`. Add opportunistic coverage as later scenarios naturally touch these paths (story 6 will exercise the log and the attack selector). Not a defect — the tested paths pass and the untested ones are symmetric.
+Evidence: authored tests now cover `FightersPage.SearchPlayers`/`AddPlayer` and `CharacterListEditorPage.EditMonster`/`DuplicateMonster`/`DeleteMonster`, including player removal from Available, monster-template retention and counted monster groups. Do not recreate those cases because this backlog once listed them as absent. Remaining gaps include an explicit `GoToPlayersTab` workflow, `FighterTile.Edit`/`Delete`/`Statuses`, `CombatLogPanel.Entries`/`FightDashboardPage.Log`, and the runtime path of `MartialAttackSelector.SelectAttack`. Story 6 can exercise the log and attack selector while extending the existing first-add initiative helper. Separate UI controls merit separate tests; domain internals and exhaustive rule matrices do not belong in this backlog. See spec-005's `uitests-layout.md` for the current coverage boundary.
 
----
-
-## DW-006 — Exhaustive character/attack editor field coverage (story 5b)
-
-- status: open
-- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
-- summary: Story 5 was narrowed at its spec checkpoint to routable page objects + list/fighters/dashboard component objects + scenarios. The exhaustive field-level editing of the character and attack editors was split off into story `5b`.
-
-Deferred surface: character basic-info deep fields (Max HP, HP, Armor Class, shield toggle + value, effective AC read), `AbilityScoresEditor` (score, save bonus, mastery bonus, save-mastery toggle), `SkillsEditor` (mastery increase/decrease via left/right-click, governing-ability menu), `ResistancesEditor` (affinity increase/decrease), and attack `DamageRollCollectionEditor` + to-hit modifier editing — each with edit-and-re-read scenarios. Tracked as story `5b` in `stories.yaml`; build it on top of story 5's `PageObject`/`ComponentObject` seam (extend, don't duplicate) once story 5 is accepted.
+The 2026-10-08 refactor separates typed UI actions asserted against real services from independently service-driven rendering cases across all four business test files. Future gap coverage must follow that directionality with no fakes; local search/manual selection remain UI-local. This is authored coverage, not new runtime-pass evidence.
 
 ---
 
@@ -165,10 +169,12 @@ Resolved by adding `tests/Components/DndUiWebTests/`. `RegisterWebAppServicesTes
 
 ---
 
-## DW-007 — `StateFullNavigation.NavigateBack()` can fall through to an unreachable URL
+## DW-016 — `StateFullNavigation.NavigateBack()` can fall through to an unreachable URL
 
 - status: resolved
 - source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
 - summary: Surfaced while building the story-5 page objects. `StateFullNavigation` records its page history from `NavigationManager.LocationChanged`. If no real in-app `LocationChanged` has fired yet (e.g. a fresh deep-load, or a direct `GotoAsync` in a test), `NavigateBack()` has no seeded history and falls through to a bootstrap URL (observed `https://0.0.0.1/characters`), which is unreachable.
 
 Fixed: the fake `"https://0.0.0.1/characters"` seed is replaced with the circuit's actual initial `NavigationManager.Uri`, captured at construction time (before subscribing to `LocationChanged`, which never fires for the initial load). A direct deep-load into an editor now seeds history with the real landing page, so `NavigateBack()` after `Save`/`Cancel` correctly falls back to `/` instead of the unreachable sentinel.
+
+Renumbered from DW-007, which collided with the story-1 `UseHttpsRedirection()` entry.

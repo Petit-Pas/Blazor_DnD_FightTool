@@ -209,12 +209,10 @@ public sealed class TestableCharacterListEditorPage : PageObject
     private async Task Delete(string tabName, string name)
     {
         await GoToTab(tabName);
-        var before = await ActiveRows.CountAsync();
         var row = RowNamed(name);
         await row.HoverAsync();
         await row.GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Delete" })
             .ClickAsync(new LocatorClickOptions { Force = true });
-        await Expect(ActiveRows).ToHaveCountAsync(before - 1);
     }
 
     private async Task<IReadOnlyList<string>> Names(string tabName)

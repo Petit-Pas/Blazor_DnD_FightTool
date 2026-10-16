@@ -86,9 +86,7 @@ public sealed class TestableAttackListEditor : ComponentObject
     /// <param name="name">The attack name shown in the row.</param>
     public async Task DeleteAttack(string name)
     {
-        var before = await Rows.CountAsync();
         await ClickOnRowButton(RowNamed(name), "Delete");
-        await Expect(Rows).ToHaveCountAsync(before - 1);
     }
 
     /// <summary>

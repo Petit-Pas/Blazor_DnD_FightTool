@@ -1,4 +1,5 @@
 using DnDFightTool.Business.DnDActions.FightActions.AddToFight;
+using DnDFightTool.Business.DnDActions.TurnActions.StartNextTurn;
 using DnDFightTool.Domain.CharacterSheet.Characters;
 using DnDFightTool.UiTests.Framework;
 using DnDFightTool.UiTests.TestableComponents.Components.TestableDndUi.Shared.Components.Pages;
@@ -11,90 +12,284 @@ using UndoableMediator.Mediators;
 namespace DnDFightTool.UiTests.Tests.Components.DndUi.SharedUiTests.Components.Pages;
 
 /// <summary>
-///     DASHBOARD_READ_AND_COMBAT: with two fighters arranged at a non-zero initiative (so the initiative modal never
-///     opens), read the tiles and select one, then separately start combat and toggle undo/redo — all through the typed
-///     dashboard objects.
+///     Independent fighter display, selection, combat progression and history capabilities.
 /// </summary>
 public static class FightDashboardPageUiTests
 {
     /// <summary>
-    ///     Reading the fighter tiles and selecting a fighter.
+    ///     Prepares the common roster and dashboard object for each independent scenario.
     /// </summary>
-    public sealed class ReadAndSelectFighters : IsolatedScenarioFixture
+    public abstract class DashboardFixture : IsolatedScenarioFixture
     {
         /// <summary>
-        ///     Reads two seeded fighter tiles, starts combat (a selection prerequisite) and selects one.
+        ///     Gets the mediator used for scenario-specific combat arrangement.
         /// </summary>
-        [Test]
-        public async Task Should_Read_Tiles_And_Select_A_Fighter()
-        {
-            // Arrange: seed two fighters with a non-zero initiative so the dashboard renders without the initiative modal.
-            var repository = Services.GetRequiredService<ICharacterRepository>();
-            var mediator = Services.GetRequiredService<IUndoableMediator>();
+        protected IUndoableMediator Mediator { get; private set; } = null!;
 
+        /// <summary>
+        ///     Gets the dashboard object for the current scenario.
+        /// </summary>
+        protected TestableFightDashboardPage Dashboard { get; private set; } = null!;
+
+        /// <summary>
+        ///     Seeds two fighters before each test without starting combat or navigating.
+        /// </summary>
+        [SetUp]
+        public async Task SetUpFight()
+        {
+            var repository = Services.GetRequiredService<ICharacterRepository>();
+            Mediator = Services.GetRequiredService<IUndoableMediator>();
             var goblin = CharacterFactory.BuildMonster(name: "Goblin");
             var orc = CharacterFactory.BuildMonster(name: "Orc");
+            goblin.HitPoints.MaxHps = 12;
+            goblin.HitPoints.CurrentHps = 7;
+            orc.HitPoints.MaxHps = 20;
+            orc.HitPoints.CurrentHps = 13;
             repository.Save(goblin);
             repository.Save(orc);
-            await mediator.SendAsync(new AddToFightAtomicCommand(goblin.Id, initiative: 15));
-            await mediator.SendAsync(new AddToFightAtomicCommand(orc.Id, initiative: 15));
-
-            var dashboard = new TestableFightDashboardPage(Page, BaseUrl, mediator);
-            await dashboard.GoToAsync();
-            await CaptureAsync("dashboard-two-fighters");
-
-            // Assert: both tiles render with readable name, HP and initiative.
-            var goblinTile = dashboard.FighterTile("Goblin");
-            (await goblinTile.GetName()).Should().Contain("Goblin");
-            (await goblinTile.GetCurrentHp()).Should().Be(10);
-            (await goblinTile.GetMaxHp()).Should().Be(10);
-            (await goblinTile.GetInitiative()).Should().BeGreaterThanOrEqualTo(0);
-            (await dashboard.FighterTile("Orc").GetName()).Should().Contain("Orc");
-
-            // Act + Assert: selection only takes effect once combat has started, so start it first.
-            await dashboard.CombatStatus().StartCombat();
-            var selected = await dashboard.SelectFighter("Goblin");
-            (await selected.IsSelected()).Should().BeTrue();
+            await Mediator.SendAsync(new AddToFightAtomicCommand(orc.Id, initiative: 10));
+            await Mediator.SendAsync(new AddToFightAtomicCommand(goblin.Id, initiative: 15));
+            Dashboard = new TestableFightDashboardPage(Page, BaseUrl, Mediator);
         }
     }
 
     /// <summary>
-    ///     Undoing and redoing the start of combat.
+    ///     Reading the displayed fighter information without starting combat.
     /// </summary>
-    public sealed class UndoRedoCombatStart : IsolatedScenarioFixture
+    public sealed class DisplayFighters : DashboardFixture
     {
         /// <summary>
-        ///     Starts combat, then undoes and redoes it, checking only the combat-status state.
+        ///     Each fighter tile displays its own name, hit points and initiative.
         /// </summary>
         [Test]
-        public async Task Should_Undo_And_Redo_Combat_Start()
+        public async Task Should_Display_Fighter_Details()
         {
-            // Arrange: seed two fighters with a non-zero initiative so the dashboard renders without the initiative modal.
-            var repository = Services.GetRequiredService<ICharacterRepository>();
-            var mediator = Services.GetRequiredService<IUndoableMediator>();
+            // Act
+            await Dashboard.GoToAsync();
 
-            var goblin = CharacterFactory.BuildMonster(name: "Goblin");
-            var orc = CharacterFactory.BuildMonster(name: "Orc");
-            repository.Save(goblin);
-            repository.Save(orc);
-            await mediator.SendAsync(new AddToFightAtomicCommand(goblin.Id, initiative: 15));
-            await mediator.SendAsync(new AddToFightAtomicCommand(orc.Id, initiative: 15));
-
-            var dashboard = new TestableFightDashboardPage(Page, BaseUrl, mediator);
-            await dashboard.GoToAsync();
-
-            // Act + Assert: start combat.
-            var status = dashboard.CombatStatus();
-            await status.StartCombat();
-            await CaptureAsync("combat-started");
-            (await status.GetRound()).Should().Be(1);
-
-            // Act + Assert: undo and redo the combat start.
-            await status.Undo();
-            (await status.IsCombatStarted()).Should().BeFalse();
-            await status.Redo();
-            (await status.IsCombatStarted()).Should().BeTrue();
-            (await status.GetRound()).Should().Be(1);
+            // Assert
+            var goblinTile = Dashboard.FighterTile("Goblin");
+            (await goblinTile.GetName()).Should().Contain("Goblin");
+            (await goblinTile.GetCurrentHp()).Should().Be(7);
+            (await goblinTile.GetMaxHp()).Should().Be(12);
+            (await goblinTile.GetInitiative()).Should().Be(15);
+            var orcTile = Dashboard.FighterTile("Orc");
+            (await orcTile.GetName()).Should().Contain("Orc");
+            (await orcTile.GetCurrentHp()).Should().Be(13);
+            (await orcTile.GetMaxHp()).Should().Be(20);
+            (await orcTile.GetInitiative()).Should().Be(10);
         }
     }
+
+    /// <summary>
+    ///     Selecting fighters in a combat that is already running.
+    /// </summary>
+    public sealed class SelectFighters : DashboardFixture
+    {
+        /// <summary>
+        ///     Clicking another tile transfers the selected styling to that tile.
+        /// </summary>
+        [Test]
+        public async Task Should_Select_Only_The_Chosen_Fighter()
+        {
+            // Arrange
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Dashboard.GoToAsync();
+            await Dashboard.SelectFighter("Goblin");
+
+            // Act
+            var selected = await Dashboard.SelectFighter("Orc");
+
+            // Assert
+            (await selected.IsSelected()).Should().BeTrue();
+            (await Dashboard.FighterTile("Goblin").IsSelected()).Should().BeFalse();
+        }
+
+        /// <summary>
+        ///     A turn-service change transfers highlighting without clicking a tile.
+        /// </summary>
+        [Test]
+        public async Task Should_Highlight_The_Fighter_Selected_By_The_Turn_Service()
+        {
+            await Dashboard.GoToAsync();
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Dashboard.FighterTile("Goblin").ExpectSelected(true);
+
+            await Mediator.SendAsync(new StartNextTurnCommand());
+
+            await Dashboard.FighterTile("Orc").ExpectSelected(true);
+            await Dashboard.FighterTile("Goblin").ExpectSelected(false);
+        }
+    }
+
+    /// <summary>
+    ///     Starting combat from an arranged roster.
+    /// </summary>
+    public sealed class StartCombat : DashboardFixture
+    {
+        /// <summary>
+        ///     Clicking Start Combat dispatches a command to the real mediator.
+        /// </summary>
+        [Test]
+        public async Task Should_Dispatch_Start_Combat()
+        {
+            // Arrange
+            await Dashboard.GoToAsync();
+            var status = Dashboard.CombatStatus();
+            var historyLength = Mediator.HistoryLength;
+
+            // Act
+            var command = await status.StartCombat();
+
+            // Assert
+            command.Should().BeOfType<StartNextTurnCommand>();
+            Mediator.HistoryLength.Should().Be(historyLength + 1);
+        }
+
+        /// <summary>
+        ///     Starting combat through the mediator refreshes the rendered panel.
+        /// </summary>
+        [Test]
+        public async Task Should_Display_Service_Combat_State()
+        {
+            await Dashboard.GoToAsync();
+
+            await Mediator.SendAsync(new StartNextTurnCommand());
+
+            var status = Dashboard.CombatStatus();
+            await status.WaitForRound(1);
+            (await status.GetTurnText()).Should().Contain("Goblin");
+        }
+    }
+
+    /// <summary>
+    ///     Refreshing the displayed combat status through the Next Turn button.
+    /// </summary>
+    public sealed class AdvanceTurns : DashboardFixture
+    {
+        /// <summary>
+        ///     Clicking Next Turn adds the requested command to mediator history.
+        /// </summary>
+        [Test]
+        public async Task Should_Dispatch_Next_Turn()
+        {
+            // Arrange
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Dashboard.GoToAsync();
+            var status = Dashboard.CombatStatus();
+            var historyLength = Mediator.HistoryLength;
+
+            // Act
+            var command = await status.NextTurn();
+
+            // Assert
+            command.Should().BeOfType<StartNextTurnCommand>();
+            Mediator.HistoryLength.Should().Be(historyLength + 1);
+        }
+
+        /// <summary>
+        ///     Advancing through the mediator refreshes the round and fighter labels.
+        /// </summary>
+        [Test]
+        public async Task Should_Render_An_Advanced_Service_Turn()
+        {
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Dashboard.GoToAsync();
+
+            await Mediator.SendAsync(new StartNextTurnCommand());
+
+            var status = Dashboard.CombatStatus();
+            await status.WaitForRound(2);
+            (await status.GetTurnText()).Should().Contain("Goblin");
+        }
+    }
+
+    /// <summary>
+    ///     Operating Undo and observing the resulting panel and button state.
+    /// </summary>
+    public sealed class UndoCombatActions : DashboardFixture
+    {
+        /// <summary>
+        ///     Clicking Undo moves the latest command from history to redo history.
+        /// </summary>
+        [Test]
+        public async Task Should_Undo_The_Last_Mediator_Command()
+        {
+            // Arrange
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Dashboard.GoToAsync();
+            var status = Dashboard.CombatStatus();
+            var historyLength = Mediator.HistoryLength;
+            var redoHistoryLength = Mediator.RedoHistoryLength;
+
+            // Act
+            await status.Undo();
+
+            // Assert
+            Mediator.HistoryLength.Should().Be(historyLength - 1);
+            Mediator.RedoHistoryLength.Should().Be(redoHistoryLength + 1);
+        }
+
+        /// <summary>
+        ///     Undoing through the mediator renders idle state and enables Redo.
+        /// </summary>
+        [Test]
+        public async Task Should_Render_Undone_Service_State()
+        {
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Dashboard.GoToAsync();
+
+            await Mediator.UndoLastCommandAsync();
+
+            await Dashboard.CombatStatus().WaitForRound(0);
+            await Dashboard.CombatStatus().ExpectRedoEnabled();
+        }
+    }
+
+    /// <summary>
+    ///     Operating Redo from an independently arranged undone action.
+    /// </summary>
+    public sealed class RedoCombatActions : DashboardFixture
+    {
+        /// <summary>
+        ///     Clicking Redo moves the last undone command back into history.
+        /// </summary>
+        [Test]
+        public async Task Should_Redo_The_Last_Undone_Mediator_Command()
+        {
+            // Arrange
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Mediator.UndoLastCommandAsync();
+            await Dashboard.GoToAsync();
+            var status = Dashboard.CombatStatus();
+            var historyLength = Mediator.HistoryLength;
+            var redoHistoryLength = Mediator.RedoHistoryLength;
+
+            // Act
+            await status.Redo();
+
+            // Assert
+            Mediator.HistoryLength.Should().Be(historyLength + 1);
+            Mediator.RedoHistoryLength.Should().Be(redoHistoryLength - 1);
+        }
+
+        /// <summary>
+        ///     Redoing through the mediator restores the rendered combat state.
+        /// </summary>
+        [Test]
+        public async Task Should_Render_Redone_Service_State()
+        {
+            await Mediator.SendAsync(new StartNextTurnCommand());
+            await Mediator.UndoLastCommandAsync();
+            await Dashboard.GoToAsync();
+
+            await Mediator.RedoLastUndoneCommandAsync();
+
+            await Dashboard.CombatStatus().WaitForRound(1);
+            (await Dashboard.CombatStatus().GetTurnText()).Should().Contain("Goblin");
+        }
+    }
+
 }

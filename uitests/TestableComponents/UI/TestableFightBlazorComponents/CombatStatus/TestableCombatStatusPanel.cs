@@ -51,22 +51,41 @@ public sealed class TestableCombatStatusPanel : ComponentObject
     }
 
     /// <summary>
-    ///     Starts combat by clicking the primary button, then waits until the round indicator appears.
+    ///     Starts combat and waits for the mediator to complete the command.
     /// </summary>
-    public async Task StartCombat()
+    /// <returns>The command completed by the real mediator.</returns>
+    public async Task<ICommand> StartCombat()
     {
-        await Root.GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Start Combat" }).ClickAsync();
-        await Expect(RoundText).ToBeVisibleAsync();
+        return await ExecutePrimary("Start Combat");
     }
 
     /// <summary>
-    ///     Advances to the next turn by clicking the primary button, then waits for the turn text to settle.
+    ///     Advances the turn and waits for the mediator to complete the command.
     /// </summary>
-    public async Task NextTurn()
+    /// <returns>The command completed by the real mediator.</returns>
+    public async Task<ICommand> NextTurn()
     {
-        var before = await CombatInfo.InnerTextAsync();
-        await Root.GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Next Turn" }).ClickAsync();
-        await Expect(CombatInfo).Not.ToHaveTextAsync(before);
+        return await ExecutePrimary("Next Turn");
+    }
+
+    private async Task<ICommand> ExecutePrimary(string buttonName)
+    {
+        var completion = new TaskCompletionSource<ICommand>(TaskCreationOptions.RunContinuationsAsynchronously);
+        void OnCommandExecuted(object? sender, ICommand command)
+        {
+            completion.TrySetResult(command);
+        }
+
+        _mediator.OnCommandExecuted += OnCommandExecuted;
+        try
+        {
+            await Root.GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = buttonName, Exact = true }).ClickAsync();
+            return await completion.Task.WaitAsync(EventTimeout);
+        }
+        finally
+        {
+            _mediator.OnCommandExecuted -= OnCommandExecuted;
+        }
     }
 
     /// <summary>
@@ -134,13 +153,37 @@ public sealed class TestableCombatStatusPanel : ComponentObject
     }
 
     /// <summary>
+    ///     Waits for a round to render after a command; zero denotes combat not started.
+    /// </summary>
+    public async Task WaitForRound(int round)
+    {
+        if (round == 0)
+        {
+            await Expect(CombatInfo).ToHaveTextAsync("No combat started");
+        }
+        else
+        {
+            await Expect(RoundText).ToHaveTextAsync(new Regex($@"^Round\s*{round}$"));
+        }
+    }
+
+    /// <summary>
     ///     Reads the turn text (e.g. the active fighter's turn), or the idle message when combat has not started.
     /// </summary>
     /// <returns>The current combat-info body text.</returns>
     public async Task<string> GetTurnText()
     {
-        var text = await CombatInfo.Locator(".mud-body1").InnerTextAsync();
+        var text = await CombatInfo.Locator(".mud-typography-body1").InnerTextAsync();
         return text.Trim();
+    }
+
+    /// <summary>
+    ///     Asserts that the Redo button becomes enabled on the current page.
+    /// </summary>
+    public async Task ExpectRedoEnabled()
+    {
+        await Expect(Root.GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Redo" }))
+            .ToBeEnabledAsync();
     }
 
     /// <summary>

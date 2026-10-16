@@ -13,7 +13,7 @@ sources: []
 
 ## Why
 
-A vision to realize, with a pain underneath it. Today the UI of DnDFightTool has no automated coverage at all: [tests/UI/FightBlazorComponentsTests](tests/UI/FightBlazorComponentsTests) is plain NUnit over log-token parsing, and nothing renders a component, clicks a button, or opens a dialog. Every claim that a feature works is a human clicking through the app. That blocks two things at once. Benoit cannot regression-test the fight flow, and an AI agent implementing a feature has no way to *prove* it did so — it can compile, it can run domain tests, but it cannot demonstrate the button it added actually does the thing. A typed navigation library over a real browser closes both: it gives humans repeatable scenarios and gives agents a way to write throwaway verification code and hand back screenshots as evidence. It matters now because agent-driven implementation is already the working mode in this repo, and unverifiable UI work is the weakest link in it.
+DnDFightTool needs repeatable proof that its UI controls invoke the intended actions and display the resulting state. A typed real-browser library lets Benoit regression-test individual capabilities and interacting combat scenarios, while agents can demonstrate changes with assertions and screenshots. This layer verifies the rendered experience; existing unit tests remain responsible for domain correctness.
 
 ## Capabilities
 
@@ -34,8 +34,8 @@ A vision to realize, with a pain underneath it. Today the UI of DnDFightTool has
   - **success:** The same attack scenario run ten times produces identical log output and identical target HP.
 
 - **CAP-5**
-  - **intent:** A scenario reuses the steps proven by earlier scenarios — create a monster, add it to a fight, roll initiative — as named building blocks instead of re-deriving navigation. **A building block is free to bypass the UI and call the domain services directly**; creating a default goblin is arrangement, not the thing under test.
-  - **success:** A combat scenario reaches "goblin engaged in an active fight" in a handful of named calls that touch no page object, while a separate scenario proves goblin creation works *through* the UI.
+  - **intent:** A scenario author reuses common starting-state preparation without duplicating setup or depending on another test.
+  - **success:** Independent scenarios share common preparation and retain their scenario-specific starting state. Action tests drive typed UI controls and assert real-service effects; separate rendering tests seed or mutate real services and assert typed UI output. Service-seeded prerequisites retain separate UI-creation coverage.
 
 - **CAP-6**
   - **intent:** A scenario captures a named screenshot at any point, and every scenario captures a final-state image, so a reader can see the feature working.
@@ -72,14 +72,18 @@ A vision to realize, with a pain underneath it. Today the UI of DnDFightTool has
 - The test host composition sets `CommandHistoryMaxSize` to 1000 (production default is 64), so no realistic scenario can overflow the history and leave state that teardown cannot undo.
 - After a full undo the redo stack still holds the undone commands (`RedoHistoryMaxSize` 32). State is clean, but a scenario asserting on undo/redo button availability at its very first step would see a stale redo; the first new command clears the stack.
 - Storage is isolated by pointing the real `LocalFileCharacterRepository` at a unique temp folder **per run**. `dataFolder` is already a constructor argument, so no new type is introduced and the real persistence path stays under test. Per-scenario folders are not used — the repository singleton takes `dataFolder` at host-build time, so that would require the rejected per-scenario host rebuild.
-- **Arrangement may bypass the UI; the behaviour under test may not.** A building block that puts the app into a starting state is free to call domain services directly. The thing a scenario actually asserts on must be driven through the UI, and every capability reachable through the UI has at least one scenario that exercises it that way.
+- **Separate UI-to-service wiring from service-to-UI rendering.** Action tests drive typed controls and assert the real repository, fight service or mediator history; independent rendering tests seed or mutate real services and read typed UI objects. Every distinct UI control retains action coverage. Do not require UI output to prove an action reached its service, or use that same UI action to arrange its rendering test. These remain real-browser integration tests, not isolated component unit tests. No fakes or service replacements.
+- State with no service owner (currently fighter search and manual dashboard selection) remains explicitly UI-local. Do not add production hooks or services to manufacture a boundary. Browser-scoped attack drafts are observed through the real repository after the parent character Save; do not resolve a different scoped context from the host provider. Genuine end-to-end business sequences remain additional integration coverage, not a replacement for directional tests.
+- Business fixtures are grouped by capability, with duplication under creation and deletion independent. Individual controls use isolated tests; only genuine interactions across a business scenario justify a sequential fixture. Separate player/monster controls and Add/Duplicate paths use explicitly named tests, not branching type or boolean variants.
+- Unconditional common arrangement belongs in per-test setup; scenario-specific data and turn/history state remain explicit. Action synchronization uses service completion/state or navigation/modal completion, not the rendered business result. Rendering synchronization waits for one relevant marker, not an implicit collection of behavioral assertions. Detailed conventions and the reviewed coverage boundary are in [uitests-layout.md](uitests-layout.md).
+- Fighters-page coverage must distinguish player removal from Available on addition, monster-template retention, and one counted row per monster kind. First-add initiative interaction supports those checks; deterministic combat outcomes and the remaining dialog coverage remain part of CAP-3/CAP-4.
 - Direct service arrangement uses the in-process `IServiceProvider` the fixture already holds. No seeding endpoint, HTTP backdoor, or test-only registration is added to the production host — the fixture composes the same host `Program.cs` does and reaches into it from the same process.
 - Only host singletons are reachable this way: `IFightContext`, `ICharacterRepository`, `ICombatTurnService`, `IAppliedStatusRepository`, `IDnDLogService`. Per-circuit scoped services — `IGlobalEditContext`, `IDiceRollNotifier`, `IStateFullNavigation` — belong to the browser's circuit and cannot be arranged from the test process.
 - Mutating a singleton after a page has rendered does not repaint it. Arrangement either happens before navigation, or fires the same notification the production path fires (`NotifyFighterUpdated`, `OnFighterAdded`).
 - Determinism comes through the UI: `DiceRollResultInputComponent` exposes roll results as an editable numeric field inside the query modals, so a scenario types the exact roll it wants rather than stubbing the dice.
 - No blanket `data-testid` campaign across production markup. Locators use Playwright role and text semantics; adding an id is a case-by-case last resort where a locator is genuinely ambiguous.
 - Enforcement is the page-object coverage analyzer plus the `.razor`-scoped instructions file. No source generator emitting a selector catalog, and no analyzer mandating `data-testid` — scenarios failing already covers drift on existing pages.
-- The analyzer lives in the existing [src/Analyzers/DnDFightTool.Analyzers](src/Analyzers/DnDFightTool.Analyzers) project, netstandard2.0 against Roslyn 4.8, and reports a **build-breaking error**.
+- The analyzer lives in the existing [DnDFightTool.Analyzers](../../../src/Analyzers/DnDFightTool.Analyzers) project, netstandard2.0 against Roslyn 4.8, and reports a **build-breaking error**.
 - Scratch scenarios are gitignored, never committed, and wiped between runs. The durable evidence is the screenshots, not the throwaway code.
 - Coverage is all five routable pages and all dialog surfaces, not a vertical slice.
 - Library and scenario code obeys the C# rules in `project-context.md`: file-scoped namespaces, no primary constructors, no expression-bodied members, XML docs on public and internal members, NUnit with FluentAssertions.
@@ -98,6 +102,7 @@ A vision to realize, with a pain underneath it. Today the UI of DnDFightTool has
 - CI integration. The project runs locally only — there is no pipeline, no deployment, nothing to hook into.
 - Packaging the library for external reuse.
 - Replacing existing domain and business unit tests. This layer sits above them, not instead of them.
+- UI matrices for domain calculations, clone identities or deep-copy fidelity, persistence/snapshot internals, or exhaustive turn/history rules. A duplicate's provenance alone does not require another deletion test.
 - Localization-proof selectors.
 - Performance, load, or accessibility testing.
 
@@ -113,3 +118,7 @@ An agent finishes implementing a UI feature, writes a scratch scenario against t
 - The existing `FightBlazorComponentsTests` project stays as it is; this work adds separate projects under `/uitests`.
 - Playwright browser binaries are installed via the standard install step, a documented local prerequisite for running the suite.
 - The scratch project is committed as an empty shell whose contents are gitignored.
+
+## Open Questions
+
+- The earlier contract requires an undo/redo teardown opt-out, but the current `IsolatedScenarioFixture` has none and the reviewed dashboard tests use normal cleanup. Should the opt-out requirement be retired or implemented later? Framework behavior is unchanged by this business-test review.

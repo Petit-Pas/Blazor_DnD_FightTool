@@ -63,29 +63,55 @@
     field-level editor coverage was split into story 5b.
 
 - id: "5b"
-  title: Exhaustive character and attack editor field coverage
+  title: Exhaustive character editor field coverage
   description: >-
-    Extend the story-5 editor page objects with component objects that drive
-    every field: character basic-info (HP, AC, shield), abilities (score, save
-    bonus, mastery), skills (mastery up/down, governing ability), resistances
-    (affinity up/down), and attack damage rolls plus to-hit modifiers, with
-    scenarios that edit and re-read each.
+    Extend the story-5 character editor page object with component objects that
+    drive every field: basic-info (HP, AC, shield), abilities (score, save
+    bonus, mastery), skills (mastery up/down, governing ability) and resistances
+    (affinity up/down), with UI-to-repository action tests and independent
+    repository-to-UI rendering tests for each. Attack editor
+    fields were split into story 5c at the 5b spec checkpoint.
   spec_checkpoint: true
   invoke_dev_with: >-
     Build only after story 5 is accepted, on top of its PageObject/ComponentObject
     seam — extend, do not duplicate. The character and attack editor pages already
     exist as page objects; add OpenAbilitiesAndSkills/OpenResistances tab methods
     and the deep-field component objects (AbilityScoresEditor, SkillsEditor,
-    ResistancesEditor, DamageRollCollectionEditor). Skills/resistances use raw
+    ResistancesEditor). Skills/resistances use raw
     MudIconButtons with left-click increase / right-click (@oncontextmenu)
     decrease — locate them within their table row by the adjacent skill/damage-type
     text. Same rules as story 5: no locator in a scenario body, role/text locators,
-    IsolatedScenarioFixture. See deferred-work.md DW-006. Layout per
+    IsolatedScenarioFixture. See deferred-work.md DW-015. Layout per
     uitests-layout.md: each Testable{Component} object goes in
     uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents at its
     component's path; each test goes in
     uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests at the tested
-    component's path, named {TestedComponent}UiTests.cs.
+    component's path, named {TestedComponent}UiTests.cs. Use real services, no
+    fakes; follow the directional coverage and scoped-draft rules in uitests-layout.md.
+
+- id: "5c"
+  title: Attack editor field coverage
+  description: >-
+    Extend the story-5 attack editor page object with component objects that
+    drive the to-hit modifiers and damage rolls (add/delete, damage type, dice
+    expression), with UI-to-repository action tests and independently seeded
+    repository-to-UI rendering tests for each.
+  spec_checkpoint: true
+  invoke_dev_with: >-
+    Build on story 5b's patterns (state carried in aria-labels, directional
+    IsolatedScenarioFixture tests using real services, no fakes). Save the parent
+    character before asserting stored attack drafts; do not resolve browser-scoped
+    contexts from root Services. Split from 5b at its spec checkpoint for
+    spec size. Planned surface: aria-labels on the damage-type menu activator
+    ("Damage type: {type}"), the Damages add button ("Add damage") and the
+    damage row delete button ("Delete damage"); extend TestableAttackMainInfoEditor
+    (To Hit Modifiers) and TestableAttackEditorPage (Damages()); new
+    TestableDamageRollTemplateCollectionEditorComponent and
+    TestableDamageRollTemplateEditorComponent. The damage-type menu items render
+    in a popover outside the component root, so locate them from the page. The
+    dice field is an unlabelled textbox, the only one in its damage row. Same
+    rules as story 5: no locator in a test body, role/text locators, layout per
+    uitests-layout.md.
 
 - id: "6"
   title: Dialog objects, roll input, and the combat scenario
@@ -110,7 +136,10 @@
     goes in the origin project of its entry component (FightDashboardPage ->
     uitests/Tests/Components/DndUi.SharedUiTests/Components/Pages). The combat chain is
     a nested SequentialScenarioFixture class inside FightDashboardPageUiTests, per
-    the test file shape in uitests-layout.md.
+    the test file shape in uitests-layout.md. The full combat chain supplements
+    directional coverage: separately test typed dialog/action inputs against real
+    service effects and service-driven state against rendered output, per
+    uitests-layout.md. No fakes or test-only service replacements.
 
 - id: "7"
   title: Page-object coverage analyzer
@@ -137,5 +166,13 @@
   invoke_dev_with: >-
     Write this only after stories 1 to 7 are accepted, so the conventions
     documented are the ones that actually shipped rather than the ones that were
-    planned. Read the delivered library first and describe what it does, not what
-    this spec said it would do.
+    planned. Include UI-to-real-service and real-service-to-UI examples, local-state
+    and scoped-draft exceptions, and direction-specific completion waits. Read the
+    delivered library first and describe what it does, not what this spec said it would do.
+    Also promote the durable rules out of this spec: move the stable conventions of
+    uitests-layout.md (placement, naming, namespaces, test file shape, directional
+    coverage, no fakes, FluentAssertions-only, Eventually, SetUp fields) into a
+    .github/instructions file scoped to uitests/** and the authoring skill, reduce
+    the UI-tests section of project-context.md to a short pointer, and keep
+    uitests-layout.md as spec-005's record of reviewed coverage and the current
+    component map. Future specs must find these rules without reading spec-005.

@@ -90,6 +90,22 @@ public sealed class TestableFighterTile : ComponentObject
     }
 
     /// <summary>
+    ///     Waits for the tile's selected styling to match the service-driven state.
+    /// </summary>
+    public async Task ExpectSelected(bool selected)
+    {
+        var selectedClass = new Regex(@"(^|\s)active(\s|$)");
+        if (selected)
+        {
+            await Expect(Root).ToHaveClassAsync(selectedClass);
+        }
+        else
+        {
+            await Expect(Root).Not.ToHaveClassAsync(selectedClass);
+        }
+    }
+
+    /// <summary>
     ///     Opens the character editor for this fighter, driving the real edit navigation.
     /// </summary>
     /// <returns>The character editor page for this fighter.</returns>

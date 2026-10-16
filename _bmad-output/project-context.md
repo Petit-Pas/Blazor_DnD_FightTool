@@ -23,7 +23,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - **UndoableMediator 2.0.0-alpha3** — custom CQRS mediator with undo/redo. Do NOT look this up externally; follow `.github/skills/undoable-mediator/SKILL.md`. Never use MediatR.
 - **Mapster 10.0.7** — wrapped in custom `IMapper`. Never call `TypeAdapterConfig` or `.Adapt<T>()` directly. Use `IMapper.Clone<T>()` (new IDs, duplication) or `IMapper.Copy<T>()` (same IDs, edit snapshot).
 - **FluentValidation 12.1.1** — always inherit `PropertyTargetedValidator<T>`, never `AbstractValidator<T>`. This base provides `ValidateValue` for MudBlazor per-field validation.
-- **NUnit 4.5.1 + FluentAssertions 7.2.0 + FakeItEasy 9.0.1** — always use strict fakes: `A.Fake<T>(options => options.Strict())`.
+- **NUnit 4.5.1 + FluentAssertions 7.2.0 + FakeItEasy 9.0.1** — unit-test fakes must be strict: `A.Fake<T>(options => options.Strict())`. Browser UI tests use real services, no fakes.
 
 ### Build & Run Environment
 
@@ -104,7 +104,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 
 ### Testing Rules
 
-**Strict fakes always:**
+**Strict fakes in unit tests (not browser UI tests):**
 - `A.Fake<T>(options => options.Strict())` — non-configured calls throw.
 - Mediator: `A.Fake<IUndoableMediator>(o => o.Strict().Implements<ISubCommandDispatcher>())`.
 
@@ -120,6 +120,10 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - Test namespace mirrors source but without `DnDFightTool.` prefix.
 
 **UI tests (`/uitests`, Playwright) — layout in `_bmad-output/specs/spec-005-ui-test-navigation-library/uitests-layout.md`:**
+- Real-browser integration tests use real application services, no fakes or service replacements. Split each service-backed capability: typed UI action -> observable real-service effect; independent service seed/update -> typed UI rendering. Check Undo/Redo wiring against mediator history deltas, not a round label. Keep domain algorithms and exhaustive history matrices in unit tests.
+- All browser reads/actions use typed objects; service assertions belong in tests. Action helpers synchronize service completion/state or necessary navigation/modal completion, not the rendered business result. Rendering tests wait on their own relevant marker. Live service changes use production notifications and undoable commands where cleanup depends on them.
+- UI tests assert with FluentAssertions only (no `Assert.That`/NUnit constraints). Await asynchronous service effects with `Eventually` from `uitests/Framework/Extensions`. Resolve repeated services and page objects once in `[SetUp]` fields of a local abstract fixture.
+- Pure component-local search/manual selection remains UI-local; do not invent a service or test hook. Browser-scoped attack drafts require parent character Save before repository assertions; root `Services` cannot access the browser's scoped edit contexts. Separate seeded-data tests cover editor rendering. Genuine end-to-end scenarios supplement, not replace, directional cases.
 - `uitests/Framework` holds only fixtures and typed-object base classes (`PageObject`, `ComponentObject`, `DialogSeam`). Never put a typed object or a test there.
 - A component's typed object is `Testable{Component}` in `uitests/TestableComponents/{src layer}/Testable{OriginProject}`, at the component's exact relative path. Testable projects reference `Framework`, Playwright and sibling Testable projects only — never `src/`.
 - A component's UI test lives in `uitests/Tests/{src layer}/{OriginProject}UiTests` (path mirrors `src/` exactly), at the component's exact relative path, in one file `{TestedComponent}UiTests.cs`: an empty `public static class` whose nested classes derive from `SequentialScenarioFixture` (dependent `[Order]`ed steps) or `IsolatedScenarioFixture` (self-contained tests).
@@ -156,7 +160,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 4. **Orchestrator handlers MUST NOT mutate state** — delegate to atomic sub-commands only.
 5. **`Copy<T>()` for edit snapshots (same IDs), `Clone<T>()` for duplication (new IDs)** — semantic difference agents won't guess; `Copy` is used in components before editing, not in command handlers.
 6. **Query handlers live in `DnDQueryPrompter` (UI layer)**, not `DnDQueries` — counterintuitive but intentional.
-7. **Always strict fakes** with `Implements<ISubCommandDispatcher>()` for mediator.
+7. **Unit-test fakes must be strict**, with `Implements<ISubCommandDispatcher>()` for mediator; browser UI tests use real services and no fakes.
 8. **Read `.github/skills/undoable-mediator/SKILL.md`** before implementing any command/handler — external docs don't cover this library.
 9. **Read `.github/skills/dnd-logging/SKILL.md`** before implementing log entries — BBCode formatting, color tokens, block/scope structure.
 

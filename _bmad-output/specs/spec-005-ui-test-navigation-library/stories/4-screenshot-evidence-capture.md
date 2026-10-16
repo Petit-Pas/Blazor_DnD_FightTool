@@ -10,6 +10,14 @@ context:
   - 'D:\Code\Perso\DnDFightTool\_bmad-output\specs\spec-005-ui-test-navigation-library\SPEC.md'
 ---
 
+## Nested-fixture Follow-up
+
+The 2026-09-29 follow-up changed `ApplicationFixture.GetScenarioFolder()` to split the relative class name on `+` as well as `.`, so NUnit's `Outer+Inner` becomes nested `Outer/Inner` screenshot folders. The folder contract is recorded in [uitests-layout.md](../uitests-layout.md#artifacts); implementation is in [ApplicationFixture.cs](../../../../uitests/Framework/ApplicationFixture.cs).
+
+The same change corrected [AssemblyFixture.cs](../../../../uitests/Framework/AssemblyFixture.cs) documentation: it is linked into every UI test project, not only Scratch. Review findings DW-010 through DW-013 remain in [deferred-work.md](../../../implementation-artifacts/deferred-work.md), with their original scope and status unchanged.
+
+This note absorbs the former standalone nested-fixture implementation trace, consolidated on 2026-09-30. It records the follow-up without changing the original delivery status or claiming new test results.
+
 <frozen-after-approval reason="human-owned intent — do not modify unless human renegotiates">
 
 ## Intent

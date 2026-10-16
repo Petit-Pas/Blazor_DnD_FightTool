@@ -11,6 +11,21 @@ context:
   - 'D:\Code\Perso\DnDFightTool\_bmad-output\specs\spec-005-ui-test-navigation-library\deliverables.md'
 ---
 
+## Follow-up Scope Review (2026-09-30, Updated 2026-10-08)
+
+Benoit's later business-test review supersedes the bundled test organization and blanket dialog deferral below. The original approved delivery and its `done` status remain historical; the current contract is [SPEC.md](../SPEC.md) and the reviewed coverage in [uitests-layout.md](../uitests-layout.md).
+
+- Fixtures are capability-based: duplication is creation; deletion and editing are independent. Player/monster controls and Add/Duplicate cancellation paths have explicitly named tests, not branching parameterized cases.
+- Common unconditional arrangement belongs in `[SetUp]`, including the shared dashboard roster through `DashboardFixture`. Scenario-specific turns, undo and attack seed data remain explicit.
+- Assertions cover UI wiring, navigation and displayed state. Clone internals, identity/persistence mechanics and exhaustive turn/history matrices are unit-test concerns. Wait helpers synchronize one marker without bundling unrelated assertions.
+- Fighters coverage now includes first player/monster additions, player disappearance from Available, monster-template retention, counted grouping by kind, and separate removal paths. `TestableInitiativeRollQueryHandlerModal.RollAndConfirm` provides the first-add prompt interaction; it is not the dashboard's `TestableInitiativeInputDialog`. Remaining dialogs and deterministic combat stay in story 6; editor deep fields remain 5b/5c.
+
+The earlier 34-pass result preceded the later explicit-test splits, setup refactors, removal of clear-search cases and new initiative/grouping coverage. Those changes have not been collectively runtime-validated; no build or test run was requested for this documentation reconciliation. Framework tests and production behavior were outside the review.
+
+This follow-up absorbs the former standalone business-UI refactor trace. Review the four business test files, shared setup, the fighters page object and its initiative modal against the companion's coverage table; no separate refactor spec is needed.
+
+On 2026-10-08, Benoit replaced the blanket UI-only assertion rule: split UI-to-service action tests from independent service-to-UI rendering tests throughout the four business files, using real services and no fakes. Character CRUD/cancellation checks `ICharacterRepository`; attack checks commit the parent character first because the draft is circuit-scoped. Fighter controls check `IFightContext`; service commands separately prove live availability/grouping updates. Dashboard actions check mediator dispatch/history, while real service changes separately prove rendering. Search/manual selection remain explicit UI-local exceptions. Mutation helpers no longer wait for their rendered business result. The original matrix and checked tasks below describe historical delivery, not the current assertion contract. Benoit reported finishing the follow-up code fixes on 2026-10-16; no collective pass count is recorded here, and diagnostics alone are not runtime evidence.
+
 <frozen-after-approval reason="human-owned intent — do not modify unless human renegotiates">
 
 ## Intent
@@ -157,7 +172,7 @@ context:
 - The editor page is only ever returned from its parent — never navigated to directly.
   [`TestableCharacterEditorPage.cs:15`](../../../../uitests/TestableComponents/UI/TestableCharacterSheetBlazorComponents/Characters/Pages/TestableCharacterEditorPage.cs#L15)
 
-- `GoToAsync` reaches the dashboard through a real in-app click to seed nav history (works around DW-007).
+- `GoToAsync` reaches the dashboard through a real in-app click to seed nav history (works around DW-016).
   [`TestableFightDashboardPage.cs:35`](../../../../uitests/TestableComponents/Components/TestableDndUi.Shared/Components/Pages/TestableFightDashboardPage.cs#L35)
 
 - Selection wait is token-anchored to the `active` class (post-review fix), aligned with `TestableFighterTile.IsSelected`.

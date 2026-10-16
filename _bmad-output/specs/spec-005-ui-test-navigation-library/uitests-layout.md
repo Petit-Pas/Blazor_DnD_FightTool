@@ -26,13 +26,38 @@ Testable and test projects are created only once they hold something.
 
 ## Test file shape
 
-The file holds an empty `public static class {TestedComponent}UiTests`. Each sub-case is a **nested class** deriving from one of the two fixtures:
+The file holds a `public static class {TestedComponent}UiTests` container with no tests directly on it. Each **business capability** is a nested fixture (for example `CreateCharacters`, `DeleteCharacters`, `EditCharacters`). Creation includes the Duplicate button; deletion has independently arranged targets, not a dependency on a preceding UI creation test. A row's clone provenance alone does not justify another UI case.
+
+When player and monster controls occupy different places in the UI: test them with separately named methods and direct calls to their respective typed controls. Do not combine them behind `CharacterType` parameters or routing helpers. Likewise, Add and Duplicate cancellation paths use separate named tests, not a `duplicated` boolean. This does not require duplicating every generic editor-cancellation or domain-input case.
+
+Put unconditional common arrangement in NUnit `[SetUp]`: shared seeding and page-object construction, plus navigation when common to every test at that point. A local abstract fixture may hold setup shared by multiple capability fixtures, as `DashboardFixture` does. Keep different turn counts, undo state and per-test seed data explicit. Helpers such as `OpenCharacter(..., attacks)` may remain where inputs differ; do not introduce a general flow layer or use setup to hide the action under test.
+
+UI tests prove button/action wiring, navigation and displayed information. Domain calculations, copying/identity semantics and exhaustive command-history permutations belong in normal unit tests. Keep variants for distinct UI controls or visible states, not every domain input combination. Synchronization helpers wait for one relevant render marker; they must not silently add unrelated assertions or ordering requirements.
+
+### Directional coverage
+
+Use real application services, with no fakes or DI replacements. Separate the two directions for every service-backed capability:
+
+- **UI to service:** drive the typed control, then assert the observable effect on `ICharacterRepository`, `IFightContext`, or `IUndoableMediator` (including history/redo-history deltas for Undo/Redo). Assert the intended entity/value or command, not an unrelated render result. Keep distinct player/monster and Add/Duplicate controls covered.
+- **Service to UI:** seed values independently before navigation, or change the real service after rendering through its normal notification/command path, then assert typed UI output. Do not click the action being tested to manufacture the rendering state. Cover live subscriptions where supported; repository-backed editors are opened from seeded data, not assumed to subscribe to repository changes.
+- **UI-local exceptions:** search filters and manual dashboard selection have no service owner. Test those local interactions through the UI and name the exception; do not introduce a production selection service, hooks, or fake just for testing. Turn-service-driven highlighting has its own rendering test.
+- **Circuit-scoped drafts:** attack changes are not visible in the shared repository until the parent character is saved. Complete that real Save before asserting stored attacks. Resolving `IGlobalEditContext` or `IAttackEditContext` from root `Services` would inspect a different scope. Rendering tests seed attacks independently and navigate to the real editor.
+
+Action helpers must not wait for roster/list/turn rendering as their completion signal. Use real-service events (subscribe before action, bounded wait, unsubscribe in `finally`), bounded service-state assertions, or necessary navigation/modal completion. Rendering tests use typed retrying expectations for their own markers. These are focused real-browser integration tests, not isolated unit tests. Additional end-to-end sequences may deliberately cross both directions when the interaction is the subject.
+
+Assert with FluentAssertions only, not NUnit constraints such as `Assert.That(...).After(...)`. Await an asynchronous service effect with `Eventually` (`uitests/Framework/Extensions/EventuallyExtensions.cs`), which retries a FluentAssertions chain against the real service. Resolve repeated services and page objects once in `[SetUp]` fields of a local abstract fixture (e.g. `CharacterLibraryFixture`) rather than in each test. Mediator completion waits are safe: `OnCommandExecuted` fires only for top-level `SendAsync` after its sub-commands finish, and undo/redo events fire once after the cascade, provided handlers dispatch children with `SendAsSubCommandAsync`.
+
+`WaitForAvailable(groupName, count)` shares row-count synchronization across Players and Monsters without asserting names or order. `WaitForRound` waits on one round/idle marker; do not immediately repeat the same assertion after waiting. Assertions about related visible information, such as another row remaining displayed or Redo becoming enabled after Undo, are legitimate UI checks.
+
+Choose the base by test purpose, not by the number of clicks:
 
 | Sub-case | Base | Behaviour |
 |---|---|---|
 | Dependent steps (e.g. `CheckEveryStepAlongTheWay`) | `SequentialScenarioFixture` | `[Order(n)]` on every step (else NUnit runs them alphabetically). State is reset only before the first and after the last step; a failed step skips the rest. The fixture runs as a whole. |
-| Self-contained tests (e.g. `UndoButtonWorksInAnyCase`) | `IsolatedScenarioFixture` | State reset after each test; one failure does not affect the others. Undo/redo-subject tests override `UndoAllCommandsOnTeardown` to `false`. |
-| One long self-contained test (e.g. `VerySpecificTest`) | `IsolatedScenarioFixture` | Same base, single `[Test]`. |
+| Self-contained tests (e.g. `UndoButtonWorksInAnyCase`) | `IsolatedScenarioFixture` | State reset after each test; one failure does not affect the others. The current fixture has no teardown opt-out; the earlier opt-out requirement is an open question in SPEC.md. |
+| One behavior requiring several interactions (e.g. edit an attack, save its parent, check the repository) | `IsolatedScenarioFixture` | Still one independent case; navigation and setup do not make it a chained scenario. |
+
+Use `SequentialScenarioFixture` only when interaction between successive business actions is the subject, such as a complete combat scenario. Do not turn CRUD or search/add/remove bundles into ordered chains merely because they contain several actions. Arrangement may use existing domain services; assertions follow the direction under test above. All browser interactions and reads use typed objects, but service assertions belong directly in tests. Related assertions may stay together when they prove one behavior, including preservation of unrelated entities.
 
 The unit of isolation is the fixture (CAP-10). A step of a sequential fixture run alone is expected to fail.
 
@@ -57,7 +82,23 @@ Screenshots land under the running test project's own `artifacts/` folder (gitig
 
 ## Current map
 
-Component test files use the nested-fixture shape; each existing test sits unchanged in an `IsolatedScenarioFixture` nested class (splitting multi-step tests into `SequentialScenarioFixture` chains is left to the test scope review). The Meta framework tests are exempt: they test the framework, not a component. Paths below are relative to `uitests/`.
+The four business test files use independent capability fixtures. None currently needs a sequential fixture; story 6 retains the full combat chain. Framework tests are outside this business-test review. Paths below are relative to `uitests/`.
+
+### Reviewed business coverage
+
+| Surface | Required UI evidence |
+|---|---|
+| Character library | Separate player/monster creation, duplication, save-edit and deletion controls assert repository state; cancellation leaves it unchanged. Independently seeded player/monster list and editor rendering. Duplication proves an additional stored entry, not identity or deep-copy internals. |
+| Attack list | Creation, duplication, save-edit, deletion and separate Add/Duplicate/edit cancellation assert stored attacks after parent Save. Separate seeded list/editor rendering; preserve unrelated stored entries where relevant. |
+| Fighter search | Separate player and monster partial-name and no-match tests; filtering one list leaves the other unchanged. Search casing permutations and clear-search cases are not required by this review. |
+| Fighter addition | Player, first-monster and repeated-monster Add controls assert service membership. Separate notified service additions render In Fight, hide an added player from Available while others remain, and retain monster templates. |
+| Monster grouping | Real service additions of the same kind share one counted row; another kind stays separate. Verify rendered grouping, not clone or initiative-inheritance internals. |
+| Fighter removal | Player, last-monster and group-subtraction controls assert service membership. Separate notified service removals check available players, retained monster templates and reduced group counts. |
+| Dashboard | Seeded name/HP/initiative display; UI-local manual selection; turn-service highlighting. Start/Next assert command dispatch, Undo/Redo assert real history deltas. Separate service-driven start/advance/undo/redo tests check displayed state and relevant button availability, not exhaustive algorithms. |
+
+First additions now use `TestableInitiativeRollQueryHandlerModal` in `TestableDnDQueryPrompter/FightQueries`, whose `RollAndConfirm` drives the existing prompt. `AddPlayer` completes that prompt; `AddMonsterWithInitiative` handles a first monster and `AddMonster` a repeated kind. This modal is distinct from the dashboard's `TestableInitiativeInputDialog`. Story 6 must extend/reuse these objects for deterministic roll input and remaining dialogs, not create a second first-add helper. Tests that do not assert numerical initiative may roll normally; CAP-4 still requires fixed rolls when outcomes depend on them.
+
+Deep editor fields remain stories 5b/5c. Story 5's bundled matrix is historical and is superseded for current test organization by the rules above. The latest follow-up changes have not been collectively runtime-validated: the earlier 34-pass result predates them. During this review, Benoit requested quick edits without builds or tests unless requested; diagnostics alone do not establish runtime success.
 
 | `src/` component | Typed object | Test |
 |---|---|---|
@@ -75,3 +116,4 @@ Component test files use the nested-fixture shape; each existing test sits uncha
 | `UI/FightBlazorComponents/CombatStatus/CombatStatusPanel.razor` | `…/TestableFightBlazorComponents/CombatStatus/TestableCombatStatusPanel.cs` | — |
 | `UI/FightBlazorComponents/Log/CombatLogPanel.razor` | `…/TestableFightBlazorComponents/Log/TestableCombatLogPanel.cs` | — |
 | `UI/DnDQueryPrompter/MartialAttackQueries/MartialAttackRollResultQueryHandlerModal.razor` | `TestableComponents/UI/TestableDnDQueryPrompter/MartialAttackQueries/TestableMartialAttackRollResultQueryHandlerModal.cs` | — |
+| `UI/DnDQueryPrompter/FightQueries/InitiativeRollQueryHandlerModal.razor` | `TestableComponents/UI/TestableDnDQueryPrompter/FightQueries/TestableInitiativeRollQueryHandlerModal.cs` | Exercised by `FightersPageUiTests` |

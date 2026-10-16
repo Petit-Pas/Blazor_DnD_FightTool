@@ -1,4 +1,5 @@
 using DnDFightTool.UiTests.Framework.Pages;
+using DnDFightTool.UiTests.TestableComponents.UI.TestableDnDQueryPrompter.FightQueries;
 using Microsoft.Playwright;
 using static Microsoft.Playwright.Assertions;
 
@@ -75,21 +76,30 @@ public sealed class TestableFightersPage : PageObject
     }
 
     /// <summary>
-    ///     Adds the available player matching <paramref name="name"/> to the fight.
+    ///     Adds the available player matching <paramref name="name"/> and rolls its initiative.
     /// </summary>
     /// <param name="name">The player name shown in the available list.</param>
     public async Task AddPlayer(string name)
     {
-        await Add(PlayersGroup, name);
+        await AddWithInitiative(PlayersGroup, name);
     }
 
     /// <summary>
-    ///     Adds the available monster matching <paramref name="name"/> to the fight.
+    ///     Adds another monster of a kind already in the fight, without an initiative prompt.
     /// </summary>
     /// <param name="name">The monster name shown in the available list.</param>
     public async Task AddMonster(string name)
     {
-        await Add(MonstersGroup, name);
+        await ClickAdd(MonstersGroup, name);
+    }
+
+    /// <summary>
+    ///     Adds the first monster of a kind and rolls its initiative.
+    /// </summary>
+    /// <param name="name">The monster name shown in the available list.</param>
+    public async Task AddMonsterWithInitiative(string name)
+    {
+        await AddWithInitiative(MonstersGroup, name);
     }
 
     /// <summary>
@@ -98,9 +108,7 @@ public sealed class TestableFightersPage : PageObject
     /// <param name="name">The name shown in the in-fight list.</param>
     public async Task RemoveFromFight(string name)
     {
-        var before = await InFightGroup.InnerTextAsync();
         await InFightRow(name).First.GetByRole(AriaRole.Button).ClickAsync();
-        await Expect(InFightGroup).Not.ToHaveTextAsync(before);
     }
 
     /// <summary>
@@ -122,12 +130,45 @@ public sealed class TestableFightersPage : PageObject
     }
 
     /// <summary>
+    ///     Waits for the requested number of rows in an available-character list.
+    /// </summary>
+    /// <param name="groupName">The visible group heading: Players or Monsters.</param>
+    /// <param name="count">The number of rows to wait for.</param>
+    public async Task WaitForAvailable(string groupName, int count)
+    {
+        var group = groupName switch
+        {
+            "Players" => PlayersGroup,
+            "Monsters" => MonstersGroup,
+            _ => throw new ArgumentException("Expected Players or Monsters.", nameof(groupName))
+        };
+        await Expect(group.Locator(".fighter-row")).ToHaveCountAsync(count);
+    }
+
+    /// <summary>
     ///     Reads the entries currently in the fight (each line includes its initiative).
     /// </summary>
     /// <returns>The in-fight entry texts.</returns>
     public async Task<IReadOnlyList<string>> InFightNames()
     {
         return await RowTexts(InFightGroup);
+    }
+
+    /// <summary>
+    ///     Waits for the number of rendered roster rows after a service update.
+    /// </summary>
+    public async Task WaitForInFightCount(int count)
+    {
+        await Expect(InFightGroup.Locator(".fighter-row")).ToHaveCountAsync(count);
+    }
+
+    /// <summary>
+    ///     Asserts the displayed count of a monster group after a service update.
+    /// </summary>
+    public async Task ExpectMonsterCount(string name, int count)
+    {
+        await Expect(InFightRow(name)).ToHaveTextAsync(new System.Text.RegularExpressions.Regex(
+            $@"^{count}\s+.+\s+{System.Text.RegularExpressions.Regex.Escape(name)}\s+\(init "));
     }
 
     private async Task Search(string placeholder, ILocator group, string text)
@@ -140,12 +181,17 @@ public sealed class TestableFightersPage : PageObject
         }
     }
 
-    private async Task Add(ILocator group, string name)
+    private async Task AddWithInitiative(ILocator group, string name)
     {
-        var before = await InFightGroup.InnerTextAsync();
+        await ClickAdd(group, name);
+        var initiative = new TestableInitiativeRollQueryHandlerModal(Page);
+        await initiative.RollAndConfirm();
+    }
+
+    private static async Task ClickAdd(ILocator group, string name)
+    {
         await group.Locator(".fighter-row").Filter(new LocatorFilterOptions { HasText = name }).First
             .GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Add" }).ClickAsync();
-        await Expect(InFightGroup).Not.ToHaveTextAsync(before);
     }
 
     private ILocator InFightRow(string name)
