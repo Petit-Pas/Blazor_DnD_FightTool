@@ -21,5 +21,5 @@ avant de démarrer la user story 6:
 - verifier que des tests ne doivent pas être split
 - UITests UI/ folder does not exist, but we still need to make an easy differencniation between UI/ anc Components/ 
 - can we make a sequential be skipped if they are not ran in the proper order? 
-- the actual mock of the UI components all live in the same place under UITestFramework
-- new rules have been set for UITests: empty static then internal class for each test scenario, this has not been applied so far.
+- some UI tests use css classes to find elements, should we not work with aria label instead? 
+- some UI tests do something on the UI, then checks the UI impact of that something on the UI itself. Eg: when cliking on a fighter tile, it lights up. Technically correct, however it would be much better to test the following: 1) when I click a tile, it's selected (from UI to service). 2) when the service updates the selected fighter, the tile lights up (from service to UI). Doing from UI to UI is not really a unit test. Same with checking that redo changes the UI round number. In effect, redo should be tested towards Mediator History for instance. Or through an injected fake if possible.
