@@ -1,6 +1,9 @@
 using DnDFightTool.UiTests.Framework.Pages;
+using DnDFightTool.UiTests.TestableComponents.UI.TestableCharacterSheetBlazorComponents.AbilityScores;
 using DnDFightTool.UiTests.TestableComponents.UI.TestableCharacterSheetBlazorComponents.Characters.Components;
+using DnDFightTool.UiTests.TestableComponents.UI.TestableCharacterSheetBlazorComponents.DamageAffinities.Components;
 using DnDFightTool.UiTests.TestableComponents.UI.TestableCharacterSheetBlazorComponents.MartialAttacks.Components;
+using DnDFightTool.UiTests.TestableComponents.UI.TestableCharacterSheetBlazorComponents.Skills.Components;
 using Microsoft.Playwright;
 using static Microsoft.Playwright.Assertions;
 
@@ -9,8 +12,7 @@ namespace DnDFightTool.UiTests.TestableComponents.UI.TestableCharacterSheetBlazo
 /// <summary>
 ///     Page object for the character editor (<c>/Characters/Edit</c>). It is not URL-navigable — the editor renders only
 ///     when a per-circuit character edit context is set — so this page is returned from the character list page's
-///     create/edit/duplicate methods, which click the production control that drives the real navigation. This story wires
-///     the "Basic infos" (name) and "Attacks" tabs; the abilities/skills/resistances editing is the deferred story.
+///     create/edit/duplicate methods, which click the production control that drives the real navigation.
 /// </summary>
 public sealed class TestableCharacterEditorPage : PageObject
 {
@@ -43,6 +45,48 @@ public sealed class TestableCharacterEditorPage : PageObject
         var card = Page.Locator(".mud-card:has(.attack-list):visible");
         await Expect(card.GetByRole(AriaRole.Button, new LocatorGetByRoleOptions { Name = "Add" })).ToBeVisibleAsync();
         return new TestableAttackListEditor(Page, card, BaseUrl);
+    }
+
+    /// <summary>
+    ///     Switches to the "Abilities & Skills" tab and returns the typed object over the ability-scores editor.
+    /// </summary>
+    /// <returns>The ability-scores editor.</returns>
+    public async Task<TestableAbilityScoresEditorComponent> OpenAbilityScores()
+    {
+        await GoToTab("Abilities & Skills");
+        return new TestableAbilityScoresEditorComponent(Page, await Region("Abilities"));
+    }
+
+    /// <summary>
+    ///     Switches to the "Abilities & Skills" tab and returns the typed object over the skills editor.
+    /// </summary>
+    /// <returns>The skills editor.</returns>
+    public async Task<TestableSkillsEditorComponent> OpenSkills()
+    {
+        await GoToTab("Abilities & Skills");
+        return new TestableSkillsEditorComponent(Page, await Region("Skills"));
+    }
+
+    /// <summary>
+    ///     Switches to the "Resistances" tab and returns the typed object over the resistances editor.
+    /// </summary>
+    /// <returns>The resistances editor.</returns>
+    public async Task<TestableResistancesEditorComponent> OpenResistances()
+    {
+        await GoToTab("Resistances");
+        return new TestableResistancesEditorComponent(Page, await Region("Damage affinities"));
+    }
+
+    private async Task GoToTab(string tabName)
+    {
+        await Page.GetByRole(AriaRole.Tab, new PageGetByRoleOptions { Name = tabName, Exact = true }).ClickAsync();
+    }
+
+    private async Task<ILocator> Region(string name)
+    {
+        var region = Page.GetByRole(AriaRole.Region, new PageGetByRoleOptions { Name = name, Exact = true });
+        await Expect(region).ToBeVisibleAsync();
+        return region;
     }
 
     /// <summary>

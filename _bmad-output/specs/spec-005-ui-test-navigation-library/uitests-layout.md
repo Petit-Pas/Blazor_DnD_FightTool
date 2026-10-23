@@ -30,7 +30,21 @@ The file holds a `public static class {TestedComponent}UiTests` container with n
 
 When player and monster controls occupy different places in the UI: test them with separately named methods and direct calls to their respective typed controls. Do not combine them behind `CharacterType` parameters or routing helpers. Likewise, Add and Duplicate cancellation paths use separate named tests, not a `duplicated` boolean. This does not require duplicating every generic editor-cancellation or domain-input case.
 
-Put unconditional common arrangement in NUnit `[SetUp]`: shared seeding and page-object construction, plus navigation when common to every test at that point. A local abstract fixture may hold setup shared by multiple capability fixtures, as `DashboardFixture` does. Keep different turn counts, undo state and per-test seed data explicit. Helpers such as `OpenCharacter(..., attacks)` may remain where inputs differ; do not introduce a general flow layer or use setup to hide the action under test.
+Put unconditional common arrangement in NUnit `[SetUp]`: shared seeding and page-object construction, plus navigation when common to every test at that point. Each nested fixture derives directly from `IsolatedScenarioFixture` or `SequentialScenarioFixture` and owns its `[SetUp]`; do not add a local abstract base fixture (existing `DashboardFixture` and `CharacterLibraryFixture` are tracked for removal in DW-021). Keep different turn counts, undo state and per-test seed data explicit. Every test reaches its page the way a user does: start from a page object's `GoToAsync` and click through the production controls (for example `CharacterList.EditPlayer(name)` → `OpenAttacks()`). Write that seeding and navigation in the test or its `[SetUp]`; do not hide it in a static helper such as the former `OpenCharacter(page, baseUrl, services, ...)`, introduce a general flow layer, or use setup to hide the action under test.
+
+A control that navigates returns the typed object of its destination: the list page's Edit control (`TestableCharacterListEditorPage.EditPlayer(name)`) returns `TestableCharacterEditorPage`. Character editor tests seed through `ICharacterRepository` in their own `[SetUp]` and open the editor that way; there is no separate tools object or shared base fixture, so each fixture picks its own base class.
+
+Test bodies pass typed objects the strings the user sees, written as literals (`"STR"`, `"Athletics"`, `"Fire"`, `"Expertise"`). Compute a rendered string from a domain value only when the test iterates over domain values, as the every-damage-type rendering test does.
+
+Seed every starting value a test acts on or asserts against (for example `SeededStrengthScore`); never rely on factory or constructor defaults. A rendering test of a two-state control checks both states (for example STR mastered, DEX not).
+
+### Locators and accessible names
+
+Typed objects find elements by role + accessible name only. Do not anchor on layout or utility CSS classes, visible title text, or DOM position (`.First`, `..` parent hops). When a control or region has no usable accessible name, add `role`/`aria-label` to the production markup (pre-approved; list it in the story's Tasks), for example `role="region" aria-label="Skills"` on an editor panel or `role="group" aria-label="STR ability"` on a row. `data-testid` still needs approval. Older locators that break this rule are tracked in DW-022.
+
+### Story close-out
+
+When a story keeps a domain rule out of UI tests, check a unit test covers it and add one if not. Before marking a story done, record its build and UI test runs in the spec memlog with per-project counts, and add any production change missing from its Tasks.
 
 UI tests prove button/action wiring, navigation and displayed information. Domain calculations, copying/identity semantics and exhaustive command-history permutations belong in normal unit tests. Keep variants for distinct UI controls or visible states, not every domain input combination. Synchronization helpers wait for one relevant render marker; they must not silently add unrelated assertions or ordering requirements.
 
@@ -45,7 +59,7 @@ Use real application services, with no fakes or DI replacements. Separate the tw
 
 Action helpers must not wait for roster/list/turn rendering as their completion signal. Use real-service events (subscribe before action, bounded wait, unsubscribe in `finally`), bounded service-state assertions, or necessary navigation/modal completion. Rendering tests use typed retrying expectations for their own markers. These are focused real-browser integration tests, not isolated unit tests. Additional end-to-end sequences may deliberately cross both directions when the interaction is the subject.
 
-Assert with FluentAssertions only, not NUnit constraints such as `Assert.That(...).After(...)`. Await an asynchronous service effect with `Eventually` (`uitests/Framework/Extensions/EventuallyExtensions.cs`), which retries a FluentAssertions chain against the real service. Resolve repeated services and page objects once in `[SetUp]` fields of a local abstract fixture (e.g. `CharacterLibraryFixture`) rather than in each test. Mediator completion waits are safe: `OnCommandExecuted` fires only for top-level `SendAsync` after its sub-commands finish, and undo/redo events fire once after the cascade, provided handlers dispatch children with `SendAsSubCommandAsync`.
+Assert with FluentAssertions only, not NUnit constraints such as `Assert.That(...).After(...)`. Await an asynchronous service effect with `Eventually` (`uitests/Framework/Extensions/EventuallyExtensions.cs`), which retries a FluentAssertions chain against the real service. Resolve repeated services and page objects once in `[SetUp]` fields of the fixture that uses them rather than in each test. Mediator completion waits are safe: `OnCommandExecuted` fires only for top-level `SendAsync` after its sub-commands finish, and undo/redo events fire once after the cascade, provided handlers dispatch children with `SendAsSubCommandAsync`.
 
 `WaitForAvailable(groupName, count)` shares row-count synchronization across Players and Monsters without asserting names or order. `WaitForRound` waits on one round/idle marker; do not immediately repeat the same assertion after waiting. Assertions about related visible information, such as another row remaining displayed or Redo becoming enabled after Undo, are legitimate UI checks.
 
@@ -54,7 +68,7 @@ Choose the base by test purpose, not by the number of clicks:
 | Sub-case | Base | Behaviour |
 |---|---|---|
 | Dependent steps (e.g. `CheckEveryStepAlongTheWay`) | `SequentialScenarioFixture` | `[Order(n)]` on every step (else NUnit runs them alphabetically). State is reset only before the first and after the last step; a failed step skips the rest. The fixture runs as a whole. |
-| Self-contained tests (e.g. `UndoButtonWorksInAnyCase`) | `IsolatedScenarioFixture` | State reset after each test; one failure does not affect the others. The current fixture has no teardown opt-out; the earlier opt-out requirement is an open question in SPEC.md. |
+| Self-contained tests (e.g. `UndoButtonWorksInAnyCase`) | `IsolatedScenarioFixture` | State reset after each test; one failure does not affect the others. No teardown opt-out, undo/redo tests included; a test asserting initial Redo availability must account for the stale redo stack (DW-023). |
 | One behavior requiring several interactions (e.g. edit an attack, save its parent, check the repository) | `IsolatedScenarioFixture` | Still one independent case; navigation and setup do not make it a chained scenario. |
 
 Use `SequentialScenarioFixture` only when interaction between successive business actions is the subject, such as a complete combat scenario. Do not turn CRUD or search/add/remove bundles into ordered chains merely because they contain several actions. Arrangement may use existing domain services; assertions follow the direction under test above. All browser interactions and reads use typed objects, but service assertions belong directly in tests. Related assertions may stay together when they prove one behavior, including preservation of unrelated entities.
@@ -84,6 +98,8 @@ Screenshots land under the running test project's own `artifacts/` folder (gitig
 
 The four business test files use independent capability fixtures. None currently needs a sequential fixture; story 6 retains the full combat chain. Framework tests are outside this business-test review. Paths below are relative to `uitests/`.
 
+Story 5b added exhaustive character-editor field coverage: `CharacterMainInfoEditorUiTests`, `AbilityScoresEditorComponentUiTests`, `SkillsEditorComponentUiTests`, and `ResistancesEditorComponentUiTests`, all under `Tests/UI/CharacterSheetBlazorComponentsUiTests/`.
+
 ### Reviewed business coverage
 
 | Surface | Required UI evidence |
@@ -98,7 +114,9 @@ The four business test files use independent capability fixtures. None currently
 
 First additions now use `TestableInitiativeRollQueryHandlerModal` in `TestableDnDQueryPrompter/FightQueries`, whose `RollAndConfirm` drives the existing prompt. `AddPlayer` completes that prompt; `AddMonsterWithInitiative` handles a first monster and `AddMonster` a repeated kind. This modal is distinct from the dashboard's `TestableInitiativeInputDialog`. Story 6 must extend/reuse these objects for deterministic roll input and remaining dialogs, not create a second first-add helper. Tests that do not assert numerical initiative may roll normally; CAP-4 still requires fixed rolls when outcomes depend on them.
 
-Deep editor fields remain stories 5b/5c. Story 5's bundled matrix is historical and is superseded for current test organization by the rules above. The latest follow-up changes have not been collectively runtime-validated: the earlier 34-pass result predates them. During this review, Benoit requested quick edits without builds or tests unless requested; diagnostics alone do not establish runtime success.
+| Character editor deep fields | Character basic-info deep fields (Max HP, HP, Armor Class, shield toggle + value, effective AC read), `AbilityScoresEditor` (score, save bonus, mastery bonus), `SkillsEditor` (mastery increase/decrease, governing-ability menu) and `ResistancesEditor` (affinity increase/decrease) assert stored character state via real UI-to-repository action tests and independently seeded repository-to-UI rendering tests. |
+
+Deep attack editor fields remain story 5c. Story 5's bundled matrix is historical and is superseded for current test organization by the rules above.
 
 | `src/` component | Typed object | Test |
 |---|---|---|
@@ -106,7 +124,12 @@ Deep editor fields remain stories 5b/5c. Story 5's bundled matrix is historical 
 | `Components/DndUi.Shared/Components/Pages/FightDashboardPage.razor` | `…/TestableDndUi.Shared/Components/Pages/TestableFightDashboardPage.cs` | `Tests/Components/DndUi.SharedUiTests/Components/Pages/FightDashboardPageUiTests.cs` |
 | `Components/DndUi.Shared/Components/Pages/FightersPage.razor` | `…/TestableDndUi.Shared/Components/Pages/TestableFightersPage.cs` | `Tests/Components/DndUi.SharedUiTests/Components/Pages/FightersPageUiTests.cs` |
 | `UI/CharacterSheetBlazorComponents/Characters/Pages/CharacterEditorPage.razor` | `TestableComponents/UI/TestableCharacterSheetBlazorComponents/Characters/Pages/TestableCharacterEditorPage.cs` | — |
-| `UI/CharacterSheetBlazorComponents/Characters/Components/CharacterMainInfoEditor.razor` | `…/TestableCharacterSheetBlazorComponents/Characters/Components/TestableCharacterMainInfoEditor.cs` | — |
+| `UI/CharacterSheetBlazorComponents/Characters/Components/CharacterMainInfoEditor.razor` | `…/TestableCharacterSheetBlazorComponents/Characters/Components/TestableCharacterMainInfoEditor.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/Characters/Components/CharacterMainInfoEditorUiTests.cs` |
+| `UI/CharacterSheetBlazorComponents/AbilityScores/AbilityScoresEditorComponent.razor` | `…/TestableCharacterSheetBlazorComponents/AbilityScores/TestableAbilityScoresEditorComponent.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/AbilityScores/AbilityScoresEditorComponentUiTests.cs` |
+| `UI/CharacterSheetBlazorComponents/AbilityScores/AbilityScoreEditorComponent.razor` | `…/TestableCharacterSheetBlazorComponents/AbilityScores/TestableAbilityScoreEditorComponent.cs` | Exercised by `AbilityScoresEditorComponentUiTests` |
+| `UI/CharacterSheetBlazorComponents/AbilityScores/AbilityChip.razor` | — | Exercised by `SkillsEditorComponentUiTests` |
+| `UI/CharacterSheetBlazorComponents/DamageAffinities/Components/ResistancesEditorComponent.razor` | `…/TestableCharacterSheetBlazorComponents/DamageAffinities/Components/TestableResistancesEditorComponent.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/DamageAffinities/Components/ResistancesEditorComponentUiTests.cs` |
+| `UI/CharacterSheetBlazorComponents/Skills/Components/SkillsEditorComponent.razor` | `…/TestableCharacterSheetBlazorComponents/Skills/Components/TestableSkillsEditorComponent.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/Skills/Components/SkillsEditorComponentUiTests.cs` |
 | `UI/CharacterSheetBlazorComponents/MartialAttacks/Pages/AttackEditorPage.razor` | `…/TestableCharacterSheetBlazorComponents/MartialAttacks/Pages/TestableAttackEditorPage.cs` | — |
 | `UI/CharacterSheetBlazorComponents/MartialAttacks/Components/AttackListEditor.razor` | `…/TestableCharacterSheetBlazorComponents/MartialAttacks/Components/TestableAttackListEditor.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/MartialAttacks/Components/AttackListEditorUiTests.cs` |
 | `UI/CharacterSheetBlazorComponents/MartialAttacks/Components/AttackMainInfoEditor.razor` | `…/TestableCharacterSheetBlazorComponents/MartialAttacks/Components/TestableAttackMainInfoEditor.cs` | — |

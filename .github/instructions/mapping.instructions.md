@@ -10,6 +10,7 @@ applyTo: "**/Mapping/MappingConfigurations.cs"
 - **Config pattern**: Use `TypeAdapterConfig<TSource, TTarget>.NewConfig()` for custom mapping rules.
 - **Duplication**: Use `.IgnoreWhenDuplicating(x => x.Id)` to skip identity properties during `Clone()` (but not `Copy()`).
 - **Dictionary-keyed-by-Id collections**: Any `class MyCollection : Dictionary<Guid, T>` where `T` uses `IgnoreWhenDuplicating(x => x.Id)` MUST also register a `TypeAdapterConfig<MyCollection, MyCollection>` mapping that uses `AfterMapping` to rebuild the dictionary from scratch — iterating `src.Values`, mapping each item individually via `Adapt<T>()`, then calling `dest.Add(mappedItem)`. This prevents key/value Id desync when the collection is cloned (Mapster copies dictionary keys verbatim but maps values with the new Id).
+- **`List<T>`/`Dictionary<TKey, TValue>` subclasses with their own properties**: Mapster's collection mapping only copies the elements; any extra property declared directly on the subclass (e.g. `AbilityScoresCollection : List<AbilityScore>` also holding a `MasteryBonus` property) is silently left at its default on the destination. Any such subclass MUST register a `TypeAdapterConfig<MyCollection, MyCollection>().AfterMapping(...)` that explicitly copies each extra property.
 - **Clone vs Copy**:
   - `Clone<T>()` — creates a new instance with new Ids (for duplicating entities).
   - `Copy<T>()` — creates an exact copy including Ids (for undo snapshots).

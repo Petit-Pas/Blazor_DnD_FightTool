@@ -1,3 +1,4 @@
+using DnDFightTool.Domain.CharacterSheet.AbilityScores.Mapping;
 using DnDFightTool.Domain.CharacterSheet.Characters.Mapping;
 using DnDFightTool.Domain.CharacterSheet.MartialAttacks.Mapping;
 using DnDFightTool.Domain.CharacterSheet.Skills.Mapping;
@@ -10,6 +11,7 @@ public static class ServiceCollectionExtension
 {
     public static IServiceCollection RegisterCharacterSheetMappingConfigurations(this IServiceCollection services)
     {
+        services.RegisterAbilityScoresMappingConfigurations();
         services.RegisterSkillMappingConfigurations();
         services.RegisterCharacterMappingConfigurations();
         services.RegisterMartialAttackMappingConfigurations();

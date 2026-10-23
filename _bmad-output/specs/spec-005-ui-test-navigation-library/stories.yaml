@@ -94,24 +94,34 @@
   description: >-
     Extend the story-5 attack editor page object with component objects that
     drive the to-hit modifiers and damage rolls (add/delete, damage type, dice
-    expression), with UI-to-repository action tests and independently seeded
-    repository-to-UI rendering tests for each.
+    expression), with UI-to-repository action tests, independently seeded
+    repository-to-UI rendering tests, and one invalid-input case per dice field.
   spec_checkpoint: true
+  done_checkpoint: true
   invoke_dev_with: >-
-    Build on story 5b's patterns (state carried in aria-labels, directional
-    IsolatedScenarioFixture tests using real services, no fakes). Save the parent
-    character before asserting stored attack drafts; do not resolve browser-scoped
-    contexts from root Services. Split from 5b at its spec checkpoint for
-    spec size. Planned surface: aria-labels on the damage-type menu activator
-    ("Damage type: {type}"), the Damages add button ("Add damage") and the
-    damage row delete button ("Delete damage"); extend TestableAttackMainInfoEditor
-    (To Hit Modifiers) and TestableAttackEditorPage (Damages()); new
-    TestableDamageRollTemplateCollectionEditorComponent and
-    TestableDamageRollTemplateEditorComponent. The damage-type menu items render
-    in a popover outside the component root, so locate them from the page. The
-    dice field is an unlabelled textbox, the only one in its damage row. Same
-    rules as story 5: no locator in a test body, role/text locators, layout per
-    uitests-layout.md.
+    Split from 5b at its spec checkpoint for size. Follow the current SPEC.md
+    constraints and uitests-layout.md (navigation, fixtures, locators, seeding,
+    story close-out); they changed during the 5b review. Navigate like a user in
+    the test or its [SetUp]: seed through ICharacterRepository, then
+    CharacterList.GoToAsync, EditPlayer, OpenAttacks, EditAttack. No static
+    helper, no local base fixture. Save the attack, then the parent character,
+    before asserting stored attacks; never resolve browser-scoped contexts from
+    root Services. TestableAttackEditorPage.Save()/Cancel() now return
+    TestableCharacterEditorPage. Locate by role + accessible name only; add
+    these to production markup (pre-approved, list in Tasks): role=region
+    "Main Informations" and "Damages" on the two panels (drops form:visible and
+    the :visible Save/Cancel anchors), aria-label "Damage type: {type}" on the
+    damage-type activator, "Add damage" on the add button, "Delete damage" on
+    the row delete button, and a name for each damage row and its unlabelled
+    dice textbox so neither is found by position. Typed objects at their src
+    paths: extend TestableAttackMainInfoEditor (To Hit Modifiers) and
+    TestableAttackEditorPage (Damages()); new
+    Damage/Components/TestableDamageRollTemplateCollectionEditorComponent,
+    TestableDamageRollTemplateEditorComponent and TestableDamageTypeEditorComponent.
+    Damage-type menu items render in a popover outside the component root, so
+    locate them from the page by menuitem role. Invalid input: one case per
+    RegexField (to-hit modifiers, damage dice) showing the error and leaving the
+    stored value unchanged; regex grammar stays in unit tests (add one if missing).
 
 - id: "6"
   title: Dialog objects, roll input, and the combat scenario

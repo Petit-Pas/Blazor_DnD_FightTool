@@ -7,10 +7,10 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace DnDEntitiesTests.MartialAttacks;
+namespace DnDEntitiesTests.MartialAttacks.Mapping;
 
 [TestFixture]
-public class MartialAttackTemplateCollectionMappingTests
+public class MappingConfigurationsTests
 {
     private Mapper _mapper = null!;
 
@@ -27,7 +27,7 @@ public class MartialAttackTemplateCollectionMappingTests
     }
 
     [TestFixture]
-    public class CloneTests : MartialAttackTemplateCollectionMappingTests
+    public class CloneTests : MappingConfigurationsTests
     {
         [Test]
         public void Should_HaveConsistentKeyValueIds_When_Cloned()
@@ -61,7 +61,7 @@ public class MartialAttackTemplateCollectionMappingTests
     }
 
     [TestFixture]
-    public class CopyTests : MartialAttackTemplateCollectionMappingTests
+    public class CopyTests : MappingConfigurationsTests
     {
         [Test]
         public void Should_HaveConsistentKeyValueIds_When_Copied()

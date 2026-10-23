@@ -1,13 +1,10 @@
 using DnDFightTool.Domain.CharacterSheet.Characters;
-using DnDFightTool.Domain.CharacterSheet.MartialAttacks;
 using DnDFightTool.UiTests.Framework;
 using DnDFightTool.UiTests.TestableComponents.Components.TestableDndUi.Shared.Components.Pages;
-using DnDFightTool.UiTests.TestableComponents.UI.TestableCharacterSheetBlazorComponents.Characters.Pages;
 using DomainTestsUtilities.Factories.Characters;
 using DomainTestsUtilities.Factories.MartialAttacks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Playwright;
 using NUnit.Framework;
 
 namespace DnDFightTool.UiTests.Tests.UI.CharacterSheetBlazorComponentsUiTests.MartialAttacks.Components;
@@ -22,15 +19,31 @@ public static class AttackListEditorUiTests
     /// </summary>
     public sealed class DisplayAttacks : IsolatedScenarioFixture
     {
+        private ICharacterRepository _repository = null!;
+        private TestableCharacterListEditorPage _characterList = null!;
+
+        /// <summary>
+        ///     Resolves the repository and builds the list page object.
+        /// </summary>
+        [SetUp]
+        public void SetUpCharacterLibrary()
+        {
+            _repository = Services.GetRequiredService<ICharacterRepository>();
+            _characterList = new TestableCharacterListEditorPage(Page, BaseUrl);
+        }
+
         /// <summary>
         ///     The attack list renders the character's stored attacks.
         /// </summary>
         [Test]
         public async Task Should_Display_Repository_Attacks()
         {
-            var editor = await OpenCharacter(Page, BaseUrl, Services,
-                MartialAttackTemplateFactory.Build(name: "Longsword"),
-                MartialAttackTemplateFactory.Build(name: "Bow"));
+            var fighter = CharacterFactory.BuildPlayer(name: "Fighter");
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Longsword"));
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Bow"));
+            _repository.Save(fighter);
+            await _characterList.GoToAsync();
+            var editor = await _characterList.EditPlayer("Fighter");
 
             var attacks = await editor.OpenAttacks();
 
@@ -43,8 +56,11 @@ public static class AttackListEditorUiTests
         [Test]
         public async Task Should_Display_Repository_Attack_In_Editor()
         {
-            var editor = await OpenCharacter(Page, BaseUrl, Services,
-                MartialAttackTemplateFactory.Build(name: "Longsword"));
+            var fighter = CharacterFactory.BuildPlayer(name: "Fighter");
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Longsword"));
+            _repository.Save(fighter);
+            await _characterList.GoToAsync();
+            var editor = await _characterList.EditPlayer("Fighter");
             var attacks = await editor.OpenAttacks();
 
             var attackEditor = await attacks.EditAttack("Longsword");
@@ -58,6 +74,19 @@ public static class AttackListEditorUiTests
     /// </summary>
     public sealed class CreateAttacks : IsolatedScenarioFixture
     {
+        private ICharacterRepository _repository = null!;
+        private TestableCharacterListEditorPage _characterList = null!;
+
+        /// <summary>
+        ///     Resolves the repository and builds the list page object.
+        /// </summary>
+        [SetUp]
+        public void SetUpCharacterLibrary()
+        {
+            _repository = Services.GetRequiredService<ICharacterRepository>();
+            _characterList = new TestableCharacterListEditorPage(Page, BaseUrl);
+        }
+
         /// <summary>
         ///     Saving a new attack adds it to the character's attack list.
         /// </summary>
@@ -65,7 +94,9 @@ public static class AttackListEditorUiTests
         public async Task Should_Create_An_Attack()
         {
             // Arrange
-            var editor = await OpenCharacter(Page, BaseUrl, Services);
+            _repository.Save(CharacterFactory.BuildPlayer(name: "Fighter"));
+            await _characterList.GoToAsync();
+            var editor = await _characterList.EditPlayer("Fighter");
             var attacks = await editor.OpenAttacks();
 
             // Act
@@ -75,7 +106,7 @@ public static class AttackListEditorUiTests
             await editor.Save();
 
             // Assert
-            StoredAttackNames(Services).Should().Equal("Longsword");
+            StoredAttackNames(_repository).Should().Equal("Longsword");
         }
 
         /// <summary>
@@ -85,9 +116,12 @@ public static class AttackListEditorUiTests
         public async Task Should_Create_An_Attack_By_Duplication()
         {
             // Arrange
-            var editor = await OpenCharacter(Page, BaseUrl, Services,
-                MartialAttackTemplateFactory.Build(name: "Longsword"),
-                MartialAttackTemplateFactory.Build(name: "Bow"));
+            var fighter = CharacterFactory.BuildPlayer(name: "Fighter");
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Longsword"));
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Bow"));
+            _repository.Save(fighter);
+            await _characterList.GoToAsync();
+            var editor = await _characterList.EditPlayer("Fighter");
             var attacks = await editor.OpenAttacks();
 
             // Act
@@ -96,7 +130,7 @@ public static class AttackListEditorUiTests
             await editor.Save();
 
             // Assert
-            StoredAttackNames(Services).Should().BeEquivalentTo("Longsword", "Longsword", "Bow");
+            StoredAttackNames(_repository).Should().BeEquivalentTo("Longsword", "Longsword", "Bow");
         }
 
         /// <summary>
@@ -106,8 +140,11 @@ public static class AttackListEditorUiTests
         public async Task Should_Discard_A_New_Attack_On_Cancel()
         {
             // Arrange
-            var editor = await OpenCharacter(Page, BaseUrl, Services,
-                MartialAttackTemplateFactory.Build(name: "Longsword"));
+            var fighter = CharacterFactory.BuildPlayer(name: "Fighter");
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Longsword"));
+            _repository.Save(fighter);
+            await _characterList.GoToAsync();
+            var editor = await _characterList.EditPlayer("Fighter");
             var attacks = await editor.OpenAttacks();
 
             // Act
@@ -117,7 +154,7 @@ public static class AttackListEditorUiTests
             await editor.Save();
 
             // Assert
-            StoredAttackNames(Services).Should().Equal("Longsword");
+            StoredAttackNames(_repository).Should().Equal("Longsword");
         }
 
         /// <summary>
@@ -127,8 +164,11 @@ public static class AttackListEditorUiTests
         public async Task Should_Discard_A_Duplicate_On_Cancel()
         {
             // Arrange
-            var editor = await OpenCharacter(Page, BaseUrl, Services,
-                MartialAttackTemplateFactory.Build(name: "Longsword"));
+            var fighter = CharacterFactory.BuildPlayer(name: "Fighter");
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Longsword"));
+            _repository.Save(fighter);
+            await _characterList.GoToAsync();
+            var editor = await _characterList.EditPlayer("Fighter");
             var attacks = await editor.OpenAttacks();
 
             // Act
@@ -138,7 +178,7 @@ public static class AttackListEditorUiTests
             await editor.Save();
 
             // Assert
-            StoredAttackNames(Services).Should().Equal("Longsword");
+            StoredAttackNames(_repository).Should().Equal("Longsword");
         }
     }
 
@@ -147,6 +187,19 @@ public static class AttackListEditorUiTests
     /// </summary>
     public sealed class EditAttacks : IsolatedScenarioFixture
     {
+        private ICharacterRepository _repository = null!;
+        private TestableCharacterListEditorPage _characterList = null!;
+
+        /// <summary>
+        ///     Resolves the repository and builds the list page object.
+        /// </summary>
+        [SetUp]
+        public void SetUpCharacterLibrary()
+        {
+            _repository = Services.GetRequiredService<ICharacterRepository>();
+            _characterList = new TestableCharacterListEditorPage(Page, BaseUrl);
+        }
+
         /// <summary>
         ///     Editing an attack updates only that entry without adding a copy.
         /// </summary>
@@ -154,9 +207,12 @@ public static class AttackListEditorUiTests
         public async Task Should_Save_Changes_To_An_Attack()
         {
             // Arrange
-            var editor = await OpenCharacter(Page, BaseUrl, Services,
-                MartialAttackTemplateFactory.Build(name: "Longsword"),
-                MartialAttackTemplateFactory.Build(name: "Bow"));
+            var fighter = CharacterFactory.BuildPlayer(name: "Fighter");
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Longsword"));
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Bow"));
+            _repository.Save(fighter);
+            await _characterList.GoToAsync();
+            var editor = await _characterList.EditPlayer("Fighter");
             var attacks = await editor.OpenAttacks();
 
             // Act
@@ -166,7 +222,7 @@ public static class AttackListEditorUiTests
             await editor.Save();
 
             // Assert
-            StoredAttackNames(Services).Should().BeEquivalentTo("Greatsword", "Bow");
+            StoredAttackNames(_repository).Should().BeEquivalentTo("Greatsword", "Bow");
         }
 
         /// <summary>
@@ -176,8 +232,11 @@ public static class AttackListEditorUiTests
         public async Task Should_Discard_Changes_On_Cancel()
         {
             // Arrange
-            var editor = await OpenCharacter(Page, BaseUrl, Services,
-                MartialAttackTemplateFactory.Build(name: "Longsword"));
+            var fighter = CharacterFactory.BuildPlayer(name: "Fighter");
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Longsword"));
+            _repository.Save(fighter);
+            await _characterList.GoToAsync();
+            var editor = await _characterList.EditPlayer("Fighter");
             var attacks = await editor.OpenAttacks();
             var attackEditor = await attacks.EditAttack("Longsword");
 
@@ -187,7 +246,7 @@ public static class AttackListEditorUiTests
             await editor.Save();
 
             // Assert
-            StoredAttackNames(Services).Should().Equal("Longsword");
+            StoredAttackNames(_repository).Should().Equal("Longsword");
         }
     }
 
@@ -196,6 +255,19 @@ public static class AttackListEditorUiTests
     /// </summary>
     public sealed class DeleteAttacks : IsolatedScenarioFixture
     {
+        private ICharacterRepository _repository = null!;
+        private TestableCharacterListEditorPage _characterList = null!;
+
+        /// <summary>
+        ///     Resolves the repository and builds the list page object.
+        /// </summary>
+        [SetUp]
+        public void SetUpCharacterLibrary()
+        {
+            _repository = Services.GetRequiredService<ICharacterRepository>();
+            _characterList = new TestableCharacterListEditorPage(Page, BaseUrl);
+        }
+
         /// <summary>
         ///     Clicking Delete removes only the selected attack from the saved character.
         /// </summary>
@@ -203,9 +275,12 @@ public static class AttackListEditorUiTests
         public async Task Should_Delete_Only_The_Selected_Attack()
         {
             // Arrange
-            var editor = await OpenCharacter(Page, BaseUrl, Services,
-                MartialAttackTemplateFactory.Build(name: "Target"),
-                MartialAttackTemplateFactory.Build(name: "Bow"));
+            var fighter = CharacterFactory.BuildPlayer(name: "Fighter");
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Target"));
+            fighter.MartialAttacks.Add(MartialAttackTemplateFactory.Build(name: "Bow"));
+            _repository.Save(fighter);
+            await _characterList.GoToAsync();
+            var editor = await _characterList.EditPlayer("Fighter");
             var attacks = await editor.OpenAttacks();
 
             // Act
@@ -213,28 +288,13 @@ public static class AttackListEditorUiTests
             await editor.Save();
 
             // Assert
-            StoredAttackNames(Services).Should().Equal("Bow");
+            StoredAttackNames(_repository).Should().Equal("Bow");
         }
     }
 
-    private static string[] StoredAttackNames(IServiceProvider services)
+    private static string[] StoredAttackNames(ICharacterRepository repository)
     {
-        return services.GetRequiredService<ICharacterRepository>().GetAllCharacters().Single()
+        return repository.GetAllCharacters().Single()
             .MartialAttacks.Values.Select(attack => attack.Name).ToArray();
-    }
-
-    private static async Task<TestableCharacterEditorPage> OpenCharacter(
-        IPage page, string baseUrl, IServiceProvider services, params MartialAttackTemplate[] attacks)
-    {
-        var character = CharacterFactory.BuildPlayer(name: "Fighter");
-        foreach (var attack in attacks)
-        {
-            character.MartialAttacks.Add(attack.Id, attack);
-        }
-
-        services.GetRequiredService<ICharacterRepository>().Save(character);
-        var list = new TestableCharacterListEditorPage(page, baseUrl);
-        await list.GoToAsync();
-        return await list.EditPlayer("Fighter");
     }
 }

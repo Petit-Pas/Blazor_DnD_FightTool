@@ -32,4 +32,28 @@ public abstract class ComponentObject
     ///     instance it represents rather than across every copy on the page.
     /// </summary>
     protected ILocator Root { get; }
+
+    /// <summary>
+    ///     Reads a locator's <c>aria-label</c> and returns the state carried after its <c>": "</c> separator, as used by
+    ///     accessible names of the shape <c>"{subject}: {state}"</c> (e.g. mastery and affinity buttons).
+    /// </summary>
+    /// <param name="locator">The locator whose <c>aria-label</c> carries the state.</param>
+    /// <returns>The state portion of the accessible name.</returns>
+    protected static async Task<string> GetAccessibleNameState(ILocator locator)
+    {
+        const string separator = ": ";
+        var label = await locator.GetAttributeAsync("aria-label");
+        if (label is null)
+        {
+            throw new InvalidOperationException("Expected an aria-label on the locator but found none.");
+        }
+
+        var separatorIndex = label.IndexOf(separator, StringComparison.Ordinal);
+        if (separatorIndex < 0)
+        {
+            throw new InvalidOperationException($"Expected an aria-label of the shape '{{subject}}: {{state}}' but found '{label}'.");
+        }
+
+        return label[(separatorIndex + separator.Length)..];
+    }
 }

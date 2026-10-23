@@ -20,6 +20,6 @@
         "cd": true,
         "/^\\$\\w+\\s*=\\s*'[^']*'\\s*$/": true
     },
-    "dotnet.defaultSolution": "DnDFightTool.CrossPlatform.slnf"
+    "dotnet.defaultSolution": "DnDFightTool.slnx"
 }
 

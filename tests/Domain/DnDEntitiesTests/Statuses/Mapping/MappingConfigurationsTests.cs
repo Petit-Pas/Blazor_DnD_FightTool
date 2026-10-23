@@ -7,10 +7,10 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
-namespace DnDEntitiesTests.Statuses;
+namespace DnDEntitiesTests.Statuses.Mapping;
 
 [TestFixture]
-public class StatusTemplateCollectionMappingTests
+public class MappingConfigurationsTests
 {
     private Mapper _mapper = null!;
 
@@ -27,7 +27,7 @@ public class StatusTemplateCollectionMappingTests
     }
 
     [TestFixture]
-    public class CloneTests : StatusTemplateCollectionMappingTests
+    public class CloneTests : MappingConfigurationsTests
     {
         [Test]
         public void Should_HaveConsistentKeyValueIds_When_Cloned()
@@ -61,7 +61,7 @@ public class StatusTemplateCollectionMappingTests
     }
 
     [TestFixture]
-    public class CopyTests : StatusTemplateCollectionMappingTests
+    public class CopyTests : MappingConfigurationsTests
     {
         [Test]
         public void Should_HaveConsistentKeyValueIds_When_Copied()

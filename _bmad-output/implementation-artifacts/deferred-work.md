@@ -10,15 +10,76 @@ Status: `open` · `resolved` · `dropped`
 
 # Active
 
-## DW-015 — Exhaustive character/attack editor field coverage (story 5b)
+## DW-023 — Stale redo stack after the undo-everything teardown
 
 - status: open
-- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
-- summary: Story 5 was narrowed at its spec checkpoint to routable page objects + list/fighters/dashboard component objects + scenarios. The exhaustive field-level editing of the character and attack editors was split off into story `5b`.
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/SPEC.md`
+- summary: `ResetApplicationStateAsync` undoes every command, so the undone commands stay on the redo stack (up to `RedoHistoryMaxSize` 32). The next test starts with Redo enabled until it runs its first command. A test that asserts Redo is disabled on its first step fails, whatever ran before it. The UndoableMediator API cannot clear redo history without running a new command.
 
-Deferred surface: character basic-info deep fields (Max HP, HP, Armor Class, shield toggle + value, effective AC read), `AbilityScoresEditor` (score, save bonus, mastery bonus, save-mastery toggle), `SkillsEditor` (mastery increase/decrease via left/right-click, governing-ability menu), `ResistancesEditor` (affinity increase/decrease), and attack `DamageRollCollectionEditor` + to-hit modifier editing. Each needs UI-to-real-repository action tests and independently seeded repository-to-UI rendering tests, no fakes. Character fields are story `5b`, attack fields story `5c` in `stories.yaml`; extend story 5's existing typed objects. Save the parent character before observing stored attack drafts.
+Proposed direction (to plan, not decided): add a way to clear redo history in UndoableMediator (library change) and call it at the end of teardown, then assert the redo stack is empty. Until then, a test that asserts initial Redo availability runs a command first or asserts Redo enabled. Note: the earlier teardown opt-out for undo/redo tests was retired on 2026-10-23; it would not fix this.
 
-Renumbered from DW-006, which collided with the story-1 service-graph entry.
+---
+
+## DW-022 — Migrate typed objects off CSS, title-text and position locators
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/SPEC.md`
+- summary: The locator rule now allows role + accessible name only. Older typed objects still use CSS or position, for example `button.w-100:visible` and `.mud-paper:has(.hoverable-button-row)` in `TestableCharacterListEditorPage`, `.combat-status-panel` and `a[href='...']` in the page objects' `GoToAsync`, `.ability-score-chip`, `.mud-menu-item`, `form:visible`.First in `TestableCharacterEditorPage.MainInfo`, and `xpath=ancestor::tr` in `TestableSkillsEditorComponent`.
+
+Proposed direction: audit `uitests/TestableComponents` and `uitests/Framework`, add `role`/`aria-label` to the production markup where a name is missing (pre-approved), and switch each locator to `GetByRole(..., Name = ...)`. Run all UI test projects after each file.
+
+---
+
+## DW-021 — Remove local abstract base fixtures from UI tests
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/uitests-layout.md`
+- summary: Local abstract base fixtures are no longer allowed, because they force every derived fixture onto one base class. `CharacterListEditorPageUiTests.CharacterLibraryFixture`, `FightDashboardPageUiTests.DashboardFixture`, `CharacterMainInfoEditorUiTests.MainInfoEditFixture` and `SkillsEditorComponentUiTests.SkillsEditFixture` still exist.
+
+Proposed direction: each nested fixture derives directly from `IsolatedScenarioFixture` (or `SequentialScenarioFixture`) and resolves its repository, mediator and page object in its own `[SetUp]`. Behaviour must not change; run DndUi.SharedUiTests and CharacterSheetBlazorComponentsUiTests before and after.
+
+---
+
+## DW-020 — Premade test characters, monsters and attacks for reuse across tests
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/uitests-layout.md`
+- summary: UI tests now seed and navigate in plain view, so each test builds its own data inline (`CharacterFactory.BuildPlayer(name: "Fighter", withDefaults: true)`, then sets HP, abilities, skills, affinities or attacks one by one). The same shapes repeat across files: a default "Fighter" player, a player with a Longsword and a Bow, explicit Strength or Fire values. This makes tests long and lets the same idea drift between files.
+
+Proposed direction (to plan, not decided):
+- Add named, ready-made test data in `tests/Domain/DomainTestsUtilities` (already referenced by every unit and UI test project), for example a `PremadeCharacters` / `PremadeMonsters` / `PremadeAttacks` set: a plain fighter, an armored fighter with a shield, a goblin, an owlbear, a longsword, a bow.
+- Each premade returns a new instance on every call, so tests never share mutable state, and tests can still change fields after building it.
+- Keep values a test asserts on explicit in the test (or exposed as constants on the premade), so the test stays readable without opening the factory.
+- Keep seeding and navigation in the test or its `[SetUp]` (uitests-layout rule); premades only build objects, they do not save or navigate.
+- Decide whether unit tests (DnDActionsTests, FightTests) should use the same premades, and how premades relate to the existing `CharacterFactory`, `MartialAttackTemplateFactory` and friends (extend them or sit on top).
+
+Costs: a shared data catalog couples tests to each other; changing a premade can break unrelated tests unless asserted values stay explicit in each test.
+
+---
+
+## DW-019 — Save-mastery state is read from a MudBlazor CSS class
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5b-exhaustive-character-editor-field-coverage.md`
+- summary: `TestableAbilityScoreEditorComponent.HasSaveMastery()` returns true when the ability chip has the `mud-chip-filled` class. That class is internal to MudBlazor, so an upgrade could rename it and silently break the getter. The rendering test checks both true (STR) and false (DEX), so a rename fails loudly, but the coupling stays.
+
+Proposed direction: expose the state on the chip with an accessible attribute, for example `aria-pressed="true|false"` (the chip acts as a toggle), and read that attribute instead. This is a production markup change. Do it together with DW-018, which moves the mastery and affinity state into proper attributes too.
+
+---
+
+## DW-018 — Turn the mastery and affinity buttons into real spinbuttons
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5b-exhaustive-character-editor-field-coverage.md`
+- summary: Story 5b put the current state in the button's accessible name: `aria-label="Fire affinity: Resistant"` and `aria-label="Animal Handling mastery: Expertise"`. Accessibility guidance says the name should only say what the control is, and the state should go in its own attribute. A screen reader may not announce a name that changes on every click. Decrease is right-click only, so keyboard users cannot lower a value.
+
+Proposed direction (chosen over a stable label with `aria-describedby`, and over visible text next to the icon):
+- Use `role="spinbutton"` with a stable name (`"Fire affinity"`, `"Animal Handling mastery"`), `aria-valuetext` for the readable state (`"Resistant"`), and `aria-valuenow`/`aria-valuemin`/`aria-valuemax` as numbers kept in sync with the enum.
+- Add Up/Down arrow keys to increase and decrease, as the role requires. Keep left-click and right-click for mouse users.
+- `role="spinbutton"` is probably not allowed on a `<button>`, so this likely needs a small shared component in place of `MudIconButton`. Check this first.
+- Tests: the typed objects use an exact `GetByRole(AriaRole.Spinbutton, Name = ...)` lookup and read `aria-valuetext`. Remove the regex prefix match and `ComponentObject.GetAccessibleNameState`. Add a keyboard test for the arrow keys.
+
+Costs: production behavior changes beyond test needs (new role and keyboard handling), and the numeric value attributes must stay in sync with `SkillMasteryEnum` and `DamageAffinityEnum`.
 
 ---
 
@@ -178,3 +239,27 @@ Resolved by adding `tests/Components/DndUiWebTests/`. `RegisterWebAppServicesTes
 Fixed: the fake `"https://0.0.0.1/characters"` seed is replaced with the circuit's actual initial `NavigationManager.Uri`, captured at construction time (before subscribing to `LocationChanged`, which never fires for the initial load). A direct deep-load into an editor now seeds history with the real landing page, so `NavigateBack()` after `Save`/`Cancel` correctly falls back to `/` instead of the unreachable sentinel.
 
 Renumbered from DW-007, which collided with the story-1 `UseHttpsRedirection()` entry.
+
+---
+
+## DW-015 — Exhaustive character/attack editor field coverage (story 5b)
+
+- status: resolved
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5-page-objects-for-routable-pages.md`
+- summary: Story 5 was narrowed at its spec checkpoint to routable page objects + list/fighters/dashboard component objects + scenarios. The exhaustive field-level editing of the character and attack editors was split off into story `5b`.
+
+Resolved for the character-editor surface (story `5b`): character basic-info deep fields (Max HP, HP, Armor Class, shield toggle + value, effective AC read), `AbilityScoresEditor` (score, save bonus, mastery bonus, save-mastery toggle), `SkillsEditor` (mastery increase/decrease via left/right-click, governing-ability menu), and `ResistancesEditor` (affinity increase/decrease) are now covered by UI-to-real-repository action tests and independently seeded repository-to-UI rendering tests under `uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests/`. The attack `DamageRollCollectionEditor` + to-hit modifier editing remains deferred as story `5c` in `stories.yaml`.
+
+Renumbered from DW-006, which collided with the story-1 service-graph entry.
+
+---
+
+## DW-017 — No fast unit test for the `AbilityScoresCollection.MasteryBonus` Mapster fix
+
+- status: resolved
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5b-exhaustive-character-editor-field-coverage.md`
+- summary: Story 5b fixed a bug where Mapster dropped `MasteryBonus` on `Copy()`/`Clone()` (`AfterMapping` in `src/Domain/CharacterSheet/AbilityScores/Mapping/MappingConfigurations.cs`). Only a UI test covered it.
+
+Resolved 2026-10-23: added `tests/Domain/DnDEntitiesTests/AbilityScores/Mapping/MappingConfigurationsTests.cs`. It checks that Copy and Clone keep `MasteryBonus` and the scores. The two `MasteryBonus` tests fail when the fix is removed. The entry first said no test pattern existed for `Copy`/`Clone`. That was wrong: MartialAttacks and Statuses already had collection mapping tests. Those tests moved to `{Feature}/Mapping/MappingConfigurationsTests.cs`, so each test file now mirrors its source file.
+
+Audited 2026-10-16: no other `List<T>`/`Dictionary<TKey, TValue>` subclass under `src/Domain` has an extra stored property. The standing rule is in [mapping.instructions.md](../../.github/instructions/mapping.instructions.md).

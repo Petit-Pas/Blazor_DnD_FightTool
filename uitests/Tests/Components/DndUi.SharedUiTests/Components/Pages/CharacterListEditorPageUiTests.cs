@@ -141,6 +141,8 @@ public static class CharacterListEditorPageUiTests
             await editor.MainInfo().SetName("Owlbear");
             await CaptureAsync("monster-name-entered");
             await editor.Save();
+            // Save returns to the list defaulted to Players; switch back so the automatic final screenshot shows the monster.
+            await CharacterList.GoToMonstersTab();
 
             // Assert
             Repository.GetAllCharacters()
@@ -200,6 +202,8 @@ public static class CharacterListEditorPageUiTests
             // Act
             var editor = await CharacterList.DuplicateMonster("Alpha");
             await editor.Save();
+            // Save returns to the list defaulted to Players; switch back so the automatic final screenshot shows the monsters.
+            await CharacterList.GoToMonstersTab();
 
             // Assert
             Repository.GetAllCharacters().Where(character => character.Type == CharacterType.Monster)
@@ -312,6 +316,8 @@ public static class CharacterListEditorPageUiTests
             var editor = await CharacterList.EditMonster("Original");
             await editor.MainInfo().SetName("Renamed");
             await editor.Save();
+            // Save returns to the list defaulted to Players; switch back so the automatic final screenshot shows the monster.
+            await CharacterList.GoToMonstersTab();
 
             // Assert
             Repository.GetAllCharacters().Select(character => character.Name)

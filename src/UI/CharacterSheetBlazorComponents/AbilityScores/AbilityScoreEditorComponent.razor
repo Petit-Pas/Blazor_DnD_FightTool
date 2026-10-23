@@ -8,7 +8,7 @@
 {
     <MudForm Model=AbilityScore Validation="@(_abilityScoreValidator.ValidateValue)" FieldChanged="NotifyChangedAsync"
         Class=@Class Style=@Style>
-        <div class="d-flex gap-3 align-items-center">
+        <div class="d-flex gap-3 align-items-center" role="group" aria-label="@($"{AbilityScore.Ability.ShortName()} ability")">
             <AbilityChip 
                 Class="mr-5"
                 Ability=@AbilityScore.Ability
