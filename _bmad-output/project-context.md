@@ -49,6 +49,7 @@ _This file contains critical rules and patterns that AI agents must follow when 
 - `record` for immutable value objects, `class` for mutable entities with identity.
 - Collection expressions `[]` for empty/initialized collections.
 - Async/await always — never `.Result` or `.GetAwaiter().GetResult()`.
+- Methods returning `Task`/`ValueTask` end with `Async` (not NUnit test methods or framework-fixed overrides). Older names are migrated in DW-025.
 - XML doc comments (`/// <summary>`) on public and internal members.
 - `[Obsolete]` on parameterless constructors (serialization-only); use `bool withDefaults` constructor for production code.
 - Interface-first for domain entities (`ICharacter` → `Character`).

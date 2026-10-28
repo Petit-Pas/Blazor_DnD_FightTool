@@ -6,8 +6,8 @@
 {
     <div class="f-row align-items-center gap-3">
         <DamageTypeEditorComponent @bind-DamageType=@Template.Type />
-        <DiceRollTemplateEditorComponent @ref=_damageField @bind-Value=@Template.Dices />
+        <DiceRollTemplateEditorComponent @ref=_damageField @bind-Value=@Template.Dices Label="Dice" />
         <MudIconButton Icon=@Icons.Material.Filled.Delete Color=Color.Error Variant="Variant.Filled" Size=Size.Large
-                       Class="rounded-circle" OnClick=Delete />
+                       Class="rounded-circle" aria-label="Delete damage" OnClick=Delete />
     </div>
 }

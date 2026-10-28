@@ -1,0 +1,8 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- After a change, reinstall the browser: pwsh {test project}/bin/Debug/net10.0/playwright.ps1 install chromium -->
+    <PlaywrightVersion>1.64.1</PlaywrightVersion>
+  </PropertyGroup>
+
+</Project>

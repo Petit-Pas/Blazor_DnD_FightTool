@@ -1,5 +1,4 @@
-﻿using DnDFightTool.Domain.CharacterSheet.Dices.Validation;
-using DnDFightTool.Infrastructure.Extensions;
+﻿using DnDFightTool.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Components;
 
 namespace DnDFightTool.UI.SharedComponents.Inputs;
@@ -20,20 +19,37 @@ public partial class RegexField<T>
 
     private string _currentInput = "";
     private string? _validationError;
-    private bool _isCurrentlyValid = true;
+    private T? _syncedValue;
 
     protected override void OnParametersSet()
     {
         base.OnParametersSet();
-        if (Value is not null && _currentInput == "")
+        if (Value is null)
         {
+            _syncedValue = default;
+            _currentInput = "";
+            _validationError = null;
+            return;
+        }
+        // Resync only when bound to another object; otherwise a re-render would overwrite the user's invalid input.
+        if (!ReferenceEquals(Value, _syncedValue))
+        {
+            _syncedValue = Value;
             _currentInput = Value.Expression;
+            Validate(_currentInput);
         }
     }
 
     public bool Validate()
     {
-        return _isCurrentlyValid;
+        return _validationError is null;
+    }
+
+    private string? GetValidationError(string? value)
+    {
+        return Value is null
+            ? null
+            : GetRegexError(value ?? "");
     }
 
     private string? GetRegexError(string value)
@@ -42,24 +58,14 @@ public partial class RegexField<T>
         {
             return "Cannot be empty";
         }
-        return DiceRollTemplateValidator.MatchRegex(value)
+        return Value!.IsValid(value)
             ? null
             : ErrorMessage;
     }
 
     private void Validate(string value)
     {
-        var regexError = GetRegexError(value);
-        if (regexError != null)
-        {
-            _isCurrentlyValid = false;
-            _validationError = regexError;
-        }
-        else
-        {
-            _isCurrentlyValid = true;
-            _validationError = null;
-        }
+        _validationError = GetRegexError(value);
     }
 
     private async Task OnInputChangedAsync(string value)
@@ -68,7 +74,7 @@ public partial class RegexField<T>
         Validate(value);
 
         // Only update model when valid
-        if (_isCurrentlyValid)
+        if (_validationError is null)
         {
             Value!.Expression = _currentInput;
             await ValueChanged.InvokeAsync(Value);

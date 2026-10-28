@@ -117,6 +117,7 @@ public static class CharacterMainInfoEditorUiTests
             // Act
             await MainInfo.SetMaxHps(42);
             await MainInfo.SetCurrentHps(30);
+            await CaptureAsync("before-save");
             await Editor.Save();
 
             // Assert
@@ -141,6 +142,7 @@ public static class CharacterMainInfoEditorUiTests
         {
             // Act
             await MainInfo.SetName("Fighter Renamed");
+            await CaptureAsync("before-save");
             await Editor.Save();
 
             // Assert
@@ -164,6 +166,7 @@ public static class CharacterMainInfoEditorUiTests
             await MainInfo.SetArmorClass(16);
             await MainInfo.SetShieldValue(3);
             await MainInfo.SetShieldEquipped(true);
+            await CaptureAsync("before-save");
             await Editor.Save();
 
             // Assert

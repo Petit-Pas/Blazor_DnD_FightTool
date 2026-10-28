@@ -162,6 +162,7 @@ public static class CharacterListEditorPageUiTests
             // Act
             var editor = await CharacterList.CreatePlayer();
             await editor.MainInfo().SetName("Ghost");
+            await CaptureAsync("before-cancel");
             await editor.Cancel();
 
             // Assert
@@ -181,6 +182,7 @@ public static class CharacterListEditorPageUiTests
 
             // Act
             var editor = await CharacterList.DuplicatePlayer("Alpha");
+            await CaptureAsync("before-save");
             await editor.Save();
 
             // Assert
@@ -201,6 +203,7 @@ public static class CharacterListEditorPageUiTests
 
             // Act
             var editor = await CharacterList.DuplicateMonster("Alpha");
+            await CaptureAsync("before-save");
             await editor.Save();
             // Save returns to the list defaulted to Players; switch back so the automatic final screenshot shows the monsters.
             await CharacterList.GoToMonstersTab();
@@ -223,6 +226,7 @@ public static class CharacterListEditorPageUiTests
             // Act
             var editor = await CharacterList.DuplicatePlayer("Original");
             await editor.MainInfo().SetName("Discarded");
+            await CaptureAsync("before-cancel");
             await editor.Cancel();
 
             // Assert
@@ -294,6 +298,7 @@ public static class CharacterListEditorPageUiTests
             // Act
             var editor = await CharacterList.EditPlayer("Original");
             await editor.MainInfo().SetName("Renamed");
+            await CaptureAsync("before-save");
             await editor.Save();
 
             // Assert
@@ -315,6 +320,7 @@ public static class CharacterListEditorPageUiTests
             // Act
             var editor = await CharacterList.EditMonster("Original");
             await editor.MainInfo().SetName("Renamed");
+            await CaptureAsync("before-save");
             await editor.Save();
             // Save returns to the list defaulted to Players; switch back so the automatic final screenshot shows the monster.
             await CharacterList.GoToMonstersTab();
@@ -337,6 +343,7 @@ public static class CharacterListEditorPageUiTests
 
             // Act
             await editor.MainInfo().SetName("Discarded");
+            await CaptureAsync("before-cancel");
             await editor.Cancel();
 
             // Assert

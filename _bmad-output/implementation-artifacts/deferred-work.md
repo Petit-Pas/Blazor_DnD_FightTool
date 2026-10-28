@@ -10,6 +10,16 @@ Status: `open` · `resolved` · `dropped`
 
 # Active
 
+## DW-025 — Add the `Async` suffix to every async method
+
+- status: open
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5c-attack-editor-field-coverage.md`
+- summary: The rule is now that every method returning `Task`/`ValueTask` ends with `Async` (see `.github/instructions/csharp.instructions.md`). Many existing methods break it: 113 in `uitests/Framework` and `uitests/TestableComponents` alone (for example `AddDamage`, `EditPlayer`, `Save`), plus an uncounted number in `src/`.
+
+Proposed direction: rename across the whole solution (`src/`, `tests/`, `uitests/`), using the IDE rename so every caller follows. Skip NUnit test methods and overrides or interface implementations whose name a framework fixes. Build and run all test projects after each project.
+
+---
+
 ## DW-023 — Stale redo stack after the undo-everything teardown
 
 - status: open
@@ -250,6 +260,8 @@ Renumbered from DW-007, which collided with the story-1 `UseHttpsRedirection()` 
 
 Resolved for the character-editor surface (story `5b`): character basic-info deep fields (Max HP, HP, Armor Class, shield toggle + value, effective AC read), `AbilityScoresEditor` (score, save bonus, mastery bonus, save-mastery toggle), `SkillsEditor` (mastery increase/decrease via left/right-click, governing-ability menu), and `ResistancesEditor` (affinity increase/decrease) are now covered by UI-to-real-repository action tests and independently seeded repository-to-UI rendering tests under `uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests/`. The attack `DamageRollCollectionEditor` + to-hit modifier editing remains deferred as story `5c` in `stories.yaml`.
 
+Remainder resolved 2026-10-25 (story `5c`): to-hit modifiers (edit, invalid input, rendering) and damage rolls (add, delete, damage type, dice, invalid dice, cancel, rendering) are covered under `uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests/MartialAttacks/Components/` and `.../Damage/Components/`.
+
 Renumbered from DW-006, which collided with the story-1 service-graph entry.
 
 ---
@@ -263,3 +275,16 @@ Renumbered from DW-006, which collided with the story-1 service-graph entry.
 Resolved 2026-10-23: added `tests/Domain/DnDEntitiesTests/AbilityScores/Mapping/MappingConfigurationsTests.cs`. It checks that Copy and Clone keep `MasteryBonus` and the scores. The two `MasteryBonus` tests fail when the fix is removed. The entry first said no test pattern existed for `Copy`/`Clone`. That was wrong: MartialAttacks and Statuses already had collection mapping tests. Those tests moved to `{Feature}/Mapping/MappingConfigurationsTests.cs`, so each test file now mirrors its source file.
 
 Audited 2026-10-16: no other `List<T>`/`Dictionary<TKey, TValue>` subclass under `src/Domain` has an extra stored property. The standing rule is in [mapping.instructions.md](../../.github/instructions/mapping.instructions.md).
+
+---
+
+## DW-024 — Deleting a damage row can show the wrong dice text
+
+- status: resolved
+- source_spec: `_bmad-output/specs/spec-005-ui-test-navigation-library/stories/5c-attack-editor-field-coverage.md`
+- summary: The damage rows had no `@key`, so after deleting row 1 Blazor reused its component for the next template. `RegexField` resynced its text only while the text was `""`, so the reused row kept the deleted row's dice text. The stored data was correct; only the display was wrong.
+
+Resolved 2026-10-26:
+- Each row has `@key="damageTemplate"`, and `Remove` drops the stale component reference.
+- `RegexField` now resyncs when it is bound to a different object, not when its text is empty. The empty-text rule had a second bug: after the user emptied the field, any re-render (for example a refused Save) put the stored value back on screen, removed the error, and kept Save blocked.
+- Covered by `Should_Display_The_Remaining_Damage_After_Deleting_The_First` and `Should_Keep_Empty_Dice_After_Refused_Save`. The first test fails only when both fixes are removed. `Should_Keep_Invalid_Dice_On_The_Remaining_Damage_After_Deleting_The_First` (added 2026-10-28) fails when only `@key` is removed. `Should_Keep_Empty_Dice_After_Refused_Save` fails when only the `RegexField` fix is removed.

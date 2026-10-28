@@ -6,7 +6,7 @@
 
 @if (AttackTemplate is not null)
 {
-    <MudPaper Class="@("p-3 d-flex flex-column h-100 gap-3" + Class)" Style=@Style Elevation="2" Square>
+    <MudPaper Class="@("p-3 d-flex flex-column h-100 gap-3" + Class)" Style=@Style Elevation="2" Square role="region" aria-label="Main Informations">
         <MudText Typo="Typo.h5" Class=""> Main Informations </MudText>
         <MudForm @ref=_form Model="AttackTemplate" Validation="@(_attackTemplateValidator.ValidateValue)" Class="f-column gap-3">
             <MudTextField Label="Name" @bind-Value="AttackTemplate.Name" For="@(() => AttackTemplate.Name)" Typo="Typo.h5" />

@@ -25,4 +25,5 @@ applyTo: "**/*.cs"
 - **Spacing Conventions**
   - Never use => expression-bodied members, even for single-line methods. Always use a block body with braces.
 - **Async**: Use `async`/`await` for all asynchronous operations when possible. Do not simply return the task in a simple method.
+- **Async suffix**: Every method that returns `Task`, `Task<T>`, `ValueTask` or `ValueTask<T>` ends with `Async` (e.g. `AddDamageAsync`). Exceptions: NUnit test methods, and overrides or interface implementations whose name is fixed by a framework. Existing names are migrated in DW-025.
 

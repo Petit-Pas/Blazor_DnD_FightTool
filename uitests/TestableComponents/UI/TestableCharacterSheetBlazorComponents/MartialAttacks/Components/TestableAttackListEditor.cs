@@ -108,9 +108,10 @@ public sealed class TestableAttackListEditor : ComponentObject
 
     private async Task<TestableAttackEditorPage> OpenedAttackEditor()
     {
-        // The attack editor is reached by a same-document (SPA) navigation; wait for its unique "Main Informations" header
+        // The attack editor is reached by a same-document (SPA) navigation; wait for its unique "Main Informations" region
         // rather than a URL, which is unreliable for SPA navigations.
-        await Expect(Page.GetByText("Main Informations")).ToBeVisibleAsync();
+        await Expect(Page.GetByRole(AriaRole.Region, new PageGetByRoleOptions { Name = "Main Informations", Exact = true }))
+            .ToBeVisibleAsync();
         return new TestableAttackEditorPage(Page, _baseUrl);
     }
 }

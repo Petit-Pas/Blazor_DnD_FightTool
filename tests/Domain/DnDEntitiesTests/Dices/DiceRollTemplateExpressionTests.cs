@@ -107,6 +107,19 @@ public class DiceRollTemplateExpressionTests
             // Assert
             diceThrow.Expression.Should().Be("1d8");
         }
+
+        [TestCase("0")]
+        [TestCase("1-1")]
+        [TestCase("")]
+        public void Should_Build_Zero_When_Empty(string input)
+        {
+            // Arrange
+            var diceThrow = new DiceRollTemplate(input);
+
+            // Act
+            // Assert
+            diceThrow.Expression.Should().Be("0");
+        }
     }
 
     [TestFixture]

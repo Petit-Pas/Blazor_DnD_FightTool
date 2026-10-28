@@ -102,7 +102,9 @@ public static class AttackListEditorUiTests
             // Act
             var attackEditor = await attacks.AddAttack();
             await attackEditor.MainInfo().SetName("Longsword");
+            await CaptureAsync("before-attack-save");
             await attackEditor.Save();
+            await CaptureAsync("attack-list");
             await editor.Save();
 
             // Assert
@@ -126,7 +128,9 @@ public static class AttackListEditorUiTests
 
             // Act
             var duplicateEditor = await attacks.DuplicateAttack("Longsword");
+            await CaptureAsync("before-attack-save");
             await duplicateEditor.Save();
+            await CaptureAsync("attack-list");
             await editor.Save();
 
             // Assert
@@ -150,7 +154,9 @@ public static class AttackListEditorUiTests
             // Act
             var attackEditor = await attacks.AddAttack();
             await attackEditor.MainInfo().SetName("Discarded");
+            await CaptureAsync("before-attack-cancel");
             await attackEditor.Cancel();
+            await CaptureAsync("attack-list");
             await editor.Save();
 
             // Assert
@@ -174,7 +180,9 @@ public static class AttackListEditorUiTests
             // Act
             var attackEditor = await attacks.DuplicateAttack("Longsword");
             await attackEditor.MainInfo().SetName("Discarded");
+            await CaptureAsync("before-attack-cancel");
             await attackEditor.Cancel();
+            await CaptureAsync("attack-list");
             await editor.Save();
 
             // Assert
@@ -218,7 +226,9 @@ public static class AttackListEditorUiTests
             // Act
             var editAttackEditor = await attacks.EditAttack("Longsword");
             await editAttackEditor.MainInfo().SetName("Greatsword");
+            await CaptureAsync("before-attack-save");
             await editAttackEditor.Save();
+            await CaptureAsync("attack-list");
             await editor.Save();
 
             // Assert
@@ -242,7 +252,9 @@ public static class AttackListEditorUiTests
 
             // Act
             await attackEditor.MainInfo().SetName("Discarded");
+            await CaptureAsync("before-attack-cancel");
             await attackEditor.Cancel();
+            await CaptureAsync("attack-list");
             await editor.Save();
 
             // Assert
@@ -285,6 +297,7 @@ public static class AttackListEditorUiTests
 
             // Act
             await attacks.DeleteAttack("Target");
+            await CaptureAsync("attack-list");
             await editor.Save();
 
             // Assert

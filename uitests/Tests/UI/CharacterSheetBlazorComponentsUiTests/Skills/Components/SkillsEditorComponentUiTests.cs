@@ -122,6 +122,7 @@ public static class SkillsEditorComponentUiTests
         {
             // Act
             await Skills.IncreaseMastery("Athletics");
+            await CaptureAsync("before-save");
             await Editor.Save();
 
             // Assert
@@ -136,6 +137,7 @@ public static class SkillsEditorComponentUiTests
         {
             // Act
             await Skills.DecreaseMastery("Stealth");
+            await CaptureAsync("before-save");
             await Editor.Save();
 
             // Assert
@@ -156,6 +158,7 @@ public static class SkillsEditorComponentUiTests
         {
             // Act
             await Skills.SetAbility("Athletics", "DEX");
+            await CaptureAsync("before-save");
             await Editor.Save();
 
             // Assert

@@ -108,6 +108,7 @@ public static class ResistancesEditorComponentUiTests
         {
             // Act
             await _resistances.IncreaseAffinity("Fire");
+            await CaptureAsync("before-save");
             await _editor.Save();
 
             // Assert
@@ -122,6 +123,7 @@ public static class ResistancesEditorComponentUiTests
         {
             // Act
             await _resistances.DecreaseAffinity("Fire");
+            await CaptureAsync("before-save");
             await _editor.Save();
 
             // Assert
@@ -136,6 +138,7 @@ public static class ResistancesEditorComponentUiTests
         {
             // Act
             await _resistances.IncreaseAffinity("Fire");
+            await CaptureAsync("before-cancel");
             await _editor.Cancel();
 
             // Assert

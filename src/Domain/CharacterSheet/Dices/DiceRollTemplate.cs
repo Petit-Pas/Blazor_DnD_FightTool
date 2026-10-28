@@ -32,6 +32,17 @@ public partial class DiceRollTemplate : IHashable, IRegexValidated
     }
 
     /// <summary>
+    ///     Copy ctor. Copies the internal state instead of re-parsing, since some valid states (0, negative totals) do not re-parse from their own text.
+    /// </summary>
+    /// <param name="other"> The template to copy </param>
+    public DiceRollTemplate(DiceRollTemplate other)
+    {
+        _dicesToRoll = [.. other._dicesToRoll.Select(x => new Dices(x.Amount, x.Value))];
+        _wildcards = [.. other._wildcards];
+        _staticModifier = other._staticModifier;
+    }
+
+    /// <summary>
     ///     The regex that validates and parses the expression
     /// </summary>
     internal readonly static Regex _regex = DiceRollTemplateRegex();
@@ -158,11 +169,15 @@ public partial class DiceRollTemplate : IHashable, IRegexValidated
             expression += $"{(_staticModifier > 0 ? "+" : "")}{_staticModifier}";
         }
 
-        if (expression[0] == '+')
+        if (expression.Length > 0 && expression[0] == '+')
         {
             expression = expression[1..];
         }
 
+        if (expression.Length == 0)
+        {
+            return "0";
+        }
         return expression;
     }
 

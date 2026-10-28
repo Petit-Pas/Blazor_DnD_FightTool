@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Playwright" Version="1.38.0" />
+    <PackageReference Include="Microsoft.Playwright" Version="$(PlaywrightVersion)" />
   </ItemGroup>
 
   <ItemGroup>

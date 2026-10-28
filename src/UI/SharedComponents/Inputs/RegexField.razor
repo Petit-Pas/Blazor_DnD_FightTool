@@ -10,8 +10,7 @@
         <MudTextField Label=@Label
                       Value=@_currentInput
                       ValueChanged="@(async (string value) => { await OnInputChangedAsync(value); })"
-                      Error="@(_validationError is not null)"
-                      ErrorText="@_validationError"
+                      Validation="@(new Func<string?, string?>(GetValidationError))"
                       Immediate=true />
     </div>
 }

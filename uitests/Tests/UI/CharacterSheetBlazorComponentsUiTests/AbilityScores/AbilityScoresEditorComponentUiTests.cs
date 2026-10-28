@@ -68,6 +68,7 @@ public static class AbilityScoresEditorComponentUiTests
 
             // Act
             await strength.SetScore(18);
+            await CaptureAsync("before-save");
             await editor.Save();
 
             // Assert
@@ -87,6 +88,7 @@ public static class AbilityScoresEditorComponentUiTests
 
             // Act
             await strength.SetSaveBonus(2);
+            await CaptureAsync("before-save");
             await editor.Save();
 
             // Assert
@@ -105,6 +107,7 @@ public static class AbilityScoresEditorComponentUiTests
 
             // Act
             await abilities.SetMasteryBonus(5);
+            await CaptureAsync("before-save");
             await editor.Save();
 
             // Assert
@@ -124,6 +127,7 @@ public static class AbilityScoresEditorComponentUiTests
 
             // Act
             await strength.ToggleSaveMastery();
+            await CaptureAsync("before-save");
             await editor.Save();
 
             // Assert
@@ -143,6 +147,7 @@ public static class AbilityScoresEditorComponentUiTests
 
             // Act
             await strength.SetScore(25);
+            await CaptureAsync("before-cancel");
             await editor.Cancel();
 
             // Assert

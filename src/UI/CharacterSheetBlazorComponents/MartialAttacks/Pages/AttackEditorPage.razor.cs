@@ -31,7 +31,7 @@ public partial class AttackEditorPage
             case 0:
                 ArgumentNullException.ThrowIfNull(_mainInfoComponent, nameof(_mainInfoComponent));
                 ArgumentNullException.ThrowIfNull(_damageComponent, nameof(_damageComponent));
-                if (!await _mainInfoComponent.ValidateAsync() || _damageComponent.Validate())
+                if (!await _mainInfoComponent.ValidateAsync() || !_damageComponent.Validate())
                 {
                     arg.Cancel = true;
                 }

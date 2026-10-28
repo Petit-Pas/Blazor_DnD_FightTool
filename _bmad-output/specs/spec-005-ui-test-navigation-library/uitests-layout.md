@@ -89,10 +89,14 @@ The unit of isolation is the fixture (CAP-10). A step of a sequential fixture ru
 - **Test projects** (and Scratch) reference `Framework`, the Testable projects they drive, `tests/Domain/DomainTestsUtilities`, and `Microsoft.Playwright` directly so the driver lands in their output. Scratch references every Testable project.
 - Test projects and Scratch link `Framework/AssemblyFixture.cs` and `Framework/AssemblyInfo.cs` via `<Compile Include=… Link=…>` so the host lifecycle and the no-parallelism rule apply in their own assembly.
 - Every project is listed in `DnDFightTool.slnx` (solution folders mirror paths) and `DnDFightTool.CrossPlatform.slnf`.
+- The `Microsoft.Playwright` version is set once, as `PlaywrightVersion` in `uitests/Directory.Build.props`. Every `PackageReference` uses `$(PlaywrightVersion)`.
+- On a new machine, or after a version change, build a test project once and install the browser: `pwsh uitests/Tests/UI/CharacterSheetBlazorComponentsUiTests/bin/Debug/net10.0/playwright.ps1 install chromium`. Without it, every UI test fails with "Executable doesn't exist".
 
 ## Artifacts
 
 Screenshots land under the running test project's own `artifacts/` folder (gitignored), then the test class namespace below the project's assembly name, then the container and nested class, then the test name: `{project}/artifacts/{component path}/{Container}/{NestedFixture}/{TestName}/NN-{step}.png`.
+
+The automatic final screenshot shows wherever the test ends, which is often a page it navigated to after the action. So an action test captures the screen it tested before leaving it: `CaptureAsync("before-save")` or `("before-cancel")` just before a Save/Cancel that navigates away, and `("error-shown")` once a refused action's error is visible. When a test passes through several editors, capture each one before leaving it (for example `before-attack-save`, then `attack-list` before the parent Save).
 
 ## Current map
 
@@ -115,8 +119,9 @@ Story 5b added exhaustive character-editor field coverage: `CharacterMainInfoEdi
 First additions now use `TestableInitiativeRollQueryHandlerModal` in `TestableDnDQueryPrompter/FightQueries`, whose `RollAndConfirm` drives the existing prompt. `AddPlayer` completes that prompt; `AddMonsterWithInitiative` handles a first monster and `AddMonster` a repeated kind. This modal is distinct from the dashboard's `TestableInitiativeInputDialog`. Story 6 must extend/reuse these objects for deterministic roll input and remaining dialogs, not create a second first-add helper. Tests that do not assert numerical initiative may roll normally; CAP-4 still requires fixed rolls when outcomes depend on them.
 
 | Character editor deep fields | Character basic-info deep fields (Max HP, HP, Armor Class, shield toggle + value, effective AC read), `AbilityScoresEditor` (score, save bonus, mastery bonus), `SkillsEditor` (mastery increase/decrease, governing-ability menu) and `ResistancesEditor` (affinity increase/decrease) assert stored character state via real UI-to-repository action tests and independently seeded repository-to-UI rendering tests. |
+| Attack editor deep fields | To-hit modifiers (edit, invalid input refused with its error shown) and damage rolls (add, delete, damage type, dice, invalid dice, cancel) assert stored attacks after attack Save and parent character Save. Separate seeded tests check to-hit, damage count and each row's type and dice rendering. |
 
-Deep attack editor fields remain story 5c. Story 5's bundled matrix is historical and is superseded for current test organization by the rules above.
+Story 5's bundled matrix is historical and is superseded for current test organization by the rules above.
 
 | `src/` component | Typed object | Test |
 |---|---|---|
@@ -132,7 +137,10 @@ Deep attack editor fields remain story 5c. Story 5's bundled matrix is historica
 | `UI/CharacterSheetBlazorComponents/Skills/Components/SkillsEditorComponent.razor` | `…/TestableCharacterSheetBlazorComponents/Skills/Components/TestableSkillsEditorComponent.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/Skills/Components/SkillsEditorComponentUiTests.cs` |
 | `UI/CharacterSheetBlazorComponents/MartialAttacks/Pages/AttackEditorPage.razor` | `…/TestableCharacterSheetBlazorComponents/MartialAttacks/Pages/TestableAttackEditorPage.cs` | — |
 | `UI/CharacterSheetBlazorComponents/MartialAttacks/Components/AttackListEditor.razor` | `…/TestableCharacterSheetBlazorComponents/MartialAttacks/Components/TestableAttackListEditor.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/MartialAttacks/Components/AttackListEditorUiTests.cs` |
-| `UI/CharacterSheetBlazorComponents/MartialAttacks/Components/AttackMainInfoEditor.razor` | `…/TestableCharacterSheetBlazorComponents/MartialAttacks/Components/TestableAttackMainInfoEditor.cs` | — |
+| `UI/CharacterSheetBlazorComponents/MartialAttacks/Components/AttackMainInfoEditor.razor` | `…/TestableCharacterSheetBlazorComponents/MartialAttacks/Components/TestableAttackMainInfoEditor.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/MartialAttacks/Components/AttackMainInfoEditorUiTests.cs` |
+| `UI/CharacterSheetBlazorComponents/Damage/Components/DamageRollTemplateCollectionEditorComponent.razor` | `…/TestableCharacterSheetBlazorComponents/Damage/Components/TestableDamageRollTemplateCollectionEditorComponent.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/Damage/Components/DamageRollTemplateCollectionEditorComponentUiTests.cs` |
+| `UI/CharacterSheetBlazorComponents/Damage/Components/DamageRollTemplateEditorComponent.razor` | `…/TestableCharacterSheetBlazorComponents/Damage/Components/TestableDamageRollTemplateEditorComponent.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/Damage/Components/DamageRollTemplateEditorComponentUiTests.cs` |
+| `UI/CharacterSheetBlazorComponents/Damage/Components/DamageTypeEditorComponent.razor` | `…/TestableCharacterSheetBlazorComponents/Damage/Components/TestableDamageTypeEditorComponent.cs` | `Tests/UI/CharacterSheetBlazorComponentsUiTests/Damage/Components/DamageTypeEditorComponentUiTests.cs` |
 | `UI/FightBlazorComponents/Entities/FightingCharacters/Components/FighterTile.razor` | `TestableComponents/UI/TestableFightBlazorComponents/Entities/FightingCharacters/Components/TestableFighterTile.cs` | — |
 | `UI/FightBlazorComponents/Entities/FightingCharacters/Dialog/InitiativeInputDialog.razor` | `…/TestableFightBlazorComponents/Entities/FightingCharacters/Dialog/TestableInitiativeInputDialog.cs` | — |
 | `UI/FightBlazorComponents/Entities/MartialAttacks/MartialAttackSelector.razor` | `…/TestableFightBlazorComponents/Entities/MartialAttacks/TestableMartialAttackSelector.cs` | — |
